@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.0)
-project(simple)
+project(domain_models)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -25,11 +25,9 @@ find_package(rosidl_default_generators REQUIRED)
 
 ## Generate messages in the 'msg' folder
 rosidl_generate_interfaces(
-	simple
-	"msg/OccupancyGridMap.msg"
-	"msg/Map.msg"
-	"msg/Plan.msg"
-	"srv/AddServiceDef.srv"
+	domain_models
+	"msg/Roi.msg"
+	"srv/GetInformation.srv"
 	DEPENDENCIES builtin_interfaces
 )
 
