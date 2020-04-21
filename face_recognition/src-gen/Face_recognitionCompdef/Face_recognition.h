@@ -17,8 +17,15 @@
 #include <rclcpp/rclcpp.hpp>
 #include "sensor_msgs/msg/image.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/objdetect.hpp"
+#include "opencv2/opencv.hpp"
+#include <iostream>
 
-
+using namespace std;
+using namespace cv;
 
 // End of Include stereotype (header)
 
@@ -61,7 +68,7 @@ public:
 	 * 
 	 * @param image sensor_msgs::msg::Image::SharedPtr
 	 */
-	void FaceDetectionHandler(const sensor_msgs::msg::Image /*in*/image);
+	void FaceDetectionHandler(const sensor_msgs::msg::Image::SharedPtr /*in*/image);
 
 	/**
 	 * 

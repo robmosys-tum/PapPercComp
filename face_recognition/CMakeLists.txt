@@ -16,6 +16,7 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(services REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(OpenCV REQUIRED)
 
 include_directories(
 	# assure that generated .h files are found
@@ -23,7 +24,7 @@ include_directories(
 )
 
 add_executable(Face_recognition src-gen/Face_recognitionCompdef/Face_recognition.cpp)
-ament_target_dependencies(Face_recognition rclcpp rclcpp_lifecycle services)
+ament_target_dependencies(Face_recognition rclcpp rclcpp_lifecycle services "OpenCV")
 ament_target_dependencies(Face_recognition sensor_msgs)
 ament_target_dependencies(Face_recognition geometry_msgs)
 #	target_link_libraries(Face_recognition ${catkin_LIBRARIES})

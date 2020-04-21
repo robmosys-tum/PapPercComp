@@ -18,15 +18,18 @@
 // declare options
 rclcpp::NodeOptions face_recognition_options;
 
+static bool receiving = false;
+
+void detectAndDraw( Mat& img, CascadeClassifier& cascade, CascadeClassifier& nestedCascade, double scale );
+
+void FaceDetectionHandler(const sensor_msgs::msg::Image::SharedPtr /*in*/image);
+
 int main(int argc, char **argv) {
 	rclcpp::init(argc, argv);
 
-	auto face_recognition = std::make_shared
-			< Face_recognitionCompdef::Face_recognition
-			> (face_recognition_options);
+	auto face_recognition = std::make_shared< Face_recognitionCompdef::Face_recognition> (face_recognition_options);
 
-	RCLCPP_INFO(face_recognition->get_logger(),
-			"Face_recognition has been initialized");
+	RCLCPP_INFO(face_recognition->get_logger(),"Face_recognition has been initialized");
 
 	rclcpp::executors::MultiThreadedExecutor executor;
 
@@ -35,6 +38,68 @@ int main(int argc, char **argv) {
 	executor.spin();
 	rclcpp::shutdown();
 }
+
+
+void detectAndDraw( Mat& img, CascadeClassifier& cascade, CascadeClassifier& nestedCascade, double scale)
+{
+    vector<Rect> faces, faces2;
+    Mat gray, smallImg;
+
+    cvtColor( img, gray, COLOR_BGR2GRAY ); // Convert to Gray Scale
+    double fx = 1 / scale;
+
+    // Resize the Grayscale Image
+    resize( gray, smallImg, Size(), fx, fx, INTER_LINEAR );
+    equalizeHist( smallImg, smallImg );
+
+    // Detect faces of different sizes using cascade classifier
+    cascade.detectMultiScale( smallImg, faces, 1.1,
+                            2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
+
+    // Draw circles around the faces
+    for ( size_t i = 0; i < faces.size(); i++ )
+    {
+        Rect r = faces[i];
+        Mat smallImgROI;
+        vector<Rect> nestedObjects;
+        Point center;
+        Scalar color = Scalar(255, 0, 0); // Color for Drawing tool
+        int radius;
+
+        double aspect_ratio = (double)r.width/r.height;
+        if( 0.75 < aspect_ratio && aspect_ratio < 1.3 )
+        {
+            center.x = cvRound((r.x + r.width*0.5)*scale);
+            center.y = cvRound((r.y + r.height*0.5)*scale);
+            radius = cvRound((r.width + r.height)*0.25*scale);
+            circle( img, center, radius, color, 3, 8, 0 );
+        }
+        else
+            rectangle( img, cv::Point(cvRound(r.x*scale), cvRound(r.y*scale)), cv::Point(cvRound((r.x + r.width-1)*scale), cvRound((r.y + r.height-1)*scale)), color, 3, 8, 0);
+        if( nestedCascade.empty() )
+            continue;
+        smallImgROI = smallImg( r );
+
+        // Detection of eyes int the input image
+        nestedCascade.detectMultiScale( smallImgROI, nestedObjects, 1.1, 2,
+                                        0|CASCADE_SCALE_IMAGE, Size(30, 30) );
+
+        // Draw circles around eyes
+        for ( size_t j = 0; j < nestedObjects.size(); j++ )
+        {
+            Rect nr = nestedObjects[j];
+            center.x = cvRound((r.x + nr.x + nr.width*0.5)*scale);
+            center.y = cvRound((r.y + nr.y + nr.height*0.5)*scale);
+            radius = cvRound((nr.width + nr.height)*0.25*scale);
+            circle( img, center, radius, color, 3, 8, 0 );
+        }
+
+    }
+
+    // Show Processed Image with detected faces
+    imshow( "Face Detection", img );
+}
+
 
 // End of Include declaration (body)
 
@@ -46,7 +111,32 @@ namespace Face_recognitionCompdef {
  * 
  * @param image 
  */
-void Face_recognition::FaceDetectionHandler(const sensor_msgs::msg::Image /*in*/image) {
+void Face_recognition::FaceDetectionHandler(const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
+
+	auto img_msg = sensor_msgs::msg::Image();
+
+	img_msg = *image;
+
+	CascadeClassifier cascade, nestedCascade;
+	double scale=1;
+
+	nestedCascade.load( "/home/bare/ros2_ws/face_recognition/src-gen/Face_recognitionCompdef/haarcascade_eye_tree_eyeglasses.xml" ) ;
+
+	cascade.load( "/home/bare/ros2_ws/face_recognition/src-gen/Face_recognitionCompdef/trained_classifier.xml" ) ;
+
+	receiving = false;
+
+	if (!receiving) {
+		receiving = true;
+		cv::Mat cv_mat(img_msg.height, img_msg.width, CV_8UC3,img_msg.data.data());
+		cv::Mat c_mat = cv_mat;
+		RCLCPP_INFO(get_logger(), "receiving images: (%d, %d)", img_msg.height, img_msg.width);
+		if( !c_mat.empty() )
+		{
+			detectAndDraw( c_mat, cascade, nestedCascade, scale );
+			waitKey(1);
+		}
+	}
 
 }
 
@@ -56,7 +146,7 @@ void Face_recognition::FaceDetectionHandler(const sensor_msgs::msg::Image /*in*/
  */
 Face_recognition::Face_recognition(rclcpp::NodeOptions /*in*/options) : rclcpp_lifecycle::LifecycleNode("Face_recognition", options) {
 	auto Image_qos = rclcpp::QoS(rclcpp::KeepLast(100)).best_effort();
-	Image_sub = create_subscription < sensor_msgs::msg::Image> ("Image", Image_qos, [this](const sensor_msgs::msg::Image image) {
+	Image_sub = create_subscription < sensor_msgs::msg::Image> ("Image", Image_qos, [this](const sensor_msgs::msg::Image::SharedPtr image) {
 				Face_recognitionCompdef::Face_recognition::FaceDetectionHandler(image);
 	});
 	// auto Pose_qos = rclcpp::QoS(rclcpp::KeepLast(100)).best_effort();
@@ -65,6 +155,10 @@ Face_recognition::Face_recognition(rclcpp::NodeOptions /*in*/options) : rclcpp_l
 	// rclcpp::Rate loop_rate(10);
 	// directly activate a publisher
 	Pose_pub->on_activate();
+	if (!receiving)
+	{
+		RCLCPP_INFO(get_logger(), "got image messages. send info:");
+	}
 }
 
 } // of namespace Face_recognitionCompdef
