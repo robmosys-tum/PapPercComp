@@ -28,9 +28,9 @@
       <nestedClassifier xmi:type="uml:Class" xmi:id="_csaWtHMbEeqqEr2btfYovQ"/>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_b6Yt8HNJEeqsX_wbhX2b7A" name="ComponentService3"/>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_hItM8HNJEeqsX_wbhX2b7A" name="ComponentService5">
-        <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_hI6BQHNJEeqsX_wbhX2b7A" client="_hItM8HNJEeqsX_wbhX2b7A">
-          <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#svcdefs/P_Twist"/>
-          <contract xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#svcdefs/P_Twist"/>
+        <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_LRX10IR3Eeqw8M3DSWkgQQ" client="_hItM8HNJEeqsX_wbhX2b7A">
+          <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#svcdefs/P_Pose2D"/>
+          <contract xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#svcdefs/P_Pose2D"/>
         </interfaceRealization>
       </nestedClassifier>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_k8iD4HNJEeqsX_wbhX2b7A" name="FaceDetection">

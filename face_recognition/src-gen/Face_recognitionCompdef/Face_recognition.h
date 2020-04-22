@@ -16,7 +16,7 @@
 // Include from Include stereotype (header)
 #include <rclcpp/rclcpp.hpp>
 #include "sensor_msgs/msg/image.hpp"
-#include "geometry_msgs/msg/twist.hpp"
+#include "geometry_msgs/msg/pose2_d.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc.hpp"
@@ -63,7 +63,7 @@ public:
 	/**
 	 * 
 	 */
-	std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::Twist>> Pose_pub;
+	std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::Pose2D>> Pose_pub;
 	/**
 	 * 
 	 * @param image sensor_msgs::msg::Image::SharedPtr
