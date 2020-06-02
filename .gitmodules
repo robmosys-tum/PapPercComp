@@ -1,0 +1,3 @@
+[submodule "trashnet"]
+	path = trashnet
+	url = https://github.com/garythung/trashnet
