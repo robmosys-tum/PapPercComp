@@ -14,7 +14,7 @@
 
 The following instructions were tested on Ubuntu 18.04. Installation from source using the 'catkin' buildsystem is recommendended.
 
-THe [Installation Instructions](http://knowrob.org/installation) are adapted as following
+The [Installation Instructions](http://knowrob.org/installation) are adapted as following
 
 ```bash
 rosdep update
