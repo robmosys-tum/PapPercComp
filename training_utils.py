@@ -16,7 +16,7 @@ CLASSES = {
 
 
 def train_model(model: nn.Module, train: DataLoader, val: DataLoader, optimizer: Optimizer, epochs: int = 1,
-                lossfunc: torch.nn = torch.nn.CrossEntropyLoss()):
+                lossfunc: torch.nn = torch.nn.CrossEntropyLoss(), debugprint=False):
     """
     Train a model on the input dataset.
     Parameters
@@ -45,33 +45,40 @@ def train_model(model: nn.Module, train: DataLoader, val: DataLoader, optimizer:
     """
     losses = []
     accuracies = []
+    # for epoch in tqdm(range(epochs), total=epochs):
     for epoch in range(epochs):
         for x, y in tqdm(iter(train), total=len(train)):
+        # for x, y in iter(train):
             ##########################################################
             # YOUR CODE HERE
+            x = x.to(model.device)
+            y = y.to(model.device)
+            optimizer.zero_grad()
             x = x.transpose(1, 3)
             x = x.transpose(2, 3)
-            # x = x.to(model.device)
             x = model(x)
             loss = lossfunc(x, y)
-            print("Epoch ", epoch, " Loss: ", loss.item())
+            if debugprint:
+                print("Epoch ", epoch, " Loss: ", loss.item())
             losses.append(loss.item())
 
-            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
             acc = 0
             total = 0
+            model.eval()
             for valX, valY in iter(val):
-                valX, valY = next(iter(val))
+                valX = valX.to(model.device)
+                valY = valY.to(model.device)
                 valX = valX.transpose(1, 3)
                 valX = valX.transpose(2, 3)
-                # valX = valX.to(model.device)
                 valX = model(valX).argmax(1)
                 acc += float(torch.sum(valX == valY).item())
                 total += len(valY)
-            print("Epoch ", epoch, " Acc: ", acc / total)
+            if debugprint:
+                print("Epoch ", epoch, " Acc: ", acc / total)
             accuracies.append(acc / total)
+            model.train()
             ##########################################################
     return losses, accuracies
