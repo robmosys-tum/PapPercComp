@@ -65,20 +65,26 @@ def train_model(model: nn.Module, train: DataLoader, val: DataLoader, optimizer:
             loss.backward()
             optimizer.step()
 
-            acc = 0
-            total = 0
-            model.eval()
-            for valX, valY in iter(val):
-                valX = valX.to(model.device)
-                valY = valY.to(model.device)
-                valX = valX.transpose(1, 3)
-                valX = valX.transpose(2, 3)
-                valX = model(valX).argmax(1)
-                acc += float(torch.sum(valX == valY).item())
-                total += len(valY)
+            acc = evaluate(model, val)
             if debugprint:
-                print("Epoch ", epoch, " Acc: ", acc / total)
-            accuracies.append(acc / total)
+                print("Epoch ", epoch, " Acc: ", acc)
+            accuracies.append(acc)
             model.train()
             ##########################################################
     return losses, accuracies
+
+
+def evaluate(model: nn.Module, eval_dataloader: DataLoader):
+    model.eval()
+    acc = 0
+    total = 0
+    for x, y in iter(eval_dataloader):
+        x = x.to(model.device)
+        y = y.to(model.device)
+        x = x.transpose(1, 3)
+        x = x.transpose(2, 3)
+        x = model(x)
+        x = x.argmax(1)
+        acc += float(torch.sum(x == y).item())
+        total += len(y)
+    return acc/total
