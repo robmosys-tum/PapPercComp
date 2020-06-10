@@ -14,6 +14,9 @@
 // Derived includes directives
 #include "rclcpp/rclcpp.hpp"
 
+//Kinect Fusion
+#include "kinectfusion.h"
+
 namespace Rgbd_surface_reconstructionCompdef {
 
 // static attributes (if any)
