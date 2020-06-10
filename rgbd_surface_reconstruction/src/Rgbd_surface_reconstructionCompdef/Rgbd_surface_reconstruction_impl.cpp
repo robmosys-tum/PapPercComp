@@ -14,8 +14,6 @@
 // Derived includes directives
 #include "rclcpp/rclcpp.hpp"
 
-//Kinect Fusion
-#include "kinectfusion.h"
 
 namespace Rgbd_surface_reconstructionCompdef {
 
@@ -28,6 +26,14 @@ namespace Rgbd_surface_reconstructionCompdef {
 Rgbd_surface_reconstruction_impl::Rgbd_surface_reconstruction_impl(
 		rclcpp::NodeOptions /*in*/options) :
 		Rgbd_surface_reconstruction(options) {
+
+			kinectfusion::GlobalConfiguration configuration;
+			configuration.voxel_scale = 2.f;
+			configuration.init_depth = 700.f;
+			configuration.distance_threshold = 10.f;
+			configuration.angle_threshold = 20.f;
+
+			kinectfusion::Pipeline pipeline { camera.get_parameters(), configuration };
 }
 
 /**

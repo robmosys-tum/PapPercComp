@@ -14,6 +14,9 @@
 #include "Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction.h"
 #include "sensor_msgs/msg/image.hpp"
 
+//Kinect Fusion
+#include "kinectfusion.h"
+
 namespace ros2Library {
 namespace rclcpp {
 class NodeOptions;
