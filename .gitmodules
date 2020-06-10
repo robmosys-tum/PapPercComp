@@ -1,0 +1,3 @@
+[submodule "rgbd_surface_reconstruction/lib/KinectFusionLib"]
+	path = rgbd_surface_reconstruction/lib/KinectFusionLib
+	url = https://github.com/DanielHettegger/KinectFusionLib.git
