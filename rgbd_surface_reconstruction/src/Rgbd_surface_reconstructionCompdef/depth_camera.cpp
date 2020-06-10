@@ -1,6 +1,6 @@
-#include <depth_camera.h>
+#include "Rgbd_surface_reconstructionCompdef/depth_camera.h"
 
-// ### Kinect ###
+//### Kinect ###
 KinectCamera::KinectCamera()
 {
     _cam_params.image_width = 1920;

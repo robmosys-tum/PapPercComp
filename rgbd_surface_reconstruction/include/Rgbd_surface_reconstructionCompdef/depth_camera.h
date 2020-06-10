@@ -28,8 +28,6 @@ struct InputFrame {
 class DepthCamera {
 public:
     virtual ~DepthCamera() = default;
-
-    virtual InputFrame grab_frame() const = 0;
     virtual CameraParameters get_parameters() const = 0;
 };
 

@@ -54,7 +54,7 @@ include_directories(
 
 add_subdirectory(lib/KinectFusionLib)
 
-add_executable(Rgbd_surface_reconstruction src-gen/Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction.cpp src/Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction_impl.cpp)
+add_executable(Rgbd_surface_reconstruction src-gen/Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction.cpp src/Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction_impl.cpp src/Rgbd_surface_reconstructionCompdef/depth_camera.cpp)
 target_link_libraries(Rgbd_surface_reconstruction ${OpenCV_LIBS} KinectFusion)
 ament_target_dependencies(Rgbd_surface_reconstruction rclcpp rclcpp_lifecycle sensor_msgs shape_msgs)
 
