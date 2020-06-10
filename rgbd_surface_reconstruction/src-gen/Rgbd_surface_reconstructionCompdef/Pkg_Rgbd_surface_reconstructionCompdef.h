@@ -1,8 +1,8 @@
-#ifndef PKG_SURFACERECONSTRUCTIONCOMPDEF
-#define PKG_SURFACERECONSTRUCTIONCOMPDEF
+#ifndef PKG_RGBD_SURFACE_RECONSTRUCTIONCOMPDEF
+#define PKG_RGBD_SURFACE_RECONSTRUCTIONCOMPDEF
 
 /************************************************************
- Pkg_SurfaceReconstructionCompdef package header
+ Pkg_Rgbd_surface_reconstructionCompdef package header
  ************************************************************/
 
 #ifndef _IN_
@@ -17,13 +17,13 @@
 
 /* Package dependency header include                        */
 
-namespace SurfaceReconstructionCompdef {
+namespace Rgbd_surface_reconstructionCompdef {
 
 // Types defined within the package
-}// of namespace SurfaceReconstructionCompdef
+}// of namespace Rgbd_surface_reconstructionCompdef
 
 /************************************************************
- End of Pkg_SurfaceReconstructionCompdef package header
+ End of Pkg_Rgbd_surface_reconstructionCompdef package header
  ************************************************************/
 
 #endif

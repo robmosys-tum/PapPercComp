@@ -1,11 +1,11 @@
-#ifndef PKG_SURFACERECONSTRUCTIONCOMPDEF_GLOBALENUMS
-#define PKG_SURFACERECONSTRUCTIONCOMPDEF_GLOBALENUMS
+#ifndef PKG_RGBD_SURFACE_RECONSTRUCTIONCOMPDEF_GLOBALENUMS
+#define PKG_RGBD_SURFACE_RECONSTRUCTIONCOMPDEF_GLOBALENUMS
 
 /************************************************************
  Pkg_globalenums package header
  ************************************************************/
 
-#include "SurfaceReconstructionCompdef/Pkg_SurfaceReconstructionCompdef.h"
+#include "Rgbd_surface_reconstructionCompdef/Pkg_Rgbd_surface_reconstructionCompdef.h"
 
 #ifndef _IN_
 #define _IN_
@@ -19,12 +19,12 @@
 
 /* Package dependency header include                        */
 
-namespace SurfaceReconstructionCompdef {
+namespace Rgbd_surface_reconstructionCompdef {
 namespace globalenums {
 
 // Types defined within the package
 }// of namespace globalenums
-} // of namespace SurfaceReconstructionCompdef
+} // of namespace Rgbd_surface_reconstructionCompdef
 
 /************************************************************
  End of Pkg_globalenums package header
