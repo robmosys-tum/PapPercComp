@@ -17,6 +17,8 @@
 //Kinect Fusion
 #include "kinectfusion.h"
 
+#include "depth_camera.h"
+
 namespace ros2Library {
 namespace rclcpp {
 class NodeOptions;
