@@ -43,12 +43,18 @@ public:
 	 */
 	Rgbd_surface_reconstruction_impl(rclcpp::NodeOptions /*in*/options);
 
+	~Rgbd_surface_reconstruction_impl();
+
 	/**
 	 * 
 	 * @param image 
 	 */
 	void depth_image_handler(
 			const sensor_msgs::msg::Image::SharedPtr /*in*/image);
+	
+	KinectCamera _camera {};
+
+	kinectfusion::Pipeline* _kinect_pipeline_ptr;
 
 };
 /************************************************************/

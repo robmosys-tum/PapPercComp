@@ -33,7 +33,12 @@ Rgbd_surface_reconstruction_impl::Rgbd_surface_reconstruction_impl(
 			configuration.distance_threshold = 10.f;
 			configuration.angle_threshold = 20.f;
 
-			//kinectfusion::Pipeline pipeline { camera.get_parameters(), configuration };
+			_kinect_pipeline_ptr = new kinectfusion::Pipeline(_camera.get_parameters(), configuration);
+}
+
+Rgbd_surface_reconstruction_impl::~Rgbd_surface_reconstruction_impl()
+{
+	delete _kinect_pipeline_ptr;
 }
 
 /**
