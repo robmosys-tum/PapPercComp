@@ -47,7 +47,7 @@ endif (EIGEN3_INCLUDE_DIR)
 
 include_directories(
 	# assure that generated .h files are found
-	${PROJECT_SOURCE_DIR}/src
+	${PROJECT_SOURCE_DIR}/include
 	${PROJECT_SOURCE_DIR}/src-gen
 	${PROJECT_SOURCE_DIR}/lib/KinectFusionLib/include
 )
