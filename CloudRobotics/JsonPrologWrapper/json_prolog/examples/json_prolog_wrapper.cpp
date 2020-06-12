@@ -9,24 +9,31 @@
 using namespace std;
 using namespace json_prolog;
 
-/**
- * This tutorial demonstrates simple receipt of messages over the ROS system.
- */
+std_msgs::String global_Msg;
+
+
+ros::Publisher chatter_pub;
+
+void parse(const PrologBindings &bdg, const std::string &var_name){
+
+  global_Msg.data = bdg[var_name].toString();
+}
+
 void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
     ROS_INFO("I heard: [%s]", msg->data.c_str());
 
     Prolog pl;
+
     PrologQueryProxy bdgs = pl.query(msg->data.c_str());
     for(PrologQueryProxy::iterator it=bdgs.begin();
       it != bdgs.end(); it++)
     {
       PrologBindings bdg = *it;
-      cout << "A = "<< bdg["A"] << endl;
-      cout << "B = " << bdg["B"] << endl;
-      cout << "C = " << bdg["C"] << endl;
+      parse(bdg, "A");
+      chatter_pub.publish(global_Msg);
+      ROS_INFO("I send: [%s]", global_Msg.data.c_str());
     }
-    //TODO(jkabalar): send this output back to robot control program
 }
 
 int main(int argc, char *argv[])
@@ -38,6 +45,8 @@ int main(int argc, char *argv[])
   ros::NodeHandle n;
 
   ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
+
+  chatter_pub = n.advertise<std_msgs::String>("response", 1000);
   
   ros::spin();
   

@@ -19,6 +19,7 @@
 // declare options
 rclcpp::NodeOptions knowrobwrapper_options;
 
+
 int main(int argc, char **argv) {
 	rclcpp::init(argc, argv);
 
@@ -33,21 +34,26 @@ int main(int argc, char **argv) {
 	executor.add_node(knowrobwrapper->get_node_base_interface());
 	while (rclcpp::ok())
 	{
-		// Sending examplary query to KnowRob interface
-		auto msg = std_msgs::msg::String();
-		msg.data = "member(A, [1, 2, 3, 4]), B = ['x', A], C = foo(bar, A, B)";
-		RCLCPP_INFO(knowrobwrapper->get_logger(), "Publishing: '%s'", msg.data.c_str());
+		auto query = std_msgs::msg::String();
+		std::cout << "Please enter a query for KnowRob: ";
+		std::cin >> query.data;
+		RCLCPP_INFO(knowrobwrapper->get_logger(), "Publishing: '%s'", query.data.c_str());
 
-		knowrobwrapper->query_pub_->publish(std::move(msg));
+		knowrobwrapper->query_pub_->publish(std::move(query));
+		
 		executor.spin_once();
 	}
 	executor.spin();
 	rclcpp::shutdown();
 }
 
+
 // End of Include declaration (body)
 
 namespace KnowRobWrapperCompdef {
+
+
+
 
 // static attributes (if any)
 

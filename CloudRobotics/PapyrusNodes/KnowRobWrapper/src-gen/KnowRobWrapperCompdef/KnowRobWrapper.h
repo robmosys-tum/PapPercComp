@@ -48,6 +48,12 @@ public:
 	 * 
 	 */
 	rclcpp::Subscription<std_msgs::msg::String>::SharedPtr response_sub_;
+	
+	/**
+	 * 
+	 * @param string 
+	 */
+	void ResponseHandler(const std_msgs::msg::String::SharedPtr /*in*/string);
 
 	/**
 	 * 

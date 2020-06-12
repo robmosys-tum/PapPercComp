@@ -35,7 +35,7 @@ KnowRobWrapper_impl::KnowRobWrapper_impl(rclcpp::NodeOptions /*in*/options) :
 void KnowRobWrapper_impl::ResponseHandler(
 		const std_msgs::msg::String::SharedPtr /*in*/string) {
 			msg = *string;
-			//RCLCPP_INFO(this->get_logger(), "KnowRobWrapper has received " + msg);
+			RCLCPP_INFO(this->get_logger(), "KnowRobWrapper has received '%s'", msg.data.c_str());
 }
 
 } // of namespace KnowRobWrapperCompdef
