@@ -19,6 +19,7 @@ The [Installation Instructions](http://knowrob.org/installation) are adapted as 
 ```bash
 rosdep update
 cd ~/catkin_ws/src
+wstool init
 wstool merge https://raw.github.com/jkabalar/knowrob/master/rosinstall/knowrob-base.rosinstall
 wstool update
 rosdep install --ignore-src --from-paths .
@@ -34,7 +35,7 @@ Also make sure to initialize the [Workspace](http://knowrob.org/installation/wor
 
 Inspired by testing of bi-directional communication between ROS and ROS2 nodes can be seen in the [Repository](https://github.com/ros2/ros1_bridge) of ros1bridge
 
-### Example 1a: ROS 2 talker and ROS 1 listener
+### Communication
 
 First we start a ROS 1 `roscore`:
 
@@ -69,13 +70,18 @@ The program will start outputting the currently available topics in ROS 1 and RO
 
 ---
 
-Now we start the ROS 2 talker from the papyrus workspace.
+Now we start the ROS 2 node from the papyrus workspace.
 
 ```
 # Shell C:
 # Source ROS 2 next:
 . <install-space-with-ros2>/setup.bash
 ros2 run knowrobwrapper KnowRobWrapper
+```
+
+The input will be entered via keyboard, therefore the query is requested
+```
+Please enter a query for Knowrob:
 ```
 
 The ROS 2 node will start printing the published messages to the console.
@@ -88,13 +94,13 @@ From the catkin workspace, perform
 # Shell C:
 # Source ROS 1 first:
 . ~/ros_catkin_ws/devel/setup.bash
-roslaunch json_prolog json_prolog.launch
+roslaunch json_prolog json_prolog_node
 ```
 This will launch the interface to the prolog.
 
 ---
 
-Now we start the ROS 1 listener. 
+Now we start the KnowRob wrapper. 
 From the catkin workspace, run the wrapper 
 
 ```
@@ -103,11 +109,12 @@ From the catkin workspace, run the wrapper
 rosrun json_prolog json_prolog_wrapper
 ```
 
-The ROS 1 node will start printing the received messages to the console.
+The ROS 1 node will start printing the received queries and responses to the console.
+The response will be forwarded to the ROS2 node.
 
 ---
 
-When looking at the output in *shell B* there will be a line stating that the bridge for this topic has been created:
+When looking at the output in *shell B* there will be a line stating that the bridge for the sender and receiver topics have been created:
 
 ```
 created 1to2 bridge for topic '/chatter' with ROS 1 type 'std_msgs/String' and ROS 2 type 'std_msgs/String'
