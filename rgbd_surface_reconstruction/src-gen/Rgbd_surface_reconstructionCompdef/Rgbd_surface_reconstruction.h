@@ -52,6 +52,11 @@ public:
 
 	/**
 	 * 
+	 */
+	rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr color_image_sub_;
+
+	/**
+	 * 
 	 * @param options 
 	 */
 	Rgbd_surface_reconstruction(rclcpp::NodeOptions /*in*/options);

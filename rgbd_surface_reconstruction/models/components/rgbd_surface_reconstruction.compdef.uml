@@ -17,6 +17,7 @@
       <ownedAttribute xmi:type="uml:Port" xmi:id="_q6rQAKrxEeqauMPG7GPMiw" name="depth_image" type="_tSlikKrxEeqauMPG7GPMiw" aggregation="composite"/>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_wRxQgKrxEeqauMPG7GPMiw" name="surface_mesh" type="_x0LecKrxEeqauMPG7GPMiw" aggregation="composite"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_zYtzUKrxEeqauMPG7GPMiw" name="activity1" type="_zYkCUKrxEeqauMPG7GPMiw"/>
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_dJ9WgK_xEeqoUr4pK8_TEQ" name="color_image" type="_gRGGkK_xEeqoUr4pK8_TEQ" aggregation="composite"/>
       <ownedConnector xmi:type="uml:Connector" xmi:id="_9s5_8KrxEeqauMPG7GPMiw" name="Connects8">
         <end xmi:type="uml:ConnectorEnd" xmi:id="_9s-RYKrxEeqauMPG7GPMiw" partWithPort="_zYtzUKrxEeqauMPG7GPMiw" role="_3GUGcKrxEeqauMPG7GPMiw"/>
         <end xmi:type="uml:ConnectorEnd" xmi:id="_9s-RYarxEeqauMPG7GPMiw" role="_wRxQgKrxEeqauMPG7GPMiw"/>
@@ -24,6 +25,10 @@
       <ownedConnector xmi:type="uml:Connector" xmi:id="_-80IoKrxEeqauMPG7GPMiw" name="Connects9">
         <end xmi:type="uml:ConnectorEnd" xmi:id="_-862UKrxEeqauMPG7GPMiw" partWithPort="_zYtzUKrxEeqauMPG7GPMiw" role="_30mv0KrxEeqauMPG7GPMiw"/>
         <end xmi:type="uml:ConnectorEnd" xmi:id="_-87dYKrxEeqauMPG7GPMiw" role="_q6rQAKrxEeqauMPG7GPMiw"/>
+      </ownedConnector>
+      <ownedConnector xmi:type="uml:Connector" xmi:id="_mOjjgK_xEeqoUr4pK8_TEQ" name="Connects12">
+        <end xmi:type="uml:ConnectorEnd" xmi:id="_mOpDEK_xEeqoUr4pK8_TEQ" partWithPort="_zYtzUKrxEeqauMPG7GPMiw" role="_ZJX18K_xEeqoUr4pK8_TEQ"/>
+        <end xmi:type="uml:ConnectorEnd" xmi:id="_mOpDEa_xEeqoUr4pK8_TEQ" role="_dJ9WgK_xEeqoUr4pK8_TEQ"/>
       </ownedConnector>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_kzM7dKrxEeqauMPG7GPMiw"/>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_tSlikKrxEeqauMPG7GPMiw"/>
@@ -40,7 +45,9 @@
         <ownedAttribute xmi:type="uml:Port" xmi:id="_3GUGcKrxEeqauMPG7GPMiw" name="ActivityPort2" aggregation="composite"/>
         <ownedAttribute xmi:type="uml:Port" xmi:id="_30mv0KrxEeqauMPG7GPMiw" name="ActivityPort3" aggregation="composite"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="__-8UAKrxEeqauMPG7GPMiw" name="" type="__-tDcKrxEeqauMPG7GPMiw"/>
+        <ownedAttribute xmi:type="uml:Port" xmi:id="_ZJX18K_xEeqoUr4pK8_TEQ" name="ActivityPort5" aggregation="composite"/>
       </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Class" xmi:id="_gRGGkK_xEeqoUr4pK8_TEQ"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Usage" xmi:id="_tSsQQKrxEeqauMPG7GPMiw" client="_tSlikKrxEeqauMPG7GPMiw">
       <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/sensor_msgs.servicedef.uml#svcdefs/P_Image"/>
@@ -48,6 +55,9 @@
     <packagedElement xmi:type="uml:OpaqueBehavior" xmi:id="__-tDcKrxEeqauMPG7GPMiw" name="depth_image_handler">
       <language>C++</language>
       <body></body>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_gRMNMK_xEeqoUr4pK8_TEQ" client="_gRGGkK_xEeqoUr4pK8_TEQ">
+      <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/sensor_msgs.servicedef.uml#svcdefs/P_Image"/>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_kzM7darxEeqauMPG7GPMiw">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_kzM7dqrxEeqauMPG7GPMiw" source="http://www.eclipse.org/uml2/2.0.0/UML">
@@ -136,4 +146,8 @@
   <robotics.generics:Connects xmi:id="_9s-RYqrxEeqauMPG7GPMiw" base_Connector="_9s5_8KrxEeqauMPG7GPMiw"/>
   <robotics.generics:Connects xmi:id="_-88EcKrxEeqauMPG7GPMiw" base_Connector="_-80IoKrxEeqauMPG7GPMiw"/>
   <robotics.functions:Function xmi:id="__-1mUKrxEeqauMPG7GPMiw" base_Class="__-tDcKrxEeqauMPG7GPMiw"/>
+  <robotics.components:ActivityPort xmi:id="_ZJcucK_xEeqoUr4pK8_TEQ" base_Port="_ZJX18K_xEeqoUr4pK8_TEQ"/>
+  <robotics.components:ComponentService xmi:id="_gRJw8K_xEeqoUr4pK8_TEQ" base_Class="_gRGGkK_xEeqoUr4pK8_TEQ"/>
+  <robotics.components:ComponentPort xmi:id="_gRPQgK_xEeqoUr4pK8_TEQ" base_Port="_dJ9WgK_xEeqoUr4pK8_TEQ"/>
+  <robotics.generics:Connects xmi:id="_mOpqIK_xEeqoUr4pK8_TEQ" base_Connector="_mOjjgK_xEeqoUr4pK8_TEQ"/>
 </xmi:XMI>

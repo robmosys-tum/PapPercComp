@@ -30,9 +30,17 @@ Rgbd_surface_reconstruction_impl::Rgbd_surface_reconstruction_impl(
 /**
  * 
  * @param image 
+ * @param image 
  */
 void Rgbd_surface_reconstruction_impl::depth_image_handler(
+		const sensor_msgs::msg::Image::SharedPtr /*in*/image,
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
+}
+
+/**
+ * 
+ */
+void Rgbd_surface_reconstruction_impl::color_image_handler() {
 }
 
 } // of namespace Rgbd_surface_reconstructionCompdef

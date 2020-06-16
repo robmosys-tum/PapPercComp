@@ -41,9 +41,16 @@ public:
 	/**
 	 * 
 	 * @param image 
+	 * @param image 
 	 */
 	void depth_image_handler(
+			const sensor_msgs::msg::Image::SharedPtr /*in*/image,
 			const sensor_msgs::msg::Image::SharedPtr /*in*/image);
+
+	/**
+	 * 
+	 */
+	void color_image_handler();
 
 };
 /************************************************************/

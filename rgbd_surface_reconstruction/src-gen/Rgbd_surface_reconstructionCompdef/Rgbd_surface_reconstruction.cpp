@@ -64,6 +64,14 @@ Rgbd_surface_reconstruction::Rgbd_surface_reconstruction(
 	// directly activate a publisher
 	surface_mesh_pub_->on_activate();
 
+	color_image_sub_ =
+			create_subscription<sensor_msgs::msg::Image>("color_image",
+					rclcpp::QoS(rclcpp::KeepLast(100)).best_effort(),
+					std::bind(
+							&Rgbd_surface_reconstructionCompdef::Rgbd_surface_reconstruction_impl::depth_image_handler,
+							(Rgbd_surface_reconstruction_impl*) this,
+							std::placeholders::_1));
+
 }
 
 } // of namespace Rgbd_surface_reconstructionCompdef
