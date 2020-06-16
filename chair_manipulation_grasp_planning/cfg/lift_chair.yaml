@@ -1,0 +1,13 @@
+planner1:
+  ns: robot1
+  arm_group: arm
+  gripper_group: gripper
+  world_frame: world
+  grasp_frame: robot1/grasp
+
+planner2:
+  ns: robot2
+  arm_group: arm
+  gripper_group: gripper
+  world_frame: world
+  grasp_frame: robot2/grasp

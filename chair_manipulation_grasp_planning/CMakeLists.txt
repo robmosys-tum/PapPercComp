@@ -26,7 +26,7 @@ find_package(Boost REQUIRED system filesystem date_time thread)
 
 catkin_package(
   LIBRARIES
-  INCLUDE_DIRS
+  INCLUDE_DIRS include
   CATKIN_DEPENDS
     moveit_core
     moveit_visual_tools
@@ -37,8 +37,10 @@ catkin_package(
     EIGEN3
 )
 
-include_directories(${THIS_PACKAGE_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS})
 
-add_executable(move src/move.cpp)
-target_link_libraries(move ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-install(TARGETS move DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+add_executable(move_node src/move.cpp)
+target_link_libraries(move_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(lift_chair_node include/chair_manipulation_grasp_planning/grasp_planner.h include/chair_manipulation_grasp_planning/dual_grasp_planner.h src/grasp_planner.cpp src/dual_grasp_planner.cpp src/lift_chair_node.cpp)
+target_link_libraries(lift_chair_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})

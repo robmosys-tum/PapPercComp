@@ -206,29 +206,29 @@ int main(int argc, char *argv[])
     // Initialization
     ros::init(argc, argv, node_name);
     ros::NodeHandle nh;
-    ros::NodeHandle priv_nh_("~");
+    ros::NodeHandle priv_nh("~");
     tf2_ros::TransformBroadcaster transform_broadcaster;
 
     // Parameters
-    auto world_frame = priv_nh_.param<std::string>("world_frame", "world");
-    auto depth_image_topic = priv_nh_.param<std::string>("depth_image_topic", "kinect/depth/image_raw");
-    auto camera_info_topic = priv_nh_.param<std::string>("camera_info_topic", "kinect/depth/camera_info");
-    auto grasp_frame = priv_nh_.param<std::string>("grasp_frame", "grasp");
-    auto debug_output_dir = priv_nh_.param<std::string>("debug_output_dir", "/tmp");
-    auto generate_debug_output = priv_nh_.param<bool>("generate_debug_output", false);
-    auto show_visualization = priv_nh_.param<bool>("show_visualization", false);
-    auto min_depth_tolerance = priv_nh_.param<double>("min_depth_tolerance",
+    auto world_frame = priv_nh.param<std::string>("world_frame", "world");
+    auto depth_image_topic = priv_nh.param<std::string>("depth_image_topic", "kinect/depth/image_raw");
+    auto camera_info_topic = priv_nh.param<std::string>("camera_info_topic", "kinect/depth/camera_info");
+    auto grasp_frame = priv_nh.param<std::string>("grasp_frame", "grasp");
+    auto debug_output_dir = priv_nh.param<std::string>("debug_output_dir", "/tmp");
+    auto generate_debug_output = priv_nh.param<bool>("generate_debug_output", false);
+    auto show_visualization = priv_nh.param<bool>("show_visualization", false);
+    auto min_depth_tolerance = priv_nh.param<double>("min_depth_tolerance",
                                                       std::numeric_limits<double>::infinity());
-    auto roi_x = priv_nh_.param<int>("roi_x", 0);
-    auto roi_y = priv_nh_.param<int>("roi_y", 0);
-    auto roi_width = priv_nh_.param<int>("roi_width", 640);
-    auto roi_height = priv_nh_.param<int>("roi_height", 480);
-    auto blur_ksize = priv_nh_.param<int>("blur_ksize", 31);
-    auto differentiator = priv_nh_.param<std::string>("differentiator", "laplacian");
-    auto sobel_ksize = priv_nh_.param<int>("sobel_ksize", 3);
-    auto laplacian_ksize = priv_nh_.param<int>("laplacian_ksize", 3);
-    auto nms_threshold = priv_nh_.param<double>("nms_threshold", 1.);
-    auto seat_plate_horizontal_position = priv_nh_.param<double>("seat_plate_horizontal_position", 0.3);
+    auto roi_x = priv_nh.param<int>("roi_x", 0);
+    auto roi_y = priv_nh.param<int>("roi_y", 0);
+    auto roi_width = priv_nh.param<int>("roi_width", 640);
+    auto roi_height = priv_nh.param<int>("roi_height", 480);
+    auto blur_ksize = priv_nh.param<int>("blur_ksize", 31);
+    auto differentiator = priv_nh.param<std::string>("differentiator", "laplacian");
+    auto sobel_ksize = priv_nh.param<int>("sobel_ksize", 3);
+    auto laplacian_ksize = priv_nh.param<int>("laplacian_ksize", 3);
+    auto nms_threshold = priv_nh.param<double>("nms_threshold", 1.);
+    auto seat_plate_horizontal_position = priv_nh.param<double>("seat_plate_horizontal_position", 0.3);
 
     // Create a window for visualization
     const std::string window_name = "Depth image detection";

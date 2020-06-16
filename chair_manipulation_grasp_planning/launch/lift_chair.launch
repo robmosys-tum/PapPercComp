@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<launch>
+  <node name="lift_chair" pkg="chair_manipulation_grasp_planning" type="lift_chair_node" output="screen">
+    <rosparam file="$(find chair_manipulation_grasp_planning)/cfg/lift_chair.yaml" />
+  </node>
+</launch>
