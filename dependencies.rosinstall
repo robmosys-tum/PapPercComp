@@ -1,0 +1,4 @@
+- git:
+    local-name: ur10_robotiq_2f_140
+    uri: 'https://github.com/Badenhoop/ur10_robotiq_2f_140'
+    version: master
