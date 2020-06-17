@@ -3,7 +3,11 @@
 # the correct files to run.
 # ------------------------------------------------------------------------------
 
+import torch
+
 from parse import get_arguments
+from dataloader import train_set, val_set
+from training import run_model
 
 
 if __name__ == "__main__":
@@ -11,6 +15,16 @@ if __name__ == "__main__":
 
     if args.mode == 'train':
         ### Actual training
-        pass
-    elif args.mode == 'test':
-        pass
+        # Shapes of the loaded data are [batch_size, channels, width, height]
+        dataloader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True)
+
+        run_model(dataloader, args=args, mode='train')
+
+        
+    elif args.mode == 'val':
+        ### This is actually the 'test' set, but apparently most papers (including the dataset itself) classify this as the validation set. As I identify as a sheep, I shall follow the crowd.
+        dataloader = torch.utils.data.DataLoader(val_set, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True)
+
+        run_model(dataloader, args=args, mode='val')
+
+    # No other modes allowed

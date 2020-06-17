@@ -1,2 +1,4 @@
 Data/DAVIS
 Data/DAVIS-data.zip
+__pycache__/dataloader.cpython-37.pyc
+__pycache__/parse.cpython-37.pyc

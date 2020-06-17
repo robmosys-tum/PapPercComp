@@ -1,5 +1,6 @@
 # ------------------------------------------------------------------------------
 # Loads training or testing data for PyTorch network.
+# Currently provides train_set and val_set for DAVIS 2016 dataset.
 # ------------------------------------------------------------------------------
 
 import torch
@@ -80,21 +81,3 @@ class DAVISData(torch.utils.data.Dataset):
 train_set = DAVISData('train')
 val_set = DAVISData('val')
 
-
-dataloaders = {}
-dataloaders['train'] = torch.utils.data.DataLoader(train_set, batch_size=16, shuffle=True, num_workers=0, pin_memory=True)
-dataloaders['val'] = torch.utils.data.DataLoader(val_set, batch_size=16, shuffle=False, num_workers=0, pin_memory=True)
-#dataloaders['test'] = torch.utils.data.DataLoader(test_set, batch_size=128, shuffle=False, num_workers=2, pin_memory=True)
-
-# Shapes of the loaded data are [batch_size, channels, width, height]
-
-
-i=0
-for x, y in dataloaders['train']:
-    print("Batch numbero %d" % i)
-    print(x.shape)
-    print(y.shape)
-    i += 1
-
-    if i > 10:
-        break
