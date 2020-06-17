@@ -14,10 +14,18 @@
 // Derived includes directives
 #include "rclcpp/rclcpp.hpp"
 
+// abs()
+#include <stdlib.h>
+
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+
 
 namespace Rgbd_surface_reconstructionCompdef {
 
 // static attributes (if any)
+int  encoding2mat_type(const std::string & encoding);
+void image_message_to_cv(cv::Mat &frame, sensor_msgs::msg::Image::SharedPtr msg);
 
 /**
  * 
@@ -47,6 +55,12 @@ Rgbd_surface_reconstruction_impl::~Rgbd_surface_reconstruction_impl()
  */
 void Rgbd_surface_reconstruction_impl::depth_image_handler(
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
+	_depth_image = image;
+
+	if(!_depth_image_initialized)
+		_depth_image_initialized = true;
+
+	process_frames();
 }
 
 /**
@@ -55,6 +69,70 @@ void Rgbd_surface_reconstruction_impl::depth_image_handler(
  */
 void Rgbd_surface_reconstruction_impl::color_image_handler(
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
+	_color_image = image;
+
+	if(!_color_image_initialized)
+		_color_image_initialized = true;
+
+	process_frames();
+}
+
+void Rgbd_surface_reconstruction_impl::process_frames(){
+	if(!_depth_image_initialized || !_color_image_initialized)
+		return;
+	
+	double depth_image_timestamp = _depth_image->header.stamp.sec + _depth_image->header.stamp.nanosec/1000000000.0;
+	double color_image_timestamp = _color_image->header.stamp.sec + _color_image->header.stamp.nanosec/1000000000.0;
+	
+	//If two messages are closer than 16ms we assume they belong together.
+	if(!(abs(depth_image_timestamp - color_image_timestamp)  <= 0.016)) 
+		return;
+
+	cv::Mat depth_map, color_map;
+
+	image_message_to_cv(depth_map, _depth_image);
+	image_message_to_cv(color_map, _color_image);
+
+	cv::imshow("depth_map", depth_map);
+	cv::imshow("color_map", color_map);
+	cv::waitKey(1);
+
+	bool success = _kinect_pipeline_ptr->process_frame(depth_map, color_map);
+    if (!success)
+        std::cout << "Frame could not be processed" << std::endl;
+	else	
+        std::cout << "Frame could be processed" << std::endl;
+
+
+}
+
+// from ROS2 image_tools demo [https://github.com/ros2/demos/blob/eloquent/image_tools/src/showimage.cpp]
+int encoding2mat_type(const std::string & encoding) {
+	if (encoding == "mono8") {
+	return CV_8UC1;
+	} else if (encoding == "bgr8") {
+	return CV_8UC3;
+	} else if (encoding == "mono16") {
+	return CV_16SC1;
+	} else if (encoding == "rgba8") {
+	return CV_8UC4;
+	} else if (encoding == "bgra8") {
+	return CV_8UC4;
+	} else if (encoding == "32FC1") {
+	return CV_32FC1;
+	} else if (encoding == "rgb8") {
+	return CV_8UC3;
+	} else {
+	throw std::runtime_error("Unsupported encoding type");
+	}
+}
+
+void image_message_to_cv(cv::Mat &frame, sensor_msgs::msg::Image::SharedPtr msg) {
+	cv::Mat tmp_frame(
+        msg->height, msg->width, encoding2mat_type(msg->encoding),
+        const_cast<unsigned char *>(msg->data.data()), msg->step);
+	
+	frame = tmp_frame;
 }
 
 } // of namespace Rgbd_surface_reconstructionCompdef

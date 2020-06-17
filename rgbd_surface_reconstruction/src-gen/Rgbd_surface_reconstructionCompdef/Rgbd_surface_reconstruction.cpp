@@ -53,14 +53,14 @@ Rgbd_surface_reconstruction::Rgbd_surface_reconstruction(
 		rclcpp_lifecycle::LifecycleNode("Rgbd_surface_reconstruction", options) {
 	depth_image_sub_ =
 			create_subscription<sensor_msgs::msg::Image>("depth_image",
-					rclcpp::QoS(rclcpp::KeepLast(100)).best_effort(),
+					rclcpp::QoS(rclcpp::KeepLast(100)).reliable(),
 					std::bind(
 							&Rgbd_surface_reconstructionCompdef::Rgbd_surface_reconstruction_impl::depth_image_handler,
 							(Rgbd_surface_reconstruction_impl*) this,
 							std::placeholders::_1));
 	color_image_sub_ =
 			create_subscription<sensor_msgs::msg::Image>("color_image",
-					rclcpp::QoS(rclcpp::KeepLast(100)).best_effort(),
+					rclcpp::QoS(rclcpp::KeepLast(100)).reliable(),
 					std::bind(
 							&Rgbd_surface_reconstructionCompdef::Rgbd_surface_reconstruction_impl::color_image_handler,
 							(Rgbd_surface_reconstruction_impl*) this,

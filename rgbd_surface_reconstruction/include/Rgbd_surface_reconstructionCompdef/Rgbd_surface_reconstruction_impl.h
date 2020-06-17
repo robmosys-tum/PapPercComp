@@ -55,11 +55,18 @@ public:
 	void color_image_handler(
 			const sensor_msgs::msg::Image::SharedPtr /*in*/image);
 	
-
+private:
 	KinectCamera _camera {};
 
 	kinectfusion::Pipeline* _kinect_pipeline_ptr;
 
+	bool _depth_image_initialized = false;
+	bool _color_image_initialized = false;
+
+	sensor_msgs::msg::Image::SharedPtr _depth_image;
+	sensor_msgs::msg::Image::SharedPtr _color_image;
+
+	void process_frames();
 };
 /************************************************************/
 /* External declarations (package visibility)               */
