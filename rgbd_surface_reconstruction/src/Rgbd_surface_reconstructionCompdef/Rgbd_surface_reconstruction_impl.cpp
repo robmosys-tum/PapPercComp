@@ -104,6 +104,17 @@ void Rgbd_surface_reconstruction_impl::process_frames(){
         std::cout << "Frame could be processed" << std::endl;
 
 
+	cv::imshow("Pipeline Output", _kinect_pipeline_ptr->get_last_model_frame());
+	cv::waitKey(1);
+
+	// Retrieve camera poses
+	//auto poses = _kinect_pipeline_ptr->get_poses();
+
+	// Export surface mesh
+	//auto mesh = _kinect_pipeline_ptr->extract_mesh();
+	//kinectfusion::export_ply("~/temp/mesh.ply", mesh);
+
+
 }
 
 // from ROS2 image_tools demo [https://github.com/ros2/demos/blob/eloquent/image_tools/src/showimage.cpp]
