@@ -1,5 +1,7 @@
 #include <ros/ros.h>
 #include <tf2_ros/transform_broadcaster.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Transform.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CameraInfo.h>
 #include <cv_bridge/cv_bridge.h>
@@ -159,14 +161,19 @@ void draw_rotated_rect(const cv::Mat &image, const cv::RotatedRect &rect, const 
     }
 }
 
+double angle_from_rotated_rect(const cv::RotatedRect &plate_rect)
+{
+    return deg2rad(plate_rect.angle) + M_PI_2;
+}
+
 cv::Point2i compute_grasp_pixel_coords(const cv::RotatedRect &plate_rect, double seat_plate_horizontal_position)
 {
     double length = plate_rect.size.width > plate_rect.size.height ? plate_rect.size.width : plate_rect.size.height;
-    double angle = deg2rad(plate_rect.angle);
+    double angle = angle_from_rotated_rect(plate_rect);
     double cx = plate_rect.center.x;
     double cy = plate_rect.center.y;
-    int x = int(cx + (seat_plate_horizontal_position - 0.5) * length * std::cos(angle + M_PI_2));
-    int y = int(cy + (seat_plate_horizontal_position - 0.5) * length * std::sin(angle + M_PI_2));
+    int x = int(cx + (seat_plate_horizontal_position - 0.5) * length * std::cos(angle));
+    int y = int(cy + (seat_plate_horizontal_position - 0.5) * length * std::sin(angle));
     return cv::Point2i{x, y};
 }
 
@@ -197,8 +204,26 @@ Eigen::Vector3d compute_surface_normal(const cv::Mat &depth_image, const cv::Poi
     double dzdy = 0.5 * (
             depth_image.at<double>(coords + cv::Point2i{0, 1}) -
             depth_image.at<double>(coords - cv::Point2i{0, 1}));
-    Eigen::Vector3d direction{-dzdx, -dzdy, 1.};
-    return direction / direction.norm();
+    auto direction_x = Eigen::Vector3d{1, 0, dzdx}.normalized();
+    auto direction_y = Eigen::Vector3d{0, 1, dzdy}.normalized();
+    auto normal = direction_x.cross(direction_y).normalized();
+    return normal;
+}
+
+Eigen::Quaterniond compute_frame_rotation(const Eigen::Vector3d &frame_axis, double axis_angle)
+{
+    // This function computes the rotation quaternion from the parent frame to a child frame which is defined by an axis
+    // and an angle (relative to the parent's frame).
+    // In order to do so, we have to compute the roll and pitch angles of the axis vector first.
+    // Then we consecutively apply intrinsic roll (x-axis), pitch (y-axis) and yaw (z-axis) rotations where
+    // the yaw angle is the angle of the child frame's axis.
+    auto roll = std::atan2(-frame_axis.y(), frame_axis.z());
+    auto pitch = std::asin(-frame_axis.x());
+
+    // Use tf2::Quaternion here because Eigen does not implement euler angles
+    tf2::Quaternion q;
+    q.setRPY(roll, pitch, axis_angle);
+    return Eigen::Quaterniond{q.w(), q.x(), q.y(), q.z()};
 }
 
 int main(int argc, char *argv[])
@@ -218,7 +243,7 @@ int main(int argc, char *argv[])
     auto generate_debug_output = priv_nh.param<bool>("generate_debug_output", false);
     auto show_visualization = priv_nh.param<bool>("show_visualization", false);
     auto min_depth_tolerance = priv_nh.param<double>("min_depth_tolerance",
-                                                      std::numeric_limits<double>::infinity());
+                                                     std::numeric_limits<double>::infinity());
     auto roi_x = priv_nh.param<int>("roi_x", 0);
     auto roi_y = priv_nh.param<int>("roi_y", 0);
     auto roi_width = priv_nh.param<int>("roi_width", 640);
@@ -360,15 +385,14 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        // Get depth, 3D position and the surface normal to obtain the grasp orientation
+        // Get depth, 3D position and rotation of the grasp frame
         auto grasp_depth = image.at<double>(grasp_pixel_coords);
         auto grasp_position = depth_pixel_to_3D_point(grasp_pixel_coords.x,
                                                       grasp_pixel_coords.y,
                                                       grasp_depth,
                                                       *camera_info_msg);
         auto grasp_surface_normal = compute_surface_normal(image, grasp_pixel_coords);
-        Eigen::Quaternion<double> grasp_orientation;
-        grasp_orientation = Eigen::AngleAxis<double>{plate_rect.angle + M_PI, grasp_surface_normal};
+        auto grasp_rotation = compute_frame_rotation(-grasp_surface_normal, angle_from_rotated_rect(plate_rect));
 
         // Create grasp pose message and publish it
         geometry_msgs::TransformStamped chair_transform;
@@ -378,10 +402,10 @@ int main(int argc, char *argv[])
         chair_transform.transform.translation.x = grasp_position.x();
         chair_transform.transform.translation.y = grasp_position.y();
         chair_transform.transform.translation.z = grasp_position.z();
-        chair_transform.transform.rotation.x = grasp_orientation.x();
-        chair_transform.transform.rotation.y = grasp_orientation.y();
-        chair_transform.transform.rotation.z = grasp_orientation.z();
-        chair_transform.transform.rotation.w = grasp_orientation.w();
+        chair_transform.transform.rotation.x = grasp_rotation.x();
+        chair_transform.transform.rotation.y = grasp_rotation.y();
+        chair_transform.transform.rotation.z = grasp_rotation.z();
+        chair_transform.transform.rotation.w = grasp_rotation.w();
         transform_broadcaster.sendTransform(chair_transform);
 
         // Generate output files for debugging

@@ -4,6 +4,9 @@ planner1:
   gripper_group: gripper
   world_frame: world
   grasp_frame: robot1/grasp
+  planning_time: 60
+  open_group_state: "open"
+  closed_group_state: "closed"
 
 planner2:
   ns: robot2
@@ -11,3 +14,6 @@ planner2:
   gripper_group: gripper
   world_frame: world
   grasp_frame: robot2/grasp
+  planning_time: 60
+  open_group_state: "open"
+  closed_group_state: "closed"
