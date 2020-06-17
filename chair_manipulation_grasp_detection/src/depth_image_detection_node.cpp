@@ -18,7 +18,7 @@ double deg2rad(double deg)
     return (deg / 180) * M_PI;
 }
 
-void computeHorizontalPixelCountHistogram(const cv::Mat &image, cv::Mat &hist)
+void compute_horizontal_pixel_count_histogram(const cv::Mat &image, cv::Mat &hist)
 {
     hist = cv::Mat::zeros(image.rows, 1, CV_64FC1);
     for (int row = 0; row < image.rows; row++)
@@ -33,7 +33,7 @@ void computeHorizontalPixelCountHistogram(const cv::Mat &image, cv::Mat &hist)
     }
 }
 
-void computeVerticalPixelCountHistogram(const cv::Mat &image, cv::Mat &hist)
+void compute_vertical_pixel_count_histogram(const cv::Mat &image, cv::Mat &hist)
 {
     hist = cv::Mat::zeros(image.cols, 1, CV_64FC1);
     for (int col = 0; col < image.cols; col++)
@@ -48,7 +48,7 @@ void computeVerticalPixelCountHistogram(const cv::Mat &image, cv::Mat &hist)
     }
 }
 
-void saveColumnVector(const cv::Mat &hist, const std::string &filename)
+void save_column_vector(const cv::Mat &hist, const std::string &filename)
 {
     std::ofstream file{filename};
     for (int row = 0; row < hist.rows; row++)
@@ -57,7 +57,7 @@ void saveColumnVector(const cv::Mat &hist, const std::string &filename)
     }
 }
 
-void nonMaximumSuppression(const cv::Mat &input, cv::Mat &output, double threshold, bool collectMin = false)
+void non_maximum_suppression(const cv::Mat &input, cv::Mat &output, double threshold, bool collectMin = false)
 {
     output = cv::Mat::zeros(input.size(), CV_64FC1);
     for (int row = 1; row < input.rows - 1; row++)
@@ -92,9 +92,9 @@ struct HistogramSegment
     {}
 };
 
-void extractHistogramSegments(const cv::Mat &hist,
-                              const cv::Mat &peak_indicators,
-                              std::vector<HistogramSegment> &segments)
+void extract_histogram_segments(const cv::Mat &hist,
+                                const cv::Mat &peak_indicators,
+                                std::vector<HistogramSegment> &segments)
 {
     int rows = hist.rows;
     int start_position = 0;
@@ -125,7 +125,7 @@ void extractHistogramSegments(const cv::Mat &hist,
 }
 
 template<typename Scalar>
-void matToPointVector(const cv::Mat &mat, std::vector<cv::Point> &points)
+void mat_to_point_vector(const cv::Mat &mat, std::vector<cv::Point> &points)
 {
     for (int row = 0; row < mat.rows; row++)
     {
@@ -139,13 +139,13 @@ void matToPointVector(const cv::Mat &mat, std::vector<cv::Point> &points)
     }
 }
 
-cv::RotatedRect findSeatPlateRect(const cv::Mat &image, int y_min, int y_max)
+cv::RotatedRect find_seat_plate_rect(const cv::Mat &image, int y_min, int y_max)
 {
     int width = image.size().width;
     int height = y_max - y_min + 1;
     auto crop = image(cv::Rect{0, y_min, width, height});
     std::vector<cv::Point> points;
-    matToPointVector<std::uint8_t>(crop, points);
+    mat_to_point_vector<std::uint8_t>(crop, points);
     auto rect = cv::minAreaRect(points);
     cv::Point2f new_center{rect.center.x, rect.center.y + float(y_min)};
     return cv::RotatedRect{new_center, rect.size, rect.angle};
@@ -307,8 +307,8 @@ int main(int argc, char *argv[])
         // Compute horizontal and vertical pixel count histograms
         cv::Mat horizontal_hist;
         cv::Mat vertical_hist;
-        computeHorizontalPixelCountHistogram(image_roi, horizontal_hist);
-        computeVerticalPixelCountHistogram(image_roi, vertical_hist);
+        compute_horizontal_pixel_count_histogram(image_roi, horizontal_hist);
+        compute_vertical_pixel_count_histogram(image_roi, vertical_hist);
 
         // Apply blur before computing gradients
         cv::Mat horizontal_hist_blurred;
@@ -343,12 +343,12 @@ int main(int argc, char *argv[])
         // Apply non-maximum-suppression to get start and end positions of each peak in the histograms
         cv::Mat horizontal_peak_indicators;
         cv::Mat vertical_peak_indicators;
-        nonMaximumSuppression(horizontal_hist_gradient, horizontal_peak_indicators, nms_threshold);
-        nonMaximumSuppression(vertical_hist_gradient, vertical_peak_indicators, nms_threshold);
+        non_maximum_suppression(horizontal_hist_gradient, horizontal_peak_indicators, nms_threshold);
+        non_maximum_suppression(vertical_hist_gradient, vertical_peak_indicators, nms_threshold);
 
         // Extract segments from the histogram containing peaks and non-peaks
         std::vector<HistogramSegment> segments;
-        extractHistogramSegments(horizontal_hist, horizontal_peak_indicators, segments);
+        extract_histogram_segments(horizontal_hist, horizontal_peak_indicators, segments);
 
         // If we detect less than three segments, that means that the chair does not have a graspable seat plate
         if (segments.size() < 3)
@@ -365,8 +365,8 @@ int main(int argc, char *argv[])
                 });
 
         // Fit a rectangle to the determined vertical area of the seat plate in the image
-        cv::RotatedRect plate_rect = findSeatPlateRect(image_roi, seat_plate_segment->start_position,
-                                                       seat_plate_segment->end_position);
+        cv::RotatedRect plate_rect = find_seat_plate_rect(image_roi, seat_plate_segment->start_position,
+                                                          seat_plate_segment->end_position);
 
         // Get the grasp pixel coordinates from the rectangle.
         // seat_plate_horizontal_position represents the percentage of positional offset
@@ -411,14 +411,14 @@ int main(int argc, char *argv[])
         // Generate output files for debugging
         if (generate_debug_output)
         {
-            saveColumnVector(horizontal_hist_blurred, debug_output_dir + "/horizontal_hist.csv");
-            saveColumnVector(vertical_hist_blurred, debug_output_dir + "/vertical_hist.csv");
+            save_column_vector(horizontal_hist_blurred, debug_output_dir + "/horizontal_hist.csv");
+            save_column_vector(vertical_hist_blurred, debug_output_dir + "/vertical_hist.csv");
 
-            saveColumnVector(horizontal_hist_gradient, debug_output_dir + "/horizontal_hist_gradient.csv");
-            saveColumnVector(vertical_hist_gradient, debug_output_dir + "/vertical_hist_gradient.csv");
+            save_column_vector(horizontal_hist_gradient, debug_output_dir + "/horizontal_hist_gradient.csv");
+            save_column_vector(vertical_hist_gradient, debug_output_dir + "/vertical_hist_gradient.csv");
 
-            saveColumnVector(horizontal_peak_indicators, debug_output_dir + "/horizontal_peak_indicators.csv");
-            saveColumnVector(vertical_peak_indicators, debug_output_dir + "/vertical_peak_indicators.csv");
+            save_column_vector(horizontal_peak_indicators, debug_output_dir + "/horizontal_peak_indicators.csv");
+            save_column_vector(vertical_peak_indicators, debug_output_dir + "/vertical_peak_indicators.csv");
         }
 
         // Show a window for visualization
