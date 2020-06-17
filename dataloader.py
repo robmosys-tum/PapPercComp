@@ -77,19 +77,24 @@ class DAVISData(torch.utils.data.Dataset):
 
 
 
-data = DAVISData('train')
-
-print(data[3])
-
+train_set = DAVISData('train')
+val_set = DAVISData('val')
 
 
-# Or we use the following
-# 'from_numpy' does not copy the data, they share the same memory.
-# tensor = torch.from_numpy(arr)
-# data = torch.utils.data.TensorDataset(tensor)
+dataloaders = {}
+dataloaders['train'] = torch.utils.data.DataLoader(train_set, batch_size=16, shuffle=True, num_workers=0, pin_memory=True)
+dataloaders['val'] = torch.utils.data.DataLoader(val_set, batch_size=16, shuffle=False, num_workers=0, pin_memory=True)
+#dataloaders['test'] = torch.utils.data.DataLoader(test_set, batch_size=128, shuffle=False, num_workers=2, pin_memory=True)
+
+# Shapes of the loaded data are [batch_size, channels, width, height]
 
 
-# dataloaders = {}
-# dataloaders['train'] = torch.utils.data.DataLoader(train_set, batch_size=128, shuffle=True, num_workers=2, pin_memory=True)
-# dataloaders['val'] = torch.utils.data.DataLoader(val_set, batch_size=128, shuffle=False, num_workers=2, pin_memory=True)
-# dataloaders['test'] = torch.utils.data.DataLoader(test_set, batch_size=128, shuffle=False, num_workers=2, pin_memory=True)
+i=0
+for x, y in dataloaders['train']:
+    print("Batch numbero %d" % i)
+    print(x.shape)
+    print(y.shape)
+    i += 1
+
+    if i > 10:
+        break
