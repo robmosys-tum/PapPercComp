@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
     pcl::io::loadPCDFile(template_model_path, *template_cloud);
     translateToOrigin(*template_cloud, *transformed_template_cloud);
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr filtered_template_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+    pcl::PointCloud<pcl::PointXYZ>::Ptr filtered_template_cloud(new pcl::PointCloud<pcl::PointXYZ>);
     voxel_filter.setInputCloud(transformed_template_cloud);
     voxel_filter.filter(*filtered_template_cloud);
 
@@ -403,7 +403,7 @@ int main(int argc, char *argv[])
          */
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_f(new pcl::PointCloud<pcl::PointXYZ>);
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZ>);
-        pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_plane(new pcl::PointCloud<pcl::PointXYZ>());
+        pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_plane(new pcl::PointCloud<pcl::PointXYZ>);
         // Create the segmentation object for the planar model and set all the parameters
         pcl::SACSegmentation<pcl::PointXYZ> seg;
         pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
