@@ -1,19 +1,25 @@
 planner1:
   ns: robot1
+  tf_prefix: robot1
   arm_group: arm
   gripper_group: gripper
   world_frame: world
-  grasp_frame: robot1/grasp
+  grasp_frame: grasp
   planning_time: 60
   open_group_state: "open"
   closed_group_state: "closed"
+  pre_grasp_distance: 0.1
+  lift_height: 0.2
 
 planner2:
   ns: robot2
+  tf_prefix: robot2
   arm_group: arm
   gripper_group: gripper
   world_frame: world
-  grasp_frame: robot2/grasp
+  grasp_frame: grasp
   planning_time: 60
   open_group_state: "open"
   closed_group_state: "closed"
+  pre_grasp_distance: 0.1
+  lift_height: 0.2

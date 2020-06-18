@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <tf2_ros/transform_broadcaster.h>
 #include <tf2/LinearMath/Quaternion.h>
+#include <tf2/convert.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CameraInfo.h>
 #include <cv_bridge/cv_bridge.h>
@@ -13,6 +14,7 @@
 #include <pcl/features/normal_3d.h>
 
 using PointCloud = pcl::PointCloud<pcl::PointXYZ>;
+using PointIndices = pcl::PointIndices;
 using SurfaceNormals = pcl::PointCloud<pcl::Normal>;
 using SearchMethod = pcl::search::KdTree<pcl::PointXYZ>;
 
@@ -41,22 +43,6 @@ PointT depth_pixel_to_3D_point(int u,
     double X = (double(u) - cx) / fx * Z;
     double Y = (double(v) - cy) / fy * Z;
     return PointT(X, Y, Z);
-}
-
-void depth_image_to_point_cloud(const cv::Mat &depth_image,
-                                const sensor_msgs::CameraInfo &camera_info,
-                                PointCloud &point_cloud)
-{
-    point_cloud = PointCloud{std::uint32_t(depth_image.cols), std::uint32_t(depth_image.rows)};
-    for (int row = 0; row < depth_image.rows; row++)
-    {
-        for (int col = 0; col < depth_image.cols; col++)
-        {
-            point_cloud.at(col, row) = depth_pixel_to_3D_point<pcl::PointXYZ>(col, row,
-                                                                              depth_image.at<double>(row, col),
-                                                                              camera_info);
-        }
-    }
 }
 
 void compute_horizontal_pixel_count_histogram(const cv::Mat &image, cv::Mat &hist)
@@ -202,15 +188,21 @@ void draw_rotated_rect(const cv::Mat &image, const cv::RotatedRect &rect, const 
     }
 }
 
-double angle_from_rotated_rect(const cv::RotatedRect &plate_rect)
+double angle_from_rotated_rect(const cv::RotatedRect &rect)
 {
-    return deg2rad(plate_rect.angle) + M_PI_2;
+    // Convert weird RotatedRect angle
+    if (rect.size.width > rect.size.height)
+    {
+        return deg2rad(-rect.angle);
+    }
+    return deg2rad(rect.angle + 90);
 }
 
 cv::Point2i compute_grasp_pixel_coords(const cv::RotatedRect &plate_rect, double seat_plate_horizontal_position)
 {
     double length = plate_rect.size.width > plate_rect.size.height ? plate_rect.size.width : plate_rect.size.height;
     double angle = angle_from_rotated_rect(plate_rect);
+
     double cx = plate_rect.center.x;
     double cy = plate_rect.center.y;
     int x = int(cx + (seat_plate_horizontal_position - 0.5) * length * std::cos(angle));
@@ -218,18 +210,92 @@ cv::Point2i compute_grasp_pixel_coords(const cv::RotatedRect &plate_rect, double
     return cv::Point2i{x, y};
 }
 
-Eigen::Vector3d compute_surface_normal(const PointCloud::ConstPtr &point_cloud,
-                                       const cv::Point2i &coords,
+bool in_roi(const cv::Point2i &coords, const cv::Mat &roi)
+{
+    return coords.x >= 0 &&
+           coords.x < roi.cols &&
+           coords.y >= 0 &&
+           coords.y < roi.rows &&
+           roi.at<std::uint8_t>(coords) > 0;
+}
+
+bool compute_grasp_position(const cv::Point2i &grasp_pixel_coords,
+                            const cv::Mat &depth_image,
+                            const cv::Mat &image_roi,
+                            const sensor_msgs::CameraInfo &camera_info,
+                            Eigen::Vector3d &grasp_position)
+{
+    // If the pixel at the given coordinates is in the region of interest, return that right away
+    double depth = depth_image.at<double>(grasp_pixel_coords);
+    if (in_roi(grasp_pixel_coords, image_roi))
+    {
+        grasp_position = depth_pixel_to_3D_point<Eigen::Vector3d>(
+                grasp_pixel_coords.x, grasp_pixel_coords.y, depth, camera_info);
+        return true;
+    }
+
+    // Otherwise, return the center point of the surrounding pixels
+    Eigen::Vector3d center{0., 0., 0.};
+    static const std::vector<cv::Point2i> coords_offsets = {
+            cv::Point2i{-1, -1}, cv::Point2i{-1, 0}, cv::Point2i{-1, 1},
+            cv::Point2i{0, -1}, cv::Point2i{0, 1},
+            cv::Point2i{1, -1}, cv::Point2i{1, 0}, cv::Point2i{1, 1}};
+    std::size_t num_valid_neighbors = 0;
+    for (const auto &offset : coords_offsets)
+    {
+        auto coords = cv::Point2i{grasp_pixel_coords.x + offset.x,
+                                  grasp_pixel_coords.y + offset.y};
+        if (!in_roi(coords, image_roi))
+        {
+            continue;
+        }
+        depth = depth_image.at<double>(coords);
+        auto point = depth_pixel_to_3D_point<Eigen::Vector3d>(coords.x, coords.y, depth, camera_info);
+        center += point;
+        num_valid_neighbors++;
+    }
+
+    if (num_valid_neighbors == 0)
+    {
+        return false;
+    }
+    grasp_position = center / num_valid_neighbors;
+    return true;
+}
+
+Eigen::Vector3d compute_surface_normal(const Eigen::Vector3d &position,
+                                       const cv::Mat &depth_image,
+                                       const cv::Mat &image_roi,
+                                       const sensor_msgs::CameraInfo &camera_info,
                                        double normal_radius)
 {
-    pcl::PointIndices::Ptr indices{new pcl::PointIndices};
-    indices->indices.push_back(coords.y * point_cloud->width + coords.x);
+    // Retrieve the search surface which is all points that are in the region of interest
+    PointCloud::Ptr search_surface{new PointCloud};
+    for (int col = 0; col < depth_image.cols; col++)
+    {
+        for (int row = 0; row < depth_image.rows; row++)
+        {
+            cv::Point2i coords{col, row};
+            if (in_roi(coords, image_roi))
+            {
+                auto depth = depth_image.at<double>(coords);
+                auto point = depth_pixel_to_3D_point<pcl::PointXYZ>(col, row, depth, camera_info);
+                search_surface->push_back(point);
+            }
+        }
+    }
+
+    // Create a point cloud with a single point containing the requested position
+    PointCloud::Ptr position_cloud{new PointCloud};
+    position_cloud->push_back(pcl::PointXYZ{
+            float(position.x()), float(position.y()), float(position.z())});
+
     SurfaceNormals::Ptr normals{new SurfaceNormals};
     SearchMethod::Ptr search_method{new SearchMethod};
 
     pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> estimation;
-    estimation.setInputCloud(point_cloud);
-    estimation.setIndices(indices);
+    estimation.setInputCloud(position_cloud);
+    estimation.setSearchSurface(search_surface);
     estimation.setSearchMethod(search_method);
     estimation.setRadiusSearch(normal_radius);
     estimation.compute(*normals);
@@ -265,7 +331,6 @@ int main(int argc, char *argv[])
     tf2_ros::TransformBroadcaster transform_broadcaster;
 
     // Parameters
-    auto world_frame = priv_nh.param<std::string>("world_frame", "world");
     auto depth_image_topic = priv_nh.param<std::string>("depth_image_topic", "kinect/depth/image_raw");
     auto camera_info_topic = priv_nh.param<std::string>("camera_info_topic", "kinect/depth/camera_info");
     auto grasp_frame = priv_nh.param<std::string>("grasp_frame", "grasp");
@@ -278,10 +343,9 @@ int main(int argc, char *argv[])
     auto roi_y = priv_nh.param<int>("roi_y", 0);
     auto roi_width = priv_nh.param<int>("roi_width", 640);
     auto roi_height = priv_nh.param<int>("roi_height", 480);
-    auto blur_ksize = priv_nh.param<int>("blur_ksize", 31);
+    auto gaussian_ksize = priv_nh.param<int>("gaussian_ksize", 15);
     auto differentiator = priv_nh.param<std::string>("differentiator", "laplacian");
-    auto sobel_ksize = priv_nh.param<int>("sobel_ksize", 3);
-    auto laplacian_ksize = priv_nh.param<int>("laplacian_ksize", 3);
+    auto differentiator_ksize = priv_nh.param<int>("differentiator_ksize", 3);
     auto nms_threshold = priv_nh.param<double>("nms_threshold", 1.);
     auto seat_plate_horizontal_position = priv_nh.param<double>("seat_plate_horizontal_position", 0.3);
     auto normal_radius = priv_nh.param<double>("normal_radius", 0.05);
@@ -311,24 +375,20 @@ int main(int argc, char *argv[])
             ROS_ERROR_STREAM_NAMED(node_name, "cv_bridge exception: " << e.what());
             return -1;
         }
-        auto image = cv_ptr->image;
+        auto depth_image = cv_ptr->image;
         auto camera_frame = image_msg->header.frame_id;
 
         // Get camera info
         topic = nh.resolveName(camera_info_topic);
         auto camera_info_msg = ros::topic::waitForMessage<sensor_msgs::CameraInfo>(topic, nh);
 
-        // Convert depth image to organized point cloud
-        PointCloud::Ptr point_cloud{new PointCloud};
-        depth_image_to_point_cloud(image, *camera_info_msg, *point_cloud);
-
         // Extract min and max depth
         double min_depth, max_depth;
-        cv::minMaxLoc(image, &min_depth, &max_depth);
+        cv::minMaxLoc(depth_image, &min_depth, &max_depth);
 
         // Truncate depth
         cv::Mat image_threshold;
-        cv::inRange(image,
+        cv::inRange(depth_image,
                     cv::Scalar{min_depth - min_depth_tolerance},
                     cv::Scalar{min_depth + min_depth_tolerance},
                     image_threshold);
@@ -348,25 +408,26 @@ int main(int argc, char *argv[])
         // Apply blur before computing gradients
         cv::Mat horizontal_hist_blurred;
         cv::Mat vertical_hist_blurred;
-        cv::GaussianBlur(horizontal_hist, horizontal_hist_blurred, cv::Size(1, blur_ksize), 0., 0.,
-                         cv::BORDER_DEFAULT);
-        cv::GaussianBlur(vertical_hist, vertical_hist_blurred, cv::Size(1, blur_ksize), 0., 0., cv::BORDER_DEFAULT);
+        cv::GaussianBlur(
+                horizontal_hist, horizontal_hist_blurred, cv::Size(1, gaussian_ksize), 0., 0., cv::BORDER_DEFAULT);
+        cv::GaussianBlur(
+                vertical_hist, vertical_hist_blurred, cv::Size(1, gaussian_ksize), 0., 0., cv::BORDER_DEFAULT);
 
         // Compute the gradients of the histograms
         cv::Mat horizontal_hist_gradient;
         cv::Mat vertical_hist_gradient;
         if (differentiator == "sobel")
         {
-            cv::Sobel(horizontal_hist_blurred, horizontal_hist_gradient, -1, 0, 1, sobel_ksize, 1., 0.,
+            cv::Sobel(horizontal_hist_blurred, horizontal_hist_gradient, -1, 0, 1, differentiator_ksize, 1., 0.,
                       cv::BORDER_REPLICATE);
-            cv::Sobel(vertical_hist_blurred, vertical_hist_gradient, -1, 0, 1, sobel_ksize, 1., 0.,
+            cv::Sobel(vertical_hist_blurred, vertical_hist_gradient, -1, 0, 1, differentiator_ksize, 1., 0.,
                       cv::BORDER_REPLICATE);
         }
         else if (differentiator == "laplacian")
         {
-            cv::Laplacian(horizontal_hist_blurred, horizontal_hist_gradient, -1, laplacian_ksize, 1., 0.,
+            cv::Laplacian(horizontal_hist_blurred, horizontal_hist_gradient, -1, differentiator_ksize, 1., 0.,
                           cv::BORDER_REPLICATE);
-            cv::Laplacian(vertical_hist_blurred, vertical_hist_gradient, -1, laplacian_ksize, 1., 0.,
+            cv::Laplacian(vertical_hist_blurred, vertical_hist_gradient, -1, differentiator_ksize, 1., 0.,
                           cv::BORDER_REPLICATE);
         }
         else
@@ -411,19 +472,27 @@ int main(int argc, char *argv[])
                 << grasp_pixel_coords.x << "," << grasp_pixel_coords.y << ")");
 
         // Check the potential edge case where the computed grasp pixel coordinates are not in the image anymore.
-        // We also check if the neighboring pixels are inside the image in order to compute the surface normal.
-        cv::Rect check_bounds_rect{grasp_pixel_coords.x - 1, grasp_pixel_coords.y - 1, 3, 3};
-        cv::Rect image_rect = cv::Rect{0, 0, image.cols, image.rows};
-        if ((check_bounds_rect & image_rect) != check_bounds_rect)
+        cv::Rect image_rect = cv::Rect{0, 0, depth_image.cols, depth_image.rows};
+        if (!image_rect.contains(grasp_pixel_coords))
         {
             ROS_WARN_NAMED(node_name, "Grasp pixel coords are out of image bounds!");
             continue;
         }
 
-        // Get depth, 3D position and rotation of the grasp frame
-        auto grasp_depth = image.at<double>(grasp_pixel_coords);
-        auto grasp_position = point_cloud->at(grasp_pixel_coords.y, grasp_pixel_coords.x);
-        auto grasp_surface_normal = compute_surface_normal(point_cloud, grasp_pixel_coords, normal_radius);
+        // Get the 3D position of the grasp. It can be the case that some depth values are NaN.
+        // These pixels are filtered out in the image_roi.
+        // We have to check for the case that our computed grasp pixel coordinate yields such a NaN value
+        // and infer the final grasp position from its surrounding depth pixels.
+        Eigen::Vector3d grasp_position;
+        if (!compute_grasp_position(grasp_pixel_coords, depth_image, image_roi, *camera_info_msg, grasp_position))
+        {
+            ROS_WARN_NAMED(node_name, "Unable to compute grasp position!");
+            continue;
+        }
+
+        // The grasp coordinate system is obtained from the surface normal at the grasp position
+        auto grasp_surface_normal = compute_surface_normal(
+                grasp_position, depth_image, image_roi, *camera_info_msg, normal_radius);
         auto grasp_rotation = compute_frame_rotation(grasp_surface_normal, angle_from_rotated_rect(plate_rect));
 
         // Create grasp pose message and publish it
@@ -431,9 +500,9 @@ int main(int argc, char *argv[])
         chair_transform.header.stamp = ros::Time::now();
         chair_transform.header.frame_id = camera_frame;
         chair_transform.child_frame_id = grasp_frame;
-        chair_transform.transform.translation.x = grasp_position.x;
-        chair_transform.transform.translation.y = grasp_position.y;
-        chair_transform.transform.translation.z = grasp_position.z;
+        chair_transform.transform.translation.x = grasp_position.x();
+        chair_transform.transform.translation.y = grasp_position.y();
+        chair_transform.transform.translation.z = grasp_position.z();
         chair_transform.transform.rotation.x = grasp_rotation.x();
         chair_transform.transform.rotation.y = grasp_rotation.y();
         chair_transform.transform.rotation.z = grasp_rotation.z();

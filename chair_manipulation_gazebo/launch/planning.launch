@@ -1,13 +1,32 @@
 <?xml version="1.0" ?>
 <launch>
+
   <group ns="robot1">
+
+    <!-- Moveit -->
     <include file="$(find ur10_robotiq_2f_140_moveit_config)/launch/ur10_robotiq_2f_140_moveit_planning_execution.launch">
       <arg name="use_rviz" value="false" />
     </include>
+
+    <!-- grasp detection -->
+    <include file="$(find chair_manipulation_grasp_detection)/launch/depth_image_detection.launch">
+      <arg name="grasp_frame" value="robot1/grasp" />
+    </include>
+
   </group>
+
   <group ns="robot2">
+
+    <!-- Moveit -->
     <include file="$(find ur10_robotiq_2f_140_moveit_config)/launch/ur10_robotiq_2f_140_moveit_planning_execution.launch">
       <arg name="use_rviz" value="false" />
     </include>
+
+    <!-- grasp detection -->
+    <include file="$(find chair_manipulation_grasp_detection)/launch/depth_image_detection.launch">
+      <arg name="grasp_frame" value="robot2/grasp" />
+    </include>
+
   </group>
+
 </launch>

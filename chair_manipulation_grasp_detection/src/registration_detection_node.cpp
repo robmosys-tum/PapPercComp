@@ -138,7 +138,6 @@ public:
     {
         float fitness_score;
         Eigen::Matrix4f final_transformation;
-//        PCL_MAKE_ALIGNED_OPERATOR_NEW
     };
 
     explicit TemplateAlignment(int nr_samples = 10,

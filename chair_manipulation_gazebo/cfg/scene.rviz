@@ -352,19 +352,201 @@ Visualization Manager:
       Value: true
       Velocity_Scaling_Factor: 0.1
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: true
+        robot1/base:
+          Value: true
+        robot1/base_link:
+          Value: true
+        robot1/camera_depth_frame:
+          Value: true
+        robot1/camera_depth_optical_frame:
+          Value: true
+        robot1/camera_link:
+          Value: true
+        robot1/camera_rgb_frame:
+          Value: true
+        robot1/camera_rgb_optical_frame:
+          Value: true
+        robot1/ee_link:
+          Value: true
+        robot1/forearm_link:
+          Value: true
+        robot1/left_inner_finger:
+          Value: true
+        robot1/left_inner_finger_pad:
+          Value: true
+        robot1/left_inner_knuckle:
+          Value: true
+        robot1/left_outer_finger:
+          Value: true
+        robot1/left_outer_knuckle:
+          Value: true
+        robot1/right_inner_finger:
+          Value: true
+        robot1/right_inner_finger_pad:
+          Value: true
+        robot1/right_inner_knuckle:
+          Value: true
+        robot1/right_outer_finger:
+          Value: true
+        robot1/right_outer_knuckle:
+          Value: true
+        robot1/robotiq_arg2f_base_link:
+          Value: true
+        robot1/shoulder_link:
+          Value: true
+        robot1/tool0:
+          Value: true
+        robot1/upper_arm_link:
+          Value: true
+        robot1/world:
+          Value: true
+        robot1/wrist_1_link:
+          Value: true
+        robot1/wrist_2_link:
+          Value: true
+        robot1/wrist_3_link:
+          Value: true
+        robot2/base:
+          Value: true
+        robot2/base_link:
+          Value: true
+        robot2/camera_depth_frame:
+          Value: true
+        robot2/camera_depth_optical_frame:
+          Value: true
+        robot2/camera_link:
+          Value: true
+        robot2/camera_rgb_frame:
+          Value: true
+        robot2/camera_rgb_optical_frame:
+          Value: true
+        robot2/ee_link:
+          Value: true
+        robot2/forearm_link:
+          Value: true
+        robot2/left_inner_finger:
+          Value: true
+        robot2/left_inner_finger_pad:
+          Value: true
+        robot2/left_inner_knuckle:
+          Value: true
+        robot2/left_outer_finger:
+          Value: true
+        robot2/left_outer_knuckle:
+          Value: true
+        robot2/right_inner_finger:
+          Value: true
+        robot2/right_inner_finger_pad:
+          Value: true
+        robot2/right_inner_knuckle:
+          Value: true
+        robot2/right_outer_finger:
+          Value: true
+        robot2/right_outer_knuckle:
+          Value: true
+        robot2/robotiq_arg2f_base_link:
+          Value: true
+        robot2/shoulder_link:
+          Value: true
+        robot2/tool0:
+          Value: true
+        robot2/upper_arm_link:
+          Value: true
+        robot2/world:
+          Value: true
+        robot2/wrist_1_link:
+          Value: true
+        robot2/wrist_2_link:
+          Value: true
+        robot2/wrist_3_link:
+          Value: true
+        world:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        world:
+          robot1/world:
+            robot1/base_link:
+              robot1/base:
+                {}
+              robot1/shoulder_link:
+                robot1/upper_arm_link:
+                  robot1/forearm_link:
+                    robot1/wrist_1_link:
+                      robot1/wrist_2_link:
+                        robot1/wrist_3_link:
+                          robot1/ee_link:
+                            {}
+                          robot1/tool0:
+                            robot1/robotiq_arg2f_base_link:
+                              robot1/left_inner_knuckle:
+                                {}
+                              robot1/left_outer_knuckle:
+                                robot1/left_outer_finger:
+                                  robot1/left_inner_finger:
+                                    robot1/left_inner_finger_pad:
+                                      {}
+                              robot1/right_inner_knuckle:
+                                {}
+                              robot1/right_outer_knuckle:
+                                robot1/right_outer_finger:
+                                  robot1/right_inner_finger:
+                                    robot1/right_inner_finger_pad:
+                                      {}
+            robot1/camera_rgb_frame:
+              robot1/camera_depth_frame:
+                robot1/camera_depth_optical_frame:
+                  {}
+              robot1/camera_link:
+                {}
+              robot1/camera_rgb_optical_frame:
+                {}
+          robot2/world:
+            robot2/base_link:
+              robot2/base:
+                {}
+              robot2/shoulder_link:
+                robot2/upper_arm_link:
+                  robot2/forearm_link:
+                    robot2/wrist_1_link:
+                      robot2/wrist_2_link:
+                        robot2/wrist_3_link:
+                          robot2/ee_link:
+                            {}
+                          robot2/tool0:
+                            robot2/robotiq_arg2f_base_link:
+                              robot2/left_inner_knuckle:
+                                {}
+                              robot2/left_outer_knuckle:
+                                robot2/left_outer_finger:
+                                  robot2/left_inner_finger:
+                                    robot2/left_inner_finger_pad:
+                                      {}
+                              robot2/right_inner_knuckle:
+                                {}
+                              robot2/right_outer_knuckle:
+                                robot2/right_outer_finger:
+                                  robot2/right_inner_finger:
+                                    robot2/right_inner_finger_pad:
+                                      {}
+            robot2/camera_rgb_frame:
+              robot2/camera_depth_frame:
+                robot2/camera_depth_optical_frame:
+                  {}
+              robot2/camera_link:
+                {}
+              robot2/camera_rgb_optical_frame:
+                {}
       Update Interval: 0
-      Value: false
+      Value: true
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
@@ -622,8 +804,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 0.9568195343017578
-        Min Value: 2.980232238769531e-7
+        Max Value: 0.9578456282615662
+        Min Value: 5.960464477539062e-7
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -644,7 +826,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /kinect/depth/points
+      Topic: /robot1/kinect/depth/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -652,14 +834,14 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 0.9853925108909607
-        Min Value: 0.01492735743522644
+        Max Value: 0.9568641781806946
+        Min Value: 3.5762786865234375e-7
         Value: true
       Axis: Z
       Channel Name: intensity
       Class: rviz/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: Intensity
+      Color Transformer: AxisColor
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
@@ -674,67 +856,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /chair
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 0.9853925108909607
-        Min Value: 0.01492735743522644
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/PointCloud2
-      Color: 115; 210; 22
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: PointCloud2
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Points
-      Topic: /template
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 0.9853925108909607
-        Min Value: 0.01492735743522644
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/PointCloud2
-      Color: 239; 41; 41
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: PointCloud2
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Points
-      Topic: /aligned_template
+      Topic: /robot2/kinect/depth/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -767,7 +889,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.4493045806884766
+      Distance: 3.3427062034606934
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -782,10 +904,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.30479755997657776
+      Pitch: 0.4897974133491516
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.24044069647789001
+      Yaw: 1.7954399585723877
     Saved: ~
 Window Geometry:
   Displays:
