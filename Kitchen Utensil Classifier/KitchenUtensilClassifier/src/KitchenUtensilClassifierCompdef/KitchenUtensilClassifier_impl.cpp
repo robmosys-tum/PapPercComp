@@ -25,14 +25,19 @@ namespace KitchenUtensilClassifierCompdef {
 
 // static attributes (if any)
 
+static void softmax(Mat *outputs, double max_val);
+
+
 /**
  * 
  * @param options 
  */
+
 KitchenUtensilClassifier_impl::KitchenUtensilClassifier_impl(
 		rclcpp::NodeOptions /*in*/options) :
 		KitchenUtensilClassifier(options) {
 	net = dnn::readNet(MODEL_PATH);
+	counter = 200;
 }
 
 /**
@@ -41,31 +46,71 @@ KitchenUtensilClassifier_impl::KitchenUtensilClassifier_impl(
  */
 void KitchenUtensilClassifier_impl::classifyKitchenUtensil(
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
+
+	const char *class_name;
 	Mat blob;
 	Mat frame(image->height, image->width, CV_8UC3, image->data.data());
 
-    Scalar mean = 100;
-    double scaleFactor = 1.0;
-    Size inputSize(inputWidth, inputHeight);
+	if (counter++ < 30)
+		return;
+	counter = 0;
+	Scalar mean = Scalar(124.16, 116.736, 103.936);
 
-    blob = dnn::blobFromImage(frame, scaleFactor, inputSize, mean);
-    net.setInput(blob);
-    Mat prob = net.forward();
-    Point classIdPoint;
-    double confidence;
-    minMaxLoc(prob.reshape(1, 1), 0, &confidence, 0, &classIdPoint);
-    int classId = classIdPoint.x;
+	double scaleFactor = 1.0;
+	Size inputSize(inputWidth, inputHeight);
 
-    // Output efficiency information.
-    std::vector<double> layersTimes;
-    double freq = getTickFrequency() / 1000;
-    double t = net.getPerfProfile(layersTimes) / freq;
-    // Print predicted class.
-    RCLCPP_INFO(this->get_logger(), format("Inference time: %.2f ms", t));
-    RCLCPP_INFO(this->get_logger(),
-    			format("%s: %.4f", (format("Class #%d",classId).c_str()), confidence));
+	blob = dnn::blobFromImage(frame, scaleFactor, inputSize, mean);
+	net.setInput(blob);
+	Mat prob = net.forward();
+	Point classIdPoint;
+	double confidence;
+	minMaxLoc(prob, 0, &confidence, 0, &classIdPoint);
+
+	softmax(&prob, confidence);
+
+	// Print out probability for each class
+	MatIterator_<float> it, end;
+	RCLCPP_INFO(this->get_logger(), format("%d", prob.type()));
+	for(it = prob.begin<float>(), end = prob.end<float>(); it != end; ++it) {
+		Point p = it.pos();
+		RCLCPP_INFO(this->get_logger(), format("%f", prob.at<float>(p)));
+	}
+
+	int classId = classIdPoint.x;
+	switch (classId) {
+	case 0:
+		class_name = "Fork";
+		break;
+	case 1:
+		class_name = "Knife";
+		break;
+	case 2:
+		class_name = "Ladle";
+		break;
+	case 3:
+		class_name = "Spoon";
+		break;
+	default:
+		class_name = "UNKOWN";
+	}
+
+	// Efficiency information.
+	std::vector<double> layersTimes;
+	double freq = getTickFrequency() / 1000;
+	double t = net.getPerfProfile(layersTimes) / freq;
+
+	// Print predicted class.
+	RCLCPP_INFO(this->get_logger(), format("Inference time: %.2f ms", t));
+	RCLCPP_INFO(this->get_logger(), format("%s: %.4f",
+			(format("Class %s (#%d)", class_name, classId).c_str()), confidence));
 }
 
+static void softmax(Mat *outputs, double max_val) {
+	*outputs = *outputs - max_val;
+	exp(*outputs, *outputs);
+	double s = sum(*outputs)[0];
+	*outputs = *outputs / s;
+}
 
 } // of namespace KitchenUtensilClassifierCompdef
 

@@ -54,6 +54,7 @@ private:
 	static const int inputWidth = 224;
 	static const int inputHeight = 224;
 	cv::dnn::Net net;
+	int counter;
 
 };
 /************************************************************/
