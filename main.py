@@ -6,7 +6,7 @@
 import torch
 
 from parse import get_arguments
-from dataloader import train_set, val_set
+from dataloader import train_set, val_set, CustomData
 from training import run_model
 
 
@@ -26,5 +26,15 @@ if __name__ == "__main__":
         dataloader = torch.utils.data.DataLoader(val_set, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True)
 
         run_model(dataloader, args=args, mode='val')
+
+
+    elif args.mode == 'inference':
+        ### Custom data where only the segmentation mask of the first frame is given. Generate the rest of the segmentation masks.
+        assert args.custom_data is not None, "No directory given for custom data. Please use '--custom_data <directory>'."
+
+        dataloader = torch.utils.data.DataLoader(CustomData(args.custom_data), batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True)
+
+        run_model(dataloader, args=args, mode='inference')
+
 
     # No other modes allowed

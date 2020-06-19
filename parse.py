@@ -9,7 +9,10 @@ def get_arguments():
     parser = ArgumentParser()
 
     ### IO Parameters
-    parser.add_argument('--mode', help="Mode in which you want to run the network.", choices=['train', 'val'], default='train')
+    parser.add_argument('--mode', help="Mode in which you want to run the network.", choices=['train', 'val', 'inference'], default='train')
+    parser.add_argument('--load', help="Loads existing trained model if available.", action="store_true")
+    parser.add_argument('--custom_data', help="Directory in which the custom data for inference can be found.", default=None)
+
 
     ### Training Parameters
     parser.add_argument('--batch_size', help="Batch size to use for the dataloader.", type=int, default=16)

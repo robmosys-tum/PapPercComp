@@ -4,8 +4,11 @@
 # ------------------------------------------------------------------------------
 
 import torch
+import os
 
 from architecture import DeepLab
+from utility import load_model
+
 
 
 def run_model(dataloader, args, mode='train'):
@@ -25,7 +28,17 @@ def run_model(dataloader, args, mode='train'):
 
     ### Create model of embedding network
     # TODO: define model
+    #model = DeepLab()
     model = model.to(device)
+
+    if args.load:
+        # TODO: Check if I need to assign the value to model, or if load_state_dict works on model directly (not sure if passed by reference).
+        load_model(model)
+
+    else:
+        # TrainedModel directory might not exist yet
+        if not os.path.exists("TrainedModel"):
+            os.makedirs("TrainedModel")
 
 
     ### Create optimizer and scheduler
@@ -64,6 +77,7 @@ def run_model(dataloader, args, mode='train'):
     torch.save(model.state_dict(), "TrainedModel/finalModel.pth")
 
     return 
+
 
 
 def run_epoch(model, optimizer, dataloader, mode='train'):
