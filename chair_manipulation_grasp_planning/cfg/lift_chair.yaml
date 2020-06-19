@@ -1,25 +1,54 @@
 planner1:
   ns: robot1
-  tf_prefix: robot1
   arm_group: arm
   gripper_group: gripper
+
+  # Global world frame
   world_frame: world
-  grasp_frame: grasp
+
+  # This must be the frame that Moveit uses for inverse kinematics (the one at the end of the kinematic chain)
+  ik_frame: robot1/wrist_3_link
+
+  # Tool center point of the end-effector
+  tcp_frame: robot1/tcp
+
+  # This is the grasp frame where the Z-axis points towards the chair and the Y-axis points up.
+  # It is used to compute the pre-grasp and lift frames.
+  grasp_frame: robot1/grasp
+
+  # This is the grasp frame which has the same position as grasp_frame but its orientation is
+  # the desired orientation of the tcp frame.
+  # So the planner computes the position of the pre-grasp and lift in the grasp_frame first
+  # and then expresses those positions relative to the desired orientation of the tcp frame.
+  grasp_tcp_aligned_frame: robot1/grasp_tcp_aligned
+
+  # This is the computed pre-grasp frame which has the same orientation as the grasp frame.
+  # It's origin is located by going the pre-grasp distance along the negative Z-axis of the grasp frame.
+  pre_grasp_frame: robot1/pre_grasp
+
+  # This is the computed lift grasp frame which has the same orientation as the grasp frame.
+  # It's origin is the grasp frame's origin shifted by the lift height in the direction of the world frame's positive Z-axis.
+  lift_frame: robot1/lift
+
   planning_time: 60
   open_group_state: "open"
   closed_group_state: "closed"
-  pre_grasp_distance: 0.1
-  lift_height: 0.2
+  pre_grasp_distance: 0.2
+  lift_height: 0.1
 
 planner2:
   ns: robot2
-  tf_prefix: robot2
   arm_group: arm
   gripper_group: gripper
   world_frame: world
-  grasp_frame: grasp
+  ik_frame: robot2/wrist_3_link
+  tcp_frame: robot2/tcp
+  grasp_frame: robot2/grasp
+  grasp_tcp_aligned_frame: robot2/grasp_tcp_aligned
+  pre_grasp_frame: robot2/pre_grasp
+  lift_frame: robot2/lift
   planning_time: 60
   open_group_state: "open"
   closed_group_state: "closed"
-  pre_grasp_distance: 0.1
-  lift_height: 0.2
+  pre_grasp_distance: 0.2
+  lift_height: 0.1

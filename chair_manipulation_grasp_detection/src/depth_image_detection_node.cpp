@@ -493,7 +493,11 @@ int main(int argc, char *argv[])
         // The grasp coordinate system is obtained from the surface normal at the grasp position
         auto grasp_surface_normal = compute_surface_normal(
                 grasp_position, depth_image, image_roi, *camera_info_msg, normal_radius);
-        auto grasp_rotation = compute_frame_rotation(grasp_surface_normal, angle_from_rotated_rect(plate_rect));
+        // Note, that we want the grasp frame to be oriented such that the Z-axis is the
+        // inverted normal (so it points into the chair) and the Y-axis is pointing up.
+        // This is the same convention that ROS industrial uses as standard for the tool0 frame.
+        auto grasp_rotation = compute_frame_rotation(-grasp_surface_normal,
+                                                     angle_from_rotated_rect(plate_rect) + M_PI);
 
         // Create grasp pose message and publish it
         geometry_msgs::TransformStamped chair_transform;

@@ -30,11 +30,18 @@ public:
     void execute_lift();
 
 private:
-    std::string tf_prefix;
+    std::string ns;
     std::string arm_group_name;
     std::string gripper_group_name;
+
     std::string world_frame;
+    std::string ik_frame;
+    std::string tcp_frame;
     std::string grasp_frame;
+    std::string grasp_tcp_aligned_frame;
+    std::string pre_grasp_frame;
+    std::string lift_frame;
+
     std::string open_group_state;
     std::string closed_group_state;
     double pre_grasp_distance;
@@ -48,11 +55,9 @@ private:
 
     moveit::planning_interface::MoveGroupInterface::Plan plan;
 
-    tf2::Transform world_to_pre_grasp;
-    tf2::Transform world_to_grasp;
-    tf2::Transform world_to_lift;
-
-    std::string build_frame_id(const std::string &frame) const;
+    tf2::Transform world_to_pre_grasp_to_ik;
+    tf2::Transform world_to_grasp_to_ik;
+    tf2::Transform world_to_lift_to_ik;
 
     void plan_arm_pose(const tf2::Transform &pose_tf, const std::string &pose_name);
 };
