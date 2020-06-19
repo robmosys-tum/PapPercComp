@@ -1,25 +1,27 @@
 # ------------------------------------------------------------------------------
 # Training the network defined in architecture using the data loaded using data-
 # loader.
+# Also provides the validation and inference modes on already trained models.
 # ------------------------------------------------------------------------------
 
 import torch
 import os
+import matplotlib.pyplot as plt
 
-from architecture import DeepLab
+from architecture import DeepLab, deeplabModel
 from utility import load_model
+from PIL import Image
 
 
 
-def run_model(dataloader, args, mode='train'):
+def run_model(dataloader, args):
     """
     Run a model in either training mode or validation mode. If the model exists, then the weights are loaded.
 
     Arguments:
         dataloader (torch.utils.data.DataLoader) : contains the data used for training/testing.
         args (argparse.ArgumentParser) : command line arguments
-        mode (String) : train or val
-
+        
     Returns:
         None
     """
@@ -29,17 +31,54 @@ def run_model(dataloader, args, mode='train'):
     ### Create model of embedding network
     # TODO: define model
     #model = DeepLab()
-    model = model.to(device)
+    #model = model.to(device)
 
     if args.load:
         # TODO: Check if I need to assign the value to model, or if load_state_dict works on model directly (not sure if passed by reference).
-        load_model(model)
-
+        #load_model(model)
+        pass
     else:
         # TrainedModel directory might not exist yet
         if not os.path.exists("TrainedModel"):
             os.makedirs("TrainedModel")
 
+
+    if args.mode == 'inference':
+        deeplabModel.to(device)
+        deeplabModel.eval()
+
+        # Create a color pallette, selecting a color for each class
+        palette = torch.tensor([2 ** 25 - 1, 2 ** 15 - 1, 2 ** 21 - 1])
+        colors = torch.as_tensor([i for i in range(21)])[:, None] * palette
+        colors = (colors % 255).numpy().astype("uint8")
+
+        imcount = 0
+        # Output directory might not exist yet
+        if not os.path.exists("Output"):
+            os.makedirs("Output")
+
+        for im, _ in dataloader:
+            im = im.to(device)
+            
+            # Using no_grad() is a necessity! Otherwise memory usage will be far too high.
+            with torch.no_grad():
+                output = deeplabModel(im)['out']
+
+            # Iterate over all images in the batch
+            for out in output:
+                output_predictions = out.argmax(0)
+            
+                
+                # plot the semantic segmentation predictions of 21 classes in each color
+                seg = Image.fromarray(output_predictions.byte().cpu().numpy())
+                seg.putpalette(colors)
+                
+                plt.imsave(f"Output/{imcount : 05d}.png", seg)
+                imcount += 1
+        return
+
+    else:
+        return
 
     ### Create optimizer and scheduler
     optimizer = torch.optim.SGD(

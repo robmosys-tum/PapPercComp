@@ -6,9 +6,9 @@
 import torch
 import torch.nn as nn
 import torch.functional as F
-
 import numpy as np
 
+from torchvision import models
 
 
 class ConvBlock(nn.Sequential):
@@ -38,3 +38,7 @@ class DeepLab(nn.Module):
     
     def forward(self, x):
         return x
+
+# Output of deeplabModel are (21, w, h) images for 21 possible segmentations.
+deeplabModel = models.segmentation.deeplabv3_resnet101(pretrained=True, progress=True)
+

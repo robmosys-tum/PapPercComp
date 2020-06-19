@@ -1,6 +1,7 @@
 # ------------------------------------------------------------------------------
 # Loads training or testing data for PyTorch network.
-# Currently provides train_set and val_set for DAVIS 2016 dataset.
+# Currently provides train_set and val_set for DAVIS 2016 dataset, and allows 
+# custom datasets with one annoted frame for inference.
 # ------------------------------------------------------------------------------
 
 import torch
@@ -132,9 +133,3 @@ class CustomData(torch.utils.data.Dataset):
 train_set = DAVISData('train')
 val_set = DAVISData('val')
 
-
-custom = CustomData("Custom")
-
-dataloader = torch.utils.data.DataLoader(custom, batch_size=1, shuffle=False, num_workers=0, pin_memory=True)
-
-print(next(iter(dataloader)))
