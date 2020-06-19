@@ -1,82 +1,41 @@
 #include "chair_manipulation_grasp_planning/dual_grasp_planner.h"
-#include <future>
 
 namespace chair_manipulation
 {
 
-void chair_manipulation::DualGraspPlanner::lift_chair()
+bool DualGraspPlanner::lift_chair()
 {
-    try
+    client1.waitForServer();
+    client2.waitForServer();
+
+    return execute_goal(Goal::PREPARE, "PREPARE") &&
+           execute_goal(Goal::PLAN_PRE_GRASP, "PLAN_PRE_GRASP") &&
+           execute_goal(Goal::EXECUTE_PRE_GRASP, "EXECUTE_PRE_GRASP") &&
+           execute_goal(Goal::PLAN_GRASP, "PLAN_GRASP") &&
+           execute_goal(Goal::EXECUTE_GRASP, "EXECUTE_GRASP") &&
+           execute_goal(Goal::PLAN_LIFT, "PLAN_LIFT") &&
+           execute_goal(Goal::EXECUTE_LIFT, "EXECUTE_LIFT");
+}
+
+bool DualGraspPlanner::execute_goal(int goal_id, const std::string &name)
+{
+    ROS_INFO_STREAM_NAMED("dual_grasp_planner", "Start goal " << name);
+    Goal goal;
+    goal.goal = goal_id;
+    client1.sendGoal(goal);
+    client2.sendGoal(goal);
+    client1.waitForResult();
+    client2.waitForResult();
+    auto state1 = client1.getState();
+    auto state2 = client2.getState();
+    if (state1 == actionlib::SimpleClientGoalState::SUCCEEDED &&
+        state2 == actionlib::SimpleClientGoalState::SUCCEEDED)
     {
-        std::future<void> future1, future2;
-
-        // Retrieve grasp pose
-        ROS_INFO_STREAM_NAMED("grasp_planning", "Retrieve grasp poses.");
-        future1 = std::async(std::launch::async, [&]
-        { planner1.retrieve_grasp_pose(); });
-        future2 = std::async(std::launch::async, [&]
-        { planner2.retrieve_grasp_pose(); });
-        future1.get();
-        future2.get();
-
-        // Plan pre-grasp
-        ROS_INFO_STREAM_NAMED("grasp_planning", "Plan pre-grasp.");
-        future1 = std::async(std::launch::async, [&]
-        { planner1.plan_pre_grasp(); });
-        future2 = std::async(std::launch::async, [&]
-        { planner2.plan_pre_grasp(); });
-        future1.get();
-        future2.get();
-
-        // Execute pre-grasp
-        ROS_INFO_STREAM_NAMED("grasp_planning", "Execute pre-grasp.");
-        future1 = std::async(std::launch::async, [&]
-        { planner1.execute_pre_grasp(); });
-        future2 = std::async(std::launch::async, [&]
-        { planner2.execute_pre_grasp(); });
-        future1.get();
-        future2.get();
-
-        // Plan grasp
-        ROS_INFO_STREAM_NAMED("grasp_planning", "Plan grasp.");
-        future1 = std::async(std::launch::async, [&]
-        { planner1.plan_grasp(); });
-        future2 = std::async(std::launch::async, [&]
-        { planner2.plan_grasp(); });
-        future1.get();
-        future2.get();
-
-        // Execute grasp
-        ROS_INFO_STREAM_NAMED("grasp_planning", "Execute grasp.");
-        future1 = std::async(std::launch::async, [&]
-        { planner1.execute_grasp(); });
-        future2 = std::async(std::launch::async, [&]
-        { planner2.execute_grasp(); });
-        future1.get();
-        future2.get();
-
-        // Plan lift
-        ROS_INFO_STREAM_NAMED("grasp_planning", "Plan lift.");
-        future1 = std::async(std::launch::async, [&]
-        { planner1.plan_lift(); });
-        future2 = std::async(std::launch::async, [&]
-        { planner2.plan_lift(); });
-        future1.get();
-        future2.get();
-
-        // Plan grasp
-        ROS_INFO_STREAM_NAMED("grasp_planning", "Execute lift.");
-        future1 = std::async(std::launch::async, [&]
-        { planner1.execute_lift(); });
-        future2 = std::async(std::launch::async, [&]
-        { planner2.execute_lift(); });
-        future1.get();
-        future2.get();
+        ROS_INFO_STREAM_NAMED("dual_grasp_planner", "Finished goal " << name);
+        return true;
     }
-    catch (const GraspPlanningException &e)
-    {
-        ROS_ERROR_STREAM_NAMED("grasp_planning", e.what());
-    }
+    ROS_ERROR_STREAM_NAMED("dual_grasp_planner", "Failed goal " << name);
+    return false;
 }
 
 }

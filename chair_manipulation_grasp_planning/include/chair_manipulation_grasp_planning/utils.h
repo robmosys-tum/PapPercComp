@@ -12,8 +12,8 @@ inline double deg2rad(double deg)
     return deg * (M_PI / 180.0);
 }
 
-void add_ground_plane(moveit::planning_interface::MoveGroupInterface &group,
-                      moveit::planning_interface::PlanningSceneInterface &planning_scene_interface);
+void add_ground_plane(moveit::planning_interface::PlanningSceneInterface &planning_scene_interface,
+                      const std::string &frame);
 
 }
 

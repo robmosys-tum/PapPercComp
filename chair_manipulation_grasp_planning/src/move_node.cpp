@@ -29,7 +29,7 @@ void moveToPose(moveit::planning_interface::MoveGroupInterface &group,
     target_pose.position.z = z;
     group.setPoseTarget(target_pose);
 
-    chair_manipulation::add_ground_plane(group, planning_scene_interface);
+    chair_manipulation::add_ground_plane(planning_scene_interface, group.getPlanningFrame());
 
     moveit::planning_interface::MoveGroupInterface::Plan plan;
     bool success = (group.plan(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
@@ -40,6 +40,15 @@ void moveToPose(moveit::planning_interface::MoveGroupInterface &group,
 void moveUp(moveit::planning_interface::MoveGroupInterface &group)
 {
     group.setNamedTarget("up");
+    moveit::planning_interface::MoveGroupInterface::Plan plan;
+    bool success = (group.plan(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    ROS_INFO_NAMED("move", "Visualizing plan %s", success ? "" : "FAILED");
+    group.move();
+}
+
+void moveHome(moveit::planning_interface::MoveGroupInterface &group)
+{
+    group.setNamedTarget("home");
     moveit::planning_interface::MoveGroupInterface::Plan plan;
     bool success = (group.plan(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
     ROS_INFO_NAMED("move", "Visualizing plan %s", success ? "" : "FAILED");
@@ -64,7 +73,7 @@ void close(moveit::planning_interface::MoveGroupInterface &group)
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "move");
+    ros::init(argc, argv, "move_node");
     ros::NodeHandle node_handle;
     ros::AsyncSpinner spinner(1);
     spinner.start();
@@ -98,6 +107,8 @@ int main(int argc, char **argv)
 
     if (command == "move_up")
         moveUp(arm_group);
+    else if (command == "move_home")
+        moveHome(arm_group);
     else if (command == "move_to_pose")
         moveToPose(arm_group, planning_scene_interface, 0.0, -0.5, 0.5, deg2rad(180), deg2rad(0), deg2rad(0));
     else if (command == "close")

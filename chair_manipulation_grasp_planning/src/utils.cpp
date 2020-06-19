@@ -3,11 +3,11 @@
 namespace chair_manipulation
 {
 
-void add_ground_plane(moveit::planning_interface::MoveGroupInterface &group,
-                      moveit::planning_interface::PlanningSceneInterface &planning_scene_interface)
+void add_ground_plane(moveit::planning_interface::PlanningSceneInterface &planning_scene_interface,
+                      const std::string &frame)
 {
     moveit_msgs::CollisionObject collision_object;
-    collision_object.header.frame_id = group.getPlanningFrame();
+    collision_object.header.frame_id = frame;
     collision_object.id = "ground_plane";
 
     shape_msgs::Plane plane;
@@ -20,7 +20,7 @@ void add_ground_plane(moveit::planning_interface::MoveGroupInterface &group,
     box_pose.orientation.w = 1.0;
     box_pose.position.x = 0.0;
     box_pose.position.y = 0.0;
-    box_pose.position.z = -0.1;
+    box_pose.position.z = -0.01;
 
     collision_object.planes.push_back(plane);
     collision_object.plane_poses.push_back(box_pose);

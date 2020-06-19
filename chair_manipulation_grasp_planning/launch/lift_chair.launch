@@ -1,6 +1,46 @@
 <?xml version="1.0" ?>
 <launch>
-  <node name="lift_chair" pkg="chair_manipulation_grasp_planning" type="lift_chair_node" output="screen">
-    <rosparam file="$(find chair_manipulation_grasp_planning)/cfg/lift_chair.yaml" />
+  <group ns="robot1">
+    <node name="robot1_action_server" pkg="chair_manipulation_grasp_planning" type="grasp_action_planner_server_node" output="screen">
+      <rosparam file="$(find chair_manipulation_grasp_planning)/cfg/grasp_planner.yaml" />
+      <rosparam>
+        # Base link frame of the robot
+        base_frame: robot1/base_link
+
+        # This must be the frame that Moveit uses for inverse kinematics (the one at the end of the kinematic chain)
+        ik_frame: robot1/wrist_3_link
+
+        # Tool center point of the end-effector
+        tcp_frame: robot1/tcp
+
+        # This is the grasp frame where the Z-axis points towards the chair and the Y-axis points up.
+        # It is used to compute the pre-grasp and lift frames.
+        grasp_frame: robot1/grasp
+
+        # This is the grasp frame which has the same position as grasp_frame but its orientation is
+        # the desired orientation of the tcp frame.
+        # So the planner computes the position of the pre-grasp and lift in the grasp_frame first
+        # and then expresses those positions relative to the desired orientation of the tcp frame.
+        grasp_tcp_aligned_frame: robot1/grasp_tcp_aligned
+      </rosparam>
+    </node>
+  </group>
+
+  <group ns="robot2">
+    <node name="robot1_action_server" pkg="chair_manipulation_grasp_planning" type="grasp_action_planner_server_node" output="screen">
+      <rosparam file="$(find chair_manipulation_grasp_planning)/cfg/grasp_planner.yaml" />
+      <rosparam>
+        ns: robot2
+        base_frame: robot2/base_link
+        ik_frame: robot2/wrist_3_link
+        tcp_frame: robot2/tcp
+        grasp_frame: robot2/grasp
+        grasp_tcp_aligned_frame: robot2/grasp_tcp_aligned
+      </rosparam>
+    </node>
+  </group>
+
+  <node name="lift_chair" pkg="chair_manipulation_grasp_planning" type="dual_grasp_planner_node" output="screen">
+
   </node>
 </launch>

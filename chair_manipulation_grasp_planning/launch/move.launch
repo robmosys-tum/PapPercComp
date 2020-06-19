@@ -6,4 +6,9 @@
       <param name="command" type="string" value="$(arg command)" />
     </node>
   </group>
+  <group ns="robot2">
+    <node name="move" pkg="chair_manipulation_grasp_planning" type="move_node" output="screen">
+      <param name="command" type="string" value="$(arg command)" />
+    </node>
+  </group>
 </launch>
