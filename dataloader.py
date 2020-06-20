@@ -96,7 +96,7 @@ class CustomData(torch.utils.data.Dataset):
     """
     def __init__(self, directory):
         self.images = []
-        self.seg_mask = None
+        self.seg_mask = []
 
         # Go over files in alphabetical order (according to video sequence)
         for f in sorted(os.listdir(directory)):

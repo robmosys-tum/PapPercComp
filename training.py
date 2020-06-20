@@ -73,7 +73,7 @@ def run_model(dataloader, args):
                 seg = Image.fromarray(output_predictions.byte().cpu().numpy())
                 seg.putpalette(colors)
                 
-                plt.imsave(f"Output/{imcount : 05d}.png", seg)
+                plt.imsave(f"Output/{imcount : 06d}.png", seg)
                 imcount += 1
         return
 
