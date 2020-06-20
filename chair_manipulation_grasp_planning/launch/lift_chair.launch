@@ -30,7 +30,6 @@
     <node name="robot1_action_server" pkg="chair_manipulation_grasp_planning" type="grasp_action_planner_server_node" output="screen">
       <rosparam file="$(find chair_manipulation_grasp_planning)/cfg/grasp_planner.yaml" />
       <rosparam>
-        ns: robot2
         base_frame: robot2/base_link
         ik_frame: robot2/wrist_3_link
         tcp_frame: robot2/tcp
@@ -40,7 +39,5 @@
     </node>
   </group>
 
-  <node name="lift_chair" pkg="chair_manipulation_grasp_planning" type="dual_grasp_planner_node" output="screen">
-
-  </node>
+  <node name="lift_chair" pkg="chair_manipulation_grasp_planning" type="dual_grasp_planner_node" output="screen" />
 </launch>

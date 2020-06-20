@@ -33,8 +33,6 @@ GraspPlanner::GraspPlanner(const ros::NodeHandle &nh)
 
     arm_group->setPlanningTime(planning_time);
     gripper_group->setPlanningTime(planning_time);
-
-    add_ground_plane(*planning_scene_interface, arm_group->getPlanningFrame());
 }
 
 void GraspPlanner::prepare()
@@ -95,12 +93,10 @@ void GraspPlanner::plan_pre_grasp()
 
 void GraspPlanner::execute_pre_grasp()
 {
-    auto result = arm_group->execute(plan);
-    if (result != moveit::planning_interface::MoveItErrorCode::SUCCESS)
-        throw GraspPlanningException{"Failed to execute pre-grasp."};
-
     gripper_group->setNamedTarget(open_group_state);
-    result = gripper_group->move();
+    gripper_group->move();
+
+    auto result = arm_group->execute(plan);
     if (result != moveit::planning_interface::MoveItErrorCode::SUCCESS)
         throw GraspPlanningException{"Failed to execute pre-grasp."};
 }
@@ -117,9 +113,7 @@ void GraspPlanner::execute_grasp()
         throw GraspPlanningException{"Failed to execute grasp."};
 
     gripper_group->setNamedTarget(closed_group_state);
-    result = gripper_group->move();
-    if (result != moveit::planning_interface::MoveItErrorCode::SUCCESS)
-        throw GraspPlanningException{"Failed to execute grasp."};
+    gripper_group->move();
 }
 
 void GraspPlanner::plan_lift()
@@ -142,6 +136,7 @@ void GraspPlanner::stop()
 
 void GraspPlanner::plan_arm_pose(const tf2::Transform &pose_tf, const std::string &pose_name)
 {
+    add_ground_plane(*planning_scene_interface, arm_group->getPlanningFrame());
     geometry_msgs::Pose pose;
     tf2::toMsg(pose_tf, pose);
     arm_group->setPoseTarget(pose);

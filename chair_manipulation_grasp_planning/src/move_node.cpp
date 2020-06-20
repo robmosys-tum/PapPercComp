@@ -34,7 +34,7 @@ void moveToPose(moveit::planning_interface::MoveGroupInterface &group,
     moveit::planning_interface::MoveGroupInterface::Plan plan;
     bool success = (group.plan(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
     ROS_INFO_NAMED("move", "Visualizing plan %s", success ? "" : "FAILED");
-    group.move();
+    group.execute(plan);
 }
 
 void moveUp(moveit::planning_interface::MoveGroupInterface &group)
