@@ -3,6 +3,13 @@ Data/DAVIS-data.zip
 Custom/
 Output/
 TrainedModel/
+CustomA/
+LibbySeg/
+SoapboxSeg/
+ParkourSeg/
+SurfSegSeq/
+TennisSegSeq/
+TrainsSegSeq/
 
 __pycache__/dataloader.cpython-37.pyc
 __pycache__/parse.cpython-37.pyc

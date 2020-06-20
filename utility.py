@@ -5,7 +5,10 @@
 
 import numpy as np
 import os
-import imageio
+
+from PIL import Image
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 
 def load_model(model):
@@ -48,31 +51,59 @@ def load_model(model):
     return model
 
 
-def create_video(output_name="video", image_list=None, image_dir=None):
+def create_video(output_name="video", image_dir=None, seg_dir=None, true_dir=None):
     """
-    Creates a video from a sequence of images. Either provide the list of images directly, or let them be loaded in from a directory image_dir.
+    Creates a video from a sequence of images. Provide the directories containing the images. We require three image types: the real images from image_dir, the computed segmentation masks in seg_dir and the ground-truth data in true_dir.
 
     Arguments:
-        image_list (List) : images to be processed into video
-        image_dir (String) : path to folder containing images
+        image_dir (String) : path to folder containing real images
+        seg_dir (String) : path to folder containing computed segmentation masks
+        true_dir (String) : path to folder containing ground-truth segmentation masks
     
     Returns:
         Creates a video in the "Output/" folder
     """
-    assert (image_list is not None) or (image_dir is not None), "Must provide some input to create_video()."
+
+    image_list = []
+    for filename in sorted(os.listdir(image_dir)):
+        image_list.append(Image.open(os.path.join(image_dir, filename)))
+
+    seg_list = []
+    for filename in sorted(os.listdir(seg_dir)):
+        if filename[-3:] == "png":
+            seg_list.append(Image.open(os.path.join(seg_dir, filename)))
 
 
-    if image_list is None:
-        image_list = []
-        for filename in sorted(os.listdir(image_dir)):
-            image_list.append(imageio.imread(os.path.join(image_dir, filename)))
+    true_list = []
+    for filename in sorted(os.listdir(true_dir)):
+        true_list.append(Image.open(os.path.join(true_dir, filename)))
+
     
     if not os.path.exists("Output"):
         os.makedirs("Output")
 
-    imageio.mimsave(f'Output/{output_name}.gif', image_list)
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(14, 4))
+    ax1.axis('off')
+    ax2.axis('off')
+    ax3.axis('off')
+    fig.tight_layout()
+
+    ims = []
+    for i, s, t in zip(image_list, seg_list, true_list):
+        im1 = ax1.imshow(i, animated=True)
+        im2 = ax2.imshow(s, animated=True)
+        im3 = ax3.imshow(t, animated=True)
+
+        ims.append([im1, im2, im3])
+
+    ani = animation.ArtistAnimation(fig, ims, interval=50, blit=True)
+    ani.save(f"Output/{output_name}.mp4")
+    
 
 
 if __name__ == "__main__":
-    create_video(image_dir="Output")
-    create_video(output_name="annotated", image_dir= r"D:\Documents\MasterRCI\SS20\RobotPerceptionLab\PapPercComp\Data\DAVIS\Annotations\480p\libby")
+    create_video(
+        image_dir=r"D:\Documents\MasterRCI\SS20\RobotPerceptionLab\PapPercComp\Data\DAVIS\JPEGImages\480p\soapbox",
+        seg_dir="SoapboxSeg",
+        true_dir=r"D:\Documents\MasterRCI\SS20\RobotPerceptionLab\PapPercComp\Data\DAVIS\Annotations\480p\soapbox")
+
