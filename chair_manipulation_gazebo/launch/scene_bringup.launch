@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <launch>
+
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="limited" default="false" doc="If true, limits joint range [-PI, PI] on all joints." />
@@ -7,7 +8,7 @@
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find chair_manipulation_gazebo)/worlds/scene.world" />
-    <arg name="paused" value="false" />
+    <arg name="paused" value="$(arg paused)" />
     <arg name="gui" value="$(arg gui)"/>
   </include>
 
@@ -15,15 +16,23 @@
   <group ns="robot1">
 
     <include file="$(find ur10_robotiq_2f_140_gazebo)/launch/spawn.launch">
-      <arg name="limited"     value="$(arg limited)" />
-      <arg name="robot_name"  value="robot1" />
-      <arg name="tf_prefix"   value="robot1" />
-      <arg name="x"           value="-1.0" />
-      <arg name="y"           value="0.0" />
-      <arg name="z"           value="0.1" />
-      <arg name="roll"        value="0.0" />
-      <arg name="pitch"       value="0.0" />
-      <arg name="yaw"         value="1.5707" />
+      <arg name="limited"             value="$(arg limited)" />
+      <arg name="robot_name"          value="robot1" />
+      <arg name="tf_prefix"           value="robot1" />
+      <arg name="x"                   value="-0.5" />
+      <arg name="y"                   value="-1.0" />
+      <arg name="z"                   value="0.1" />
+      <arg name="roll"                value="0.0" />
+      <arg name="pitch"               value="0.0" />
+      <arg name="yaw"                 value="-1.5707" />
+      <arg name="shoulder_pan_joint"  value="0.0" />
+      <arg name="shoulder_lift_joint" value="-1.5707" />
+      <arg name="elbow_joint"         value="0.0" />
+      <arg name="wrist_1_joint"       value="-1.5707" />
+      <arg name="wrist_2_joint"       value="0.0" />
+      <arg name="wrist_3_joint"       value="0.0" />
+      <arg name="left_finger_joint"   value="0.0" />
+      <arg name="right_finger_joint"  value="0.0" />
     </include>
 
     <include file="$(find chair_manipulation_gazebo)/launch/spawn_camera.launch">
@@ -43,15 +52,23 @@
   <group ns="robot2">
 
     <include file="$(find ur10_robotiq_2f_140_gazebo)/launch/spawn.launch">
-      <arg name="limited"     value="$(arg limited)" />
-      <arg name="robot_name"  value="robot2" />
-      <arg name="tf_prefix"   value="robot2" />
-      <arg name="x"           value="1.0" />
-      <arg name="y"           value="0.0" />
-      <arg name="z"           value="0.1" />
-      <arg name="roll"        value="0.0" />
-      <arg name="pitch"       value="0.0" />
-      <arg name="yaw"         value="1.5707" />
+      <arg name="limited"             value="$(arg limited)" />
+      <arg name="robot_name"          value="robot2" />
+      <arg name="tf_prefix"           value="robot2" />
+      <arg name="x"                   value="0.5" />
+      <arg name="y"                   value="-1.0" />
+      <arg name="z"                   value="0.1" />
+      <arg name="roll"                value="0.0" />
+      <arg name="pitch"               value="0.0" />
+      <arg name="yaw"                 value="1.5707" />
+      <arg name="shoulder_pan_joint"  value="0.0" />
+      <arg name="shoulder_lift_joint" value="-1.5707" />
+      <arg name="elbow_joint"         value="0.0" />
+      <arg name="wrist_1_joint"       value="-1.5707" />
+      <arg name="wrist_2_joint"       value="0.0" />
+      <arg name="wrist_3_joint"       value="0.0" />
+      <arg name="left_finger_joint"   value="0.0" />
+      <arg name="right_finger_joint"  value="0.0" />
     </include>
 
     <include file="$(find chair_manipulation_gazebo)/launch/spawn_camera.launch">

@@ -114,6 +114,8 @@ void GraspPlanner::execute_grasp()
 
     gripper_group->setNamedTarget(closed_group_state);
     gripper_group->move();
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(5s);
 }
 
 void GraspPlanner::plan_lift()
@@ -136,7 +138,11 @@ void GraspPlanner::stop()
 
 void GraspPlanner::plan_arm_pose(const tf2::Transform &pose_tf, const std::string &pose_name)
 {
+    // Weird Moveit bug? - If we put add_ground_plane() in the constructor, it doesn't add
+    // the ground plane to the planning scene. If we put it here, however, it works.
+    // This seems to be strange...
     add_ground_plane(*planning_scene_interface, arm_group->getPlanningFrame());
+
     geometry_msgs::Pose pose;
     tf2::toMsg(pose_tf, pose);
     arm_group->setPoseTarget(pose);

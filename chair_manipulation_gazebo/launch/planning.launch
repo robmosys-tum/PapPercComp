@@ -10,6 +10,9 @@
 
   <group ns="robot1">
 
+    <!-- sensor configuration for Moveit -->
+    <rosparam ns="move_group" command="load" file="$(find chair_manipulation_gazebo)/cfg/sensors.yaml" />
+
     <!-- Moveit -->
     <include file="$(find ur10_robotiq_2f_140_moveit_config)/launch/ur10_robotiq_2f_140_moveit_planning_execution.launch">
       <arg name="use_rviz" value="false" />
@@ -31,6 +34,9 @@
   </group>
 
   <group ns="robot2">
+
+    <!-- sensor configuration for Moveit -->
+    <rosparam ns="move_group" command="load" file="$(find chair_manipulation_gazebo)/cfg/sensors.yaml" />
 
     <!-- Moveit -->
     <include file="$(find ur10_robotiq_2f_140_moveit_config)/launch/ur10_robotiq_2f_140_moveit_planning_execution.launch">

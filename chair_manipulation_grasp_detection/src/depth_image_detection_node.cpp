@@ -361,7 +361,7 @@ int main(int argc, char *argv[])
     {
         // Listen for depth image
         std::string topic = nh.resolveName(depth_image_topic);
-        ROS_INFO_STREAM_NAMED(node_name, "Cloud service called; waiting for an Image on topic " << topic);
+        ROS_DEBUG_STREAM_NAMED(node_name, "Cloud service called; waiting for an Image on topic " << topic);
         auto image_msg = ros::topic::waitForMessage<sensor_msgs::Image>(topic, nh);
 
         // Convert image to OpenCV matrix
@@ -449,7 +449,7 @@ int main(int argc, char *argv[])
         // If we detect less than three segments, that means that the chair does not have a graspable seat plate
         if (segments.size() < 3)
         {
-            ROS_WARN_NAMED(node_name, "Not able to find the seat plate!");
+            ROS_WARN_NAMED(node_name, "Unable to find the seat plate.");
             continue;
         }
 
@@ -468,8 +468,6 @@ int main(int argc, char *argv[])
         // seat_plate_horizontal_position represents the percentage of positional offset
         // along the rectangle's horizontal axis (from the left).
         auto grasp_pixel_coords = compute_grasp_pixel_coords(plate_rect, seat_plate_horizontal_position);
-        ROS_INFO_STREAM_NAMED(node_name, "Grasp pixel coordinates: ("
-                << grasp_pixel_coords.x << "," << grasp_pixel_coords.y << ")");
 
         // Check the potential edge case where the computed grasp pixel coordinates are not in the image anymore.
         cv::Rect image_rect = cv::Rect{0, 0, depth_image.cols, depth_image.rows};
