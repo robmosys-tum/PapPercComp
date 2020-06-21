@@ -36,7 +36,7 @@ private:
     std::string arm_group_name;
     std::string gripper_group_name;
 
-    std::string base_frame;
+    std::string world_frame;
     std::string ik_frame;
     std::string tcp_frame;
     std::string grasp_frame;
@@ -47,6 +47,8 @@ private:
     double pre_grasp_distance;
     double lift_height;
 
+    ros::NodeHandle nh;
+
     // std::unique_ptr because we need to initialize them with values from the parameter server
     std::unique_ptr<moveit::planning_interface::MoveGroupInterface> arm_group;
     std::unique_ptr<moveit::planning_interface::MoveGroupInterface> gripper_group;
@@ -54,9 +56,9 @@ private:
 
     moveit::planning_interface::MoveGroupInterface::Plan plan;
 
-    tf2::Transform base_to_pre_grasp_to_ik;
-    tf2::Transform base_to_grasp_to_ik;
-    tf2::Transform base_to_lift_to_ik;
+    tf2::Transform world_to_pre_grasp_to_ik;
+    tf2::Transform world_to_grasp_to_ik;
+    tf2::Transform world_to_lift_to_ik;
 
     tf2_ros::StaticTransformBroadcaster broadcaster;
 

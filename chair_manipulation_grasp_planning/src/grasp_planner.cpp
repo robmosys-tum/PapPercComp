@@ -13,7 +13,7 @@ GraspPlanner::GraspPlanner(const ros::NodeHandle &nh)
     arm_group_name = nh.param<std::string>("arm_group", "arm");
     gripper_group_name = nh.param<std::string>("gripper_group", "gripper");
 
-    base_frame = nh.param<std::string>("base_frame", "base_link");
+    world_frame = nh.param<std::string>("world_frame", "world");
     ik_frame = nh.param<std::string>("ik_frame", "wrist_3_link");
     tcp_frame = nh.param<std::string>("tcp_frame", "tcp");
     grasp_frame = nh.param<std::string>("grasp_frame", "grasp");
@@ -42,9 +42,9 @@ void GraspPlanner::prepare()
     try
     {
         // Declare all transforms that we need
-        tf2::Transform base_to_grasp;
-        tf2::Transform base_to_pre_grasp;
-        tf2::Transform base_to_lift;
+        tf2::Transform world_to_grasp;
+        tf2::Transform world_to_pre_grasp;
+        tf2::Transform world_to_lift;
 
         tf2::Transform grasp_to_pre_grasp;
 
@@ -55,8 +55,8 @@ void GraspPlanner::prepare()
         // Retrieve transforms
         geometry_msgs::TransformStamped msg;
 
-        msg = tf_buffer.lookupTransform(base_frame, grasp_frame, ros::Time{0}, ros::Duration{3.});
-        tf2::fromMsg(msg.transform, base_to_grasp);
+        msg = tf_buffer.lookupTransform(world_frame, grasp_frame, ros::Time{0}, ros::Duration{3.});
+        tf2::fromMsg(msg.transform, world_to_grasp);
 
         msg = tf_buffer.lookupTransform(grasp_frame, grasp_tcp_aligned_frame, ros::Time{0}, ros::Duration{3.});
         tf2::fromMsg(msg.transform, grasp_to_grasp_tcp_aligned);
@@ -69,16 +69,35 @@ void GraspPlanner::prepare()
         // The pre-grasp position is located by translating pre_grasp_distance along the z-axis of the grasp pose
         grasp_to_pre_grasp.setIdentity();
         grasp_to_pre_grasp.setOrigin(tf2::Vector3{0., 0., -pre_grasp_distance});
-        base_to_pre_grasp = base_to_grasp * grasp_to_pre_grasp;
+        world_to_pre_grasp = world_to_grasp * grasp_to_pre_grasp;
 
-        // The lift position is just lift_height along the z-axis of the base
-        base_to_lift.setRotation(base_to_grasp.getRotation());
-        base_to_lift.setOrigin(base_to_grasp.getOrigin() + tf2::Vector3{0., 0., lift_height});
+        // The lift position is just lift_height along the z-axis of the world
+        world_to_lift.setRotation(world_to_grasp.getRotation());
+        world_to_lift.setOrigin(world_to_grasp.getOrigin() + tf2::Vector3{0., 0., lift_height});
 
         // Express everything in the IK frame because Moveit's target pose is the pose of the ik_frame
-        base_to_grasp_to_ik = base_to_grasp * grasp_to_ik;
-        base_to_pre_grasp_to_ik = base_to_pre_grasp * grasp_to_ik;
-        base_to_lift_to_ik = base_to_lift * grasp_to_ik;
+        world_to_grasp_to_ik = world_to_grasp * grasp_to_ik;
+        world_to_pre_grasp_to_ik = world_to_pre_grasp * grasp_to_ik;
+        world_to_lift_to_ik = world_to_lift * grasp_to_ik;
+
+        // Send planned transforms
+        msg.header.stamp = ros::Time::now();
+        msg.header.frame_id = world_frame;
+
+        ros::NodeHandle nh;
+        auto ns = nh.getNamespace();
+
+        msg.child_frame_id = ns + "_planned_pre_grasp";
+        tf2::convert(world_to_pre_grasp_to_ik, msg.transform);
+        broadcaster.sendTransform(msg);
+
+        msg.child_frame_id = ns + "_planned_grasp";
+        tf2::convert(world_to_grasp_to_ik, msg.transform);
+        broadcaster.sendTransform(msg);
+
+        msg.child_frame_id = ns + "_planned_lift";
+        tf2::convert(world_to_lift_to_ik, msg.transform);
+        broadcaster.sendTransform(msg);
     }
     catch (const tf2::TransformException &e)
     {
@@ -88,7 +107,7 @@ void GraspPlanner::prepare()
 
 void GraspPlanner::plan_pre_grasp()
 {
-    plan_arm_pose(base_to_pre_grasp_to_ik, "pre-grasp");
+    plan_arm_pose(world_to_pre_grasp_to_ik, "pre-grasp");
 }
 
 void GraspPlanner::execute_pre_grasp()
@@ -103,7 +122,7 @@ void GraspPlanner::execute_pre_grasp()
 
 void GraspPlanner::plan_grasp()
 {
-    plan_arm_pose(base_to_grasp_to_ik, "grasp");
+    plan_arm_pose(world_to_grasp_to_ik, "grasp");
 }
 
 void GraspPlanner::execute_grasp()
@@ -120,7 +139,7 @@ void GraspPlanner::execute_grasp()
 
 void GraspPlanner::plan_lift()
 {
-    plan_arm_pose(base_to_lift_to_ik, "lift");
+    plan_arm_pose(world_to_lift_to_ik, "lift");
 }
 
 void GraspPlanner::execute_lift()
@@ -142,9 +161,10 @@ void GraspPlanner::plan_arm_pose(const tf2::Transform &pose_tf, const std::strin
     // the ground plane to the planning scene. If we put it here, however, it works.
     // This seems to be strange...
     add_ground_plane(*planning_scene_interface, arm_group->getPlanningFrame());
-
+    
     geometry_msgs::Pose pose;
     tf2::toMsg(pose_tf, pose);
+    arm_group->setPoseReferenceFrame(world_frame);
     arm_group->setPoseTarget(pose);
     auto result = arm_group->plan(plan);
     if (result != moveit::planning_interface::MoveItErrorCode::SUCCESS)

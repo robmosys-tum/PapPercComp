@@ -14,9 +14,10 @@ public:
     using Goal = chair_manipulation_grasp_planning::GraspExecutionGoal;
     using Result = chair_manipulation_grasp_planning::GraspExecutionResult;
 
-    DualGraspPlanner()
-            : client1("robot1/grasp_planner", true),
-              client2("robot2/grasp_planner", true)
+    DualGraspPlanner(const std::string &planner1_action_name,
+                     const std::string &planner2_action_name)
+            : client1(planner1_action_name, true),
+              client2(planner2_action_name, true)
     {}
 
     bool lift_chair();

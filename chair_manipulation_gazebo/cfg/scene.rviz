@@ -7,9 +7,8 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1
-        - /TF1/Status1
-        - /RobotModel1/Status1
         - /PointCloud22
+        - /MotionPlanning1
         - /MotionPlanning1/Planned Path1
       Splitter Ratio: 0.5022761821746826
     Tree Height: 622
@@ -31,7 +30,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: PointCloud2
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -144,6 +143,8 @@ Visualization Manager:
           Value: true
         robot2_grasp:
           Value: true
+        robot2_grasp_tcp_aligned:
+          Value: true
         robot2_left_inner_finger:
           Value: true
         robot2_left_inner_finger_pad:
@@ -168,6 +169,8 @@ Visualization Manager:
           Value: true
         robot2_shoulder_link:
           Value: true
+        robot2_tcp:
+          Value: true
         robot2_tool0:
           Value: true
         robot2_upper_arm_link:
@@ -187,6 +190,28 @@ Visualization Manager:
       Show Names: true
       Tree:
         world:
+          camera1/world:
+            camera1/camera_rgb_frame:
+              camera1/camera_depth_frame:
+                camera1/camera_depth_optical_frame:
+                  robot1_grasp:
+                    robot1_grasp_tcp_aligned:
+                      {}
+              camera1/camera_link:
+                {}
+              camera1/camera_rgb_optical_frame:
+                {}
+          camera2/world:
+            camera2/camera_rgb_frame:
+              camera2/camera_depth_frame:
+                camera2/camera_depth_optical_frame:
+                  robot2_grasp:
+                    robot2_grasp_tcp_aligned:
+                      {}
+              camera2/camera_link:
+                {}
+              camera2/camera_rgb_optical_frame:
+                {}
           robot1_base_link:
             robot1_base:
               {}
@@ -226,6 +251,8 @@ Visualization Manager:
                     robot2_wrist_2_link:
                       robot2_wrist_3_link:
                         robot2_ee_link:
+                          {}
+                        robot2_tcp:
                           {}
                         robot2_tool0:
                           robot2_robotiq_arg2f_base_link:
@@ -542,7 +569,7 @@ Visualization Manager:
     - Acceleration_Scaling_Factor: 0.1
       Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
-      Move Group Namespace: ""
+      Move Group Namespace: robot1
       MoveIt_Allow_Approximate_IK: false
       MoveIt_Allow_External_Program: false
       MoveIt_Allow_Replanning: false
@@ -791,7 +818,7 @@ Visualization Manager:
         Show Trail: false
         State Display Time: 0.05 s
         Trail Step Size: 1
-        Trajectory Topic: move_group/display_planned_path
+        Trajectory Topic: robot1/move_group/display_planned_path
       Planning Metrics:
         Payload: 1
         Show Joint Torques: false
@@ -811,8 +838,8 @@ Visualization Manager:
         Show Workspace: false
         Start State Alpha: 1
         Start State Color: 0; 255; 0
-      Planning Scene Topic: move_group/monitored_planning_scene
-      Robot Description: robot_description
+      Planning Scene Topic: robot1/move_group/monitored_planning_scene
+      Robot Description: robot1/robot_description
       Scene Geometry:
         Scene Alpha: 0.8999999761581421
         Scene Color: 50; 230; 50
@@ -1086,10 +1113,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7947972416877747
+      Pitch: 0.7697972655296326
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.45044076442718506
+      Yaw: 0.4554407596588135
     Saved: ~
 Window Geometry:
   Displays:

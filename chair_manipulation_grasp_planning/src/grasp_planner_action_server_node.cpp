@@ -91,7 +91,10 @@ int main(int argc, char *argv[])
 {
     ros::init(argc, argv, "grasp_planner_action_server_node");
 
-    chair_manipulation::GraspPlannerActionServer server{"grasp_planner"};
+    ros::NodeHandle nh_priv{"~"};
+    auto action_name = nh_priv.param<std::string>("action_name", "grasp_planner");
+    
+    chair_manipulation::GraspPlannerActionServer server{action_name};
     ros::spin();
 
     return 0;
