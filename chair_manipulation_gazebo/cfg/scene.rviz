@@ -6,10 +6,13 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /MotionPlanning1
+        - /TF1
+        - /TF1/Status1
+        - /RobotModel1/Status1
+        - /PointCloud22
         - /MotionPlanning1/Planned Path1
       Splitter Ratio: 0.5022761821746826
-    Tree Height: 678
+    Tree Height: 622
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -28,7 +31,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: PointCloud2
+    SyncSource: ""
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -59,125 +62,121 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        robot1/base:
+        camera1/camera_depth_frame:
           Value: true
-        robot1/base_link:
+        camera1/camera_depth_optical_frame:
           Value: true
-        robot1/camera_depth_frame:
+        camera1/camera_link:
           Value: true
-        robot1/camera_depth_optical_frame:
+        camera1/camera_rgb_frame:
           Value: true
-        robot1/camera_link:
+        camera1/camera_rgb_optical_frame:
           Value: true
-        robot1/camera_rgb_frame:
+        camera1/world:
           Value: true
-        robot1/camera_rgb_optical_frame:
+        camera2/camera_depth_frame:
           Value: true
-        robot1/ee_link:
+        camera2/camera_depth_optical_frame:
           Value: true
-        robot1/forearm_link:
+        camera2/camera_link:
           Value: true
-        robot1/grasp:
+        camera2/camera_rgb_frame:
           Value: true
-        robot1/grasp_tcp_aligned:
+        camera2/camera_rgb_optical_frame:
           Value: true
-        robot1/left_inner_finger:
+        camera2/world:
           Value: true
-        robot1/left_inner_finger_pad:
+        robot1_base:
           Value: true
-        robot1/left_inner_knuckle:
+        robot1_base_link:
           Value: true
-        robot1/left_outer_finger:
+        robot1_ee_link:
           Value: true
-        robot1/left_outer_knuckle:
+        robot1_forearm_link:
           Value: true
-        robot1/right_inner_finger:
+        robot1_grasp:
           Value: true
-        robot1/right_inner_finger_pad:
+        robot1_grasp_tcp_aligned:
           Value: true
-        robot1/right_inner_knuckle:
+        robot1_left_inner_finger:
           Value: true
-        robot1/right_outer_finger:
+        robot1_left_inner_finger_pad:
           Value: true
-        robot1/right_outer_knuckle:
+        robot1_left_inner_knuckle:
           Value: true
-        robot1/robotiq_arg2f_base_link:
+        robot1_left_outer_finger:
           Value: true
-        robot1/shoulder_link:
+        robot1_left_outer_knuckle:
           Value: true
-        robot1/tcp:
+        robot1_right_inner_finger:
           Value: true
-        robot1/tool0:
+        robot1_right_inner_finger_pad:
           Value: true
-        robot1/upper_arm_link:
+        robot1_right_inner_knuckle:
           Value: true
-        robot1/world:
+        robot1_right_outer_finger:
           Value: true
-        robot1/wrist_1_link:
+        robot1_right_outer_knuckle:
           Value: true
-        robot1/wrist_2_link:
+        robot1_robotiq_arg2f_base_link:
           Value: true
-        robot1/wrist_3_link:
+        robot1_shoulder_link:
           Value: true
-        robot2/base:
+        robot1_tcp:
           Value: true
-        robot2/base_link:
+        robot1_tool0:
           Value: true
-        robot2/camera_depth_frame:
+        robot1_upper_arm_link:
           Value: true
-        robot2/camera_depth_optical_frame:
+        robot1_wrist_1_link:
           Value: true
-        robot2/camera_link:
+        robot1_wrist_2_link:
           Value: true
-        robot2/camera_rgb_frame:
+        robot1_wrist_3_link:
           Value: true
-        robot2/camera_rgb_optical_frame:
+        robot2_base:
           Value: true
-        robot2/ee_link:
+        robot2_base_link:
           Value: true
-        robot2/forearm_link:
+        robot2_ee_link:
           Value: true
-        robot2/grasp:
+        robot2_forearm_link:
           Value: true
-        robot2/grasp_tcp_aligned:
+        robot2_grasp:
           Value: true
-        robot2/left_inner_finger:
+        robot2_left_inner_finger:
           Value: true
-        robot2/left_inner_finger_pad:
+        robot2_left_inner_finger_pad:
           Value: true
-        robot2/left_inner_knuckle:
+        robot2_left_inner_knuckle:
           Value: true
-        robot2/left_outer_finger:
+        robot2_left_outer_finger:
           Value: true
-        robot2/left_outer_knuckle:
+        robot2_left_outer_knuckle:
           Value: true
-        robot2/right_inner_finger:
+        robot2_right_inner_finger:
           Value: true
-        robot2/right_inner_finger_pad:
+        robot2_right_inner_finger_pad:
           Value: true
-        robot2/right_inner_knuckle:
+        robot2_right_inner_knuckle:
           Value: true
-        robot2/right_outer_finger:
+        robot2_right_outer_finger:
           Value: true
-        robot2/right_outer_knuckle:
+        robot2_right_outer_knuckle:
           Value: true
-        robot2/robotiq_arg2f_base_link:
+        robot2_robotiq_arg2f_base_link:
           Value: true
-        robot2/shoulder_link:
+        robot2_shoulder_link:
           Value: true
-        robot2/tcp:
+        robot2_tool0:
           Value: true
-        robot2/tool0:
+        robot2_upper_arm_link:
           Value: true
-        robot2/upper_arm_link:
+        robot2_wrist_1_link:
           Value: true
-        robot2/world:
+        robot2_wrist_2_link:
           Value: true
-        robot2/wrist_1_link:
-          Value: true
-        robot2/wrist_2_link:
-          Value: true
-        robot2/wrist_3_link:
+        robot2_wrist_3_link:
           Value: true
         world:
           Value: true
@@ -188,86 +187,62 @@ Visualization Manager:
       Show Names: true
       Tree:
         world:
-          robot1/world:
-            robot1/base_link:
-              robot1/base:
-                {}
-              robot1/shoulder_link:
-                robot1/upper_arm_link:
-                  robot1/forearm_link:
-                    robot1/wrist_1_link:
-                      robot1/wrist_2_link:
-                        robot1/wrist_3_link:
-                          robot1/ee_link:
-                            {}
-                          robot1/tcp:
-                            {}
-                          robot1/tool0:
-                            robot1/robotiq_arg2f_base_link:
-                              robot1/left_inner_knuckle:
-                                {}
-                              robot1/left_outer_knuckle:
-                                robot1/left_outer_finger:
-                                  robot1/left_inner_finger:
-                                    robot1/left_inner_finger_pad:
-                                      {}
-                              robot1/right_inner_knuckle:
-                                {}
-                              robot1/right_outer_knuckle:
-                                robot1/right_outer_finger:
-                                  robot1/right_inner_finger:
-                                    robot1/right_inner_finger_pad:
-                                      {}
-            robot1/camera_rgb_frame:
-              robot1/camera_depth_frame:
-                robot1/camera_depth_optical_frame:
-                  robot1/grasp:
-                    robot1/grasp_tcp_aligned:
-                      {}
-              robot1/camera_link:
-                {}
-              robot1/camera_rgb_optical_frame:
-                {}
-          robot2/world:
-            robot2/base_link:
-              robot2/base:
-                {}
-              robot2/shoulder_link:
-                robot2/upper_arm_link:
-                  robot2/forearm_link:
-                    robot2/wrist_1_link:
-                      robot2/wrist_2_link:
-                        robot2/wrist_3_link:
-                          robot2/ee_link:
-                            {}
-                          robot2/tcp:
-                            {}
-                          robot2/tool0:
-                            robot2/robotiq_arg2f_base_link:
-                              robot2/left_inner_knuckle:
-                                {}
-                              robot2/left_outer_knuckle:
-                                robot2/left_outer_finger:
-                                  robot2/left_inner_finger:
-                                    robot2/left_inner_finger_pad:
-                                      {}
-                              robot2/right_inner_knuckle:
-                                {}
-                              robot2/right_outer_knuckle:
-                                robot2/right_outer_finger:
-                                  robot2/right_inner_finger:
-                                    robot2/right_inner_finger_pad:
-                                      {}
-            robot2/camera_rgb_frame:
-              robot2/camera_depth_frame:
-                robot2/camera_depth_optical_frame:
-                  robot2/grasp:
-                    robot2/grasp_tcp_aligned:
-                      {}
-              robot2/camera_link:
-                {}
-              robot2/camera_rgb_optical_frame:
-                {}
+          robot1_base_link:
+            robot1_base:
+              {}
+            robot1_shoulder_link:
+              robot1_upper_arm_link:
+                robot1_forearm_link:
+                  robot1_wrist_1_link:
+                    robot1_wrist_2_link:
+                      robot1_wrist_3_link:
+                        robot1_ee_link:
+                          {}
+                        robot1_tcp:
+                          {}
+                        robot1_tool0:
+                          robot1_robotiq_arg2f_base_link:
+                            robot1_left_inner_knuckle:
+                              {}
+                            robot1_left_outer_knuckle:
+                              robot1_left_outer_finger:
+                                robot1_left_inner_finger:
+                                  robot1_left_inner_finger_pad:
+                                    {}
+                            robot1_right_inner_knuckle:
+                              {}
+                            robot1_right_outer_knuckle:
+                              robot1_right_outer_finger:
+                                robot1_right_inner_finger:
+                                  robot1_right_inner_finger_pad:
+                                    {}
+          robot2_base_link:
+            robot2_base:
+              {}
+            robot2_shoulder_link:
+              robot2_upper_arm_link:
+                robot2_forearm_link:
+                  robot2_wrist_1_link:
+                    robot2_wrist_2_link:
+                      robot2_wrist_3_link:
+                        robot2_ee_link:
+                          {}
+                        robot2_tool0:
+                          robot2_robotiq_arg2f_base_link:
+                            robot2_left_inner_knuckle:
+                              {}
+                            robot2_left_outer_knuckle:
+                              robot2_left_outer_finger:
+                                robot2_left_inner_finger:
+                                  robot2_left_inner_finger_pad:
+                                    {}
+                            robot2_right_inner_knuckle:
+                              {}
+                            robot2_right_outer_knuckle:
+                              robot2_right_outer_finger:
+                                robot2_right_inner_finger:
+                                  robot2_right_inner_finger_pad:
+                                    {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -280,213 +255,208 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base:
+        robot1_base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        ee_link:
+        robot1_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        forearm_link:
+        robot1_ee_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_inner_finger:
+        robot1_forearm_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_inner_finger_pad:
+        robot1_left_inner_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_inner_knuckle:
+        robot1_left_inner_finger_pad:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_outer_finger:
+        robot1_left_inner_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_outer_knuckle:
+        robot1_left_outer_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_inner_finger:
+        robot1_left_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_inner_finger_pad:
+        robot1_right_inner_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_inner_knuckle:
+        robot1_right_inner_finger_pad:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_outer_finger:
+        robot1_right_inner_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_outer_knuckle:
+        robot1_right_outer_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_arg2f_base_link:
+        robot1_right_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        shoulder_link:
+        robot1_robotiq_arg2f_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        tool0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        upper_arm_link:
+        robot1_shoulder_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        world:
+        robot1_tool0:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        wrist_1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wrist_2_link:
+        robot1_upper_arm_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        wrist_3_link:
+        robot1_wrist_1_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-      Name: RobotModel
-      Robot Description: /robot1/robot_description
-      TF Prefix: robot1
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
-    - Alpha: 1
-      Class: rviz/RobotModel
-      Collision Enabled: false
-      Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: Links in Alphabetic Order
-        base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        base_link:
+        robot1_wrist_2_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        ee_link:
+        robot1_wrist_3_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        forearm_link:
+        robot2_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        robot2_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_inner_finger:
+        robot2_ee_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_inner_finger_pad:
+        robot2_forearm_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_inner_knuckle:
+        robot2_left_inner_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_outer_finger:
+        robot2_left_inner_finger_pad:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_outer_knuckle:
+        robot2_left_inner_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_inner_finger:
+        robot2_left_outer_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_inner_finger_pad:
+        robot2_left_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_inner_knuckle:
+        robot2_right_inner_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_outer_finger:
+        robot2_right_inner_finger_pad:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_outer_knuckle:
+        robot2_right_inner_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_arg2f_base_link:
+        robot2_right_outer_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        shoulder_link:
+        robot2_right_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        tool0:
+        robot2_robotiq_arg2f_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        upper_arm_link:
+          Value: true
+        robot2_shoulder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robot2_tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        robot2_upper_arm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robot2_wrist_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robot2_wrist_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robot2_wrist_3_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -495,24 +465,9 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        wrist_1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wrist_2_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wrist_3_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
       Name: RobotModel
-      Robot Description: /robot2/robot_description
-      TF Prefix: robot2
+      Robot Description: robot_description
+      TF Prefix: ""
       Update Interval: 0
       Value: true
       Visual Enabled: true
@@ -549,7 +504,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /robot1/kinect/depth/points
+      Topic: /camera1/kinect/depth/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -579,7 +534,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /robot2/kinect/depth/points
+      Topic: /camera2/kinect/depth/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -587,7 +542,7 @@ Visualization Manager:
     - Acceleration_Scaling_Factor: 0.1
       Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
-      Move Group Namespace: robot1
+      Move Group Namespace: ""
       MoveIt_Allow_Approximate_IK: false
       MoveIt_Allow_External_Program: false
       MoveIt_Allow_Replanning: false
@@ -618,90 +573,208 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
-          base:
+          robot1_base:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          base_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          ee_link:
+          robot1_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          forearm_link:
+          robot1_ee_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_inner_finger:
+          robot1_forearm_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_inner_finger_pad:
+          robot1_left_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_inner_knuckle:
+          robot1_left_inner_finger_pad:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_outer_finger:
+          robot1_left_inner_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_outer_knuckle:
+          robot1_left_outer_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_inner_finger:
+          robot1_left_outer_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_inner_finger_pad:
+          robot1_right_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_inner_knuckle:
+          robot1_right_inner_finger_pad:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_outer_finger:
+          robot1_right_inner_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_outer_knuckle:
+          robot1_right_outer_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_arg2f_base_link:
+          robot1_right_outer_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          shoulder_link:
+          robot1_robotiq_arg2f_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          tool0:
+          robot1_shoulder_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          upper_arm_link:
+            Value: true
+          robot1_tool0:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          robot1_upper_arm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot1_wrist_1_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot1_wrist_2_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot1_wrist_3_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          robot2_base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_ee_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_forearm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_inner_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_inner_finger_pad:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_inner_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_outer_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_outer_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_inner_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_inner_finger_pad:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_inner_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_outer_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_outer_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_robotiq_arg2f_base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_shoulder_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_tool0:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          robot2_upper_arm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_wrist_1_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_wrist_2_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_wrist_3_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -710,21 +783,6 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          wrist_1_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          wrist_2_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          wrist_3_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
         Loop Animation: false
         Robot Alpha: 0.5
         Robot Color: 150; 50; 150
@@ -733,7 +791,7 @@ Visualization Manager:
         Show Trail: false
         State Display Time: 0.05 s
         Trail Step Size: 1
-        Trajectory Topic: robot1/move_group/display_planned_path
+        Trajectory Topic: move_group/display_planned_path
       Planning Metrics:
         Payload: 1
         Show Joint Torques: false
@@ -747,14 +805,14 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: arm
+        Planning Group: robot1_arm
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
         Start State Alpha: 1
         Start State Color: 0; 255; 0
-      Planning Scene Topic: robot1/move_group/monitored_planning_scene
-      Robot Description: robot1/robot_description
+      Planning Scene Topic: move_group/monitored_planning_scene
+      Robot Description: robot_description
       Scene Geometry:
         Scene Alpha: 0.8999999761581421
         Scene Color: 50; 230; 50
@@ -770,90 +828,208 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
-          base:
+          robot1_base:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          base_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          ee_link:
+          robot1_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          forearm_link:
+          robot1_ee_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_inner_finger:
+          robot1_forearm_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_inner_finger_pad:
+          robot1_left_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_inner_knuckle:
+          robot1_left_inner_finger_pad:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_outer_finger:
+          robot1_left_inner_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          left_outer_knuckle:
+          robot1_left_outer_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_inner_finger:
+          robot1_left_outer_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_inner_finger_pad:
+          robot1_right_inner_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_inner_knuckle:
+          robot1_right_inner_finger_pad:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_outer_finger:
+          robot1_right_inner_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          right_outer_knuckle:
+          robot1_right_outer_finger:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          robotiq_arg2f_base_link:
+          robot1_right_outer_knuckle:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          shoulder_link:
+          robot1_robotiq_arg2f_base_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          tool0:
+          robot1_shoulder_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          upper_arm_link:
+            Value: true
+          robot1_tool0:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          robot1_upper_arm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot1_wrist_1_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot1_wrist_2_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot1_wrist_3_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          robot2_base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_ee_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_forearm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_inner_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_inner_finger_pad:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_inner_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_outer_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_left_outer_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_inner_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_inner_finger_pad:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_inner_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_outer_finger:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_right_outer_knuckle:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_robotiq_arg2f_base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_shoulder_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_tool0:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          robot2_upper_arm_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_wrist_1_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_wrist_2_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          robot2_wrist_3_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -862,21 +1038,6 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          wrist_1_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          wrist_2_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          wrist_3_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
         Robot Alpha: 1
         Show Robot Collision: false
         Show Robot Visual: true
@@ -910,25 +1071,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.7592806816101074
+      Distance: 4.231368064880371
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.3044527769088745
-        Y: 0.07485754042863846
-        Z: 0.02105800434947014
+        X: -0.3046039640903473
+        Y: -0.5049558877944946
+        Z: 0.21058347821235657
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4997974634170532
+      Pitch: 0.7947972416877747
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.9604406356811523
+      Yaw: 0.45044076442718506
     Saved: ~
 Window Geometry:
   Displays:
@@ -938,9 +1099,9 @@ Window Geometry:
   Hide Right Dock: false
   MotionPlanning:
     collapsed: false
-  MotionPlanning - Slider:
+  MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000295000004ddfc020000000dfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000003d00000331000000c900fffffffa000000010100000002fb0000000c00430061006d0065007200610100000000ffffffff0000000000000000fb000000100044006900730070006c0061007900730100000000000002950000015600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000318000002020000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000374000001a60000000000000000fb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000374000001a60000019b00ffffff00000001000004a6000004ddfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fc0000003d000004dd000000a400fffffffa000000010100000002fb0000000c00430061006d0065007200610100000000ffffffff0000000000000000fb0000000a00560069006500770073010000059c0000010f0000010000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000d2d0000003efc0100000002fb0000000800540069006d0065010000000000000d2d000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000005e6000004dd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000295000004ddfc020000000dfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000003d000002f9000000c900fffffffa000000010100000002fb0000000c00430061006d0065007200610100000000ffffffff0000000000000000fb000000100044006900730070006c0061007900730100000000000002950000015600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000033c000001de0000019b00fffffffb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000374000001a60000000000000000fb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000374000001a6000000000000000000000001000004a6000004ddfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fc0000003d000004dd000000a400fffffffa000000010100000002fb0000000c00430061006d0065007200610100000000ffffffff0000000000000000fb0000000a00560069006500770073010000059c0000010f0000010000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000d2d0000003efc0100000002fb0000000800540069006d0065010000000000000d2d000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000005e6000004dd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:

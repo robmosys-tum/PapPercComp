@@ -1,6 +1,14 @@
 <?xml version="1.0" ?>
 <launch>
 
+  <!-- camera1/world -> world -->
+  <node name="camera1_world_to_world" pkg="tf2_ros" type="static_transform_publisher"
+        args="0 0 0 0 0 0 camera1/world world" />
+
+  <!-- camera2/world -> world -->
+  <node name="camera2_world_to_world" pkg="tf2_ros" type="static_transform_publisher"
+        args="0 0 0 0 0 0 camera2/world world" />
+
   <!-- Define the tool center point (tcp) link relative to the inverse kinematics link that Moveit uses 
        which is the last link in the kinematic chain. In our case, this is the wrist_3_link. -->
   <arg name="wrist_3_link_to_tcp_XYZYPR" default="0 0.269 0 0 0 0" />
@@ -8,54 +16,41 @@
   <!-- Rotate the grasp such that its orientation aligns with the tcp link. -->
   <arg name="grasp_to_grasp_aligned_XYZYPR" default="0 0 0 1.5707 0 1.5707" />
 
-  <group ns="robot1">
+  <!-- sensor configuration for Moveit -->
+  <rosparam ns="move_group" command="load" file="$(find chair_manipulation_gazebo)/cfg/sensors.yaml" />
 
-    <!-- sensor configuration for Moveit -->
-    <rosparam ns="move_group" command="load" file="$(find chair_manipulation_gazebo)/cfg/sensors.yaml" />
+  <!-- Moveit -->
+  <include file="$(find dual_arm_manipulator_moveit_config)/launch/dual_arm_manipulator_moveit_planning_execution.launch">
+    <arg name="use_rviz" value="false" />
+  </include>
 
-    <!-- Moveit -->
-    <include file="$(find ur10_robotiq_2f_140_moveit_config)/launch/ur10_robotiq_2f_140_moveit_planning_execution.launch">
-      <arg name="use_rviz" value="false" />
-    </include>
+  <!-- grasp detection (first robot) -->
+  <include ns="camera1" file="$(find chair_manipulation_grasp_detection)/launch/depth_image_detection.launch">
+    <arg name="grasp_frame" value="robot1_grasp" />
+  </include>
 
-    <!-- grasp detection -->
-    <include file="$(find chair_manipulation_grasp_detection)/launch/depth_image_detection.launch">
-      <arg name="grasp_frame" value="robot1/grasp" />
-    </include>
+  <!-- grasp detection (second robot) -->
+  <include ns="camera2" file="$(find chair_manipulation_grasp_detection)/launch/depth_image_detection.launch">
+    <arg name="grasp_frame" value="robot2_grasp" />
+  </include>
 
-    <!-- wrist_3_link -> tcp -->
-    <node name="robot1_wirst_3_link_to_tcp" pkg="tf2_ros" type="static_transform_publisher"
-          args="$(arg wrist_3_link_to_tcp_XYZYPR) robot1/wrist_3_link robot1/tcp" />
+  <!-- wrist_3_link -> tcp (first robot) -->
+  <node name="robot1_wirst_3_link_to_tcp" pkg="tf2_ros" type="static_transform_publisher"
+        args="$(arg wrist_3_link_to_tcp_XYZYPR) robot1_wrist_3_link robot1_tcp" />
 
-    <!-- grasp -> grasp_tcp_aligned -->
-    <node name="robot1_grasp_to_grasp_tcp_aligned" pkg="tf2_ros" type="static_transform_publisher"
-          args="$(arg grasp_to_grasp_aligned_XYZYPR) robot1/grasp robot1/grasp_tcp_aligned" />
+  <!-- wrist_3_link -> tcp (second robot) -->
+  <node name="robot2_wirst_3_link_to_tcp" pkg="tf2_ros" type="static_transform_publisher" 
+        args="$(arg wrist_3_link_to_tcp_XYZYPR) robot2_wrist_3_link robot1_tcp" />
 
-  </group>
+  <!-- grasp -> grasp_tcp_aligned (first robot) -->
+  <node name="robot1_grasp_to_grasp_tcp_aligned" pkg="tf2_ros" type="static_transform_publisher"
+        args="$(arg grasp_to_grasp_aligned_XYZYPR) robot1_grasp robot1_grasp_tcp_aligned" />
+  
+  <!-- grasp -> grasp_tcp_aligned (second robot) -->
+  <node name="robot2_grasp_to_grasp_tcp_aligned"  pkg="tf2_ros" type="static_transform_publisher"
+        args="$(arg grasp_to_grasp_aligned_XYZYPR) robot2_grasp robot1_grasp_tcp_aligned" />
 
-  <group ns="robot2">
-
-    <!-- sensor configuration for Moveit -->
-    <rosparam ns="move_group" command="load" file="$(find chair_manipulation_gazebo)/cfg/sensors.yaml" />
-
-    <!-- Moveit -->
-    <include file="$(find ur10_robotiq_2f_140_moveit_config)/launch/ur10_robotiq_2f_140_moveit_planning_execution.launch">
-      <arg name="use_rviz" value="false" />
-    </include>
-
-    <!-- grasp detection -->
-    <include file="$(find chair_manipulation_grasp_detection)/launch/depth_image_detection.launch">
-      <arg name="grasp_frame" value="robot2/grasp" />
-    </include>
-
-    <!-- wrist_3_link -> tcp -->
-    <node name="robot2_wirst_3_link_to_tcp" pkg="tf2_ros" type="static_transform_publisher" 
-          args="$(arg wrist_3_link_to_tcp_XYZYPR) robot2/wrist_3_link robot2/tcp" />
-
-    <!-- grasp -> grasp_tcp_aligned -->
-    <node name="robot2_grasp_to_grasp_tcp_aligned"  pkg="tf2_ros" type="static_transform_publisher"
-          args="$(arg grasp_to_grasp_aligned_XYZYPR) robot2/grasp robot2/grasp_tcp_aligned" />
-
-  </group>
+  <!-- rviz -->
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" args="-d $(find chair_manipulation_gazebo)/cfg/scene.rviz" respawn="false" output="screen" />
 
 </launch>

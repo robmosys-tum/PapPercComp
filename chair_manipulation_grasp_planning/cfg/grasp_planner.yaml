@@ -1,7 +1,3 @@
-arm_group: arm
-gripper_group: gripper
 planning_time: 60
-open_group_state: "open"
-closed_group_state: "closed"
 pre_grasp_distance: 0.1
 lift_height: 0.1
