@@ -1,3 +1,4 @@
-planning_time: 60
+planning_attempts: 10
+planning_attempt_time: 5
 pre_grasp_distance: 0.1
 lift_height: 0.1

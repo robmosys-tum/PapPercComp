@@ -35,6 +35,8 @@ public:
 private:
     std::string arm_group_name;
     std::string gripper_group_name;
+    std::string open_group_state;
+    std::string closed_group_state;
 
     std::string world_frame;
     std::string ik_frame;
@@ -45,8 +47,8 @@ private:
     std::string planned_grasp_frame;
     std::string planned_lift_frame;
 
-    std::string open_group_state;
-    std::string closed_group_state;
+    int planning_attempts;
+    double planning_attempt_time;
     double pre_grasp_distance;
     double lift_height;
 

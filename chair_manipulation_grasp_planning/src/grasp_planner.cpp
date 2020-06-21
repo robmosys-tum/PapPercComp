@@ -12,6 +12,8 @@ GraspPlanner::GraspPlanner(const ros::NodeHandle &nh)
 {
     arm_group_name = nh.param<std::string>("arm_group", "arm");
     gripper_group_name = nh.param<std::string>("gripper_group", "gripper");
+    open_group_state = nh.param<std::string>("open_group_state", "open");
+    closed_group_state = nh.param<std::string>("closed_group_state", "closed");
 
     world_frame = nh.param<std::string>("world_frame", "world");
     ik_frame = nh.param<std::string>("ik_frame", "wrist_3_link");
@@ -22,20 +24,16 @@ GraspPlanner::GraspPlanner(const ros::NodeHandle &nh)
     planned_grasp_frame = nh.param<std::string>("planned_grasp_frame", "planned_grasp");
     planned_lift_frame = nh.param<std::string>("planned_lift_frame", "planned_lift");
 
-    open_group_state = nh.param<std::string>("open_group_state", "open");
-    closed_group_state = nh.param<std::string>("closed_group_state", "closed");
+    planning_attempts = nh.param<int>("planning_attempts", 10);
+    planning_attempt_time = nh.param<double>("planning_attempt_time", 5.);
     pre_grasp_distance = nh.param<double>("pre_grasp_distance", 0.1);
     lift_height = nh.param<double>("lift_height", 0.2);
-    auto planning_time = nh.param<double>("planning_time", 10.);
 
     using moveit::planning_interface::MoveGroupInterface;
     using moveit::planning_interface::PlanningSceneInterface;
     arm_group = std::make_unique<MoveGroupInterface>(arm_group_name);
     gripper_group = std::make_unique<MoveGroupInterface>(gripper_group_name);
     planning_scene_interface = std::make_unique<PlanningSceneInterface>();
-
-    arm_group->setPlanningTime(planning_time);
-    gripper_group->setPlanningTime(planning_time);
 }
 
 void GraspPlanner::prepare()
@@ -166,13 +164,20 @@ void GraspPlanner::plan_arm_pose(const tf2::Transform &pose_tf, const std::strin
     tf2::toMsg(pose_tf, pose);
     arm_group->setPoseReferenceFrame(world_frame);
     arm_group->setPoseTarget(pose);
-    auto result = arm_group->plan(plan);
-    if (result != moveit::planning_interface::MoveItErrorCode::SUCCESS)
+    arm_group->setPlanningTime(planning_attempt_time);
+
+    for (int i = 0; i < planning_attempts; i++)
     {
-        std::ostringstream msg;
-        msg << "Failed to plan " << pose_name << " pose.";
-        throw GraspPlanningException{msg.str()};
+        auto result = arm_group->plan(plan);
+        if (result == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        {
+            return;
+        }
     }
+
+    std::ostringstream msg;
+    msg << "Failed to plan " << pose_name << " pose.";
+    throw GraspPlanningException{msg.str()};
 }
 
 }
