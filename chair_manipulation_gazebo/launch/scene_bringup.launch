@@ -73,4 +73,12 @@
     <arg name="yaw" value="3.14159" />
   </include>
 
+  <!-- camera1/world -> world -->
+  <node name="camera1_world_to_world" pkg="tf2_ros" type="static_transform_publisher"
+        args="0 0 0 0 0 0 /world /camera1/world" />
+
+  <!-- camera2/world -> world -->
+  <node name="camera2_world_to_world" pkg="tf2_ros" type="static_transform_publisher"
+        args="0 0 0 0 0 0 /world /camera2/world" />
+
 </launch>

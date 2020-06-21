@@ -1,14 +1,6 @@
 <?xml version="1.0" ?>
 <launch>
 
-  <!-- camera1/world -> world -->
-  <node name="camera1_world_to_world" pkg="tf2_ros" type="static_transform_publisher"
-        args="0 0 0 0 0 0 camera1/world world" />
-
-  <!-- camera2/world -> world -->
-  <node name="camera2_world_to_world" pkg="tf2_ros" type="static_transform_publisher"
-        args="0 0 0 0 0 0 camera2/world world" />
-
   <!-- Define the tool center point (tcp) link relative to the inverse kinematics link that Moveit uses 
        which is the last link in the kinematic chain. In our case, this is the wrist_3_link. -->
   <arg name="wrist_3_link_to_tcp_XYZYPR" default="0 0.269 0 0 0 0" />
