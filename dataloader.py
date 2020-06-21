@@ -87,28 +87,36 @@ class DAVISData(torch.utils.data.Dataset):
 
 class CustomData(torch.utils.data.Dataset):
     """
-    Create a map-style dataset for Video Object Segmentation VALIDATION data from all images in a directory, with one single annotated segmentation mask called "AnnotatedFrame.png".
+    Create a map-style dataset for Video Object Segmentation VALIDATION data from all images in 'directory'. Data can have two forms:
+        1. One-Shot VOS data: one single annotated segmentation mask called "AnnotatedFrame.png" must be given in 'directory', 'seg_dir' remains None.
+        2. Validation data to calculate IoU metric: 'seg_dir' contains all the ground-truth segmentation masks. 
 
     All data is loaded into memory at once. This is meant for small datasets for validation purposes.
 
     Arguments:
-        dir (String) : path to folder containing images.
+        directory (String) : path to folder containing images.
+        seg_dir (String, optional) : path to folder containing ground-truth segmentation masks.
     """
-    def __init__(self, directory):
+    def __init__(self, directory, seg_dir=None):
         self.images = []
-        self.seg_mask = []
+        self.seg_masks = []
 
         # Go over files in alphabetical order (according to video sequence)
         for f in sorted(os.listdir(directory)):
             im = Image.open(os.path.join(directory, f))
 
-            if f == "AnnotatedFrame.png":
-                self.seg_mask = transforms.ToTensor()(im)
+            if (seg_dir is None) and (f == "AnnotatedFrame.png"):
+                self.seg_masks = im
             else:
                 self.images.append(im)
             
-            # if len(self.imagePaths) % 100 == 0:
-            #     print("Currently loaded: %d" % len(self.imagePaths))
+
+        if seg_dir is not None:
+            for f in sorted(os.listdir(seg_dir)):
+                seg = Image.open(os.path.join(seg_dir, f))
+                self.seg_masks.append(seg)
+        
+            len(self.images) == len(self.seg_masks), "Number of images and segmentation masks don't match!"
 
 
     def __len__(self):
@@ -118,18 +126,24 @@ class CustomData(torch.utils.data.Dataset):
     def __getitem__(self, idx):
         im = self.images[idx]
 
-        ### DeepLab requires normalized input
+        if len(self.images) == len(self.seg_masks):
+            seg = self.seg_masks[idx]
+        else:
+            seg = self.seg_masks
+
+        # DeepLab requires normalized input
         preprocess = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
 
-        X = preprocess(im)          # Shape [3, 480, 854]
+        X = preprocess(im)                  # Shape [3, 480, 854]
+        Y = transforms.ToTensor()(seg)      # Shape [1, 480, 854]
 
-        return (X, self.seg_mask)
+        return (X, Y)
 
 
 
-train_set = DAVISData('train')
-val_set = DAVISData('val')
+train_DAVIS = DAVISData('train')
+val_DAVIS = DAVISData('val')
 

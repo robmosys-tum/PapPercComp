@@ -9,7 +9,7 @@ import os
 import matplotlib.pyplot as plt
 
 from architecture import DeepLab, deeplabModel
-from utility import load_model
+from utility import load_model, calc_IoU
 from PIL import Image
 
 
@@ -43,7 +43,7 @@ def run_model(dataloader, args):
             os.makedirs("TrainedModel")
 
 
-    if args.mode == 'inference':
+    if args.mode == 'inference' or args.mode == 'validation':
         deeplabModel.to(device)
         deeplabModel.eval()
 
@@ -53,28 +53,35 @@ def run_model(dataloader, args):
         colors = (colors % 255).numpy().astype("uint8")
 
         imcount = 0
+        IoU_sum = 0
+
         # Output directory might not exist yet
         if not os.path.exists("Output"):
             os.makedirs("Output")
 
-        for im, _ in dataloader:
+        for im, ground_truth in dataloader:
             im = im.to(device)
+            ground_truth = ground_truth.to(device)
             
             # Using no_grad() is a necessity! Otherwise memory usage will be far too high.
             with torch.no_grad():
                 output = deeplabModel(im)['out']
 
+            IoU_sum += calc_IoU(output.argmax(1, keepdims=True), ground_truth).sum()
+
             # Iterate over all images in the batch
-            for out in output:
+            for out, gt in zip(output, ground_truth):
                 output_predictions = out.argmax(0)
-            
                 
-                # plot the semantic segmentation predictions of 21 classes in each color
+                # Plot the semantic segmentation predictions of 21 classes in each color
                 seg = Image.fromarray(output_predictions.byte().cpu().numpy())
                 seg.putpalette(colors)
                 
                 plt.imsave(f"Output/{imcount : 06d}.png", seg)
                 imcount += 1
+
+        mean_IoU = IoU_sum / imcount
+        print(f"The mean Intersection over Union for this dataset : {mean_IoU: .4f}")
         return
 
     else:

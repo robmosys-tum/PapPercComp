@@ -9,9 +9,10 @@ def get_arguments():
     parser = ArgumentParser()
 
     ### IO Parameters
-    parser.add_argument('--mode', help="Mode in which you want to run the network.", choices=['train', 'val', 'inference'], default='train')
+    parser.add_argument('--mode', help="Mode in which you want to run the network.", choices=['train', 'validation', 'inference'], default='train')
     parser.add_argument('--load', help="Loads existing trained model if available.", action="store_true")
     parser.add_argument('--custom_data', help="Directory in which the custom data for inference can be found.", default=None)
+    parser.add_argument('--seg_dir', help="Directory in which the ground truth segmentation masks for the custom data can be found.", default=None)
 
 
     ### Training Parameters

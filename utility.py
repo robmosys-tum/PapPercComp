@@ -5,6 +5,7 @@
 
 import numpy as np
 import os
+import torch
 
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -49,6 +50,39 @@ def load_model(model):
 
     print("There doesn't seem to be anything to load.")
     return model
+
+
+def calc_IoU(seg_mask, true_mask):
+    """
+    Calculates the Intersection over Union between a computed segmentation mask and the given ground truth.
+
+    For multiple segmentation instances, simply the union over all instances is taken.
+
+    Arguments:
+        seg_mask (torch.FloatTensor) : mask with integer values denoting which instance a pixel belongs to. Greater than zero if it belongs to an object.
+        true_mask (torch.FloatTensor) : binary mask where 1 denotes a pixel that belongs to an object.
+
+    Return:
+        torch.Float measuring the IoU between the two images, or for batches (N, C, H, W) we return N values of IoU.
+    """
+    eps = 1e-6      # Prevent divide by zeroes
+
+    # Convert seg_mask to binary mask with only 1 or 0 values.
+    binary_seg = torch.where(seg_mask > 0, torch.ones_like(seg_mask), torch.zeros_like(seg_mask))
+
+    # Inclusion-exclusion principle
+    intersection = binary_seg * true_mask
+    union = binary_seg + true_mask - intersection
+    
+
+    if len(seg_mask.shape) == 4:
+        # Input can be a batch of data with shape (N, C, H, W)
+        IoU = intersection.sum(dim=[1,2,3]) / (union.sum(dim=[1,2,3]) + eps)
+    else:
+        # Or input could be just a single image (C, H, W)
+        IoU = intersection.sum() / (union.sum() + eps)
+
+    return IoU
 
 
 def create_video(output_name="video", image_dir=None, seg_dir=None, true_dir=None):
@@ -103,7 +137,7 @@ def create_video(output_name="video", image_dir=None, seg_dir=None, true_dir=Non
 
 if __name__ == "__main__":
     create_video(
-        image_dir=r"D:\Documents\MasterRCI\SS20\RobotPerceptionLab\PapPercComp\Data\DAVIS\JPEGImages\480p\soapbox",
-        seg_dir="SoapboxSeg",
-        true_dir=r"D:\Documents\MasterRCI\SS20\RobotPerceptionLab\PapPercComp\Data\DAVIS\Annotations\480p\soapbox")
+        image_dir=r"Data\DAVIS\JPEGImages\480p\surf",
+        seg_dir="SurfSegSeq",
+        true_dir=r"Data\DAVIS\Annotations\480p\surf")
 
