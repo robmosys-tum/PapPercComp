@@ -27,48 +27,43 @@ void moveToPose(moveit::planning_interface::MoveGroupInterface &group,
     target_pose.position.x = x;
     target_pose.position.y = y;
     target_pose.position.z = z;
+
+    group.setPoseReferenceFrame("world");
     group.setPoseTarget(target_pose);
 
     chair_manipulation::add_ground_plane(planning_scene_interface, group.getPlanningFrame());
 
     moveit::planning_interface::MoveGroupInterface::Plan plan;
     bool success = (group.plan(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-    ROS_INFO_NAMED("move", "Visualizing plan %s", success ? "" : "FAILED");
-    group.execute(plan);
+    if (!success)
+    {
+        ROS_ERROR_STREAM_NAMED("move", "Failed to plan pose target.");
+        return;
+    }
+    success = group.execute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    if (!success)
+    {
+        ROS_ERROR_STREAM_NAMED("move", "Failed to execute pose target.");
+        return;
+    }
 }
 
-void moveUp(moveit::planning_interface::MoveGroupInterface &group)
+void moveToNamedTarget(moveit::planning_interface::MoveGroupInterface &group, const std::string &target)
 {
-    group.setNamedTarget("up");
+    group.setNamedTarget(target);
     moveit::planning_interface::MoveGroupInterface::Plan plan;
     bool success = (group.plan(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-    ROS_INFO_NAMED("move", "Visualizing plan %s", success ? "" : "FAILED");
-    group.move();
-}
-
-void moveHome(moveit::planning_interface::MoveGroupInterface &group)
-{
-    group.setNamedTarget("home");
-    moveit::planning_interface::MoveGroupInterface::Plan plan;
-    bool success = (group.plan(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-    ROS_INFO_NAMED("move", "Visualizing plan %s", success ? "" : "FAILED");
-    group.move();
-}
-
-void open(moveit::planning_interface::MoveGroupInterface &group)
-{
-    group.setNamedTarget("open");
-    moveit::planning_interface::MoveGroupInterface::Plan plan;
-    group.plan(plan);
-    group.move();
-}
-
-void close(moveit::planning_interface::MoveGroupInterface &group)
-{
-    group.setNamedTarget("closed");
-    moveit::planning_interface::MoveGroupInterface::Plan plan;
-    group.plan(plan);
-    group.move();
+    if (!success)
+    {
+        ROS_ERROR_STREAM_NAMED("move", "Failed to plan for named target '" << target << "'");
+        return;
+    }
+    success = group.execute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    if (!success)
+    {
+        ROS_ERROR_STREAM_NAMED("move", "Failed to execute named target '" << target << "'");
+        return;
+    }
 }
 
 int main(int argc, char **argv)
@@ -78,43 +73,27 @@ int main(int argc, char **argv)
     ros::AsyncSpinner spinner(1);
     spinner.start();
 
-    static const std::string ARM_GROUP = "arm";
-    static const std::string GRIPPER_GROUP = "gripper";
+    ros::NodeHandle nh_priv{"~"};
 
-    moveit::planning_interface::MoveGroupInterface arm_group(ARM_GROUP);
-    moveit::planning_interface::MoveGroupInterface gripper_group(GRIPPER_GROUP);
+    auto prefix = nh_priv.param<std::string>("prefix", "robot1");
+    auto command = nh_priv.param<std::string>("cmd", "move_up");
+
+    moveit::planning_interface::MoveGroupInterface arm_group(prefix + "_arm");
+    moveit::planning_interface::MoveGroupInterface gripper_group(prefix + "_gripper");
     moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
     arm_group.setPlanningTime(60.0);
 
-    namespace rvt = rviz_visual_tools;
-    moveit_visual_tools::MoveItVisualTools visual_tools("world");
-
-    visual_tools.deleteAllMarkers();
-    visual_tools.loadRemoteControl();
-
-    Eigen::Isometry3d text_pose = Eigen::Isometry3d::Identity();
-    text_pose.translation().z() = 1.75;
-    visual_tools.publishText(text_pose, "move", rvt::WHITE, rvt::XLARGE);
-    visual_tools.trigger();
-
-    std::string command;
-    if (!ros::param::get("~command", command))
-    {
-        ROS_ERROR("Parameter 'command' not specified!");
-        return -1;
-    }
-
     if (command == "move_up")
-        moveUp(arm_group);
+        moveToNamedTarget(arm_group, prefix + "_up");
     else if (command == "move_home")
-        moveHome(arm_group);
+        moveToNamedTarget(arm_group, prefix + "_home");
     else if (command == "move_to_pose")
         moveToPose(arm_group, planning_scene_interface, 0.0, -0.5, 0.5, deg2rad(180), deg2rad(0), deg2rad(0));
     else if (command == "close")
-        close(gripper_group);
+        moveToNamedTarget(gripper_group, prefix + "_closed");
     else if (command == "open")
-        open(gripper_group);
+        moveToNamedTarget(gripper_group, prefix + "_open");
     else
         ROS_WARN("Unknown command!");
 

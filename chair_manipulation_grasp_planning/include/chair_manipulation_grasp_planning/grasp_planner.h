@@ -41,13 +41,14 @@ private:
     std::string tcp_frame;
     std::string grasp_frame;
     std::string grasp_tcp_aligned_frame;
+    std::string planned_pre_grasp_frame;
+    std::string planned_grasp_frame;
+    std::string planned_lift_frame;
 
     std::string open_group_state;
     std::string closed_group_state;
     double pre_grasp_distance;
     double lift_height;
-
-    ros::NodeHandle nh;
 
     // std::unique_ptr because we need to initialize them with values from the parameter server
     std::unique_ptr<moveit::planning_interface::MoveGroupInterface> arm_group;

@@ -22,10 +22,15 @@
     <param name="grasp_frame" value="robot1_grasp" />
 
     <!-- This is the grasp frame which has the same position as grasp_frame but its orientation is
-          the desired orientation of the tcp frame.
-          So the planner computes the position of the pre-grasp and lift in the grasp_frame first
-          and then expresses those positions relative to the desired orientation of the tcp frame. -->
+         the desired orientation of the tcp frame.
+         So the planner computes the position of the pre-grasp and lift in the grasp_frame first
+         and then expresses those positions relative to the desired orientation of the tcp frame. -->
     <param name="grasp_tcp_aligned_frame" value="robot1_grasp_tcp_aligned" />
+
+    <!-- Planned output frames for visualization -->
+    <param name="planned_pre_grasp_frame" value="robot1_planned_pre_grasp" />
+    <param name="planned_grasp_frame" value="robot1_planned_grasp" />
+    <param name="planned_lift_frame" value="robot1_planned_lift" />
 
     <param name="arm_group" value="robot1_arm" />
     <param name="gripper_group" value="robot1_gripper" />
@@ -41,6 +46,9 @@
     <param name="tcp_frame" value="robot2_tcp" />
     <param name="grasp_frame" value="robot2_grasp" />
     <param name="grasp_tcp_aligned_frame" value="robot2_grasp_tcp_aligned" />
+    <param name="planned_pre_grasp_frame" value="robot2_planned_pre_grasp" />
+    <param name="planned_grasp_frame" value="robot2_planned_grasp" />
+    <param name="planned_lift_frame" value="robot2_planned_lift" />
     <param name="arm_group" value="robot2_arm" />
     <param name="gripper_group" value="robot2_gripper" />
     <param name="open_group_state" value="robot2_open" />

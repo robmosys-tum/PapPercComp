@@ -18,6 +18,9 @@ GraspPlanner::GraspPlanner(const ros::NodeHandle &nh)
     tcp_frame = nh.param<std::string>("tcp_frame", "tcp");
     grasp_frame = nh.param<std::string>("grasp_frame", "grasp");
     grasp_tcp_aligned_frame = nh.param<std::string>("grasp_tcp_aligned_frame", "grasp_tcp_aligned");
+    planned_pre_grasp_frame = nh.param<std::string>("planned_pre_grasp_frame", "planned_pre_grasp");
+    planned_grasp_frame = nh.param<std::string>("planned_grasp_frame", "planned_grasp");
+    planned_lift_frame = nh.param<std::string>("planned_lift_frame", "planned_lift");
 
     open_group_state = nh.param<std::string>("open_group_state", "open");
     closed_group_state = nh.param<std::string>("closed_group_state", "closed");
@@ -80,22 +83,19 @@ void GraspPlanner::prepare()
         world_to_pre_grasp_to_ik = world_to_pre_grasp * grasp_to_ik;
         world_to_lift_to_ik = world_to_lift * grasp_to_ik;
 
-        // Send planned transforms
+        // Send planned transforms for visualization
         msg.header.stamp = ros::Time::now();
         msg.header.frame_id = world_frame;
 
-        ros::NodeHandle nh;
-        auto ns = nh.getNamespace();
-
-        msg.child_frame_id = ns + "_planned_pre_grasp";
+        msg.child_frame_id = planned_pre_grasp_frame;
         tf2::convert(world_to_pre_grasp_to_ik, msg.transform);
         broadcaster.sendTransform(msg);
 
-        msg.child_frame_id = ns + "_planned_grasp";
+        msg.child_frame_id = planned_grasp_frame;
         tf2::convert(world_to_grasp_to_ik, msg.transform);
         broadcaster.sendTransform(msg);
 
-        msg.child_frame_id = ns + "_planned_lift";
+        msg.child_frame_id = planned_lift_frame;
         tf2::convert(world_to_lift_to_ik, msg.transform);
         broadcaster.sendTransform(msg);
     }
@@ -161,7 +161,7 @@ void GraspPlanner::plan_arm_pose(const tf2::Transform &pose_tf, const std::strin
     // the ground plane to the planning scene. If we put it here, however, it works.
     // This seems to be strange...
     add_ground_plane(*planning_scene_interface, arm_group->getPlanningFrame());
-    
+
     geometry_msgs::Pose pose;
     tf2::toMsg(pose_tf, pose);
     arm_group->setPoseReferenceFrame(world_frame);
