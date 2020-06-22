@@ -3,16 +3,17 @@
  <model name="ikea_urban_chair">
     <link name="link">
      <inertial>
-       <mass>10</mass>
-       <inertia>
-         <ixx>0.0</ixx>
-         <ixy>0.0</ixy>
-         <ixz>0.0</ixz>
-         <iyy>0.0</iyy>
-         <iyz>0.0</iyz>
-         <izz>0.1</izz>
-       </inertia>
-     </inertial>
+        <pose>-0.001540 0.084006 0.392711 0 0 0</pose>
+        <mass>0.007824</mass>
+        <inertia>
+          <ixx>0.000293</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.000279</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.000330</izz>
+        </inertia>
+      </inertial>
      <collision name="collision">
        <pose>0 0 0 0 0 1.6</pose>
        <geometry>

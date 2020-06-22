@@ -306,19 +306,24 @@ Eigen::Vector3d compute_surface_normal(const Eigen::Vector3d &position,
                            double(normal.normal_z)};
 }
 
-Eigen::Quaterniond compute_frame_rotation(const Eigen::Vector3d &frame_axis, double axis_angle)
+Eigen::Quaterniond compute_frame_rotation(const Eigen::Vector3d &frame_axis, 
+                                          double axis_angle, 
+                                          bool apply_roll = true, 
+                                          bool apply_pitch = true,
+                                          bool apply_yaw = true)
 {
     // This function computes the rotation quaternion from the parent frame to a child frame which is defined by an axis
     // and an angle (relative to the parent's frame).
     // In order to do so, we have to compute the roll and pitch angles of the axis vector first.
     // Then we consecutively apply intrinsic roll (x-axis), pitch (y-axis) and yaw (z-axis) rotations where
     // the yaw angle is the angle of the child frame's axis.
-    auto roll = std::atan2(-frame_axis.y(), frame_axis.z());
-    auto pitch = std::asin(-frame_axis.x());
+    auto roll = apply_roll ? std::atan2(-frame_axis.y(), frame_axis.z()) : 0.;
+    auto pitch = apply_pitch ? std::asin(-frame_axis.x()) : 0.;
+    auto yaw = apply_yaw ? axis_angle : 0.;
 
     // Use tf2::Quaternion here because Eigen does not implement euler angles
     tf2::Quaternion q;
-    q.setRPY(roll, pitch, axis_angle);
+    q.setRPY(0, pitch, axis_angle);
     return Eigen::Quaterniond{q.w(), q.x(), q.y(), q.z()};
 }
 
@@ -349,6 +354,8 @@ int main(int argc, char *argv[])
     auto nms_threshold = priv_nh.param<double>("nms_threshold", 1.);
     auto seat_plate_horizontal_position = priv_nh.param<double>("seat_plate_horizontal_position", 0.3);
     auto normal_radius = priv_nh.param<double>("normal_radius", 0.05);
+    auto roll_from_surface_normal = priv_nh.param<bool>("roll_from_surface_normal", true);
+    auto pitch_from_surface_normal = priv_nh.param<bool>("pitch_from_surface_normal", true);
 
     // Create a window for visualization
     const std::string window_name = "Depth image detection";
@@ -495,7 +502,10 @@ int main(int argc, char *argv[])
         // inverted normal (so it points into the chair) and the Y-axis is pointing up.
         // This is the same convention that ROS industrial uses as standard for the tool0 frame.
         auto grasp_rotation = compute_frame_rotation(-grasp_surface_normal,
-                                                     angle_from_rotated_rect(plate_rect) + M_PI);
+                                                     angle_from_rotated_rect(plate_rect) + M_PI,
+                                                     roll_from_surface_normal,
+                                                     pitch_from_surface_normal,
+                                                     true);
 
         // Create grasp pose message and publish it
         geometry_msgs::TransformStamped chair_transform;

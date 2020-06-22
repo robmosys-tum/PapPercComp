@@ -28,6 +28,7 @@ GraspPlanner::GraspPlanner(const ros::NodeHandle &nh)
     planning_attempt_time = nh.param<double>("planning_attempt_time", 5.);
     pre_grasp_distance = nh.param<double>("pre_grasp_distance", 0.1);
     lift_height = nh.param<double>("lift_height", 0.2);
+    max_velocity_scaling_factor = nh.param<double>("max_velocity_scaling_factor", 0.1);
 
     using moveit::planning_interface::MoveGroupInterface;
     using moveit::planning_interface::PlanningSceneInterface;
@@ -131,6 +132,9 @@ void GraspPlanner::execute_grasp()
 
     gripper_group->setNamedTarget(closed_group_state);
     gripper_group->move();
+
+    // Wait a couple of seconds, the grasp execution is likely to fail because it doesn't reach the closed
+    // position entirely. This is absolutely fine and we just wait until the gripper exerts enough force.
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(5s);
 }
@@ -165,6 +169,7 @@ void GraspPlanner::plan_arm_pose(const tf2::Transform &pose_tf, const std::strin
     arm_group->setPoseReferenceFrame(world_frame);
     arm_group->setPoseTarget(pose);
     arm_group->setPlanningTime(planning_attempt_time);
+    arm_group->setMaxVelocityScalingFactor(max_velocity_scaling_factor);
 
     for (int i = 0; i < planning_attempts; i++)
     {

@@ -51,6 +51,7 @@ private:
     double planning_attempt_time;
     double pre_grasp_distance;
     double lift_height;
+    double max_velocity_scaling_factor;
 
     // std::unique_ptr because we need to initialize them with values from the parameter server
     std::unique_ptr<moveit::planning_interface::MoveGroupInterface> arm_group;
