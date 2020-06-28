@@ -22,6 +22,8 @@ def get_arguments():
     parser.add_argument('--epochs', help="Number of epochs to run the model for.", type=int, default=1000)
     parser.add_argument('--checkpoint_epochs', help="Number of epochs between two checkpoints.", type=int, default=100)
 
+    parser.add_argument('--embedding_dim', help="Dimension of the embedding space.", type=int, default=128)
+
 
     arguments = parser.parse_args()
     return arguments
