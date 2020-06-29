@@ -69,11 +69,13 @@ def run_model(dataloader, args):
 
             
             # Print statistics
+            print("-"*30)
             print(f"Epoch [{epoch + 1: >4}/{args.epochs}] Loss: {epoch_loss:.2e}")
+            print("-"*30)
 
             if epoch % args.val_epoch-1 == 0:
                 # Calculate and print IoU 
-                epoch_loss, epoch_acc = run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='validation')
+                #epoch_loss, epoch_acc = run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='validation')
 
                 print(f"Epoch [{epoch + 1: >4}/{args.epochs}] Accuracy: {epoch_acc * 100:.2f}%")
 
@@ -179,16 +181,26 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
             background = embedded_pixelvectors * (1 - seg_mask)
 
             N, d = embedded_pixelvectors.size()[:2]
+            eps = 1e-5
 
-            # Mean and variance resulting in shapes [N, d]
+            ### Mean and variance resulting in shapes [N, d]
             mean_FG = foreground.view(N, d, -1).mean(dim=2)
-            var_FG = foreground.view(N, d, -1).var(dim=2).sqrt_()
+            # sqrt should not be taken of zero, gives gradient divide by zero, hence loss goes to NaN
+            std_FG = (foreground.view(N, d, -1).var(dim=2) + eps).sqrt_()
 
             mean_BG = background.view(N, d, -1).mean(dim=2)
-            var_BG = background.view(N, d, -1).var(dim=2).sqrt_()
+            std_BG = (background.view(N, d, -1).var(dim=2) + eps).sqrt_()
 
             ### Loss function: getting foreground pixels close together, background pixels also close together, then the distance between FG and BG clusters far apart.
-            loss = (var_FG + var_BG - (mean_BG - mean_FG)**2).mean()
+            # Then add regularization
+            reg_strength = 1
+            loss = 1 * (
+                    0.1 * (std_FG.mean() + std_BG.mean())
+                    - 0.5 * ((mean_BG - mean_FG)**2).mean()
+                    + reg_strength * (((mean_BG)**2).mean() + ((mean_FG)**2).mean()) 
+                )
+            
+            print(f"Loss is: {loss.item()}")
 
 
             # In case you wanna DEBUG memory usage for PyTorch
@@ -204,7 +216,6 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 # Calculate epoch_acc
                 pass
 
-            print(f"Loss is: {loss.item()}")
 
         ### Statistics, using Intersection over Union (IoU) for accuracy
         epoch_loss += loss.item()
