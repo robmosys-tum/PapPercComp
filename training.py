@@ -37,7 +37,6 @@ def run_model(dataloader, args):
 
 
     if args.load:
-        # TODO: Check if I need to assign the value to model, or if load_state_dict works on model directly (not sure if passed by reference).
         load_model(embedModel)
     else:
         # TrainedModel directory might not exist yet
@@ -63,13 +62,20 @@ def run_model(dataloader, args):
 
         ### Run epochs
         for epoch in range(args.epochs):
-            epoch_loss, epoch_acc = run_epoch(embedModel, optimizer, dataloader, args.mode)
+            print(f"Starting Epoch [{epoch} / {args.epochs}]")
+            epoch_loss, epoch_acc = run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode=args.mode)
             # Update the learning rate based on scheduler
             lr_scheduler.step()
 
             
             # Print statistics
-            print(f"Epoch {epoch + 1: >4}/{args.epochs}, Loss: {epoch_loss:.2e}, Accuracy: {epoch_acc * 100:.2f}%")
+            print(f"Epoch [{epoch + 1: >4}/{args.epochs}] Loss: {epoch_loss:.2e}")
+
+            if epoch % args.val_epoch-1 == 0:
+                # Calculate and print IoU 
+                epoch_loss, epoch_acc = run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='validation')
+
+                print(f"Epoch [{epoch + 1: >4}/{args.epochs}] Accuracy: {epoch_acc * 100:.2f}%")
 
 
             # Make double checkpoints, just in case.
@@ -136,11 +142,10 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
         mode (String) : train or val
         
     Returns:
-        Loss and accuracy in this epoch.
+        Loss in this epoch.
     """
     # Get the device based on the model
     device = next(embedModel.parameters()).device
-    #embedModel = embedModel.to(device)
 
     if mode == 'train':
         embedModel.train()
@@ -149,9 +154,12 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
 
     epoch_loss = 0.0
     epoch_acc = 0.0
+    iter_count = 1
 
+    
     ### Iterate over data
     for image, seg_mask in dataloader:
+        print(f"Processing data [{iter_count}/{len(dataloader)}]")
         image, seg_mask = image.to(device), seg_mask.to(device)
 
         ### Zero the parameter gradients
@@ -161,20 +169,51 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
         ### Forward pass
         # No gradient for DeepLab
         with torch.no_grad():
-            deepOut = deeplabModel(image)
+            deepOut = deeplabModel(image)['out']
 
         # Gradient for embedding network
         with torch.set_grad_enabled(True):
-            embedded_pixels = embedModel(deepOut)
+            embedded_pixelvectors = embedModel(deepOut)
+
+            foreground = embedded_pixelvectors * seg_mask
+            background = embedded_pixelvectors * (1 - seg_mask)
+
+            N, d = embedded_pixelvectors.size()[:2]
+
+            # Mean and variance resulting in shapes [N, d]
+            mean_FG = foreground.view(N, d, -1).mean(dim=2)
+            var_FG = foreground.view(N, d, -1).var(dim=2).sqrt_()
+
+            mean_BG = background.view(N, d, -1).mean(dim=2)
+            var_BG = background.view(N, d, -1).var(dim=2).sqrt_()
+
+            ### Loss function: getting foreground pixels close together, background pixels also close together, then the distance between FG and BG clusters far apart.
+            loss = (var_FG + var_BG - (mean_BG - mean_FG)**2).mean()
+
+
+            # In case you wanna DEBUG memory usage for PyTorch
+            #print(torch.cuda.memory_summary(device))
+
 
             if mode == 'train':
                 loss.backward()
                 optimizer.step()
 
+            IoU = 0
+            if mode == 'validation':
+                # Calculate epoch_acc
+                pass
+
+            print(f"Loss is: {loss.item()}")
+
         ### Statistics, using Intersection over Union (IoU) for accuracy
         epoch_loss += loss.item()
-        epoch_acc += IoU.item()
-    
+        epoch_acc += IoU
+
+        iter_count += 1
+
+
     epoch_loss /= len(dataloader.dataset)
     epoch_acc /= len(dataloader.dataset)
+
     return epoch_loss, epoch_acc

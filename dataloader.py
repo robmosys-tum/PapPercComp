@@ -81,6 +81,11 @@ class DAVISData(torch.utils.data.Dataset):
         seg = Image.open(os.path.join(self.davisDir, segPath[1:]))
         Y = transforms.ToTensor()(seg)      # Shape [1, 480, 854]
 
+        # Some of the DAVIS data seems off, annotation with two channels instead of one (I assume one is opacity)
+        if Y.shape[0] != 1:
+            print(f"Encountered special case for {imPath}.")
+            Y = Y[0:1]
+
         return (X, Y)
 
 

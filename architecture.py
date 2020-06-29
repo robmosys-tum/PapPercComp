@@ -63,8 +63,8 @@ class EmbeddingHead(nn.Module):
         super(EmbeddingHead, self).__init__()
         
         self.embed = nn.Sequential(
-            ConvBlock(256, 1024, kernel_size=7, padding=0, stride=1),
-            nn.Conv2d(1024, embed_dim, kernel_size=3, padding=0, stride=1)
+            ConvBlock(256, 128, kernel_size=7, padding=3, stride=1),
+            nn.Conv2d(128, 64, kernel_size=3, padding=1, stride=1)
         )
 
     

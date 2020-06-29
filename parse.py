@@ -19,8 +19,9 @@ def get_arguments():
     parser.add_argument('--batch_size', help="Batch size to use for the dataloader.", type=int, default=16)
     parser.add_argument('--num_workers', help="Number of workers for the dataloader.", type=int, default=0)
 
-    parser.add_argument('--epochs', help="Number of epochs to run the model for.", type=int, default=1000)
-    parser.add_argument('--checkpoint_epochs', help="Number of epochs between two checkpoints.", type=int, default=100)
+    parser.add_argument('--epochs', help="Number of epochs to run the model for.", type=int, default=10)
+    parser.add_argument('--checkpoint_epochs', help="Number of epochs between two checkpoints.", type=int, default=1)
+    parser.add_argument('--val_epoch', help="How often IoU should be computed for validation.", type=int, default=1)
 
     parser.add_argument('--embedding_dim', help="Dimension of the embedding space.", type=int, default=128)
 
