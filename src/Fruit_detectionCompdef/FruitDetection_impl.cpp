@@ -79,17 +79,19 @@ void FruitDetection_impl::FruitDetectionHandler(
  ************************************************************/
 //SHOULD RETURN list of (label, xmin, xmax, ymin, ymax)
 std::vector<std::tuple<std::string, int, int, int, int>> detectFruits(cv::Mat &img){
+	//TODO load detection NN with python.
 	auto boundingBoxes = std::vector<std::tuple<std::string, int, int, int, int>>();
 	return boundingBoxes;
 }
 
 //should RETURN disease label of cropped label
 std::string classifyDisease(cv::Mat &img){
+	//TODO load classification NN wiith python.
 	std::string diseaseClass = "";
 	return diseaseClass;
 }
 
-//should draw boxes on each detected fruit and add class/disease description
+//should draw boxes on each detected fruit and add class/disease description TODO
 void drawBox(cv::Mat &img, std::tuple<std::string, int, int, int, int> boxes,  std::string){
 	auto test = 0;
 }
