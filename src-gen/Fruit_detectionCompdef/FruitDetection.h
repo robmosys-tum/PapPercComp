@@ -11,7 +11,7 @@
 
 #include "Fruit_detectionCompdef/Pkg_Fruit_detectionCompdef.h"
 
-#include "geometry_msgs/msg/pose2d.hpp"
+#include "geometry_msgs/msg/pose2_d.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "std_msgs/msg/string.hpp"

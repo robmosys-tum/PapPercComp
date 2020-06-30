@@ -16,6 +16,7 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(OpenCV REQUIRED)
 
 include_directories(
 	# assure that generated .h files are found
@@ -24,7 +25,7 @@ include_directories(
 )
 
 add_executable(FruitDetection src-gen/Fruit_detectionCompdef/FruitDetection.cpp src/Fruit_detectionCompdef/FruitDetection_impl.cpp)
-ament_target_dependencies(FruitDetection rclcpp rclcpp_lifecycle geometry_msgs std_msgs sensor_msgs)
+ament_target_dependencies(FruitDetection rclcpp rclcpp_lifecycle geometry_msgs std_msgs sensor_msgs OpenCV)
 
 
 # Start of user code dependencies
