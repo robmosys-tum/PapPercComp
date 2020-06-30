@@ -63,6 +63,10 @@ void FruitDetection_impl::FruitDetectionHandler(
 				for(std::vector<int>::size_type i = 0; i != boxes.size(); i++) {
 				   drawBox(imageCopy, boxes[i], diseases[i]);
 				}
+				//TODO publish correct data
+				std_msgs::msg::String msg;
+				msg.data = diseases[0];
+				Disease_pub_->publish(msg);
 			}
 
 
