@@ -2,7 +2,7 @@ depth_image_topic: "kinect/depth/image_raw"
 camera_info_topic: "kinect/depth/camera_info"
 grasp_frame: "grasp"
 debug_output_dir: "/home/philipp/tmp"
-generate_debug_ouput: false
+generate_debug_output: false
 show_visualization: false
 roi_x: 0
 roi_y: 0
