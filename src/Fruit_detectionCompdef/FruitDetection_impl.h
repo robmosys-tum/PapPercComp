@@ -13,6 +13,7 @@
 
 #include "Fruit_detectionCompdef/FruitDetection.h"
 #include "sensor_msgs/msg/image.hpp"
+#include "opencv2/opencv.hpp"
 
 namespace ros2Library {
 namespace rclcpp {
