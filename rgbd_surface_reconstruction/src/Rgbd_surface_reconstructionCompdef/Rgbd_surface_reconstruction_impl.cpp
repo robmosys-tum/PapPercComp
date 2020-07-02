@@ -63,6 +63,15 @@ void Rgbd_surface_reconstruction_impl::depth_image_handler(
 	process_frames();
 }
 
+void Rgbd_surface_reconstruction_impl::pose_handler(
+		const geometry_msgs::msg::PoseStamped::SharedPtr /*in*/pose) {
+	_pose = pose;
+
+	if(!_pose_initialized)
+		_pose_initialized = true;
+
+}
+
 /**
  * 
  * @param image 
@@ -74,7 +83,6 @@ void Rgbd_surface_reconstruction_impl::color_image_handler(
 	if(!_color_image_initialized)
 		_color_image_initialized = true;
 
-	process_frames();
 }
 
 void Rgbd_surface_reconstruction_impl::process_frames(){

@@ -55,6 +55,9 @@ public:
 	void color_image_handler(
 			const sensor_msgs::msg::Image::SharedPtr /*in*/image);
 	
+	void pose_handler(
+			const geometry_msgs::msg::PoseStamped::SharedPtr /*in*/pose);
+	
 private:
 	KinectCamera _camera {};
 
@@ -62,9 +65,11 @@ private:
 
 	bool _depth_image_initialized = false;
 	bool _color_image_initialized = false;
+	bool _pose_initialized = false;
 
 	sensor_msgs::msg::Image::SharedPtr _depth_image;
 	sensor_msgs::msg::Image::SharedPtr _color_image;
+	geometry_msgs::msg::PoseStamped::SharedPtr _pose;
 
 	void process_frames();
 };

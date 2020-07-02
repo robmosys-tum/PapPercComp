@@ -65,6 +65,14 @@ Rgbd_surface_reconstruction::Rgbd_surface_reconstruction(
 							&Rgbd_surface_reconstructionCompdef::Rgbd_surface_reconstruction_impl::color_image_handler,
 							(Rgbd_surface_reconstruction_impl*) this,
 							std::placeholders::_1));
+	
+	pose_sub_ =
+			create_subscription<geometry_msgs::msg::PoseStamped>("camera_pose",
+					rclcpp::QoS(rclcpp::KeepLast(100)).reliable(),
+					std::bind(
+							&Rgbd_surface_reconstructionCompdef::Rgbd_surface_reconstruction_impl::pose_handler,
+							(Rgbd_surface_reconstruction_impl*) this,
+							std::placeholders::_1));
 
 	surface_mesh_pub_ = create_publisher<shape_msgs::msg::Mesh>("surface_mesh",
 			1);

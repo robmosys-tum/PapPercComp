@@ -13,6 +13,7 @@
 
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "sensor_msgs/msg/image.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "shape_msgs/msg/mesh.hpp"
 
 // Include from Include stereotype (header)
@@ -54,6 +55,11 @@ public:
 	 * 
 	 */
 	rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr color_image_sub_;
+
+	/**
+	 * 
+	 */
+	rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr pose_sub_;
 
 	/**
 	 * 
