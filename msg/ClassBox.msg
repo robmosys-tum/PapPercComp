@@ -1,6 +1,6 @@
-string classe
-float32 score
-int32 xmin
-int32 xmax
-int32 ymin
-int32 ymax
+string fruit_class
+int32 score
+float32 xmin
+float32 xmax
+float32 ymin
+float32 ymax
