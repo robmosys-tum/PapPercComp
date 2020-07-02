@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 import sys
 
-from fruit_detection.srv import Classification
-from fruit_detection.srv import Detection
 import rclpy
 from rclpy.node import Node
 
+from fruit_detection.srv import Classification, Detection
+
 
 class MinimalClientAsync(Node):
-
     def __init__(self):
         super().__init__('test_client')
         self.cli = self.create_client(Detection, 'DetectionService')
@@ -33,13 +32,12 @@ def main(args=None):
             try:
                 response = minimal_client.future.result()
             except Exception as e:
-                minimal_client.get_logger().info(
-                    'Service call failed %r' % (e,))
+                minimal_client.get_logger().info('Service call failed %r' %
+                                                 (e, ))
             else:
                 result1 = str(response.classes)
                 minimal_client.get_logger().info(
-                    'Result %s = %s' %
-                    (minimal_client.req.file, result1))
+                    'Result %s = %s' % (minimal_client.req.file, result1))
             break
 
     minimal_client.destroy_node()

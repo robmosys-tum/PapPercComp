@@ -1,33 +1,35 @@
 #!/usr/bin/python3
 
-import rclpy
-from rclpy.node import Node
-import tensorflow as tf
 import numpy as np
+import rclpy
+import tensorflow as tf
+from rclpy.node import Node
 
 from fruit_detection.srv import Classification
 
-class DiseaseService(Node):
 
+class DiseaseService(Node):
     def __init__(self):
         super().__init__('DiseaseService')
         #TODO add correct model file
         self.get_logger().info('Loading Model')
-        self.model = tf.keras.models.load_model('src/fruit_detection/networks/squeezenet.h5')
+        self.model = tf.keras.models.load_model(
+            'src/fruit_detection/networks/squeezenet.h5')
         self.diseases = ['healthy', 'rotten']
-        self.srv = self.create_service(Classification, 'DiseaseService', self.predict)
+        self.srv = self.create_service(Classification, 'DiseaseService',
+                                       self.predict)
         self.get_logger().info('Service Started')
 
     def predict(self, request, response):
         self.get_logger().info('Incoming request: %s' % (request.file))
         image = self.decode_img_path(request.file, 256, 256)
-        
+
         prediction = self.model.predict([image], batch_size=1)
         response.disease = self.diseases[np.argmax(prediction)]
         return response
 
     def decode_img(self, img, width, height):
-    	# TODO test
+        # TODO test
         img = tf.image.decode_raw(img, tf.float32)
         img = img / 255.0
         img = tf.image.resize(img, [width, height])
@@ -49,7 +51,6 @@ def main(args=None):
     disease_service = DiseaseService()
     rclpy.spin(disease_service)
     rclpy.shutdown()
-
 
 
 if __name__ == '__main__':
