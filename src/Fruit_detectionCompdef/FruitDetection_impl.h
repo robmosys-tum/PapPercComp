@@ -13,8 +13,12 @@
 
 #include "Fruit_detectionCompdef/FruitDetection.h"
 #include "sensor_msgs/msg/image.hpp"
+#include "fruit_detection/srv/classification.hpp"
+#include "fruit_detection/srv/detection.hpp"
+#include "fruit_detection/msg/class_box.hpp"
 #include "opencv2/opencv.hpp"
-
+#include <chrono>
+#include <future>
 namespace ros2Library {
 namespace rclcpp {
 class NodeOptions;
@@ -45,6 +49,14 @@ public:
 	 */
 	void FruitDetectionHandler(
 			const sensor_msgs::msg::Image::SharedPtr /*in*/image);
+	/**
+	 * 
+	 * @param img
+	 */
+	void classifyDisease(cv::Mat &img);
+	rclcpp::Client<fruit_detection::srv::Detection>::SharedPtr detectionClient;
+	rclcpp::Client<fruit_detection::srv::Classification>::SharedPtr diseaseClient;
+	bool test = true;
 
 };
 /************************************************************/

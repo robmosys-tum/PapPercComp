@@ -26,6 +26,7 @@ class DiseaseService(Node):
 
         prediction = self.model.predict([image], batch_size=1)
         response.disease = self.diseases[np.argmax(prediction)]
+        self.get_logger().info('Sent Response %s' % response.disease)
         return response
 
     def decode_img(self, img, width, height):

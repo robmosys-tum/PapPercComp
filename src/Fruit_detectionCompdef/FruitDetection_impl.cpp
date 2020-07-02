@@ -15,9 +15,8 @@
 #include "rclcpp/rclcpp.hpp"
 
 static auto img_msg = sensor_msgs::msg::Image();
-std::vector<std::tuple<std::string, int, int, int, int>> detectFruits(cv::Mat &img);
-std::string classifyDisease(cv::Mat &img);
-void drawBox(cv::Mat &img, std::tuple<std::string, int, int, int, int> boxes,  std::string);
+std::vector<std::tuple<std::string, int, int, int, int, int>> detectFruits(cv::Mat &img);
+void drawBox(cv::Mat &img, std::tuple<std::string, int, int, int, int, int> boxes,  std::string);
 
 
 namespace Fruit_detectionCompdef {
@@ -30,6 +29,8 @@ namespace Fruit_detectionCompdef {
  */
 FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/options) :
 		FruitDetection(options) {
+			this->detectionClient = this->create_client<fruit_detection::srv::Detection>("DetectionService");
+			this->diseaseClient = this->create_client<fruit_detection::srv::Classification>("DiseaseService");
 }
 
 /**
@@ -38,61 +39,83 @@ FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/options) :
  */
 void FruitDetection_impl::FruitDetectionHandler(
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
-
-			img_msg = *image;
-			cv::Mat cvImage(img_msg.height, img_msg.width, CV_8UC3, img_msg.data.data());
-			cv::Mat imageCopy = cvImage;
-			if(!imageCopy.empty()) {
-				RCLCPP_INFO(this->get_logger(), "Non empty image received");
-				char c = (char)cv::waitKey(10);
-				if( c == 27 || c == 'q' || c == 'Q' ) {
-					rclcpp::shutdown();
-				}
-
-				RCLCPP_INFO(this->get_logger(), "Starting Object Detection");
-				auto boxes = detectFruits(imageCopy);
-				std::vector<std::string> diseases;
-				RCLCPP_INFO(this->get_logger(), "Detection Completed");
-
+			if(this->test) {
+				img_msg = *image;
+				cv::Mat cvImage(img_msg.height, img_msg.width, CV_8UC3, img_msg.data.data());
+				cv::Mat imageCopy = cvImage;
 				RCLCPP_INFO(this->get_logger(), "Starting Disease Classification");
-				for(auto const & box : boxes){
-					cv::Mat singleFruitImage = imageCopy(cv::Rect(std::get<1>(box),std::get<2>(box),std::get<3>(box),std::get<4>(box)));
-					diseases.push_back(classifyDisease(singleFruitImage));
-				}
-				RCLCPP_INFO(this->get_logger(), "Classification Complete");
-				for(std::vector<int>::size_type i = 0; i != boxes.size(); i++) {
-				   drawBox(imageCopy, boxes[i], diseases[i]);
-				}
-				//TODO publish correct data
-				std_msgs::msg::String msg;
-				msg.data = diseases[0];
-				Disease_pub_->publish(msg);
+				this->classifyDisease(imageCopy);
+				this->test=false;
 			}
+			// if(!imageCopy.empty()) {
+			// 	RCLCPP_INFO(this->get_logger(), "Non empty image received");
+			// 	char c = (char)cv::waitKey(10);
+			// 	if( c == 27 || c == 'q' || c == 'Q' ) {
+			// 		rclcpp::shutdown();
+			// 	}
+
+				// RCLCPP_INFO(this->get_logger(), "Starting Object Detection");
+				// auto boxes = detectFruits(imageCopy);
+				// std::vector<std::string> diseases;
+				// RCLCPP_INFO(this->get_logger(), "Detection Completed");
+
+				//RCLCPP_INFO(this->get_logger(), "Starting Disease Classification");
+				// for(auto const & box : boxes){
+				// 	cv::Mat singleFruitImage = imageCopy(cv::Rect(std::get<1>(box),std::get<2>(box),std::get<3>(box),std::get<4>(box)));
+				// 	diseases.push_back(this->classifyDisease(singleFruitImage));
+				// }
+				// RCLCPP_INFO(this->get_logger(), "Classification Complete");
+				// for(std::vector<int>::size_type i = 0; i != boxes.size(); i++) {
+				//    drawBox(imageCopy, boxes[i], diseases[i]);
+				// }
+				//TODO publish correct data
+				// std_msgs::msg::String msg;
+				// msg.data = diseases[0];
+				// Disease_pub_->publish(msg);
+			// }
 
 
 }
 
+/**
+ * 
+ * @param img
+ * @return diseaseClass 
+ */
+void FruitDetection_impl::classifyDisease(cv::Mat &img){
+	while (!this->diseaseClient->wait_for_service(std::chrono::seconds(1))) {
+		if (!rclcpp::ok()) {
+			RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
+			return;
+		}
+		RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");
+  	}
+	auto request = std::make_shared<fruit_detection::srv::Classification::Request>();
+	request->file = "/home/phil/Downloads/1.png";
+	RCLCPP_INFO(this->get_logger(), "Sending Request");
+	this->diseaseClient->async_send_request(request, [this](rclcpp::Client<fruit_detection::srv::Classification>::SharedFuture future){
+		future.wait();
+		
+		auto result = future.get()->disease.data();
+		RCLCPP_INFO(this->get_logger(), "Result: %s" , result);
+	});
+}
 } // of namespace Fruit_detectionCompdef
 
 /************************************************************
  End of FruitDetection_impl class body
  ************************************************************/
 //SHOULD RETURN list of (label, xmin, xmax, ymin, ymax)
-std::vector<std::tuple<std::string, int, int, int, int>> detectFruits(cv::Mat &img){
-	//TODO load detection NN with python.
-	auto boundingBoxes = std::vector<std::tuple<std::string, int, int, int, int>>();
+std::vector<std::tuple<std::string, int, int, int, int, int>> detectFruits(cv::Mat &img){
+	auto boundingBoxes = std::vector<std::tuple<std::string, int, int, int, int, int>>();
 	return boundingBoxes;
 }
 
 //should RETURN disease label of cropped label
-std::string classifyDisease(cv::Mat &img){
-	//TODO load classification NN wiith python.
-	std::string diseaseClass = "";
-	return diseaseClass;
-}
+
 
 //should draw boxes on each detected fruit and add class/disease description TODO
-void drawBox(cv::Mat &img, std::tuple<std::string, int, int, int, int> boxes,  std::string){
+void drawBox(cv::Mat &img, std::tuple<std::string, int, int, int, int, int> boxes,  std::string){
 	auto test = 0;
 }
 
