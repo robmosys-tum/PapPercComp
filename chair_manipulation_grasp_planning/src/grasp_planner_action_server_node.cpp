@@ -5,97 +5,96 @@
 
 namespace chair_manipulation
 {
-
 class GraspPlannerActionServer
 {
 public:
-    using Action = chair_manipulation_grasp_planning::GraspExecutionAction;
-    using Goal = chair_manipulation_grasp_planning::GraspExecutionGoal;
-    using Result = chair_manipulation_grasp_planning::GraspExecutionResult;
+  using Action = chair_manipulation_grasp_planning::GraspExecutionAction;
+  using Goal = chair_manipulation_grasp_planning::GraspExecutionGoal;
+  using Result = chair_manipulation_grasp_planning::GraspExecutionResult;
 
-    explicit GraspPlannerActionServer(const std::string &name)
-            : nh_priv("~"),
-              planner(nh_priv),
-              name(name),
-              action_server(nh, name, boost::bind(&GraspPlannerActionServer::callback, this, _1), false)
-    {
-        action_server.start();
-    }
+  explicit GraspPlannerActionServer(const std::string& name)
+    : nh_priv_("~")
+    , planner_(nh_priv_)
+    , name_(name)
+    , action_server_(nh_, name, boost::bind(&GraspPlannerActionServer::callback, this, _1), false)
+  {
+    action_server_.start();
+  }
 
 private:
-    ros::NodeHandle nh;
-    ros::NodeHandle nh_priv;
-    std::string name;
-    GraspPlanner planner;
-    actionlib::SimpleActionServer<Action> action_server;
+  ros::NodeHandle nh_;
+  ros::NodeHandle nh_priv_;
+  std::string name_;
+  GraspPlanner planner_;
+  actionlib::SimpleActionServer<Action> action_server_;
 
-    void callback(const Goal::ConstPtr &goal)
+  void callback(const Goal::ConstPtr& goal)
+  {
+    bool success = false;
+    try
     {
-        bool success = false;
-        try
-        {
-            switch (goal->goal)
-            {
-                case Goal::PREPARE:
-                    planner.prepare();
-                    success = true;
-                    break;
-                case Goal::PLAN_PRE_GRASP:
-                    planner.plan_pre_grasp();
-                    success = true;
-                    break;
-                case Goal::EXECUTE_PRE_GRASP:
-                    planner.execute_pre_grasp();
-                    success = true;
-                    break;
-                case Goal::PLAN_GRASP:
-                    planner.plan_grasp();
-                    success = true;
-                    break;
-                case Goal::EXECUTE_GRASP:
-                    planner.execute_grasp();
-                    success = true;
-                    break;
-                case Goal::PLAN_LIFT:
-                    planner.plan_lift();
-                    success = true;
-                    break;
-                case Goal::EXECUTE_LIFT:
-                    planner.execute_lift();
-                    success = true;
-                    break;
-                default:
-                    ROS_ERROR_NAMED(name, "Unknown goal!");
-                    break;
-            }
-        }
-        catch (const GraspPlanningException &e)
-        {
-            ROS_ERROR_STREAM_NAMED(name, e.what());
-        }
-
-        if (success)
-        {
-            action_server.setSucceeded(Result{});
-        }
-        else
-        {
-            action_server.setAborted(Result{});
-        }
+      switch (goal->goal)
+      {
+        case Goal::PREPARE:
+          planner_.prepare();
+          success = true;
+          break;
+        case Goal::PLAN_PRE_GRASP:
+          planner_.planPreGrasp();
+          success = true;
+          break;
+        case Goal::EXECUTE_PRE_GRASP:
+          planner_.executePreGrasp();
+          success = true;
+          break;
+        case Goal::PLAN_GRASP:
+          planner_.planGrasp();
+          success = true;
+          break;
+        case Goal::EXECUTE_GRASP:
+          planner_.executeGrasp();
+          success = true;
+          break;
+        case Goal::PLAN_LIFT:
+          planner_.planLift();
+          success = true;
+          break;
+        case Goal::EXECUTE_LIFT:
+          planner_.executeLift();
+          success = true;
+          break;
+        default:
+          ROS_ERROR_NAMED(name_, "Unknown goal!");
+          break;
+      }
     }
+    catch (const GraspPlanningException& e)
+    {
+      ROS_ERROR_STREAM_NAMED(name_, e.what());
+    }
+
+    if (success)
+    {
+      action_server_.setSucceeded(Result{});
+    }
+    else
+    {
+      action_server_.setAborted(Result{});
+    }
+  }
 };
 
-}
+}  // namespace chair_manipulation
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    ros::init(argc, argv, "grasp_planner_action_server_node");
+  ros::init(argc, argv, "grasp_planner_action_server_node");
 
-    ros::NodeHandle nh_priv{"~"};
-    auto action_name = nh_priv.param<std::string>("action_name", "grasp_planner");
-    
-    chair_manipulation::GraspPlannerActionServer server{action_name};
-    ros::spin();
+  ros::NodeHandle nh_priv{ "~" };
+  auto action_name = nh_priv.param<std::string>("action_name", "grasp_planner");
 
-    return 0;
+  chair_manipulation::GraspPlannerActionServer server{ action_name };
+  ros::spin();
+
+  return 0;
 }

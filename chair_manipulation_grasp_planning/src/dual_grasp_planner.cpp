@@ -2,40 +2,35 @@
 
 namespace chair_manipulation
 {
-
-bool DualGraspPlanner::lift_chair()
+bool DualGraspPlanner::liftChair()
 {
-    client1.waitForServer();
-    client2.waitForServer();
+  client1_.waitForServer();
+  client2_.waitForServer();
 
-    return execute_goal(Goal::PREPARE, "PREPARE") &&
-           execute_goal(Goal::PLAN_PRE_GRASP, "PLAN_PRE_GRASP") &&
-           execute_goal(Goal::EXECUTE_PRE_GRASP, "EXECUTE_PRE_GRASP") &&
-           execute_goal(Goal::PLAN_GRASP, "PLAN_GRASP") &&
-           execute_goal(Goal::EXECUTE_GRASP, "EXECUTE_GRASP") &&
-           execute_goal(Goal::PLAN_LIFT, "PLAN_LIFT") &&
-           execute_goal(Goal::EXECUTE_LIFT, "EXECUTE_LIFT");
+  return executeGoal(Goal::PREPARE, "PREPARE") && executeGoal(Goal::PLAN_PRE_GRASP, "PLAN_PRE_GRASP") &&
+         executeGoal(Goal::EXECUTE_PRE_GRASP, "EXECUTE_PRE_GRASP") && executeGoal(Goal::PLAN_GRASP, "PLAN_GRASP") &&
+         executeGoal(Goal::EXECUTE_GRASP, "EXECUTE_GRASP") && executeGoal(Goal::PLAN_LIFT, "PLAN_LIFT") &&
+         executeGoal(Goal::EXECUTE_LIFT, "EXECUTE_LIFT");
 }
 
-bool DualGraspPlanner::execute_goal(int goal_id, const std::string &name)
+bool DualGraspPlanner::executeGoal(int goal_id, const std::string& name)
 {
-    ROS_INFO_STREAM_NAMED("dual_grasp_planner", "Start goal " << name);
-    Goal goal;
-    goal.goal = goal_id;
-    client1.sendGoal(goal);
-    client2.sendGoal(goal);
-    client1.waitForResult();
-    client2.waitForResult();
-    auto state1 = client1.getState();
-    auto state2 = client2.getState();
-    if (state1 == actionlib::SimpleClientGoalState::SUCCEEDED &&
-        state2 == actionlib::SimpleClientGoalState::SUCCEEDED)
-    {
-        ROS_INFO_STREAM_NAMED("dual_grasp_planner", "Finished goal " << name);
-        return true;
-    }
-    ROS_ERROR_STREAM_NAMED("dual_grasp_planner", "Failed goal " << name);
-    return false;
+  ROS_INFO_STREAM_NAMED("dual_grasp_planner", "Start goal " << name);
+  Goal goal;
+  goal.goal = goal_id;
+  client1_.sendGoal(goal);
+  client2_.sendGoal(goal);
+  client1_.waitForResult();
+  client2_.waitForResult();
+  auto state1 = client1_.getState();
+  auto state2 = client2_.getState();
+  if (state1 == actionlib::SimpleClientGoalState::SUCCEEDED && state2 == actionlib::SimpleClientGoalState::SUCCEEDED)
+  {
+    ROS_INFO_STREAM_NAMED("dual_grasp_planner", "Finished goal " << name);
+    return true;
+  }
+  ROS_ERROR_STREAM_NAMED("dual_grasp_planner", "Failed goal " << name);
+  return false;
 }
 
-}
+}  // namespace chair_manipulation
