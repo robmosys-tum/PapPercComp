@@ -4,6 +4,7 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 from trashnet.data.constants import *
+from matplotlib import pyplot as plt
 
 CLASSES = {
     GLASS: "glass",
@@ -16,7 +17,7 @@ CLASSES = {
 
 
 def train_model(model: nn.Module, train: DataLoader, val: DataLoader, optimizer: Optimizer, epochs: int = 1,
-                lossfunc: torch.nn = torch.nn.CrossEntropyLoss(), debugprint=False):
+                lossfunc: torch.nn = torch.nn.CrossEntropyLoss(), transform = None, debugprint=False):
     """
     Train a model on the input dataset.
     Parameters
@@ -48,14 +49,14 @@ def train_model(model: nn.Module, train: DataLoader, val: DataLoader, optimizer:
     # for epoch in tqdm(range(epochs), total=epochs):
     for epoch in range(epochs):
         for x, y in tqdm(iter(train), total=len(train)):
-        # for x, y in iter(train):
+            # for x, y in iter(train):
             ##########################################################
             # YOUR CODE HERE
+            if transform is not None:
+                transform_batch(x, transform)
             x = x.to(model.device)
             y = y.to(model.device)
             optimizer.zero_grad()
-            x = x.transpose(1, 3)
-            x = x.transpose(2, 3)
             x = model(x)
             loss = lossfunc(x, y)
             if debugprint:
@@ -81,10 +82,19 @@ def evaluate(model: nn.Module, eval_dataloader: DataLoader):
     for x, y in iter(eval_dataloader):
         x = x.to(model.device)
         y = y.to(model.device)
-        x = x.transpose(1, 3)
-        x = x.transpose(2, 3)
         x = model(x)
         x = x.argmax(1)
         acc += float(torch.sum(x == y).item())
         total += len(y)
-    return acc/total
+    return acc / total
+
+
+def plot(x: torch.Tensor, y: int):
+    plt.axis("off")
+    plt.imshow(x.permute(1, 2, 0))
+    plt.title(f"Label: {CLASSES[y]}")
+    plt.show()
+
+def transform_batch(x: torch.Tensor, transform):
+    for idx in range(x.shape[0]):
+        x[idx] = transform(x[idx])
