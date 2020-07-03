@@ -54,6 +54,7 @@ public:
 	 * @param img
 	 */
 	void classifyDisease(cv::Mat &img);
+	void detectFruits(cv::Mat &img);
 	rclcpp::Client<fruit_detection::srv::Detection>::SharedPtr detectionClient;
 	rclcpp::Client<fruit_detection::srv::Classification>::SharedPtr diseaseClient;
 	bool test = true;
