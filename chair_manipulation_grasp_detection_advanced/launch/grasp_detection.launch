@@ -1,0 +1,5 @@
+<launch>
+  <node name="grasp_detection" pkg="chair_manipulation_grasp_detection_advanced" type="grasp_detection_node" output="screen">
+    <rosparam file="$(find chair_manipulation_grasp_detection_advanced)/cfg/grasp_detection_node.yaml" />
+  </node>
+</launch>

@@ -1,0 +1,5 @@
+<launch>
+  <node name="create_grasp_database" pkg="chair_manipulation_grasp_detection_advanced" type="create_grasp_database_node" output="screen">
+    <rosparam file="$(find chair_manipulation_grasp_detection_advanced)/cfg/grasp_database_config.yaml" />
+  </node>
+</launch>
