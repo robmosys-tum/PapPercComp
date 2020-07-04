@@ -13,10 +13,5 @@
   <exec_depend>ur10_robotiq_2f_140_gazebo</exec_depend>
   <exec_depend>ur10_robotiq_2f_140_moveit_config</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
-
-  <export>
-    <gazebo_ros gazebo_model_path="${prefix}/models"/>
-    <gazebo_ros gazebo_media_path="${prefix}/models"/>
-  </export>
-
+  
 </package>
