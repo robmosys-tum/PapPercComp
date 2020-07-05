@@ -15,12 +15,22 @@ if __name__ == "__main__":
 
     if args.mode == 'train':
         ### Actual training
-        # Shapes of the loaded data are [batch_size, channels, width, height]
-        train_DAVIS = DAVISData('train')
+        # If we receive a list of videos that we want to process, we create a list of dataloaders to pass to our model training/validation.
+        if args.videos is not None:
+            dataloader = []
 
-        dataloader = torch.utils.data.DataLoader(
-            train_DAVIS, 
-            batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True)
+            for v in args.videos:
+                loader = torch.utils.data.DataLoader(
+                    DAVISData('train', video=v), 
+                    batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True)
+
+                dataloader.append(loader)
+
+        else:
+            # Shapes of the loaded data are [batch_size, channels, width, height]
+            dataloader = torch.utils.data.DataLoader(
+                DAVISData('train'), 
+                batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True)
 
         
     elif args.mode == 'validation':
@@ -34,12 +44,21 @@ if __name__ == "__main__":
                 CustomData(args.custom_data, seg_dir=args.seg_dir), 
                 batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True)
 
+        # CustomData has priority over loading selected videos from DAVIS2016 for validation
+        elif args.videos is not None:
+            dataloader = []
+
+            for v in args.videos:
+                loader = torch.utils.data.DataLoader(
+                    DAVISData('val', video=v), 
+                    batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True)
+
+                dataloader.append(loader)
+
         else:
             # Using DAVIS 2016 validation dataset   
-            val_DAVIS = DAVISData('val')
-
             dataloader = torch.utils.data.DataLoader(
-                val_DAVIS, 
+                DAVISData('val'), 
                 batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True)
 
 

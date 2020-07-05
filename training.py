@@ -62,8 +62,28 @@ def run_model(dataloader, args):
 
         ### Run epochs
         for epoch in range(args.epochs):
-            print(f"Starting Epoch [{epoch} / {args.epochs}]")
-            epoch_loss, epoch_acc = run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode=args.mode)
+            print(f"Starting Epoch [{epoch+1} / {args.epochs}]")
+            
+            # When multiple dataloaders are given, we iterate over these as well, running each dataloader for an epoch.
+            if isinstance(dataloader, list):
+                epoch_loss = 0
+                epoch_acc = 0
+
+                for i in range(len(dataloader)):
+                    print(f"Processing video [{i+1} / {len(dataloader)}]")
+
+                    loss, acc = run_epoch(embedModel, deeplabModel, optimizer, dataloader[i], mode=args.mode)
+
+                    epoch_loss += loss
+                    epoch_acc += acc
+
+                epoch_loss /= len(dataloader)
+                epoch_acc /= len(dataloader)
+
+
+            else:
+                epoch_loss, epoch_acc = run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode=args.mode)
+
             # Update the learning rate based on scheduler
             lr_scheduler.step()
 
@@ -161,7 +181,8 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
     
     ### Iterate over data
     for image, seg_mask in dataloader:
-        print(f"Processing data [{iter_count}/{len(dataloader)}]")
+        print(f"Processing data [{iter_count+1}/{len(dataloader)}]")
+        
         image, seg_mask = image.to(device), seg_mask.to(device)
 
         ### Zero the parameter gradients
