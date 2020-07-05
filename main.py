@@ -6,7 +6,7 @@
 import torch
 
 from parse import get_arguments
-from dataloader import train_DAVIS, val_DAVIS, CustomData
+from dataloader import DAVISData, CustomData
 from training import run_model
 
 
@@ -16,6 +16,8 @@ if __name__ == "__main__":
     if args.mode == 'train':
         ### Actual training
         # Shapes of the loaded data are [batch_size, channels, width, height]
+        train_DAVIS = DAVISData('train')
+
         dataloader = torch.utils.data.DataLoader(
             train_DAVIS, 
             batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True)
@@ -27,13 +29,15 @@ if __name__ == "__main__":
         if args.custom_data is not None:
             # Using custom data to retrieve IoU scores
             assert args.seg_dir is not None, "Ground truth for segmentation masks must be provided with '--seg_dir <directory>'."
-
+        
             dataloader = torch.utils.data.DataLoader(
                 CustomData(args.custom_data, seg_dir=args.seg_dir), 
                 batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True)
 
         else:
-            # Using DAVIS 2016 validation dataset
+            # Using DAVIS 2016 validation dataset   
+            val_DAVIS = DAVISData('val')
+
             dataloader = torch.utils.data.DataLoader(
                 val_DAVIS, 
                 batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True)

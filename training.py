@@ -203,7 +203,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
             print(f"Loss is: {loss.item()}")
 
 
-            # In case you wanna DEBUG memory usage for PyTorch
+            # In case you wanna debug memory usage for PyTorch
             #print(torch.cuda.memory_summary(device))
 
 

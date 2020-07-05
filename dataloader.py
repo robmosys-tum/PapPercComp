@@ -20,24 +20,33 @@ class DAVISData(torch.utils.data.Dataset):
 
     Arguments:
         mode (String) : 'train' or 'val' dataset
+        video (String) : defaults to None, loading all video frames from all video in DAVIS2016 dataset. When given a value, it should refer to the video of which the frames will be loaded (e.g. "bear" or "stroller").
     """
-    def __init__(self, mode):
+    def __init__(self, mode, video=None):
 
         self.davisDir = "Data/DAVIS/"
 
         self.imagePaths = []
         self.segmentationPaths = []
 
+        # Efficiency: after video is loaded, we can exit the for-loop.
+        vid_done = False
 
         if mode == 'train':
             dataPath = os.path.join(self.davisDir, "ImageSets/480p/train.txt")
 
             with open(dataPath, 'r') as dataFiles:
                 for line in dataFiles.read().splitlines():
-                    imPath, segPath, _ = line.split(' ')
-                    
-                    self.imagePaths.append(imPath)
-                    self.segmentationPaths.append(segPath)
+                    if video is None or video in line:
+                        imPath, segPath, _ = line.split(' ')
+                        
+                        self.imagePaths.append(imPath)
+                        self.segmentationPaths.append(segPath)
+
+                        vid_done = True
+
+                    elif vid_done:
+                        break
 
                     
                     # if len(self.imagePaths) % 100 == 0:
@@ -49,10 +58,16 @@ class DAVISData(torch.utils.data.Dataset):
 
             with open(dataPath, 'r') as dataFiles:
                 for line in dataFiles.read().splitlines():
-                    imPath, segPath, _ = line.split(' ')
-                    
-                    self.imagePaths.append(imPath)
-                    self.segmentationPaths.append(segPath)
+                    if video is None or video in line:
+                        imPath, segPath, _ = line.split(' ')
+                        
+                        self.imagePaths.append(imPath)
+                        self.segmentationPaths.append(segPath)
+
+                        vid_done = True
+
+                    elif vid_done:
+                        break
 
 
         else:
@@ -81,9 +96,9 @@ class DAVISData(torch.utils.data.Dataset):
         seg = Image.open(os.path.join(self.davisDir, segPath[1:]))
         Y = transforms.ToTensor()(seg)      # Shape [1, 480, 854]
 
-        # Some of the DAVIS data seems off, annotation with two channels instead of one (I assume one is opacity)
+        # Some of the DAVIS data seems off, annotation with two channels instead of one (I assume one is opacity). Only 1 case: 00077.png in bear annotation.
         if Y.shape[0] != 1:
-            print(f"Encountered special case for {imPath}.")
+            #print(f"Encountered special case for {imPath}.")
             Y = Y[0:1]
 
         return (X, Y)
@@ -147,8 +162,4 @@ class CustomData(torch.utils.data.Dataset):
 
         return (X, Y)
 
-
-
-train_DAVIS = DAVISData('train')
-val_DAVIS = DAVISData('val')
 
