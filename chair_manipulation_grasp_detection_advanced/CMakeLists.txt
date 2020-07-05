@@ -7,6 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   geometry_msgs
+  shape_msgs
+  geometric_shapes
   tf
   pcl_msgs
   pcl_ros
@@ -46,8 +48,11 @@ include_directories(
   ${PCL_INCLUDE_DIRS}
 )
 
-add_executable(create_grasp_database_node src/create_grasp_database_node.cpp)
+add_executable(create_grasp_database_node src/create_grasp_database_node.cpp include/chair_manipulation_grasp_detection_advanced/grasp_database.h include/chair_manipulation_grasp_detection_advanced/grasp_database_creator.h include/chair_manipulation_grasp_detection_advanced/grasp_database_element.h include/chair_manipulation_grasp_detection_advanced/model.h src/model.cpp include/chair_manipulation_grasp_detection_advanced/utils.h src/utils.cpp)
 target_link_libraries(create_grasp_database_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 add_executable(grasp_detection_node src/grasp_detection_node.cpp)
 target_link_libraries(grasp_detection_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(convert_mesh_test test/convert_mesh_test.cpp src/utils.cpp)
+target_link_libraries(convert_mesh_test ${catkin_LIBRARIES} ${PCL_LIBRARIES})

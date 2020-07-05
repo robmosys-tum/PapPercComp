@@ -1,5 +1,6 @@
 <launch>
   <node name="create_grasp_database" pkg="chair_manipulation_grasp_detection_advanced" type="create_grasp_database_node" output="screen">
     <rosparam file="$(find chair_manipulation_grasp_detection_advanced)/cfg/grasp_database_config.yaml" />
+    <param name="gripper_description" command="$(find xacro)/xacro --inorder '$(find ur10_robotiq_2f_140_description)/urdf/robotiq_arg2f_140_model.xacro'" />
   </node>
 </launch>
