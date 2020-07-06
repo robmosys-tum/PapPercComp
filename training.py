@@ -261,10 +261,10 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
 
                 ### Mean and variance resulting in shapes [N, d]
                 mean_FG = foreground.view(N, d, -1).sum(dim=2) / (n_FG + eps) 
-                std_FG = foreground.view(N, d, -1).var(dim=2)
+                std_FG = ((foreground.view(N, d, -1) - mean_FG.view(N, d, 1))**2).sum(dim=2) / (n_FG + eps) 
 
                 mean_BG = background.view(N, d, -1).sum(dim=2) / (n_tot - n_FG + eps) 
-                std_BG = background.view(N, d, -1).var(dim=2)
+                std_BG = ((background.view(N, d, -1) - mean_BG.view(N, d, 1))**2).sum(dim=2) / (n_tot - n_FG + eps)
                 
                 
                 torch.set_printoptions(precision=5)
