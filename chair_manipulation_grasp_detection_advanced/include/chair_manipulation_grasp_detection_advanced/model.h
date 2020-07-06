@@ -11,20 +11,18 @@ namespace chair_manipulation
 struct Model
 {
   using Mesh = shapes::Mesh;
+  using MeshPtr = std::shared_ptr<Mesh>;
   using PointCloud = pcl::PointCloud<pcl::PointNormal>;
+  using PointCloudPtr = PointCloud::Ptr;
+
+  Model() : mesh_(new Mesh), point_cloud_(new PointCloud)
+  {
+  }
 
   void load(const std::string& mesh_filename, const std::string& point_cloud_filename);
 
-  Mesh mesh_;
-  PointCloud point_cloud_;
-};
-
-class ModelException : std::runtime_error
-{
-public:
-  explicit ModelException(const std::string& msg) : std::runtime_error(msg)
-  {
-  }
+  MeshPtr mesh_;
+  PointCloudPtr point_cloud_;
 };
 
 }  // namespace chair_manipulation

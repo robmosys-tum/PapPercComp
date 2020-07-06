@@ -48,11 +48,31 @@ include_directories(
   ${PCL_INCLUDE_DIRS}
 )
 
-add_executable(create_grasp_database_node src/create_grasp_database_node.cpp include/chair_manipulation_grasp_detection_advanced/grasp_database.h include/chair_manipulation_grasp_detection_advanced/grasp_database_creator.h include/chair_manipulation_grasp_detection_advanced/grasp_database_element.h include/chair_manipulation_grasp_detection_advanced/model.h src/model.cpp include/chair_manipulation_grasp_detection_advanced/utils.h src/utils.cpp)
+set(SOURCE_FILES
+        include/chair_manipulation_grasp_detection_advanced/grasp.h
+        include/chair_manipulation_grasp_detection_advanced/grasp_database.h
+        include/chair_manipulation_grasp_detection_advanced/grasp_database_creator.h
+        include/chair_manipulation_grasp_detection_advanced/grasp_database_element.h
+        include/chair_manipulation_grasp_detection_advanced/grasp_sampler.h
+        include/chair_manipulation_grasp_detection_advanced/model.h
+        include/chair_manipulation_grasp_detection_advanced/utils.h
+        include/chair_manipulation_grasp_detection_advanced/exception.h
+        include/chair_manipulation_grasp_detection_advanced/wrench_space.h
+        src/model.cpp
+        src/utils.cpp
+        src/grasp_database.cpp
+        src/grasp_database_creator.cpp
+        src/grasp_sampler.cpp
+)
+
+add_executable(create_grasp_database_node src/create_grasp_database_node.cpp ${SOURCE_FILES})
 target_link_libraries(create_grasp_database_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
-add_executable(grasp_detection_node src/grasp_detection_node.cpp)
+add_executable(grasp_detection_node src/grasp_detection_node.cpp ${SOURCE_FILES})
 target_link_libraries(grasp_detection_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
-add_executable(convert_mesh_test test/convert_mesh_test.cpp src/utils.cpp)
+add_executable(convert_mesh_test test/convert_mesh_test.cpp ${SOURCE_FILES})
 target_link_libraries(convert_mesh_test ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(grasp_sampler_test test/grasp_sampler_test.cpp ${SOURCE_FILES})
+target_link_libraries(grasp_sampler_test ${catkin_LIBRARIES} ${PCL_LIBRARIES})

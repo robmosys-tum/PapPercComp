@@ -1,0 +1,6 @@
+grasp_quality_thresh: 0.7
+max_antipodal_normal_angle: 0.1
+max_antipodal_position_angle: 0.1
+max_equator_normal_angle: 0.1
+gripper_pad_distance: 0.1
+gripper_pad_length: 0.3
