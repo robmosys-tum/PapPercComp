@@ -1,3 +1,4 @@
-string file
+sensor_msgs/Image img
+ClassBox[] boxes
 ---
-string disease
+ClassBox[] new_boxes
