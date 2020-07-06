@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 
+import cv2
 import numpy as np
 import rclpy
 import tensorflow as tf
 import tensorflow_hub as hub
+from cv_bridge import CvBridge
 from rclpy.node import Node
 
 from fruit_detection.msg import ClassBox
@@ -16,6 +18,7 @@ class DetectionService(Node):
         self.get_logger().info('Loading Model')
         module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"
         self.model = hub.load(module_handle).signatures['default']
+        self.bridge = CvBridge()
         self.fruits = fruit_list = [
             'Fruit', 'Apple', 'Grape', 'Common fig', 'Pear', 'Strawberry',
             'Tomato', 'Lemon', 'Banana', 'Orange', 'Peach', 'Mango',
@@ -26,7 +29,7 @@ class DetectionService(Node):
         self.get_logger().info('Service Started')
 
     def predict(self, request, response):
-        image = self.decode_img_path(request.file)
+        image = self.decode_img(request.img)
         converted_image = tf.image.convert_image_dtype(image,
                                                        tf.float32)[tf.newaxis,
                                                                    ...]
@@ -35,12 +38,13 @@ class DetectionService(Node):
         self.get_logger().info('Detection complete')
         prediction = {key: value.numpy() for key, value in prediction.items()}
         response.classes = self.create_box_array(prediction)
-        self.get_logger().info('Sending response')
+        self.get_logger().info('Sending response %s' % str(response.classes))
         return response
 
-    def decode_img_path(self, path):
-        img = tf.io.read_file(path)
-        img = tf.image.decode_jpeg(img, channels=3)
+    def decode_img(self, img):
+        cv_image = self.bridge.imgmsg_to_cv2(img, "bgr8")
+        image_data = cv2.imencode('.jpg', cv_image)[1].tostring()
+        img = tf.image.decode_jpeg(image_data, channels=3)
         return img
 
     def create_box_array(self, prediction):
@@ -63,9 +67,9 @@ class DetectionService(Node):
                           classes,
                           scores,
                           max_boxes=10,
-                          min_score=0.3):
+                          min_score=0.5):
         predictions = []
-        for i in range(min(boxes.shape[0], max_boxes)):
+        for i in range(boxes.shape[0]):
             predictions.append(
                 (boxes[i], classes[i].decode('utf-8'), scores[i]))
         predictions.sort(key=lambda x: x[2], reverse=True)
