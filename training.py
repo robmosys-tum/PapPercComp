@@ -36,7 +36,7 @@ def run_model(dataloader, args):
     deeplabModel.to(device)
 
 
-    if args.load:
+    if args.load or args.mode == 'validation':
         load_model(embedModel)
     else:
         # TrainedModel directory might not exist yet
@@ -120,6 +120,10 @@ def run_model(dataloader, args):
 
 
     elif args.mode == 'validation':
+        # Output directory might not exist yet
+        if not os.path.exists("Output"):
+            os.makedirs("Output")
+
         # In case we're validating against certain video sequences
         if isinstance(dataloader, list):
                 epoch_loss = 0
@@ -294,6 +298,9 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
             loss.backward()
             optimizer.step()
 
+            ### Statistics, using Intersection over Union (IoU) for accuracy
+            epoch_loss += loss.item()
+
 
         elif mode == 'validation':
             ### Only during first loop: assign references and compute its embedding
@@ -302,7 +309,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 reference_mask = seg_mask[0]
 
                 with torch.no_grad():
-                    embedded_reference = embedModel(deepOut[0:])
+                    embedded_reference = embedModel(deepOut[0:1])
 
                     # TODO: I probably want kNN here instead of distance to mean.
                     foreground = embedded_reference * reference_mask
@@ -322,10 +329,14 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 distBG = ((embedded_pixelvectors - mean_refBG)**2).mean(dim=1, keepdims=True)    
                 # Result has shape [N,1,H,W]
 
-                predMask = torch.where(distFG > distBG, torch.ones_like(distFG), torch.zeros_like(distFG))
+                predMask = torch.where(distFG < distBG, torch.ones_like(distFG), torch.zeros_like(distFG))
+
+                print(f"\n Dist FG: \n {distFG[0,0,100:104,200:204]} \n and Dist BG: \n {distBG[0,0,100:104,200:204]} \n and ref FG: \n {mean_refFG[0,0,0,0]} \n and ref BG: \n {mean_refBG[0,0,0,0]} \n")
 
 
+            ### Statistics, using Intersection over Union (IoU) for accuracy
             IoU = calc_IoU(predMask, seg_mask).sum()
+            IoU_sum += IoU.item()
 
             # Iterate over all images in the batch
             for pred in predMask:
@@ -333,11 +344,6 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 plt.imsave(f"Output/{imcount : 06d}.png", seg)
                 imcount += 1
 
-
-
-        ### Statistics, using Intersection over Union (IoU) for accuracy
-        epoch_loss += loss.item()
-        IoU_sum += IoU.item()
 
         iter_count += 1
 

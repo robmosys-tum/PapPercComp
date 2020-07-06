@@ -25,3 +25,5 @@ When no custom data is given, the DAVIS2016 dataset is used for either training 
 - 'inference': At test time, no ground truth is known, hence `seg_dir` should be empty. Instead, a single annotated first frame should be given in the same directory as `custom_data` called "AnnotatedFrame.png".
 
 In the command you can also specify `--batch_size` for multi-batch processing. In case a model has already been trained before, using `--load` will ... well, it will load the existing model.
+
+You can use `--videos bear soapbox etc` to load certain videos from the dataset. These are then trained/validated separately.
