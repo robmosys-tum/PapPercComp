@@ -21,11 +21,13 @@ find_package(sensor_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(fruit_detection REQUIRED)
+find_package(cv_bridge REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/ClassBox.msg"
   "srv/Classification.srv"
   "srv/Detection.srv"
+  DEPENDENCIES sensor_msgs
  )
 
 include_directories(
@@ -37,7 +39,7 @@ include_directories(
 ament_python_install_package(scripts)
 
 add_executable(FruitDetection src-gen/Fruit_detectionCompdef/FruitDetection.cpp src/Fruit_detectionCompdef/FruitDetection_impl.cpp)
-ament_target_dependencies(FruitDetection rclcpp rclcpp_lifecycle geometry_msgs std_msgs sensor_msgs OpenCV fruit_detection)
+ament_target_dependencies(FruitDetection rclcpp rclcpp_lifecycle geometry_msgs std_msgs sensor_msgs OpenCV fruit_detection cv_bridge)
 
 
 # Start of user code dependencies
