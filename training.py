@@ -48,7 +48,7 @@ def run_model(dataloader, args):
         ### Create optimizer and scheduler
         optimizer = torch.optim.SGD(
                             embedModel.parameters(), 
-                            lr=0.1, 
+                            lr=1e-3, 
                             momentum=0.9, 
                             weight_decay=1e-4
                         )
@@ -59,6 +59,7 @@ def run_model(dataloader, args):
                             gamma=0.1
                         )
 
+        epoch_history = []
 
         ### Run epochs
         for epoch in range(args.epochs):
@@ -84,25 +85,32 @@ def run_model(dataloader, args):
             else:
                 epoch_loss, epoch_acc = run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode=args.mode)
 
-            # Update the learning rate based on scheduler
+            ### Update the learning rate based on scheduler
             lr_scheduler.step()
 
             
-            # Print statistics
+            ### Print statistics
             print("-"*30)
             print(f"Epoch [{epoch + 1: >4}/{args.epochs}] Loss: {epoch_loss:.2e}")
             print("-"*30)
 
-            if epoch % args.val_epoch-1 == 0:
-                # Calculate and print IoU 
-                #epoch_loss, epoch_acc = run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='validation')
+            epoch_history.append(epoch_loss)
 
-                print(f"Epoch [{epoch + 1: >4}/{args.epochs}] Accuracy: {epoch_acc * 100:.2f}%")
-
-
-            # Make double checkpoints, just in case.
+            ### Make double checkpoints, just in case.
             if epoch % args.checkpoint_epochs == 0:
                 torch.save(embedModel.state_dict(), "TrainedModel/modelBackup.pth")
+
+                ### Create and Store Plots
+                plt.figure(figsize=(12,9))
+                plt.plot(epoch_history, label='Loss History')
+
+                plt.xlabel('Epoch')
+                plt.ylabel('Loss')
+                plt.xlim(0, args.epochs)
+                plt.legend()
+                plt.grid(True)
+                plt.savefig("TrainedModel/loss_plot.png", bbox_inches='tight')
+
             elif epoch % args.checkpoint_epochs-1 == 0:
                 torch.save(embedModel.state_dict(), "TrainedModel/modelBackupBackup.pth")
         
@@ -110,7 +118,43 @@ def run_model(dataloader, args):
         torch.save(embedModel.state_dict(), "TrainedModel/finalModel.pth")
 
 
-    elif args.mode == 'inference' or args.mode == 'validation':
+
+    elif args.mode == 'validation':
+        # In case we're validating against certain video sequences
+        if isinstance(dataloader, list):
+                epoch_loss = 0
+                epoch_acc = 0
+
+                for i in range(len(dataloader)):
+                    print(f"Processing video [{i+1} / {len(dataloader)}]")
+
+                    loss, acc = run_epoch(embedModel, deeplabModel, None, dataloader[i], mode=args.mode)
+
+                    epoch_loss += loss
+                    epoch_acc += acc
+
+                    # Print statistics per video
+                    print("-"*30)
+                    print(f"Validation IoU: {100*epoch_acc:.2f}")
+                    print("-"*30)
+
+                epoch_loss /= len(dataloader)
+                epoch_acc /= len(dataloader)
+
+
+        # In case we're dealing with custom data
+        else:
+            epoch_loss, epoch_acc = run_epoch(embedModel, deeplabModel, None, dataloader, mode=args.mode)
+
+
+        ### Print statistics
+        print("-"*30)
+        print(f"Mean Validation IoU: {100*epoch_acc:.2f}")
+        print("-"*30)
+
+
+
+    elif args.mode == 'inference':
         # Create a color pallette, selecting a color for each class
         palette = torch.tensor([2 ** 25 - 1, 2 ** 15 - 1, 2 ** 21 - 1])
         colors = torch.as_tensor([i for i in range(21)])[:, None] * palette
@@ -148,6 +192,7 @@ def run_model(dataloader, args):
         mean_IoU = IoU_sum / imcount
         print(f"The mean Intersection over Union for this dataset : {mean_IoU: .4f}")
 
+
     return 
 
 
@@ -164,7 +209,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
         mode (String) : train or val
         
     Returns:
-        Loss in this epoch.
+        Loss and IoU in this epoch. Loss only relevant for training, IoU only relevant for validation.
     """
     # Get the device based on the model
     device = next(embedModel.parameters()).device
@@ -175,77 +220,129 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
         embedModel.eval()
 
     epoch_loss = 0.0
-    epoch_acc = 0.0
+    IoU_sum = 0.0
     iter_count = 1
+    imcount = 0
+
+    # Assign first image and its segmentation mask as reference during first loop through dataloader. DO NOT shuffle the dataloader for validation.
+    reference_image = None
+    reference_mask = None
+    mean_refFG = None
+    mean_refBG = None
 
     
     ### Iterate over data
     for image, seg_mask in dataloader:
-        print(f"Processing data [{iter_count+1}/{len(dataloader)}]")
-        
+        print(f"Processing data [{iter_count}/{len(dataloader)}]")
+
         image, seg_mask = image.to(device), seg_mask.to(device)
 
-        ### Zero the parameter gradients
-        if mode == 'train':
-            embedModel.zero_grad()
 
         ### Forward pass
         # No gradient for DeepLab
         with torch.no_grad():
             deepOut = deeplabModel(image)['out']
 
-        # Gradient for embedding network
-        with torch.set_grad_enabled(True):
-            embedded_pixelvectors = embedModel(deepOut)
+        if mode == 'train':
+            # Gradient for embedding network
+            with torch.set_grad_enabled(True):
+                ### Zero the parameter gradients
+                embedModel.zero_grad()
 
-            foreground = embedded_pixelvectors * seg_mask
-            background = embedded_pixelvectors * (1 - seg_mask)
+                embedded_pixelvectors = embedModel(deepOut)
 
-            N, d = embedded_pixelvectors.size()[:2]
-            eps = 1e-5
+                foreground = embedded_pixelvectors * seg_mask
+                background = embedded_pixelvectors * (1 - seg_mask)
 
-            ### Mean and variance resulting in shapes [N, d]
-            mean_FG = foreground.view(N, d, -1).mean(dim=2)
-            # sqrt should not be taken of zero, gives gradient divide by zero, hence loss goes to NaN
-            std_FG = (foreground.view(N, d, -1).var(dim=2) + eps).sqrt_()
+                N, d = embedded_pixelvectors.size()[:2]
+                eps = 1e-5
+                n_tot = embedded_pixelvectors.size()[2] * embedded_pixelvectors.size()[3]
+                n_FG = seg_mask.sum(dim=[-1,-2])
 
-            mean_BG = background.view(N, d, -1).mean(dim=2)
-            std_BG = (background.view(N, d, -1).var(dim=2) + eps).sqrt_()
+                ### Mean and variance resulting in shapes [N, d]
+                mean_FG = foreground.view(N, d, -1).sum(dim=2) / (n_FG + eps) 
+                std_FG = foreground.view(N, d, -1).var(dim=2)
 
-            ### Loss function: getting foreground pixels close together, background pixels also close together, then the distance between FG and BG clusters far apart.
-            # Then add regularization
-            reg_strength = 1
-            loss = 1 * (
-                    0.1 * (std_FG.mean() + std_BG.mean())
-                    - 0.5 * ((mean_BG - mean_FG)**2).mean()
-                    + reg_strength * (((mean_BG)**2).mean() + ((mean_FG)**2).mean()) 
-                )
-            
-            print(f"Loss is: {loss.item()}")
+                mean_BG = background.view(N, d, -1).sum(dim=2) / (n_tot - n_FG + eps) 
+                std_BG = background.view(N, d, -1).var(dim=2)
+                
+                
+                torch.set_printoptions(precision=5)
+                print(f"\n Mean FG: \n {mean_FG[0:2,0:4]} \n and Mean BG: \n {mean_BG[0:2,0:4]} \n and STD FG: \n {std_FG[0:2,0:4]} \n and STD BG: \n {std_BG[0:2,0:4]} \n")
+
+                ### Loss function: getting foreground pixels close together, background pixels also close together, then the distance between FG and BG clusters far apart.
+                std_loss = std_FG.mean() + std_BG.mean()
+
+                L2 = nn.MSELoss()
+                mean_margin_loss = - 0.5 * L2(mean_BG, mean_FG)
+                
+                # Then add regularization
+                reg_strength = 1
+                reg_loss = L2(-10, mean_FG) + L2(10, mean_BG)
+                
+                loss = (
+                        0.9 * std_loss 
+                        + reg_strength * reg_loss
+                    )
+                
+                print(f"Loss is: {loss.item():.6f} of which std has {std_loss.item():.4f} and reg has {reg_loss.item():.4f} \n")
 
 
-            # In case you wanna debug memory usage for PyTorch
-            #print(torch.cuda.memory_summary(device))
+                # In case you wanna debug memory usage for PyTorch
+                #print(torch.cuda.memory_summary(device))
+
+            loss.backward()
+            optimizer.step()
 
 
-            if mode == 'train':
-                loss.backward()
-                optimizer.step()
+        elif mode == 'validation':
+            ### Only during first loop: assign references and compute its embedding
+            if reference_image is None:
+                reference_image = image[0]
+                reference_mask = seg_mask[0]
 
-            IoU = 0
-            if mode == 'validation':
-                # Calculate epoch_acc
-                pass
+                with torch.no_grad():
+                    embedded_reference = embedModel(deepOut[0:])
+
+                    # TODO: I probably want kNN here instead of distance to mean.
+                    foreground = embedded_reference * reference_mask
+                    background = embedded_reference * (1 - reference_mask)
+
+                    mean_refFG = foreground.mean(dim=[2,3], keepdims=True)
+                    mean_refBG = background.mean(dim=[2,3], keepdims=True)
+
+
+            ### Compute embeddings and see to which mean of the reference image every pixel is closer.
+            with torch.no_grad():
+                embedded_pixelvectors = embedModel(deepOut)
+
+                distFG = ((embedded_pixelvectors - mean_refFG)**2).mean(dim=1, keepdims=True)    
+                # Result has shape [N,1,H,W]
+
+                distBG = ((embedded_pixelvectors - mean_refBG)**2).mean(dim=1, keepdims=True)    
+                # Result has shape [N,1,H,W]
+
+                predMask = torch.where(distFG > distBG, torch.ones_like(distFG), torch.zeros_like(distFG))
+
+
+            IoU = calc_IoU(predMask, seg_mask).sum()
+
+            # Iterate over all images in the batch
+            for pred in predMask:
+                seg = Image.fromarray(pred.byte().cpu().numpy())
+                plt.imsave(f"Output/{imcount : 06d}.png", seg)
+                imcount += 1
+
 
 
         ### Statistics, using Intersection over Union (IoU) for accuracy
         epoch_loss += loss.item()
-        epoch_acc += IoU
+        IoU_sum += IoU.item()
 
         iter_count += 1
 
 
     epoch_loss /= len(dataloader.dataset)
-    epoch_acc /= len(dataloader.dataset)
+    IoU_sum /= len(dataloader.dataset)
 
-    return epoch_loss, epoch_acc
+    return epoch_loss, IoU_sum

@@ -51,11 +51,13 @@ if __name__ == "__main__":
             for v in args.videos:
                 loader = torch.utils.data.DataLoader(
                     DAVISData('val', video=v), 
-                    batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=True)
+                    batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=True)
 
                 dataloader.append(loader)
 
         else:
+            # AT THE MOMENT NOT SUPPORTED: when validating OSVOS, we want to stay within the same video. Use args.videos instead.
+            
             # Using DAVIS 2016 validation dataset   
             dataloader = torch.utils.data.DataLoader(
                 DAVISData('val'), 
