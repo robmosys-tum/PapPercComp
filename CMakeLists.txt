@@ -49,7 +49,6 @@ install(TARGETS
 	FruitDetection
 	DESTINATION lib/${PROJECT_NAME}
 )
-install(PROGRAMS scripts/client.py DESTINATION lib/${PROJECT_NAME})
 install(PROGRAMS scripts/detection_service.py DESTINATION lib/${PROJECT_NAME})
 install(PROGRAMS scripts/disease_service.py DESTINATION lib/${PROJECT_NAME})
 
