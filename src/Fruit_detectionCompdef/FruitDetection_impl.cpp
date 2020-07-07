@@ -26,8 +26,22 @@ namespace Fruit_detectionCompdef {
  */
 FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/options) :
 		FruitDetection(options) {
-			this->detectionClient = this->create_client<fruit_detection::srv::Detection>("DetectionService");
+			this->detectionClient = this->create_client<fruit_detection::srv::Detection>("DetectionService");	
 			this->diseaseClient = this->create_client<fruit_detection::srv::Classification>("DiseaseService");
+			while (!this->diseaseClient->wait_for_service(std::chrono::seconds(1))) {
+				if (!rclcpp::ok()) {
+					RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
+					rclcpp::shutdown();
+				}
+				RCLCPP_INFO(this->get_logger(), "Disease service not available, waiting again...");
+  			}
+			while (!this->detectionClient->wait_for_service(std::chrono::seconds(1))) {
+				if (!rclcpp::ok()) {
+					RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
+					rclcpp::shutdown();
+				}
+				RCLCPP_INFO(this->get_logger(), "Detection service not available, waiting again...");
+  			}
 }
 
 /**
@@ -48,20 +62,10 @@ void FruitDetection_impl::FruitDetectionHandler(
 					rclcpp::shutdown();
 				}
 				RCLCPP_INFO(this->get_logger(), "Starting Object Detection");
-				this->detectFruits(cv_ptr);
+				auto im = cv_bridge::CvImage(std_msgs::msg::Header(), sensor_msgs::image_encodings::RGB8, cv::imread("/home/phil/Downloads/1.png"));
+				auto ptr = std::make_shared<cv_bridge::CvImage>(im);
+				this->detectFruits(ptr);
 				this->test=false;
-				// std::vector<std::string> diseases;
-				// RCLCPP_INFO(this->get_logger(), "Detection Completed");
-
-				//RCLCPP_INFO(this->get_logger(), "Starting Disease Classification");
-				// for(auto const & box : boxes){
-				// 	cv::Mat singleFruitImage = imageCopy(cv::Rect(std::get<1>(box),std::get<2>(box),std::get<3>(box),std::get<4>(box)));
-				// 	diseases.push_back(this->classifyDisease(singleFruitImage));
-				// }
-				// RCLCPP_INFO(this->get_logger(), "Classification Complete");
-				// for(std::vector<int>::size_type i = 0; i != boxes.size(); i++) {
-				//    drawBox(imageCopy, boxes[i], diseases[i]);
-				// }
 				//TODO publish correct data
 				// std_msgs::msg::String msg;
 				// msg.data = diseases[0];
@@ -73,16 +77,14 @@ void FruitDetection_impl::FruitDetectionHandler(
 
 /**
  * 
- * @param img
+ * @param cv_ptr
+ * @param boxes
  */
 void FruitDetection_impl::classifyDisease(cv_bridge::CvImagePtr cv_ptr, std::vector<fruit_detection::msg::ClassBox> boxes){
-	while (!this->diseaseClient->wait_for_service(std::chrono::seconds(1))) {
-		if (!rclcpp::ok()) {
-			RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
-			return;
-		}
-		RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");
-  	}
+	if(!this->diseaseClient->wait_for_service(std::chrono::seconds(1))){
+		RCLCPP_ERROR(this->get_logger(), "Classification Service not available, shutting down");
+		rclcpp::shutdown();
+	}
 	auto request = std::make_shared<fruit_detection::srv::Classification::Request>();
 	request->img = *cv_ptr->toImageMsg();
 	request->boxes = boxes;
@@ -90,7 +92,7 @@ void FruitDetection_impl::classifyDisease(cv_bridge::CvImagePtr cv_ptr, std::vec
 	this->diseaseClient->async_send_request(request, [this](rclcpp::Client<fruit_detection::srv::Classification>::SharedFuture future){
 		std::vector<fruit_detection::msg::ClassBox> boxes= future.get()->new_boxes;
 		for(fruit_detection::msg::ClassBox box : boxes){
-			RCLCPP_INFO(this->get_logger(), "Class: %s ,Score: %d, Disease: " , box.fruit_class.data(), box.score, box.disease.data());
+			RCLCPP_INFO(this->get_logger(), "Class: %s ,Score: %d, Disease: %s" , box.fruit_class.data(), box.score, box.disease.data());
 			RCLCPP_INFO(this->get_logger(), "xmin: %f ,xmax: %f" , box.xmin, box.xmax);
 			RCLCPP_INFO(this->get_logger(), "ymin: %f ,ymax: %f" , box.ymin, box.ymax);
 		}
@@ -100,16 +102,13 @@ void FruitDetection_impl::classifyDisease(cv_bridge::CvImagePtr cv_ptr, std::vec
 
 /**
  * 
- *@param img 
+ *@param cv_ptr 
  */
 void FruitDetection_impl::detectFruits(cv_bridge::CvImagePtr cv_ptr){
-	while (!this->detectionClient->wait_for_service(std::chrono::seconds(1))) {
-		if (!rclcpp::ok()) {
-			RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
-			return;
-		}
-		RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");
-  	}
+	if(!this->detectionClient->wait_for_service(std::chrono::seconds(1))){
+		RCLCPP_ERROR(this->get_logger(), "Detection service not available, shutting down");
+		rclcpp::shutdown();
+	}
 	auto request = std::make_shared<fruit_detection::srv::Detection::Request>();
 	request->img = *cv_ptr->toImageMsg();
 	RCLCPP_INFO(this->get_logger(), "Sending detection request");
@@ -121,6 +120,7 @@ void FruitDetection_impl::detectFruits(cv_bridge::CvImagePtr cv_ptr){
 	});
 }
 
+void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr, std::vector<fruit_detection::msg::ClassBox> boxes){
 
 } // of namespace Fruit_detectionCompdef
 
