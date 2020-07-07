@@ -15,9 +15,31 @@
 #include "rclcpp/rclcpp.hpp"
 
 namespace Fruit_detectionCompdef {
-
+//   fruit_list = [
+//         'Fruit', 'Apple', 'Grape', 'Common fig', 'Pear', 'Strawberry',
+//         'Tomato', 'Lemon', 'Banana', 'Orange', 'Peach', 'Mango', 'Pineapple',
+//         'Grapefruit', 'Pomegranate', 'Watermelon', 'Cantaloup'
+//     ]
 // static attributes (if any)
-
+static std::map<std::string, cv::Scalar> colorMap = {
+	{"Fruit", cv::Scalar(0, 255, 0)},
+	{"Apple", cv::Scalar(0, 0, 255)},	
+	{"Grape", cv::Scalar(255, 0, 0)},
+	{"Common fig", cv::Scalar(255, 0, 255)},
+	{"Pear", cv::Scalar(255, 255, 0)},
+	{"Strawberry", cv::Scalar(0, 255, 255)},
+	{"Tomato", cv::Scalar(147, 219, 112)},
+	{"Lemon", cv::Scalar(66, 166, 181)},
+	{"Banana", cv::Scalar(51, 115, 184)},
+	{"Orange", cv::Scalar(0, 127, 255)},
+	{"Peach", cv::Scalar(120, 31, 135)},
+	{"Mango", cv::Scalar(23, 23, 140)},
+	{"Pineapple", cv::Scalar(38, 66, 107)},
+	{"Grapefruit", cv::Scalar(255, 0, 0)},
+	{"Pomegranate", cv::Scalar(222, 176, 56)},
+	{"Watermelon", cv::Scalar(153, 50, 204)},
+	{"Cantaloup", cv::Scalar(50, 127, 205)}
+};
 /**
  * 
  * @param options 
@@ -112,7 +134,7 @@ void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr, std::vect
 	int imageHeight = sz.height;
 	RCLCPP_INFO(this->get_logger(), "Generate BoxImage");
 	for(auto box: boxes){
-		cv::Scalar color(0, 255, 0);
+		auto color = colorMap[box.fruit.data()];
 		cv::Point top_left(box.xmin * imageWidth, box.ymax * imageHeight);
 		cv::Point bottom_right(box.xmax * imageWidth, box.ymin * imageHeight);
 		cv::rectangle(img, top_left, bottom_right, color, 3);

@@ -20,6 +20,7 @@
 #include "cv_bridge/cv_bridge.h"
 #include <chrono>
 #include <future>
+#include <map>
 namespace ros2Library {
 namespace rclcpp {
 class NodeOptions;
