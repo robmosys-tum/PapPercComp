@@ -53,6 +53,7 @@ public:
 
 	void classifyDisease(cv_bridge::CvImagePtr cv_ptr , std::vector<fruit_detection::msg::ClassBox> boxes);
 	void detectFruits(cv_bridge::CvImagePtr cv_ptr);
+	void drawAndPublish(cv_bridge::CvImagePtr cv_ptr, std::vector<fruit_detection::msg::ClassBox> boxes);
 	rclcpp::Client<fruit_detection::srv::Detection>::SharedPtr detectionClient;
 	rclcpp::Client<fruit_detection::srv::Classification>::SharedPtr diseaseClient;
 	bool test = true;

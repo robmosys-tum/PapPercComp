@@ -28,14 +28,14 @@ FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/options) :
 		FruitDetection(options) {
 			this->detectionClient = this->create_client<fruit_detection::srv::Detection>("DetectionService");	
 			this->diseaseClient = this->create_client<fruit_detection::srv::Classification>("DiseaseService");
-			while (!this->diseaseClient->wait_for_service(std::chrono::seconds(1))) {
+			while (!this->diseaseClient->wait_for_service(std::chrono::seconds(5))) {
 				if (!rclcpp::ok()) {
 					RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
 					rclcpp::shutdown();
 				}
 				RCLCPP_INFO(this->get_logger(), "Disease service not available, waiting again...");
   			}
-			while (!this->detectionClient->wait_for_service(std::chrono::seconds(1))) {
+			while (!this->detectionClient->wait_for_service(std::chrono::seconds(5))) {
 				if (!rclcpp::ok()) {
 					RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
 					rclcpp::shutdown();
@@ -89,14 +89,9 @@ void FruitDetection_impl::classifyDisease(cv_bridge::CvImagePtr cv_ptr, std::vec
 	request->img = *cv_ptr->toImageMsg();
 	request->boxes = boxes;
 	RCLCPP_INFO(this->get_logger(), "Sending Request");
-	this->diseaseClient->async_send_request(request, [this](rclcpp::Client<fruit_detection::srv::Classification>::SharedFuture future){
+	this->diseaseClient->async_send_request(request, [this, cv_ptr](rclcpp::Client<fruit_detection::srv::Classification>::SharedFuture future){
 		std::vector<fruit_detection::msg::ClassBox> boxes= future.get()->new_boxes;
-		for(fruit_detection::msg::ClassBox box : boxes){
-			RCLCPP_INFO(this->get_logger(), "Class: %s ,Score: %d, Disease: %s" , box.fruit_class.data(), box.score, box.disease.data());
-			RCLCPP_INFO(this->get_logger(), "xmin: %f ,xmax: %f" , box.xmin, box.xmax);
-			RCLCPP_INFO(this->get_logger(), "ymin: %f ,ymax: %f" , box.ymin, box.ymax);
-		}
-		//TODO draw image!
+		this->drawAndPublish(cv_ptr, boxes);
 	});
 }
 
@@ -121,7 +116,39 @@ void FruitDetection_impl::detectFruits(cv_bridge::CvImagePtr cv_ptr){
 }
 
 void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr, std::vector<fruit_detection::msg::ClassBox> boxes){
+	cv::Mat img = cv_ptr->image;
+	cv::Size sz = img.size();
+	int imageWidth = sz.width;
+	int imageHeight = sz.height;
+	for(auto box: boxes){
+		cv::Scalar color(0, 255, 0);
+		cv::Point top_left(box.xmin * imageWidth, box.ymax * imageHeight);
+		cv::Point bottom_right(box.xmax * imageWidth, box.ymin * imageHeight);
+		cv::rectangle(img, top_left, bottom_right, color, 3);
 
+		std::string label = "";
+		label.append(box.fruit.data());
+		label.append(": ");
+		label.append(std::to_string(box.fruit_score));
+		label.append("%, ");
+		label.append(box.disease.data());
+		label.append(": ");
+		label.append(std::to_string(box.disease_score));
+		label.append("%");
+		int fontFace = cv::FONT_HERSHEY_SIMPLEX;
+		double fontScale = 0.8;
+		int thickness = 2;
+		int baseline=0;
+		cv::Size textSize = cv::getTextSize(label, fontFace,
+                            fontScale, thickness, &baseline);
+		cv::Point textOrg(box.xmin * imageWidth, (box.ymin * imageHeight) + textSize.height);
+		putText(img, label, textOrg, fontFace, fontScale, color, thickness, 0);
+
+	}
+	RCLCPP_INFO(this->get_logger(), "Drawing Image");
+	cv::imshow("LABELED", img);
+	cv::waitKey(0);
+}
 } // of namespace Fruit_detectionCompdef
 
 /************************************************************
