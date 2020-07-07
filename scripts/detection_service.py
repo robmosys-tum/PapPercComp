@@ -15,8 +15,9 @@ from fruit_detection.srv import Detection
 class DetectionService(Node):
     def __init__(self):
         super().__init__('DetectionService')
-        self.get_logger().info('Loading Model')
-        module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"
+        self.declare_parameter("module_handle")
+        module_handle = self.get_parameter("module_handle").get_parameter_value().string_value
+        self.get_logger().error('Loading Mode %s' % module_handle )
         self.model = hub.load(module_handle).signatures['default']
         self.bridge = CvBridge()
         self.fruits = fruit_list = [

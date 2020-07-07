@@ -45,6 +45,21 @@ ament_python_install_package(scripts)
 add_executable(FruitDetection src-gen/Fruit_detectionCompdef/FruitDetection.cpp src/Fruit_detectionCompdef/FruitDetection_impl.cpp)
 ament_target_dependencies(FruitDetection rclcpp rclcpp_lifecycle geometry_msgs std_msgs sensor_msgs OpenCV fruit_detection cv_bridge)
 
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+install(DIRECTORY
+  config
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+install(DIRECTORY
+  networks
+  DESTINATION share/${PROJECT_NAME}/
+)
+
 install(TARGETS
 	FruitDetection
 	DESTINATION lib/${PROJECT_NAME}

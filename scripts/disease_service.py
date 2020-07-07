@@ -13,10 +13,10 @@ from fruit_detection.srv import Classification
 class DiseaseService(Node):
     def __init__(self):
         super().__init__('DiseaseService')
-        #TODO add correct model file
-        self.get_logger().info('Loading Model')
-        self.model = tf.keras.models.load_model(
-            'src/fruit_detection/networks/squeezenet.h5')
+        self.declare_parameter("model_file")
+        model_file = self.get_parameter("model_file").get_parameter_value().string_value
+        self.get_logger().info('Loading Model %s' % model_file)
+        self.model = tf.keras.models.load_model(model_file)
         self.bridge = CvBridge()
         self.width = 256
         self.height = 256

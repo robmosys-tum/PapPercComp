@@ -15,11 +15,6 @@
 #include "rclcpp/rclcpp.hpp"
 
 namespace Fruit_detectionCompdef {
-//   fruit_list = [
-//         'Fruit', 'Apple', 'Grape', 'Common fig', 'Pear', 'Strawberry',
-//         'Tomato', 'Lemon', 'Banana', 'Orange', 'Peach', 'Mango', 'Pineapple',
-//         'Grapefruit', 'Pomegranate', 'Watermelon', 'Cantaloup'
-//     ]
 // static attributes (if any)
 static std::map<std::string, cv::Scalar> colorMap = {
 	{"Fruit", cv::Scalar(0, 255, 0)},
@@ -50,14 +45,14 @@ FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/options) :
 			this->diseaseClient = this->create_client<fruit_detection::srv::Classification>("DiseaseService");
 			while (!this->diseaseClient->wait_for_service(std::chrono::seconds(5))) {
 				if (!rclcpp::ok()) {
-					RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
+					//RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
 					rclcpp::shutdown();
 				}
 				RCLCPP_INFO(this->get_logger(), "Disease service not available, waiting again...");
   			}
 			while (!this->detectionClient->wait_for_service(std::chrono::seconds(5))) {
 				if (!rclcpp::ok()) {
-					RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
+					//RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
 					rclcpp::shutdown();
 				}
 				RCLCPP_INFO(this->get_logger(), "Detection service not available, waiting again...");
