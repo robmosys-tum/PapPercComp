@@ -49,19 +49,6 @@ namespace Fruit_detectionCompdef {
  */
 FruitDetection::FruitDetection(rclcpp::NodeOptions /*in*/options) :
 		rclcpp_lifecycle::LifecycleNode("FruitDetection", options) {
-	BoundingBoxes_pub_ = create_publisher<geometry_msgs::msg::Pose2D>(
-			"BoundingBoxes", 1);
-	// directly activate a publisher
-	BoundingBoxes_pub_->on_activate();
-
-	Fruit_pub_ = create_publisher<std_msgs::msg::String>("Fruit", 1);
-	// directly activate a publisher
-	Fruit_pub_->on_activate();
-
-	Disease_pub_ = create_publisher<std_msgs::msg::String>("Disease", 1);
-	// directly activate a publisher
-	Disease_pub_->on_activate();
-
 	image_sub_ =
 			create_subscription<sensor_msgs::msg::Image>("image",
 					rclcpp::QoS(rclcpp::KeepLast(100)).best_effort(),
@@ -69,6 +56,11 @@ FruitDetection::FruitDetection(rclcpp::NodeOptions /*in*/options) :
 							&Fruit_detectionCompdef::FruitDetection_impl::FruitDetectionHandler,
 							(FruitDetection_impl*) this,
 							std::placeholders::_1));
+
+	BoxImage_pub_ = create_publisher<fruit_detection::msg::BoxesImage>(
+			"BoxImage", 1);
+	// directly activate a publisher
+	BoxImage_pub_->on_activate();
 
 }
 

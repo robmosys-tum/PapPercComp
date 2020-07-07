@@ -16,47 +16,22 @@
     <packageImport xmi:type="uml:PackageImport" xmi:id="_XBra4LrMEeq97ug85ONoqw">
       <importedPackage xmi:type="uml:Model" href="pathmap://ROS2_LIB_BASE/services/sensor_msgs.servicedef.uml#ID"/>
     </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_7UioYMBQEeq3xO6elTH0FA">
+      <importedPackage xmi:type="uml:Model" href="../services/fruit_detection.servicedef.uml#ID"/>
+    </packageImport>
     <packagedElement xmi:type="uml:Class" xmi:id="_5ykcY7rLEeq97ug85ONoqw" name="FruitDetection">
-      <ownedAttribute xmi:type="uml:Port" xmi:id="_8nZUcLrLEeq97ug85ONoqw" name="BoundingBoxes" type="__2z2wLrLEeq97ug85ONoqw" aggregation="composite"/>
-      <ownedAttribute xmi:type="uml:Port" xmi:id="_GVHW8LrMEeq97ug85ONoqw" name="Fruit" type="_HMVS0LrMEeq97ug85ONoqw" aggregation="composite"/>
-      <ownedAttribute xmi:type="uml:Port" xmi:id="_I3tPgLrMEeq97ug85ONoqw" name="Disease" type="_Rt5NELrMEeq97ug85ONoqw" aggregation="composite"/>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_UuG1wLrMEeq97ug85ONoqw" name="image" type="_XBtQELrMEeq97ug85ONoqw" aggregation="composite"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_X1O-wbrMEeq97ug85ONoqw" name="activity1" type="_X1NwoLrMEeq97ug85ONoqw"/>
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_5TogkMBQEeq3xO6elTH0FA" name="BoxImage" type="_7UsZYMBQEeq3xO6elTH0FA" aggregation="composite"/>
       <ownedConnector xmi:type="uml:Connector" xmi:id="_hTm9sLrMEeq97ug85ONoqw" name="Connects12">
         <end xmi:type="uml:ConnectorEnd" xmi:id="_hTnkwLrMEeq97ug85ONoqw" partWithPort="_X1O-wbrMEeq97ug85ONoqw" role="_af_U0LrMEeq97ug85ONoqw"/>
         <end xmi:type="uml:ConnectorEnd" xmi:id="_hToL0LrMEeq97ug85ONoqw" role="_UuG1wLrMEeq97ug85ONoqw"/>
       </ownedConnector>
-      <ownedConnector xmi:type="uml:Connector" xmi:id="_h8C2sLrMEeq97ug85ONoqw" name="Connects13">
-        <end xmi:type="uml:ConnectorEnd" xmi:id="_h8EE0LrMEeq97ug85ONoqw" partWithPort="_X1O-wbrMEeq97ug85ONoqw" role="_c-wdULrMEeq97ug85ONoqw"/>
-        <end xmi:type="uml:ConnectorEnd" xmi:id="_h8EE0brMEeq97ug85ONoqw" role="_8nZUcLrLEeq97ug85ONoqw"/>
-      </ownedConnector>
-      <ownedConnector xmi:type="uml:Connector" xmi:id="_kM8iULrMEeq97ug85ONoqw" name="Connects14">
-        <end xmi:type="uml:ConnectorEnd" xmi:id="_kM9wcLrMEeq97ug85ONoqw" partWithPort="_X1O-wbrMEeq97ug85ONoqw" role="_fIpiALrMEeq97ug85ONoqw"/>
-        <end xmi:type="uml:ConnectorEnd" xmi:id="_kM9wcbrMEeq97ug85ONoqw" role="_GVHW8LrMEeq97ug85ONoqw"/>
-      </ownedConnector>
-      <ownedConnector xmi:type="uml:Connector" xmi:id="_ktmYULrMEeq97ug85ONoqw" name="Connects15">
-        <end xmi:type="uml:ConnectorEnd" xmi:id="_ktm_YLrMEeq97ug85ONoqw" partWithPort="_X1O-wbrMEeq97ug85ONoqw" role="_b88bALrMEeq97ug85ONoqw"/>
-        <end xmi:type="uml:ConnectorEnd" xmi:id="_ktm_YbrMEeq97ug85ONoqw" role="_I3tPgLrMEeq97ug85ONoqw"/>
+      <ownedConnector xmi:type="uml:Connector" xmi:id="_-v1qkMBQEeq3xO6elTH0FA" name="Connects9">
+        <end xmi:type="uml:ConnectorEnd" xmi:id="_-v4G0MBQEeq3xO6elTH0FA" partWithPort="_X1O-wbrMEeq97ug85ONoqw" role="_b88bALrMEeq97ug85ONoqw"/>
+        <end xmi:type="uml:ConnectorEnd" xmi:id="_-v4t4MBQEeq3xO6elTH0FA" role="_5TogkMBQEeq3xO6elTH0FA"/>
       </ownedConnector>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_5ykcZLrLEeq97ug85ONoqw"/>
-      <nestedClassifier xmi:type="uml:Class" xmi:id="__2z2wLrLEeq97ug85ONoqw">
-        <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="__21r8LrLEeq97ug85ONoqw" client="__2z2wLrLEeq97ug85ONoqw">
-          <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#svcdefs/P_Pose2D"/>
-          <contract xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#svcdefs/P_Pose2D"/>
-        </interfaceRealization>
-      </nestedClassifier>
-      <nestedClassifier xmi:type="uml:Class" xmi:id="_HMVS0LrMEeq97ug85ONoqw">
-        <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_HMXvELrMEeq97ug85ONoqw" client="_HMVS0LrMEeq97ug85ONoqw">
-          <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/std_msgs.servicedef.uml#svcdefs/P_String"/>
-          <contract xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/std_msgs.servicedef.uml#svcdefs/P_String"/>
-        </interfaceRealization>
-      </nestedClassifier>
-      <nestedClassifier xmi:type="uml:Class" xmi:id="_Rt5NELrMEeq97ug85ONoqw">
-        <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_Rt7CQLrMEeq97ug85ONoqw" client="_Rt5NELrMEeq97ug85ONoqw">
-          <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/std_msgs.servicedef.uml#svcdefs/P_String"/>
-          <contract xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/std_msgs.servicedef.uml#svcdefs/P_String"/>
-        </interfaceRealization>
-      </nestedClassifier>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_XBtQELrMEeq97ug85ONoqw"/>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_X1NwoLrMEeq97ug85ONoqw" name="Detection">
         <generalization xmi:type="uml:Generalization" xmi:id="_X1OXsLrMEeq97ug85ONoqw">
@@ -64,9 +39,13 @@
         </generalization>
         <ownedAttribute xmi:type="uml:Port" xmi:id="_af_U0LrMEeq97ug85ONoqw" name="ActivityPort2" aggregation="composite"/>
         <ownedAttribute xmi:type="uml:Port" xmi:id="_b88bALrMEeq97ug85ONoqw" name="ActivityPort3" aggregation="composite"/>
-        <ownedAttribute xmi:type="uml:Port" xmi:id="_c-wdULrMEeq97ug85ONoqw" name="ActivityPort4" aggregation="composite"/>
-        <ownedAttribute xmi:type="uml:Port" xmi:id="_fIpiALrMEeq97ug85ONoqw" name="ActivityPort5" aggregation="composite"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_lhIHALrMEeq97ug85ONoqw" name="" type="_lhEcoLrMEeq97ug85ONoqw"/>
+      </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Class" xmi:id="_7UsZYMBQEeq3xO6elTH0FA">
+        <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_7Ux48MBQEeq3xO6elTH0FA" client="_7UsZYMBQEeq3xO6elTH0FA">
+          <supplier xmi:type="uml:Interface" href="../services/fruit_detection.servicedef.uml#svcdefs/P_BoxesImage"/>
+          <contract xmi:type="uml:Interface" href="../services/fruit_detection.servicedef.uml#svcdefs/P_BoxesImage"/>
+        </interfaceRealization>
       </nestedClassifier>
     </packagedElement>
     <packagedElement xmi:type="uml:Usage" xmi:id="_XBvsULrMEeq97ug85ONoqw" client="_XBtQELrMEeq97ug85ONoqw">
@@ -152,23 +131,15 @@
   <robotics.components:ComponentDefinitionModel xmi:id="_5ykcfbrLEeq97ug85ONoqw" base_Package="_5ykcYLrLEeq97ug85ONoqw"/>
   <robotics.components:ComponentDefinition xmi:id="_5ykcfrrLEeq97ug85ONoqw" base_Class="_5ykcY7rLEeq97ug85ONoqw"/>
   <robotics.parameters:Parameter xmi:id="_5ykcf7rLEeq97ug85ONoqw" base_Class="_5ykcZLrLEeq97ug85ONoqw"/>
-  <robotics.components:ComponentService xmi:id="__21E4LrLEeq97ug85ONoqw" base_Class="__2z2wLrLEeq97ug85ONoqw"/>
-  <robotics.components:ComponentPort xmi:id="__22TALrLEeq97ug85ONoqw" base_Port="_8nZUcLrLEeq97ug85ONoqw"/>
-  <robotics.components:ComponentService xmi:id="_HMWg8LrMEeq97ug85ONoqw" base_Class="_HMVS0LrMEeq97ug85ONoqw"/>
-  <robotics.components:ComponentPort xmi:id="_HMYWILrMEeq97ug85ONoqw" base_Port="_GVHW8LrMEeq97ug85ONoqw"/>
-  <robotics.components:ComponentService xmi:id="_Rt6bMLrMEeq97ug85ONoqw" base_Class="_Rt5NELrMEeq97ug85ONoqw"/>
-  <robotics.components:ComponentPort xmi:id="_Rt7CQbrMEeq97ug85ONoqw" base_Port="_I3tPgLrMEeq97ug85ONoqw"/>
   <robotics.components:ComponentService xmi:id="_XBueMLrMEeq97ug85ONoqw" base_Class="_XBtQELrMEeq97ug85ONoqw"/>
   <robotics.components:ComponentPort xmi:id="_XBwTYLrMEeq97ug85ONoqw" base_Port="_UuG1wLrMEeq97ug85ONoqw"/>
   <robotics.components:Activity xmi:id="_X1O-wLrMEeq97ug85ONoqw" base_Class="_X1NwoLrMEeq97ug85ONoqw"/>
   <robotics.components:ActivityInstance xmi:id="_X1QM4LrMEeq97ug85ONoqw" base_Property="_X1O-wbrMEeq97ug85ONoqw"/>
   <robotics.components:ActivityPort xmi:id="_agAi8LrMEeq97ug85ONoqw" base_Port="_af_U0LrMEeq97ug85ONoqw"/>
   <robotics.components:ActivityPort xmi:id="_b8-QMLrMEeq97ug85ONoqw" base_Port="_b88bALrMEeq97ug85ONoqw"/>
-  <robotics.components:ActivityPort xmi:id="_c-xrcLrMEeq97ug85ONoqw" base_Port="_c-wdULrMEeq97ug85ONoqw"/>
-  <robotics.components:ActivityPort xmi:id="_fIqwILrMEeq97ug85ONoqw" base_Port="_fIpiALrMEeq97ug85ONoqw"/>
   <robotics.generics:Connects xmi:id="_hToL0brMEeq97ug85ONoqw" base_Connector="_hTm9sLrMEeq97ug85ONoqw"/>
-  <robotics.generics:Connects xmi:id="_h8EE0rrMEeq97ug85ONoqw" base_Connector="_h8C2sLrMEeq97ug85ONoqw"/>
-  <robotics.generics:Connects xmi:id="_kM9wcrrMEeq97ug85ONoqw" base_Connector="_kM8iULrMEeq97ug85ONoqw"/>
-  <robotics.generics:Connects xmi:id="_ktnmcLrMEeq97ug85ONoqw" base_Connector="_ktmYULrMEeq97ug85ONoqw"/>
   <robotics.functions:Function xmi:id="_lhGR0LrMEeq97ug85ONoqw" base_Class="_lhEcoLrMEeq97ug85ONoqw"/>
+  <robotics.components:ComponentService xmi:id="_7UvcsMBQEeq3xO6elTH0FA" base_Class="_7UsZYMBQEeq3xO6elTH0FA"/>
+  <robotics.components:ComponentPort xmi:id="_7UzHEMBQEeq3xO6elTH0FA" base_Port="_5TogkMBQEeq3xO6elTH0FA"/>
+  <robotics.generics:Connects xmi:id="_-v4t4cBQEeq3xO6elTH0FA" base_Connector="_-v1qkMBQEeq3xO6elTH0FA"/>
 </xmi:XMI>

@@ -1,3 +1,5 @@
+# Push or Send
+# attributes of datatype ClassBox
 string fruit
 int32 fruit_score
 float32 xmin

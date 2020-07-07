@@ -9,26 +9,30 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
-add_compile_options(-Wall)
+
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
-find_package(geometry_msgs REQUIRED)
+find_package(lifecycle_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
-find_package(fruit_detection REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(${PROJECT_NAME} REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/ClassBox.msg"
-  "srv/Classification.srv"
-  "srv/Detection.srv"
-  DEPENDENCIES sensor_msgs
- )
+## Generate messages in the 'msg' folder
+rosidl_generate_interfaces(
+	${PROJECT_NAME}
+	"msg/ClassBox.msg"
+	"msg/BoxesImage.msg"
+	"srv/Classification.srv"
+	"srv/Detection.srv"
+  	DEPENDENCIES sensor_msgs
+	DEPENDENCIES builtin_interfaces
+)
 
 include_directories(
 	# assure that generated .h files are found
@@ -40,10 +44,6 @@ ament_python_install_package(scripts)
 
 add_executable(FruitDetection src-gen/Fruit_detectionCompdef/FruitDetection.cpp src/Fruit_detectionCompdef/FruitDetection_impl.cpp)
 ament_target_dependencies(FruitDetection rclcpp rclcpp_lifecycle geometry_msgs std_msgs sensor_msgs OpenCV fruit_detection cv_bridge)
-
-
-# Start of user code dependencies
-# End of user code
 
 install(TARGETS
 	FruitDetection

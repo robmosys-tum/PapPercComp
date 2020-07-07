@@ -11,7 +11,7 @@
 
 #include "Fruit_detectionCompdef/Pkg_Fruit_detectionCompdef.h"
 
-#include "geometry_msgs/msg/pose2_d.hpp"
+#include "fruit_detection/msg/boxes_image.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "std_msgs/msg/string.hpp"
@@ -44,22 +44,12 @@ public:
 	/**
 	 * 
 	 */
-	rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::Pose2D>::SharedPtr BoundingBoxes_pub_;
-
-	/**
-	 * 
-	 */
-	rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::String>::SharedPtr Fruit_pub_;
-
-	/**
-	 * 
-	 */
-	rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::String>::SharedPtr Disease_pub_;
-
-	/**
-	 * 
-	 */
 	rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
+
+	/**
+	 * 
+	 */
+	rclcpp_lifecycle::LifecyclePublisher<fruit_detection::msg::BoxesImage>::SharedPtr BoxImage_pub_;
 
 	/**
 	 * 
