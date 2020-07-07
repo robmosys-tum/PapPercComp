@@ -14,8 +14,6 @@
 // Derived includes directives
 #include "rclcpp/rclcpp.hpp"
 
-static auto img_msg = sensor_msgs::msg::Image();
-
 namespace Fruit_detectionCompdef {
 
 // static attributes (if any)
@@ -50,8 +48,6 @@ FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/options) :
  */
 void FruitDetection_impl::FruitDetectionHandler(
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
-			img_msg = *image;
-			//cv::Mat cvImage(img_msg.height, img_msg.width, CV_8UC3, img_msg.data.data());
 			cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(image, sensor_msgs::image_encodings::BGR8);
 			const cv::Mat imageCopy = cv_ptr->image;
 				
@@ -66,13 +62,7 @@ void FruitDetection_impl::FruitDetectionHandler(
 				auto ptr = std::make_shared<cv_bridge::CvImage>(im);
 				this->detectFruits(ptr);
 				this->test=false;
-				//TODO publish correct data
-				// std_msgs::msg::String msg;
-				// msg.data = diseases[0];
-				// Disease_pub_->publish(msg);
 			}
-
-
 }
 
 /**
@@ -120,6 +110,7 @@ void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr, std::vect
 	cv::Size sz = img.size();
 	int imageWidth = sz.width;
 	int imageHeight = sz.height;
+	RCLCPP_INFO(this->get_logger(), "Generate BoxImage");
 	for(auto box: boxes){
 		cv::Scalar color(0, 255, 0);
 		cv::Point top_left(box.xmin * imageWidth, box.ymax * imageHeight);
@@ -148,6 +139,11 @@ void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr, std::vect
 	RCLCPP_INFO(this->get_logger(), "Drawing Image");
 	cv::imshow("LABELED", img);
 	cv::waitKey(0);
+	RCLCPP_INFO(this->get_logger(), "Publish Image");
+	auto boxImage = fruit_detection::msg::BoxesImage();
+	boxImage.img = *cv_ptr->toImageMsg();
+	boxImage.boxes = boxes;
+	this->BoxImage_pub_->publish(boxImage);
 }
 } // of namespace Fruit_detectionCompdef
 
