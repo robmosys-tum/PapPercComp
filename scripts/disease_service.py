@@ -33,6 +33,7 @@ class DiseaseService(Node):
         new_boxes = request.boxes
         for index, box in enumerate(new_boxes):
             box.disease = self.diseases[np.argmax(predictions[index])]
+            box.disease_score = int(100 * np.max(predictions[index]))
         response.new_boxes = new_boxes
         self.get_logger().info('Sending response %s' % new_boxes)
         return response

@@ -57,8 +57,8 @@ class DetectionService(Node):
             box = ClassBox()
             box.ymin, box.xmin, box.ymax, box.xmax = tuple(pred[0].astype(
                 type('float', (float, ), {})))
-            box.fruit_class = pred[1]
-            box.score = int(100 * pred[2])
+            box.fruit = pred[1]
+            box.fruit_score = int(100 * pred[2])
             classes.append(box)
         return classes
 
