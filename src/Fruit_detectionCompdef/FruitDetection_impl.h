@@ -65,7 +65,18 @@ public:
 /************************************************************/
 
 /* Inline functions                                         */
-
+inline std::string createLabel(fruit_detection::msg::ClassBox box){
+		std::string label = "";
+		label.append(box.fruit.data());
+		label.append(": ");
+		label.append(std::to_string(box.fruit_score));
+		label.append("%, ");
+		label.append(box.disease.data());
+		label.append(": ");
+		label.append(std::to_string(box.disease_score));
+		label.append("%");
+		return label;
+}
 } // of namespace Fruit_detectionCompdef
 
 /************************************************************

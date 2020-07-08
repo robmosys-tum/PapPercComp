@@ -134,15 +134,7 @@ void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr, std::vect
 		cv::Point bottom_right(box.xmax * imageWidth, box.ymin * imageHeight);
 		cv::rectangle(img, top_left, bottom_right, color, 3);
 
-		std::string label = "";
-		label.append(box.fruit.data());
-		label.append(": ");
-		label.append(std::to_string(box.fruit_score));
-		label.append("%, ");
-		label.append(box.disease.data());
-		label.append(": ");
-		label.append(std::to_string(box.disease_score));
-		label.append("%");
+		std::string label = createLabel(box);
 		int fontFace = cv::FONT_HERSHEY_SIMPLEX;
 		double fontScale = 0.8;
 		int thickness = 2;
