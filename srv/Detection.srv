@@ -1,6 +1,6 @@
 # query pattern - request
 # attributes of request DetectionReq
-sensor_msgs/Image img
+sensor_msgs/Image img #BaseImage
 ---
 # attributes of response DetectionRes
-ClassBox[] classes
+ClassBox[] classes #Detection areas with fruits
