@@ -44,11 +44,11 @@ int main(int argc, char *argv[])
     broadcaster.sendTransform(msg);
   }
 
-  Eigen::Vector3f x_direction = point.getNormalVector3fMap();
+  Eigen::Vector3f y_direction = point.getNormalVector3fMap();
   Eigen::Vector3f random_direction = Eigen::Vector3f::Random();
-  auto y_direction = (random_direction - utils::projection(x_direction, random_direction)).normalized();
+  auto z_direction = (random_direction - utils::projection(y_direction, random_direction)).normalized();
   Eigen::Quaternionf q;
-  utils::frameOrientation(x_direction, y_direction, q);
+  utils::directionsYZToQuaternion(y_direction, z_direction, q);
   msg.child_frame_id = "point";
   msg.transform.translation.x = point.x;
   msg.transform.translation.y = point.y;

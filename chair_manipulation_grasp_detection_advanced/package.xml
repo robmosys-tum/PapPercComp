@@ -22,6 +22,8 @@
   <depend>tf_conversions</depend>
   <depend>image_transport</depend>
   <depend>cv_bridge</depend>
+  <depend>ur10_robotiq_2f_140_description</depend>
+  <depend>moveit_core</depend>
 
   <!-- In case we want to create a custom grasp message -->
 <!--  <depend>message_generation</depend>-->

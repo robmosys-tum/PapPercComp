@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf_conversions
   cv_bridge
   image_transport
+  moveit_core
 )
 
 find_package(PCL REQUIRED)
@@ -58,21 +59,31 @@ set(SOURCE_FILES
         include/chair_manipulation_grasp_detection_advanced/utils.h
         include/chair_manipulation_grasp_detection_advanced/exception.h
         include/chair_manipulation_grasp_detection_advanced/wrench_space.h
+        include/chair_manipulation_grasp_detection_advanced/collision_detection.h
         src/model.cpp
         src/utils.cpp
         src/grasp_database.cpp
         src/grasp_database_creator.cpp
         src/grasp_sampler.cpp
+        src/collision_detection.cpp
+)
+
+set(LIBRARIES
+        ${catkin_LIBRARIES}
+        ${PCL_LIBRARIES}
 )
 
 add_executable(create_grasp_database_node src/create_grasp_database_node.cpp ${SOURCE_FILES})
-target_link_libraries(create_grasp_database_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(create_grasp_database_node ${LIBRARIES})
 
 add_executable(grasp_detection_node src/grasp_detection_node.cpp ${SOURCE_FILES})
-target_link_libraries(grasp_detection_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(grasp_detection_node ${LIBRARIES})
 
 add_executable(convert_mesh_test test/convert_mesh_test.cpp ${SOURCE_FILES})
-target_link_libraries(convert_mesh_test ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(convert_mesh_test ${LIBRARIES})
 
 add_executable(grasp_sampler_test test/grasp_sampler_test.cpp ${SOURCE_FILES})
-target_link_libraries(grasp_sampler_test ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(grasp_sampler_test ${LIBRARIES})
+
+add_executable(collision_detection_test test/collision_detection_test.cpp ${SOURCE_FILES})
+target_link_libraries(collision_detection_test ${LIBRARIES})

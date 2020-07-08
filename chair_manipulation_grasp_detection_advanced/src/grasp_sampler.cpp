@@ -1,5 +1,6 @@
 #include "chair_manipulation_grasp_detection_advanced/grasp_sampler.h"
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
+#include "chair_manipulation_grasp_detection_advanced/exception.h"
 
 namespace chair_manipulation
 {
@@ -38,10 +39,6 @@ bool GraspSampler::sampleGraspPose(const pcl::PointCloud<pcl::PointNormal>::Cons
 bool GraspSampler::findGraspPoseAt(const pcl::PointCloud<pcl::PointNormal>::ConstPtr& point_cloud,
                                    const pcl::PointNormal& reference_point, geometry_msgs::Pose& grasp_pose)
 {
-  Eigen::Vector3d p_i(reference_point.x, reference_point.y, reference_point.z);
-  // This normal defines the x-axis of the grasp orientation
-  Eigen::Vector3d n_i(reference_point.normal_x, reference_point.normal_y, reference_point.normal_z);
-
   // Get neighboring points in radius equal to the gripper pad distance
   std::vector<int> indices;
   std::vector<float> sqr_distances;
@@ -103,14 +100,14 @@ bool GraspSampler::findGraspPoseAt(const pcl::PointCloud<pcl::PointNormal>::Cons
   auto equator_index = *it;
   auto equator_point = (*point_cloud)[equator_index];
 
-  // The x-axis points in the direction of the normal of the reference point
-  Eigen::Vector3f x_direction = reference_point.getNormalVector3fMap();
-  // Orthonormalization of the equator inverse normal gives the y-axis
+  // The y-axis points in the direction of the normal of the reference point
+  Eigen::Vector3f y_direction = reference_point.getNormalVector3fMap();
+  // Orthonormalization of the equator inverse normal gives the z-axis
   Eigen::Vector3f equator_normal_inverted = -equator_point.getNormalVector3fMap();
-  Eigen::Vector3f y_direction =
-      (equator_normal_inverted - utils::projection(x_direction, equator_normal_inverted)).normalized();
+  Eigen::Vector3f z_direction =
+      (equator_normal_inverted - utils::projection(y_direction, equator_normal_inverted)).normalized();
   Eigen::Quaternionf orientation;
-  utils::frameOrientation(x_direction, y_direction, orientation);
+  utils::directionsYZToQuaternion(y_direction, z_direction, orientation);
 
   // Output
   grasp_pose.position.x = center_position.x();

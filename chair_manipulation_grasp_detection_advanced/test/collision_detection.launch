@@ -1,0 +1,17 @@
+<launch>
+  <node name="collision_detection_test" pkg="chair_manipulation_grasp_detection_advanced" type="collision_detection_test" output="screen">
+    <param name="gripper_description" command="cat $(find chair_manipulation_grasp_detection_advanced)/cfg/gripper/robotiq_2f_140.urdf" />
+    <param name="gripper_semantic_description" command="cat $(find chair_manipulation_grasp_detection_advanced)/cfg/gripper/robotiq_2f_140.srdf" />
+    <param name="mesh_filename" value="$(find chair_manipulation_chair_models)/models/dining_chair/meshes/dining_chair.ply" />
+    <param name="point_cloud_filename" value="$(find chair_manipulation_chair_models)/models/dining_chair/point_clouds/dining_chair.pcd" />
+    <param name="world_frame" value="frame" />
+    <param name="gripper_base_frame" value="robotiq_arg2f_140_base_link" />
+    <param name="tcp_frame" value="tcp" />
+  </node>
+
+  <param name="robot_description" command="cat $(find chair_manipulation_grasp_detection_advanced)/cfg/gripper/robotiq_2f_140.urdf" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+  </node>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+</launch>
