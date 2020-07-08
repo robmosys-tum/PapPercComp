@@ -1,11 +1,17 @@
+"""
+Default launch script. Launches all three essential nodes.
+"""
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch import LaunchDescription
 
 
 def generate_launch_description():
+    """
+    Use the parameters to determine network files at runtime.
+    """
     config = os.path.join(get_package_share_directory('fruit_detection'),
                           'config', 'params.yaml')
     model = os.path.join(get_package_share_directory('fruit_detection'),

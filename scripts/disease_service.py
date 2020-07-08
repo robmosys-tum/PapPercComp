@@ -1,5 +1,9 @@
 #!/usr/bin/python3
-
+"""
+ROS2 Service providing disease classification in single images.
+Returns a list of ClassBox containing boundingboxes and fruit class as well as
+diseases.
+"""
 import cv2
 import numpy as np
 import rclpy
@@ -11,10 +15,22 @@ from fruit_detection.srv import Classification
 
 
 class DiseaseService(Node):
+    """
+    Specification of disease classification service node.
+    Args:
+        None
+    Params:
+        model_file (str): Pretrained TensorFlow model.
+    """
     def __init__(self):
+        """
+        Initialises the service by creating the cvBridge, loading the model from
+        the given parameter and declaring the list of valid disease classes.
+        """
         super().__init__('DiseaseService')
         self.declare_parameter("model_file")
-        model_file = self.get_parameter("model_file").get_parameter_value().string_value
+        model_file = self.get_parameter(
+            "model_file").get_parameter_value().string_value
         self.get_logger().info('Loading Model %s' % model_file)
         self.model = tf.keras.models.load_model(model_file)
         self.bridge = CvBridge()
@@ -26,6 +42,15 @@ class DiseaseService(Node):
         self.get_logger().info('Service Started')
 
     def predict(self, request, response):
+        """
+        Callback for handeling incomeing requests. Basically updates disease
+        and disease_score fileds in the provided ClassBoxes
+        Args:
+            request: The incomeing service request defined in Classification.srv.
+            response: The empty response for answering the request.
+        Returns:
+            response: The updated response defined in Classification.srv.
+        """
         self.get_logger().info('Incoming request, starting classification')
         image = self.decode_request(request)
         predictions = self.model.predict(image)
@@ -39,6 +64,15 @@ class DiseaseService(Node):
         return response
 
     def decode_request(self, request):
+        """
+        Decodes an reqeust containing sensor_msgs/Image and ClassBoxes for use
+        in Tensorflow. The image gets converted and preprocessed. The image
+        then gets split up into multiple crops representing one classbox each.
+        Args:
+            request: The given request.
+        Returns:
+            img: The image as tf.tensor containing mutliple crops.
+        """
         cv_image = self.bridge.imgmsg_to_cv2(request.img, "bgr8")
         image_data = cv2.imencode('.jpg', cv_image)[1].tostring()
         img = tf.image.decode_jpeg(image_data, channels=3)
@@ -61,6 +95,10 @@ class DiseaseService(Node):
 
 
 def main(args=None):
+    """
+    Main method to start the service.
+    """
+    tf.get_logger().setLevel('ERROR')
     rclpy.init(args=args)
     disease_service = DiseaseService()
     rclpy.spin(disease_service)
@@ -68,5 +106,4 @@ def main(args=None):
 
 
 if __name__ == '__main__':
-    tf.get_logger().setLevel('ERROR')
     main()
