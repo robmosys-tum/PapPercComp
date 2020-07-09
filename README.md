@@ -73,10 +73,17 @@ networks by doing the following:
 
 Simple example:
 
-1. Build the project: `colcon build --packages-select fruit_detection`
-2. Source the setup: `source install/setup.bash`
-3. Launch the nodes: `ros2 launch fruit_detection fruit_detection_launch.py`
-4. Play the example bag: `ros2 bag play src/fruit_detection/example/bag.db3`
+1. Change to your ros2 workspace: `cd <ros2_ws>`
+2. Build the project: `colcon build --packages-select fruit_detection`
+3. Source the setup: `source install/setup.bash`
+4. Launch the nodes: `ros2 launch fruit_detection fruit_detection_launch.py`
+5. Unzip the example: `unzip src/fruit_detection/example/example.zip -d src/fruit_detection/example`
+6. Play the example bag: `ros2 bag play src/fruit_detection/example/bag.db3`
+
+Keep in mind that logging doesn't work properly when using `ros2 launch`.
+If you use the the nodes individually make sure to set their parameters!
+Sometimes playing the bag doesn't get registered in the *FruitDetection* node.
+In this case just replay the bag.
 
 ## Develop
 
