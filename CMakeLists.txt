@@ -20,7 +20,6 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(cv_bridge REQUIRED)
-find_package(${PROJECT_NAME} REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 ## Generate messages in the 'msg' folder
@@ -43,7 +42,8 @@ include_directories(
 ament_python_install_package(scripts)
 
 add_executable(FruitDetection src-gen/Fruit_detectionCompdef/FruitDetection.cpp src/Fruit_detectionCompdef/FruitDetection_impl.cpp)
-ament_target_dependencies(FruitDetection rclcpp rclcpp_lifecycle geometry_msgs std_msgs sensor_msgs OpenCV fruit_detection cv_bridge)
+ament_target_dependencies(FruitDetection rclcpp rclcpp_lifecycle geometry_msgs std_msgs sensor_msgs OpenCV cv_bridge)
+rosidl_target_interfaces(FruitDetection ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 install(DIRECTORY
   launch
