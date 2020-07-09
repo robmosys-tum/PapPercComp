@@ -33,11 +33,9 @@ static std::map<std::string, cv::Scalar> colorMap = {
     {"Grapefruit", cv::Scalar(255, 0, 0)},
     {"Pomegranate", cv::Scalar(222, 176, 56)},
     {"Watermelon", cv::Scalar(153, 50, 204)},
-    {"Cantaloup", cv::Scalar(50, 127, 205)}};
-/**
- * 
- * @param options 
- */
+    {"Cantaloup", cv::Scalar(50, 127, 205)}
+};
+
 FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/ options) : FruitDetection(options) {
     this->detectionClient = this->create_client<fruit_detection::srv::Detection>("DetectionService");
     this->diseaseClient = this->create_client<fruit_detection::srv::Classification>("DiseaseService");
@@ -57,10 +55,6 @@ FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/ options) : F
     }
 }
 
-/**
- * 
- * @param image 
- */
 void FruitDetection_impl::FruitDetectionHandler(
     const sensor_msgs::msg::Image::SharedPtr /*in*/ image) {
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(image, sensor_msgs::image_encodings::BGR8);
@@ -82,11 +76,6 @@ void FruitDetection_impl::FruitDetectionHandler(
     }
 }
 
-/**
- * 
- * @param cv_ptr
- * @param boxes
- */
 void FruitDetection_impl::classifyDisease(cv_bridge::CvImagePtr cv_ptr,
                             std::vector<fruit_detection::msg::ClassBox> boxes) {
     if (!this->diseaseClient->wait_for_service(std::chrono::seconds(1))) {
@@ -106,10 +95,6 @@ void FruitDetection_impl::classifyDisease(cv_bridge::CvImagePtr cv_ptr,
     });
 }
 
-/**
- * 
- *@param cv_ptr 
-*/
 void FruitDetection_impl::detectFruits(cv_bridge::CvImagePtr cv_ptr) {
     if (!this->detectionClient->wait_for_service(std::chrono::seconds(1))) {
         RCLCPP_ERROR(this->get_logger(),

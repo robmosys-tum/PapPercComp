@@ -42,33 +42,101 @@ namespace Fruit_detectionCompdef {
  */
 class FruitDetection_impl : public FruitDetection {
  public:
+
     /**
+     * Fruit Detection Implementation.
      * 
-     * @param options 
+     * This represents a node which is registered on the image topic and 
+     * publishes to the BoxImage topic. The image gets analyzed if it contains 
+     * any fruit objects and if they have a disease.
+     * 
+     * Fields:
+     *      detectionClient: client for the detection service
+     *      diseaseClient: client for the disease service
+     */
+    rclcpp::Client<fruit_detection::srv::Detection>::SharedPtr detectionClient;
+    rclcpp::Client<fruit_detection::srv::Classification>::SharedPtr diseaseClient;
+    bool test = true;
+
+    /**
+     * Constructs the Node.
+     * 
+     * Initializes both clients and waits for the services before assuming 
+     * normal operation.
+     * 
+     * @param options: not used.
      */
     explicit FruitDetection_impl(rclcpp::NodeOptions /*in*/ options);
 
     /**
+     * Hanlder for incomeing images in the image topic
      * 
-     * @param image 
+     * Decodes the image using cv_bridge. Stasrts the analyzing prrocess by 
+     * calling the detectFruit function.
+     * 
+     * @param image: the incomeing image.
      */
     void FruitDetectionHandler(
         const sensor_msgs::msg::Image::SharedPtr /*in*/ image);
 
+    /**
+     * Sends a request to thediseaseService.
+     * 
+     * Uses the pointer to create a sensor_msgs/Image message which is send to 
+     * the detectionService with the bounding boxes. The response is handeled in
+     * a callback. The callback unpacks ClassBoxes from the response, which 
+     * contain the updated field disease and disease_score. The boxes get passed
+     * along to the drawAndPublish function for the final processing step.
+     *  
+     * @param cv_ptr: pointer to the image.
+     * @param boxes: boxes for the detected fruits.
+     */
     void classifyDisease(cv_bridge::CvImagePtr cv_ptr,
                             std::vector<fruit_detection::msg::ClassBox> boxes);
+
+    /**
+     * Sends a request to the detectionService.
+     * 
+     * Uses the pointer to create a sensor_msgs/Image message which is send to 
+     * the detectionService. The response is handeled in a callback. The 
+     * callback unpacks ClassBoxes from the response, which contain the 
+     * boundingboxes for deteced fruits, and passes them along to the
+     * classifyDisease function with the image for further processing.
+     * 
+     * @param cv_ptr: pointer to the image.
+     */
     void detectFruits(cv_bridge::CvImagePtr cv_ptr);
+
+    /**
+     * Draws the boxes on the image and publishe the information.
+     * 
+     * Uses the pointer to create a cv::Mat and draws the boundingboxes with 
+     * labels on it. The boxes are unpacked from the ClassBoxes and drawn with
+     * opencv. Also Creates a BoxImage containing the new information and
+     * publishes this information.
+     *  
+     * @param cv_ptr: pointer to the image.
+     * @param boxes: boxes for the detected fruits.
+     */
     void drawAndPublish(cv_bridge::CvImagePtr cv_ptr,
                             std::vector<fruit_detection::msg::ClassBox> boxes);
-    rclcpp::Client<fruit_detection::srv::Detection>::SharedPtr detectionClient;
-    rclcpp::Client<fruit_detection::srv::Classification>::SharedPtr diseaseClient;
-    bool test = true;
+
 };
 /************************************************************/
 /* External declarations (package visibility)               */
 /************************************************************/
 
 /* Inline functions                                         */
+/**
+ * Creates string labels for ClassBox objects to draw.
+ * 
+ * Creates a string of the following format:
+ * "fruit: fruit_score%, disease: disease_score%"
+ * 
+ * @param box: CLassBox to create the label for
+ * 
+ * @returns label: String label containing the information of the box.
+ */
 inline std::string createLabel(fruit_detection::msg::ClassBox box) {
     std::string label = "";
     label.append(box.fruit.data());
