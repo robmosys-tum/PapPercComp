@@ -3,6 +3,8 @@
 ROS2 Service providing fruit detection in single images.
 Returns a list of ClassBox containing boundingboxes and fruit class.
 """
+import os
+
 import cv2
 import rclpy
 import tensorflow as tf
@@ -12,6 +14,8 @@ from rclpy.node import Node
 
 from fruit_detection.msg import ClassBox
 from fruit_detection.srv import Detection
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 class DetectionService(Node):
@@ -28,10 +32,10 @@ class DetectionService(Node):
         the given parameter and declaring the list of valid fruit classes.
         """
         super().__init__('DetectionService')
-        self.declare_parameter("module_handle")
+        self.declare_parameter('module_handle')
         module_handle = self.get_parameter(
-            "module_handle").get_parameter_value().string_value
-        self.get_logger().error('Loading Mode %s' % module_handle)
+            'module_handle').get_parameter_value().string_value
+        self.get_logger().info('Loading Modle %s' % module_handle)
         self.model = hub.load(module_handle).signatures['default']
         self.bridge = CvBridge()
         self.fruits = [
@@ -123,7 +127,6 @@ def main(args=None):
     """
     Main method to start the service.
     """
-    tf.get_logger().setLevel('ERROR')
     rclpy.init(args=args)
     detection_service = DetectionService()
     rclpy.spin(detection_service)

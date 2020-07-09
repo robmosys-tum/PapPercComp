@@ -4,14 +4,17 @@ ROS2 Service providing disease classification in single images.
 Returns a list of ClassBox containing boundingboxes and fruit class as well as
 diseases.
 """
+import os
+
 import cv2
 import numpy as np
 import rclpy
 import tensorflow as tf
 from cv_bridge import CvBridge
 from rclpy.node import Node
-
 from fruit_detection.srv import Classification
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 class DiseaseService(Node):
@@ -28,9 +31,9 @@ class DiseaseService(Node):
         the given parameter and declaring the list of valid disease classes.
         """
         super().__init__('DiseaseService')
-        self.declare_parameter("model_file")
+        self.declare_parameter('model_file')
         model_file = self.get_parameter(
-            "model_file").get_parameter_value().string_value
+            'model_file').get_parameter_value().string_value
         self.get_logger().info('Loading Model %s' % model_file)
         self.model = tf.keras.models.load_model(model_file)
         self.bridge = CvBridge()
@@ -98,7 +101,6 @@ def main(args=None):
     """
     Main method to start the service.
     """
-    tf.get_logger().setLevel('ERROR')
     rclpy.init(args=args)
     disease_service = DiseaseService()
     rclpy.spin(disease_service)
