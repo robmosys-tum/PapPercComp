@@ -2,7 +2,7 @@
 **Author** [Philipp Seitz](https://github.com/Gistbatch)
 
 This package contains a component created with Papyrus for robotics.
-![component](https://github.com/robmosys-tum/PapPercComp/blob/fruit_detection/images/friot_detection.compdef.png) 
+![component](https://github.com/robmosys-tum/PapPercComp/blob/fruit_detection/images/fruit_detection.compdef.png) 
 
 ## Overview
 
