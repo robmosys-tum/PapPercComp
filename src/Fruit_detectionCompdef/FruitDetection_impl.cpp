@@ -53,6 +53,7 @@ FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/ options) : F
         RCLCPP_INFO(this->get_logger(),
                     "Detection service not available, waiting again...");
     }
+    RCLCPP_ERROR(this->get_logger(), "Services Ready");
 }
 
 void FruitDetection_impl::FruitDetectionHandler(
@@ -60,19 +61,16 @@ void FruitDetection_impl::FruitDetectionHandler(
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(image, sensor_msgs::image_encodings::BGR8);
     const cv::Mat imageCopy = cv_ptr->image;
 
-    if (!imageCopy.empty() && this->test) {
+    if (!imageCopy.empty()) {
         RCLCPP_INFO(this->get_logger(), "Non empty image received");
         char c = static_cast<char>(cv::waitKey(10));
         if (c == 27 || c == 'q' || c == 'Q') {
             rclcpp::shutdown();
         }
         RCLCPP_INFO(this->get_logger(), "Starting Object Detection");
-        auto im = cv_bridge::CvImage(std_msgs::msg::Header(),
-                                        sensor_msgs::image_encodings::RGB8,
-                                        cv::imread("/home/phil/Downloads/1.png"));
-        auto ptr = std::make_shared<cv_bridge::CvImage>(im);
-        this->detectFruits(ptr);
-        this->test = false;
+        this->detectFruits(cv_ptr);
+    } else {
+        RCLCPP_INFO(this->get_logger(), "Image empty");
     }
 }
 

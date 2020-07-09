@@ -56,7 +56,6 @@ class FruitDetection_impl : public FruitDetection {
      */
     rclcpp::Client<fruit_detection::srv::Detection>::SharedPtr detectionClient;
     rclcpp::Client<fruit_detection::srv::Classification>::SharedPtr diseaseClient;
-    bool test = true;
 
     /**
      * Constructs the Node.
