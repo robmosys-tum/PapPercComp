@@ -69,7 +69,14 @@ The package is straight forward to use. Any image published will be picked up an
 processed. The nodes can also be launched individually. You can customize the neural
 networks by doing the following:
 * Object Detection: To change the object detection you can use the *module_handle* parameter.
-* Disease Classification: To change the classification network you can use the *model_file* parameter
+* Disease Classification: To change the classification network you can use the *model_file* parameter.
+
+Simple example:
+
+1. Build the project: `colcon build --packages-select fruit_detection`
+2. Source the setup: `source install/setup.bash`
+3. Launch the nodes: `ros2 launch fruit_detection fruit_detection_launch.py`
+4. Play the example bag: `ros2 bag play src/fruit_detection/example/bag.db3`
 
 ## Develop
 
