@@ -7,7 +7,9 @@ namespace chair_manipulation
 {
 struct Grasp
 {
-  Grasp(const geometry_msgs::Pose& pose, double quality) : pose_(pose), quality_(quality)
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+  Grasp(const Eigen::Isometry3d& pose, double quality) : pose_(pose), quality_(quality)
   {
   }
 
@@ -17,7 +19,7 @@ struct Grasp
    *  - the Z-axis is parallel to the gripper and is perpendicular to the Y-axis
    *  - the X-axis is perpendicular to the Y- and X-axis (and therefore perpendicular to the gripper pads)
    */
-  geometry_msgs::Pose pose_;
+  Eigen::Isometry3d pose_;
 
   /**
    * The grasp quality

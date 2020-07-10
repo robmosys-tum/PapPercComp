@@ -1,7 +1,6 @@
 #include <chair_manipulation_grasp_detection_advanced/utils.h>
 #include "chair_manipulation_grasp_detection_advanced/grasp_database_creator.h"
 #include "chair_manipulation_grasp_detection_advanced/exception.h"
-#include "chair_manipulation_grasp_detection_advanced/utils.h"
 
 namespace chair_manipulation
 {
@@ -24,34 +23,8 @@ void GraspDatabaseCreator::loadModels(ros::NodeHandle& nh)
   for (int i = 0; i < num_models; i++)
   {
     auto model_item = models_array[i];
-    std::string mesh_filename;
-    std::string point_cloud_filename;
-
-    // Get mesh filename
-    if (!model_item.hasMember("mesh"))
-    {
-      throw exception::Parameter{ "Attribute 'mesh' not found for model." };
-    }
-    XmlRpc::XmlRpcValue mesh_item = model_item["mesh"];
-    if (mesh_item.getType() != XmlRpc::XmlRpcValue::TypeString)
-    {
-      throw exception::Parameter{ "Attribute 'mesh' must be of type string." };
-    }
-    mesh_filename = (std::string)mesh_item;
-
-    // Get point cloud filename
-    if (!model_item.hasMember("point_cloud"))
-    {
-      throw exception::Parameter{ "Attribute 'point_cloud' not found for model." };
-    }
-    XmlRpc::XmlRpcValue point_cloud_item = model_item["point_cloud"];
-    if (point_cloud_item.getType() != XmlRpc::XmlRpcValue::TypeString)
-    {
-      throw exception::Parameter{ "Attribute 'point_cloud' must be of type string." };
-    }
-    point_cloud_filename = (std::string)point_cloud_item;
-
-    // Load the model
+    auto mesh_filename = utils::loadStringParameter(model_item, "mesh");
+    auto point_cloud_filename = utils::loadStringParameter(model_item, "point_cloud");
     models_[i].load(mesh_filename, point_cloud_filename);
   }
 }

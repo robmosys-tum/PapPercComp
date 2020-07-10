@@ -1,7 +1,3 @@
-//
-// Created by philipp on 04.07.20.
-//
-
 #ifndef CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_UTILS_H
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_UTILS_H
 
@@ -13,6 +9,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <ros/ros.h>
 
 namespace chair_manipulation
 {
@@ -33,37 +30,41 @@ Vector3<T> projection(const Vector3<T>& axis, const Vector3<T>& v)
 }
 
 template <typename T>
-void directionsXYToQuaternion(const Vector3<T>& x_direction, const Vector3<T>& y_direction, Eigen::Quaternion<T>& q)
+Eigen::Quaternion<T> directionsXYToQuaternion(const Vector3<T>& x_direction, const Vector3<T>& y_direction)
 {
+  Eigen::Quaternion<T> q;
+
   Vector3<T> original_x_direction = Vector3<T>::UnitX();
-  Vector3<T> x_rotation_axis = original_x_direction.cross(x_direction);
+  Vector3<T> x_rotation_axis = original_x_direction.cross(x_direction).normalized();
   T x_rotation_angle = std::acos(original_x_direction.dot(x_direction));
   q = Eigen::AngleAxis<T>{ x_rotation_angle, x_rotation_axis };
 
   Vector3<T> original_y_direction = Vector3<T>::UnitY();
   Vector3<T> rotated_original_y_direction = q * original_y_direction;
-  Vector3<T> y_rotation_axis = rotated_original_y_direction.cross(y_direction);
+  Vector3<T> y_rotation_axis = rotated_original_y_direction.cross(y_direction).normalized();
   T y_rotation_angle = std::acos(rotated_original_y_direction.dot(y_direction));
   q = Eigen::AngleAxis<T>{ y_rotation_angle, y_rotation_axis } * q;
 
-  q.normalize();
+  return q.normalized();
 }
 
 template <typename T>
-void directionsYZToQuaternion(const Vector3<T>& y_direction, const Vector3<T>& z_direction, Eigen::Quaternion<T>& q)
+Eigen::Quaternion<T> directionsYZToQuaternion(const Vector3<T>& y_direction, const Vector3<T>& z_direction)
 {
+  Eigen::Quaternion<T> q;
+
   Vector3<T> original_y_direction = Vector3<T>::UnitY();
-  Vector3<T> y_rotation_axis = original_y_direction.cross(y_direction);
+  Vector3<T> y_rotation_axis = original_y_direction.cross(y_direction).normalized();
   T y_rotation_angle = std::acos(original_y_direction.dot(y_direction));
   q = Eigen::AngleAxis<T>{ y_rotation_angle, y_rotation_axis };
 
   Vector3<T> original_z_direction = Vector3<T>::UnitZ();
   Vector3<T> rotated_original_z_direction = q * original_z_direction;
-  Vector3<T> z_rotation_axis = rotated_original_z_direction.cross(z_direction);
+  Vector3<T> z_rotation_axis = rotated_original_z_direction.cross(z_direction).normalized();
   T z_rotation_angle = std::acos(rotated_original_z_direction.dot(z_direction));
   q = Eigen::AngleAxis<T>{ z_rotation_angle, z_rotation_axis } * q;
 
-  q.normalize();
+  return q.normalized();
 }
 
 template <typename PointT>
@@ -75,6 +76,8 @@ void publishPointCloud(const pcl::PointCloud<PointT>& pcl_cloud, ros::Publisher&
   pc2_cloud->header.stamp = ros::Time::now();
   publisher.publish(pc2_cloud);
 }
+
+std::string loadStringParameter(const XmlRpc::XmlRpcValue& value, const std::string& key);
 
 }  // namespace utils
 }  // namespace chair_manipulation

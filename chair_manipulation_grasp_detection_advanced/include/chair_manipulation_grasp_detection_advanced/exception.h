@@ -28,6 +28,13 @@ struct Parameter : Runtime
   }
 };
 
+struct IllegalState : Runtime
+{
+  explicit IllegalState(const std::string& msg) : Runtime(msg)
+  {
+  }
+};
+
 }  // namespace exception
 }  // namespace chair_manipulation
 

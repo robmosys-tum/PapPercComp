@@ -1,4 +1,5 @@
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
+#include "chair_manipulation_grasp_detection_advanced/exception.h"
 #include <pcl/io/vtk_lib_io.h>
 #include <vtkTriangleFilter.h>
 #include <vtkPolyDataMapper.h>
@@ -91,6 +92,24 @@ void convert(const shapes::Mesh& from, shape_msgs::Mesh& to)
     triangle.vertex_indices[2] = from.triangles[i * 3 + 2];
     to.triangles.push_back(triangle);
   }
+}
+
+std::string loadStringParameter(const XmlRpc::XmlRpcValue& value, const std::string& key)
+{
+  if (!value.hasMember(key))
+  {
+    std::ostringstream msg;
+    msg << "Attribute '" << key << "' not found.";
+    throw exception::Parameter{ msg.str() };
+  }
+  XmlRpc::XmlRpcValue attribute = value[key];
+  if (attribute.getType() != XmlRpc::XmlRpcValue::TypeString)
+  {
+    std::ostringstream msg;
+    msg << "Attribute '" << key << "' must be of type string.";
+    throw exception::Parameter{ msg.str() };
+  }
+  return (std::string) attribute;
 }
 
 }  // namespace utils

@@ -106,8 +106,7 @@ bool GraspSampler::findGraspPoseAt(const pcl::PointCloud<pcl::PointNormal>::Cons
   Eigen::Vector3f equator_normal_inverted = -equator_point.getNormalVector3fMap();
   Eigen::Vector3f z_direction =
       (equator_normal_inverted - utils::projection(y_direction, equator_normal_inverted)).normalized();
-  Eigen::Quaternionf orientation;
-  utils::directionsYZToQuaternion(y_direction, z_direction, orientation);
+  Eigen::Quaternionf orientation = utils::directionsYZToQuaternion(y_direction, z_direction);
 
   // Output
   grasp_pose.position.x = center_position.x();

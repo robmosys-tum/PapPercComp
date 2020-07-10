@@ -20,6 +20,7 @@ find_package(catkin REQUIRED
     tf2_eigen
     tf2_geometry_msgs
     actionlib_msgs
+    message_generation
 )
 
 find_package(Eigen3 REQUIRED)

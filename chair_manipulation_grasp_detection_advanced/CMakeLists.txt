@@ -59,13 +59,13 @@ set(SOURCE_FILES
         include/chair_manipulation_grasp_detection_advanced/utils.h
         include/chair_manipulation_grasp_detection_advanced/exception.h
         include/chair_manipulation_grasp_detection_advanced/wrench_space.h
-        include/chair_manipulation_grasp_detection_advanced/collision_detection.h
+        include/chair_manipulation_grasp_detection_advanced/gripper.h
         src/model.cpp
         src/utils.cpp
         src/grasp_database.cpp
         src/grasp_database_creator.cpp
         src/grasp_sampler.cpp
-        src/collision_detection.cpp
+        src/gripper.cpp
 )
 
 set(LIBRARIES
@@ -85,5 +85,5 @@ target_link_libraries(convert_mesh_test ${LIBRARIES})
 add_executable(grasp_sampler_test test/grasp_sampler_test.cpp ${SOURCE_FILES})
 target_link_libraries(grasp_sampler_test ${LIBRARIES})
 
-add_executable(collision_detection_test test/collision_detection_test.cpp ${SOURCE_FILES})
-target_link_libraries(collision_detection_test ${LIBRARIES})
+add_executable(grasp_test test/grasp_test.cpp ${SOURCE_FILES} include/chair_manipulation_grasp_detection_advanced/contact.h test/grasp_test.cpp)
+target_link_libraries(grasp_test ${LIBRARIES})
