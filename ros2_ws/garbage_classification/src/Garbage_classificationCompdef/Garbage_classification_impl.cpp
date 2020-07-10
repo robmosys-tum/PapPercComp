@@ -14,10 +14,6 @@
 // Derived includes directives
 #include "rclcpp/rclcpp.hpp"
 
-#include <torch/script.h>
-#include <opencv2/opencv.hpp>
-
-
 #define GLASS 0
 #define PAPER 1
 #define CARDBOARD 2
@@ -49,6 +45,9 @@ namespace Garbage_classificationCompdef {
 Garbage_classification_impl::Garbage_classification_impl(
 		rclcpp::NodeOptions /*in*/options) :
 		Garbage_classification(options) {
+	//TODO make configurable
+	classifier_ = torch::jit::load("/home/seedship/TUM/SS20/Model-Driven\ Approach\ for\ Robotics\ Perception/PapPercComp/models/resnet152/transcripted_model_cuda.pt");
+	camNum_ = 0;
 }
 
 /**
@@ -57,6 +56,38 @@ Garbage_classification_impl::Garbage_classification_impl(
  */
 void Garbage_classification_impl::classify(
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
+//	RCLCPP_INFO(this->get_logger(),"Image received!");
+	img_msg_ = *image;
+
+	cv::Mat img(img_msg_.height, img_msg_.width, CV_8UC3,img_msg_.data.data());
+	cv::Mat img_resized;
+	cv::resize(img, img_resized, cv::Size(DIM1, DIM2));
+
+	torch::Tensor img_tensor = torch::from_blob(img_resized.data, {img_resized.rows, img_resized.cols, 3}, torch::kByte).clone();
+	img_tensor = img_tensor.permute({2, 0, 1}); // convert to CxHxW
+	img_tensor = img_tensor / 255.0;
+
+	img_tensor = img_tensor.unsqueeze(0).cuda();
+	std::vector<torch::jit::IValue> input;
+	input.emplace_back(img_tensor);
+
+	torch::Tensor output = classifier_.forward(input).toTensor();
+	auto prediction = output.topk(5);
+	auto topClasses = std::get<1>(prediction);
+	topClasses = topClasses.flatten();
+
+	std::string ans("Top 5 Predicted Class:");
+	for (unsigned idx = 0; idx < 5; idx++) {
+		ans += (" " + CLASSES[topClasses[idx].item().toInt()]);
+	}
+	classification_.set__data(ans);
+
+
+	// Does not work on my Arch Linux
+//	imshow("Garbage Classification Image", img);
+
+	RCLCPP_INFO(this->get_logger(), ans);
+	classification_pub_->publish(classification_);
 }
 
 } // of namespace Garbage_classificationCompdef
