@@ -8,6 +8,10 @@
 #define METAL 4
 #define TRASH 5
 
+
+#define DIM1 384
+#define DIM2 512
+
 static std::unordered_map<int, std::string> CLASSES = {
 		{GLASS, "GLASS" },
 		{ PAPER, "PAPER" },
@@ -30,6 +34,7 @@ main(int argc, char** argv)
 	int camNum = atoi(argv[2]);
 //	cv::Mat img = cv::imread("/home/seedship/TUM/SS20/Model-Driven\ Approach\ for\ Robotics\ Perception/PapPercComp/trashnet/data/dataset-resized/glass/glass10.jpg");
 	cv::Mat img;
+	cv::Mat img_resized;
 
 	cv::VideoCapture cap;
 
@@ -37,7 +42,8 @@ main(int argc, char** argv)
 		std::cout << "Could not open camera!\n";
 	while (cap.isOpened() && cap.read(img))
 	{
-		torch::Tensor img_tensor = torch::from_blob(img.data, {img.rows, img.cols, 3}, torch::kByte).clone();
+		cv::resize(img, img_resized, cv::Size(DIM1, DIM2));
+		torch::Tensor img_tensor = torch::from_blob(img_resized.data, {img_resized.rows, img_resized.cols, 3}, torch::kByte).clone();
 		img_tensor = img_tensor.permute({2, 0, 1}); // convert to CxHxW
 		img_tensor = img_tensor / 255.0;
 
