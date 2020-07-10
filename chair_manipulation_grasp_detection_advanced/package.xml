@@ -9,24 +9,18 @@
   <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
+  <depend>chair_manipulation_chair_models</depend>
   <depend>roscpp</depend>
   <depend>sensor_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>shape_msgs</depend>
   <depend>geometric_shapes</depend>
-  <depend>tf</depend>
-  <depend>pcl_conversions</depend>
   <depend>pcl_msgs</depend>
   <depend>pcl_ros</depend>
-  <depend>visualization_msgs</depend>
-  <depend>tf_conversions</depend>
-  <depend>image_transport</depend>
-  <depend>cv_bridge</depend>
-  <depend>ur10_robotiq_2f_140_description</depend>
+  <depend>pcl_conversions</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_eigen</depend>
   <depend>moveit_core</depend>
-
-  <!-- In case we want to create a custom grasp message -->
-<!--  <depend>message_generation</depend>-->
-<!--  <exec_depend>message_runtime</exec_depend>-->
 
 </package>

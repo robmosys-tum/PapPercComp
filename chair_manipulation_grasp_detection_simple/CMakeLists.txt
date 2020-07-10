@@ -22,22 +22,6 @@ find_package(PCL REQUIRED)
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-# ================================================
-# In case we want to create a custom grasp message
-# ================================================
-#
-#set(MSG_DEPS
-#  geometry_msgs
-#)
-#
-#set(MSG_FILES
-#  Grasp.msg
-#)
-#
-#add_message_files(DIRECTORY msg FILES ${MSG_FILES})
-#generate_messages(DEPENDENCIES ${MSG_DEPS})
-#catkin_package(CATKIN_DEPENDS message_runtime ${MSG_DEPS})
-
 catkin_package(CATKIN_DEPENDS)
 
 include_directories(

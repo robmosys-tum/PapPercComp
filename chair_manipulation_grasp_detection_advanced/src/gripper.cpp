@@ -7,12 +7,12 @@
 
 namespace chair_manipulation
 {
-Gripper::Gripper(const GripperParametersConstPtr& params) : params_(params)
+Gripper::Gripper(const GripperParameters& params) : params_(params)
 {
   // Parse urdf and srdf descriptions
-  auto urdf_model = urdf::parseURDF(params->gripper_description_);
+  auto urdf_model = urdf::parseURDF(params_.gripper_description_);
   auto srdf_model = std::make_shared<srdf::Model>();
-  srdf_model->initString(*urdf_model, params->gripper_semantic_description_);
+  srdf_model->initString(*urdf_model, params_.gripper_semantic_description_);
 
   // Initialize robot model, robot state and collision environment
   robot_model_ = std::make_shared<moveit::core::RobotModel>(urdf_model, srdf_model);
@@ -34,12 +34,12 @@ Gripper::Gripper(const GripperParametersConstPtr& params) : params_(params)
 
   // Get tcp to base transform
   bool frame_found;
-  Eigen::Isometry3d world_to_base = robot_state_->getFrameTransform(params_->base_frame_, &frame_found);
+  Eigen::Isometry3d world_to_base = robot_state_->getFrameTransform(params_.base_frame_, &frame_found);
   if (!frame_found)
-    throw exception::Parameter{ "Cannot find frame '" + params_->base_frame_ + "'." };
-  Eigen::Isometry3d world_to_tcp = robot_state_->getFrameTransform(params_->tcp_frame_, &frame_found);
+    throw exception::Parameter{ "Cannot find frame '" + params_.base_frame_ + "'." };
+  Eigen::Isometry3d world_to_tcp = robot_state_->getFrameTransform(params_.tcp_frame_, &frame_found);
   if (!frame_found)
-    throw exception::Parameter{ "Cannot find frame '" + params_->tcp_frame_ + "'." };
+    throw exception::Parameter{ "Cannot find frame '" + params_.tcp_frame_ + "'." };
   tcp_to_base_ = world_to_base * world_to_tcp.inverse();
   base_pose_ = Eigen::Isometry3d::Identity();
 
@@ -65,7 +65,7 @@ void Gripper::clearCollisionObjects()
 
 void Gripper::setStateOpen()
 {
-  for (const auto& finger_group : params_->finger_groups_)
+  for (const auto& finger_group : params_.finger_groups_)
     robot_state_->setVariablePositions(open_group_state_values_[finger_group.group_name_]);
 }
 
@@ -85,7 +85,7 @@ bool Gripper::grasp(std::vector<Contact>& contacts)
     return false;
 
   // Move each finger group individually to closed position and stop at a point of collision
-  for (const auto& finger_group : params_->finger_groups_)
+  for (const auto& finger_group : params_.finger_groups_)
   {
     const auto& open_values = open_group_state_values_[finger_group.group_name_];
     const auto& closed_values = closed_group_state_values_[finger_group.group_name_];
@@ -201,13 +201,13 @@ bool Gripper::moveToContacts(const std::map<std::string, double>& open_values,
 
 void Gripper::updateState()
 {
-  robot_state_->updateStateWithLinkAt(params_->base_frame_, base_pose_);
+  robot_state_->updateStateWithLinkAt(params_.base_frame_, base_pose_);
   robot_state_->updateCollisionBodyTransforms();
 }
 
 void Gripper::loadGroupStates()
 {
-  for (const auto& finger_group : params_->finger_groups_)
+  for (const auto& finger_group : params_.finger_groups_)
   {
     const auto& group_name = finger_group.group_name_;
     const auto& jmg = robot_model_->getJointModelGroup(group_name);

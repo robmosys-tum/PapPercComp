@@ -4,14 +4,13 @@
 
 namespace chair_manipulation
 {
-GraspDatabaseCreator::GraspDatabaseCreator(ros::NodeHandle& nh) : grasp_sampler_(nh)
-{
-  sample_trials = nh.param<double>("sample_trials", 1000);
-  loadModels(nh);
-}
 
-void GraspDatabaseCreator::loadModels(ros::NodeHandle& nh)
+void GraspDatabaseCreatorParameters::load(ros::NodeHandle& nh)
 {
+  grasp_sampler_params_.load(nh);
+
+  sample_trials_ = nh.param<int>("sample_trails", 1000);
+
   XmlRpc::XmlRpcValue models_array;
   if (!nh.getParam("models", models_array) || models_array.getType() != XmlRpc::XmlRpcValue::TypeArray ||
       models_array.size() == 0)
@@ -31,11 +30,11 @@ void GraspDatabaseCreator::loadModels(ros::NodeHandle& nh)
 
 void GraspDatabaseCreator::createGraspDatabase(GraspDatabase& database)
 {
-  for (const auto& model : models_)
+  for (const auto& model : params_.models_)
   {
     auto element = std::make_shared<GraspDatabaseElement>();
     element->model_ = model;
-    grasp_sampler_.sampleGrasps(model, sample_trials, element->grasps_);
+    grasp_sampler_.sampleGrasps(model, params_.sample_trials_, element->grasps_);
     database.add(element);
   }
 }

@@ -4,7 +4,7 @@
 
 namespace chair_manipulation
 {
-GraspSampler::GraspSampler(ros::NodeHandle& nh)
+void GraspSamplerParameters::load(ros::NodeHandle& nh)
 {
   grasp_quality_threshold_ = nh.param<double>("grasp_quality_threshold", 0.7);
   max_antipodal_normal_angle_ = nh.param<double>("max_antipodal_normal_angle", 0.1);
@@ -43,13 +43,13 @@ bool GraspSampler::findGraspPoseAt(const pcl::PointCloud<pcl::PointNormal>::Cons
   std::vector<int> indices;
   std::vector<float> sqr_distances;
   search_method_.setInputCloud(point_cloud);
-  search_method_.radiusSearch(reference_point, gripper_pad_distance_, indices, sqr_distances);
+  search_method_.radiusSearch(reference_point, params_.gripper_pad_distance_, indices, sqr_distances);
 
   // Filter out the points where the antipodal normal and position angle is greater than the given threshold
   const auto filter_max_antipodal_angle = [&](int j) {
     auto antipodal_point = (*point_cloud)[j];
-    return computeAntipodalNormalAngle(reference_point, antipodal_point) > max_antipodal_normal_angle_ &&
-           computeAntipodalPositionAngle(reference_point, antipodal_point) > max_antipodal_position_angle_;
+    return computeAntipodalNormalAngle(reference_point, antipodal_point) > params_.max_antipodal_normal_angle_ &&
+           computeAntipodalPositionAngle(reference_point, antipodal_point) > params_.max_antipodal_position_angle_;
   };
   indices.erase(std::remove_if(indices.begin(), indices.end(), filter_max_antipodal_angle), indices.end());
   if (indices.empty())
@@ -77,12 +77,12 @@ bool GraspSampler::findGraspPoseAt(const pcl::PointCloud<pcl::PointNormal>::Cons
   // Get neighboring points of the center point within the radius of the gripper pad length
   indices = std::vector<int>{};
   sqr_distances = std::vector<float>{};
-  search_method_.radiusSearch(center_point, gripper_pad_length_, indices, sqr_distances);
+  search_method_.radiusSearch(center_point, params_.gripper_pad_length_, indices, sqr_distances);
 
   // Filter out the points where the equator normal angle is larger than the given threshold
   const auto filter_max_equator_angle = [&](int k) {
     auto equator_point = (*point_cloud)[k];
-    return computeEquatorNormalAngle(reference_point, equator_point) > max_equator_normal_angle_;
+    return computeEquatorNormalAngle(reference_point, equator_point) > params_.max_equator_normal_angle_;
   };
   indices.erase(std::remove_if(indices.begin(), indices.end(), filter_max_equator_angle), indices.end());
   if (indices.empty())
@@ -146,7 +146,7 @@ double GraspSampler::computeEquatorCost(const PointT& reference_point, const Poi
 {
   // Normalize angle from [0, pi/2] to [0, 1].
   // Normalize distance from [0, gripper_pad_length] to [0, 1].
-  const double sqr_gripper_pad_length = gripper_pad_length_ * gripper_pad_length_;
+  const double sqr_gripper_pad_length = params_.gripper_pad_length_ * params_.gripper_pad_length_;
   auto distance = (reference_point.getVector3fMap() - equator_point.getVector3fMap()).norm();
   return computeEquatorNormalAngle(reference_point, equator_point) / M_PI_2 + distance / sqr_gripper_pad_length;
 }

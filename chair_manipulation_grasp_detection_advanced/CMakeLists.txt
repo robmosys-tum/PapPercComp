@@ -3,43 +3,24 @@ project(chair_manipulation_grasp_detection_advanced)
 
 set(CMAKE_CXX_STANDARD 14)
 
-find_package(catkin REQUIRED COMPONENTS
+find_package(
+  catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   geometry_msgs
   shape_msgs
   geometric_shapes
-  tf
   pcl_msgs
   pcl_ros
   pcl_conversions
-  visualization_msgs
-  tf_conversions
-  cv_bridge
-  image_transport
+  tf2
+  tf2_ros
+  tf2_eigen
   moveit_core
 )
 
 find_package(PCL REQUIRED)
-
-find_package(OpenCV)
-include_directories(${OpenCV_INCLUDE_DIRS})
-
-# ================================================
-# In case we want to create a custom grasp message
-# ================================================
-#
-#set(MSG_DEPS
-#  geometry_msgs
-#)
-#
-#set(MSG_FILES
-#  Grasp.msg
-#)
-#
-#add_message_files(DIRECTORY msg FILES ${MSG_FILES})
-#generate_messages(DEPENDENCIES ${MSG_DEPS})
-#catkin_package(CATKIN_DEPENDS message_runtime ${MSG_DEPS})
+find_package(FCL REQUIRED)
 
 catkin_package(CATKIN_DEPENDS)
 
@@ -49,28 +30,31 @@ include_directories(
   ${PCL_INCLUDE_DIRS}
 )
 
-set(SOURCE_FILES
-        include/chair_manipulation_grasp_detection_advanced/grasp.h
-        include/chair_manipulation_grasp_detection_advanced/grasp_database.h
-        include/chair_manipulation_grasp_detection_advanced/grasp_database_creator.h
-        include/chair_manipulation_grasp_detection_advanced/grasp_database_element.h
-        include/chair_manipulation_grasp_detection_advanced/grasp_sampler.h
-        include/chair_manipulation_grasp_detection_advanced/model.h
-        include/chair_manipulation_grasp_detection_advanced/utils.h
-        include/chair_manipulation_grasp_detection_advanced/exception.h
-        include/chair_manipulation_grasp_detection_advanced/wrench_space.h
-        include/chair_manipulation_grasp_detection_advanced/gripper.h
-        src/model.cpp
-        src/utils.cpp
-        src/grasp_database.cpp
-        src/grasp_database_creator.cpp
-        src/grasp_sampler.cpp
-        src/gripper.cpp
+set(
+  SOURCE_FILES
+  include/chair_manipulation_grasp_detection_advanced/grasp.h
+  include/chair_manipulation_grasp_detection_advanced/grasp_database.h
+  include/chair_manipulation_grasp_detection_advanced/grasp_database_creator.h
+  include/chair_manipulation_grasp_detection_advanced/grasp_database_element.h
+  include/chair_manipulation_grasp_detection_advanced/grasp_sampler.h
+  include/chair_manipulation_grasp_detection_advanced/model.h
+  include/chair_manipulation_grasp_detection_advanced/utils.h
+  include/chair_manipulation_grasp_detection_advanced/exception.h
+  include/chair_manipulation_grasp_detection_advanced/wrench_space.h
+  include/chair_manipulation_grasp_detection_advanced/gripper.h
+  src/model.cpp
+  src/utils.cpp
+  src/grasp_database.cpp
+  src/grasp_database_creator.cpp
+  src/grasp_sampler.cpp
+  src/gripper.cpp
 )
 
-set(LIBRARIES
-        ${catkin_LIBRARIES}
-        ${PCL_LIBRARIES}
+set(
+  LIBRARIES
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  ${FCL_LIBRARIES}
 )
 
 add_executable(create_grasp_database_node src/create_grasp_database_node.cpp ${SOURCE_FILES})

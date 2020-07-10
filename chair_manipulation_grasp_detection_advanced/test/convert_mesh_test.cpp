@@ -1,4 +1,5 @@
 #include <ros/ros.h>
+#include <ros/package.h>
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
 #include <pcl/io/vtk_lib_io.h>
 
@@ -10,7 +11,7 @@ int main(int argc, char *argv[])
   ros::Publisher mesh_pub = nh.advertise<shape_msgs::Mesh>("mesh", 1);
 
   pcl::PolygonMesh polygon_mesh;
-  auto mesh_filename = nh_priv.param<std::string>("mesh_filename", "");
+  auto mesh_filename = ros::package::getPath("chair_manipulation_chair_models") + "/models/dining_chair/meshes/dining_chair.ply";
   if (!pcl::io::loadPolygonFilePLY(mesh_filename, polygon_mesh))
   {
     ROS_ERROR("Failed to load mesh.");

@@ -4,15 +4,17 @@
 
 using namespace chair_manipulation;
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   ros::init(argc, argv, "create_grasp_database_node");
-  ros::NodeHandle nh_priv{"~"};
+  ros::NodeHandle nh_priv{ "~" };
   auto output_filename = nh_priv.param<std::string>("output_filename", "grasp_database.yaml");
   try
   {
     GraspDatabase database;
-    GraspDatabaseCreator creator{nh_priv};
+    GraspDatabaseCreatorParameters params;
+    params.load(nh_priv);
+    GraspDatabaseCreator creator{ params };
     creator.createGraspDatabase(database);
     database.save(output_filename);
   }

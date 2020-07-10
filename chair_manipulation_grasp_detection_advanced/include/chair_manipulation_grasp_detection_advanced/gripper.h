@@ -29,13 +29,11 @@ struct GripperParameters
 class Gripper
 {
 public:
-  using GripperParametersConstPtr = std::shared_ptr<const GripperParameters>;
-
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   static constexpr double CONTACT_THRESHOLD = 0.001;
 
-  explicit Gripper(const GripperParametersConstPtr& params);
+  explicit Gripper(const GripperParameters& params);
 
   void setTcpPose(const Eigen::Isometry3d& tcp_pose);
 
@@ -61,7 +59,7 @@ public:
   }
 
 private:
-  GripperParametersConstPtr params_;
+  GripperParameters params_;
 
   moveit::core::RobotModelPtr robot_model_;
   moveit::core::RobotStatePtr robot_state_;

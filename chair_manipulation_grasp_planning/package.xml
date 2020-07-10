@@ -10,6 +10,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <depend>chair_manipulation_msgs</depend>
   <depend>pluginlib</depend>
   <depend>eigen</depend>
   <depend>moveit_core</depend>
@@ -26,7 +27,5 @@
   <depend>tf2_ros</depend>
   <depend>tf2_eigen</depend>
   <depend>tf2_geometry_msgs</depend>
-  <depend>actionlib_msgs</depend>
-  <depend>message_generation</depend>
 
 </package>

@@ -19,35 +19,12 @@ find_package(catkin REQUIRED
     tf2_ros
     tf2_eigen
     tf2_geometry_msgs
-    actionlib_msgs
-    message_generation
 )
 
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED system filesystem date_time thread)
 
-add_action_files(
-  DIRECTORY action
-  FILES GraspExecution.action
-)
-
-generate_messages(
-  DEPENDENCIES actionlib_msgs std_msgs
-)
-
-catkin_package(
-    LIBRARIES
-    INCLUDE_DIRS include
-    CATKIN_DEPENDS
-    moveit_core
-    moveit_visual_tools
-    moveit_ros_planning_interface
-    interactive_markers
-    tf2_geometry_msgs
-    actionlib_msgs
-    DEPENDS
-    EIGEN3
-)
+catkin_package(CATKIN_DEPENDS)
 
 include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS})
 

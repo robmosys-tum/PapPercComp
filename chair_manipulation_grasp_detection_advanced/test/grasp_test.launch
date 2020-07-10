@@ -1,11 +1,5 @@
 <launch>
-  <node name="grasp_test" pkg="chair_manipulation_grasp_detection_advanced" type="grasp_test" output="screen">
-    <rosparam file="$(find chair_manipulation_grasp_detection_advanced)/cfg/gripper/robotiq_2f_140.yaml" />
-    <param name="gripper_description" command="cat $(find chair_manipulation_grasp_detection_advanced)/cfg/gripper/robotiq_2f_140.urdf" />
-    <param name="gripper_semantic_description" command="cat $(find chair_manipulation_grasp_detection_advanced)/cfg/gripper/robotiq_2f_140.srdf" />
-    <param name="mesh_filename" value="$(find chair_manipulation_chair_models)/models/dining_chair/meshes/dining_chair.ply" />
-    <param name="point_cloud_filename" value="$(find chair_manipulation_chair_models)/models/dining_chair/point_clouds/dining_chair.pcd" />
-  </node>
-
-  <param name="robot_description" command="cat $(find chair_manipulation_grasp_detection_advanced)/cfg/gripper/robotiq_2f_140.urdf" />
+  <node name="grasp_test" pkg="chair_manipulation_grasp_detection_advanced" type="grasp_test" output="screen"/>
+  <param name="robot_description"
+         command="cat $(find chair_manipulation_grasp_detection_advanced)/cfg/gripper/robotiq_2f_140.urdf"/>
 </launch>

@@ -10,20 +10,28 @@
 
 namespace chair_manipulation
 {
+struct GraspDatabaseCreatorParameters
+{
+  void load(ros::NodeHandle& nh);
+
+  GraspSamplerParameters grasp_sampler_params_;
+  int sample_trials_;
+  std::vector<Model> models_;
+};
+
 class GraspDatabaseCreator
 {
 public:
-  explicit GraspDatabaseCreator(ros::NodeHandle& nh);
+  explicit GraspDatabaseCreator(const GraspDatabaseCreatorParameters& params)
+      : params_(params), grasp_sampler_(params.grasp_sampler_params_)
+  {
+  }
 
   void createGraspDatabase(GraspDatabase& database);
 
 private:
-  std::size_t sample_trials;
-  std::vector<Model> models_;
-
+  GraspDatabaseCreatorParameters params_;
   GraspSampler grasp_sampler_;
-
-  void loadModels(ros::NodeHandle& nh);
 };
 
 }  // namespace chair_manipulation

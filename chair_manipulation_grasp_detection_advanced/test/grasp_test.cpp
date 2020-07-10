@@ -1,10 +1,10 @@
 #include <ros/ros.h>
+#include <ros/package.h>
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
 #include "chair_manipulation_grasp_detection_advanced/model.h"
 #include "chair_manipulation_grasp_detection_advanced/gripper.h"
 #include <string>
 #include <fstream>
-#include <streambuf>
 #include <tf2_eigen/tf2_eigen.h>
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <moveit/robot_state/conversions.h>
@@ -24,24 +24,21 @@ int main(int argc, char* argv[])
   ros::NodeHandle nh;
   ros::NodeHandle nh_priv{ "~" };
 
-  ros::Publisher mesh_pub = nh.advertise<shape_msgs::Mesh>("chair_mesh", 1);
+  ros::Publisher mesh_pub = nh.advertise<shape_msgs::Mesh>("mesh", 1);
   ros::Publisher robot_state_pub = nh.advertise<moveit_msgs::DisplayRobotState>("display_robot_state", 1);
   tf2_ros::StaticTransformBroadcaster broadcaster;
 
-  auto mesh_filename = nh_priv.param<std::string>("mesh_filename", "");
-  auto point_cloud_filename = nh_priv.param<std::string>("point_cloud_filename", "");
+  auto mesh_filename = ros::package::getPath("chair_manipulation_chair_models") + "/models/dining_chair/meshes/dining_chair.ply";
+  auto point_cloud_filename = ros::package::getPath("chair_manipulation_chair_models") + "/models/dining_chair/point_clouds/dining_chair.pcd";
 
-  // TODO: remove these
-  mesh_filename = "/home/philipp/chair_manipulation_ws/src/chair_manipulation/chair_manipulation_chair_models/models/"
-                  "dining_chair/meshes/dining_chair.ply";
-  point_cloud_filename = "/home/philipp/chair_manipulation_ws/src/chair_manipulation/chair_manipulation_chair_models/"
-                         "models/dining_chair/point_clouds/dining_chair.pcd";
+  Model model;
+  model.load(mesh_filename, point_cloud_filename);
 
-  auto params = std::make_shared<GripperParameters>();
-  params->gripper_description_ = loadFileContent("/home/philipp/chair_manipulation_ws/src/chair_manipulation/chair_manipulation_grasp_detection_advanced/cfg/gripper/robotiq_2f_140.urdf");
-  params->gripper_semantic_description_ = loadFileContent("/home/philipp/chair_manipulation_ws/src/chair_manipulation/chair_manipulation_grasp_detection_advanced/cfg/gripper/robotiq_2f_140.srdf");
-  params->base_frame_ = "robotiq_arg2f_base_link";
-  params->tcp_frame_ = "tcp";
+  GripperParameters params{};
+  params.gripper_description_ = loadFileContent("/home/philipp/chair_manipulation_ws/src/chair_manipulation/chair_manipulation_grasp_detection_advanced/cfg/gripper/robotiq_2f_140.urdf");
+  params.gripper_semantic_description_ = loadFileContent("/home/philipp/chair_manipulation_ws/src/chair_manipulation/chair_manipulation_grasp_detection_advanced/cfg/gripper/robotiq_2f_140.srdf");
+  params.base_frame_ = "robotiq_arg2f_base_link";
+  params.tcp_frame_ = "tcp";
   FingerGroup left_finger_group;
   left_finger_group.group_name_ = "left_finger";
   left_finger_group.open_group_state_name_ = "left_finger_open";
@@ -50,21 +47,12 @@ int main(int argc, char* argv[])
   right_finger_group.group_name_ = "right_finger";
   right_finger_group.open_group_state_name_ = "right_finger_open";
   right_finger_group.closed_group_state_name_ = "right_finger_closed";
-  params->finger_groups_ = { left_finger_group, right_finger_group };
+  params.finger_groups_ = { left_finger_group, right_finger_group };
 
-  Model model;
-  model.load(mesh_filename, point_cloud_filename);
-
-  geometry_msgs::Pose gripper_pose;
-  gripper_pose.orientation.w = 1.;
-  gripper_pose.position.z = 0.;
-
-  Eigen::Isometry3d eigen_pose;
-  //tf2::fromMsg(gripper_pose, eigen_pose);
-  eigen_pose = Eigen::Isometry3d::Identity();
+  Eigen::Isometry3d tcp_pose = Eigen::Isometry3d::Identity();
 
   Gripper gripper{ params };
-  gripper.setTcpPose(eigen_pose);
+  gripper.setTcpPose(tcp_pose);
   gripper.setStateOpen();
   gripper.addCollisionObject(model.mesh_);
 

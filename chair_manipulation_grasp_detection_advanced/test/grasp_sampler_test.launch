@@ -1,9 +1,4 @@
 <launch>
-  <node name="grasp_sampler_test" pkg="chair_manipulation_grasp_detection_advanced" type="grasp_sampler_test" output="screen">
-    <rosparam file="$(find chair_manipulation_grasp_detection_advanced)/cfg/grasp_sampler.yaml" />
-    <rosparam file="$(find chair_manipulation_grasp_detection_advanced)/cfg/gripper/robotiq_2f_140.yaml" />
-    <param name="mesh_filename" value="$(find chair_manipulation_chair_models)/models/dining_chair/meshes/dining_chair.ply" />
-    <param name="point_cloud_filename" value="$(find chair_manipulation_chair_models)/models/dining_chair/point_clouds/dining_chair.pcd" />
-    <param name="index" value="12000" />
-  </node>
+  <node name="grasp_sampler_test" pkg="chair_manipulation_grasp_detection_advanced" type="grasp_sampler_test"
+        output="screen"/>
 </launch>

@@ -10,13 +10,27 @@
 
 namespace chair_manipulation
 {
+struct GraspSamplerParameters
+{
+  void load(ros::NodeHandle& nh);
+
+  double grasp_quality_threshold_;
+  double max_antipodal_normal_angle_;
+  double max_antipodal_position_angle_;
+  double max_equator_normal_angle_;
+  double gripper_pad_distance_;
+  double gripper_pad_length_;
+};
+
 class GraspSampler
 {
 public:
   using PointCloud = Model::PointCloud;
   using PointT = PointCloud::PointType;
 
-  explicit GraspSampler(ros::NodeHandle& nh);
+  explicit GraspSampler(const GraspSamplerParameters& params) : params_(params)
+  {
+  }
 
   void sampleGrasps(const Model& model, std::size_t sample_trials, std::vector<Grasp>& grasps);
 
@@ -26,12 +40,7 @@ public:
                        geometry_msgs::Pose& grasp_pose);
 
 private:
-  double grasp_quality_threshold_;
-  double max_antipodal_normal_angle_;
-  double max_antipodal_position_angle_;
-  double max_equator_normal_angle_;
-  double gripper_pad_distance_;
-  double gripper_pad_length_;
+  GraspSamplerParameters params_;
 
   std::default_random_engine random_generator_;
 
