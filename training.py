@@ -36,7 +36,7 @@ def run_model(dataloader, args):
     deeplabModel.to(device)
 
 
-    if args.load or args.mode == 'validation':
+    if args.load:
         load_model(embedModel)
     else:
         # TrainedModel directory might not exist yet
@@ -139,7 +139,7 @@ def run_model(dataloader, args):
 
                     # Print statistics per video
                     print("-"*30)
-                    print(f"Validation IoU: {100*epoch_acc:.2f}")
+                    print(f"Validation IoU: {100*acc:.2f}")
                     print("-"*30)
 
                 epoch_loss /= len(dataloader)
@@ -297,7 +297,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
 
             loss.backward()
             optimizer.step()
-
+            
             ### Statistics, using Intersection over Union (IoU) for accuracy
             epoch_loss += loss.item()
 
@@ -329,9 +329,8 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 distBG = ((embedded_pixelvectors - mean_refBG)**2).mean(dim=1, keepdims=True)    
                 # Result has shape [N,1,H,W]
 
-                predMask = torch.where(distFG < distBG, torch.ones_like(distFG), torch.zeros_like(distFG))
-
-                print(f"\n Dist FG: \n {distFG[0,0,100:104,200:204]} \n and Dist BG: \n {distBG[0,0,100:104,200:204]} \n and ref FG: \n {mean_refFG[0,0,0,0]} \n and ref BG: \n {mean_refBG[0,0,0,0]} \n")
+                margin = 100
+                predMask = torch.where(distFG + margin < distBG, torch.ones_like(distFG), torch.zeros_like(distFG))
 
 
             ### Statistics, using Intersection over Union (IoU) for accuracy
@@ -340,13 +339,23 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
 
             # Iterate over all images in the batch
             for pred in predMask:
-                seg = Image.fromarray(pred.byte().cpu().numpy())
-                plt.imsave(f"Output/{imcount : 06d}.png", seg)
+                #seg = Image.fromarray(pred[0].byte().cpu().numpy())
+                #plt.imsave(f"Output/{imcount : 06d}.png", seg)
+                
+                seg = pred[0].cpu().numpy()
+                
+                fig = plt.figure(figsize=(16, 9))
+                plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
+                im = plt.imshow(seg)
+                #pos = fig.add_axes([0.93,0.1,0.02,0.35])
+                #fig.colorbar(im, cax=pos)
+                plt.savefig(f"Output/{imcount : 06d}.png")
+                
                 imcount += 1
 
 
         iter_count += 1
-
+        
 
     epoch_loss /= len(dataloader.dataset)
     IoU_sum /= len(dataloader.dataset)
