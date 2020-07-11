@@ -13,11 +13,15 @@
     <packageImport xmi:type="uml:PackageImport" xmi:id="_x0Gl8KrxEeqauMPG7GPMiw">
       <importedPackage xmi:type="uml:Model" href="pathmap://ROS2_LIB_BASE/services/shape_msgs.servicedef.uml#ID"/>
     </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_y2EzkMNLEeqDcveG-qLs8Q">
+      <importedPackage xmi:type="uml:Model" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#ID"/>
+    </packageImport>
     <packagedElement xmi:type="uml:Class" xmi:id="_kzM7c6rxEeqauMPG7GPMiw" name="Rgbd_surface_reconstruction">
       <ownedAttribute xmi:type="uml:Port" xmi:id="_q6rQAKrxEeqauMPG7GPMiw" name="depth_image" type="_tSlikKrxEeqauMPG7GPMiw" aggregation="composite"/>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_wRxQgKrxEeqauMPG7GPMiw" name="surface_mesh" type="_x0LecKrxEeqauMPG7GPMiw" aggregation="composite"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_zYtzUKrxEeqauMPG7GPMiw" name="activity1" type="_zYkCUKrxEeqauMPG7GPMiw"/>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_dJ9WgK_xEeqoUr4pK8_TEQ" name="color_image" type="_gRGGkK_xEeqoUr4pK8_TEQ" aggregation="composite"/>
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_vBqt0MNLEeqDcveG-qLs8Q" name="camera_pose" type="_y2S2AMNLEeqDcveG-qLs8Q" aggregation="composite"/>
       <ownedConnector xmi:type="uml:Connector" xmi:id="_9s5_8KrxEeqauMPG7GPMiw" name="Connects8">
         <end xmi:type="uml:ConnectorEnd" xmi:id="_9s-RYKrxEeqauMPG7GPMiw" partWithPort="_zYtzUKrxEeqauMPG7GPMiw" role="_3GUGcKrxEeqauMPG7GPMiw"/>
         <end xmi:type="uml:ConnectorEnd" xmi:id="_9s-RYarxEeqauMPG7GPMiw" role="_wRxQgKrxEeqauMPG7GPMiw"/>
@@ -29,6 +33,10 @@
       <ownedConnector xmi:type="uml:Connector" xmi:id="_mOjjgK_xEeqoUr4pK8_TEQ" name="Connects12">
         <end xmi:type="uml:ConnectorEnd" xmi:id="_mOpDEK_xEeqoUr4pK8_TEQ" partWithPort="_zYtzUKrxEeqauMPG7GPMiw" role="_ZJX18K_xEeqoUr4pK8_TEQ"/>
         <end xmi:type="uml:ConnectorEnd" xmi:id="_mOpDEa_xEeqoUr4pK8_TEQ" role="_dJ9WgK_xEeqoUr4pK8_TEQ"/>
+      </ownedConnector>
+      <ownedConnector xmi:type="uml:Connector" xmi:id="_5YBdoMNLEeqDcveG-qLs8Q" name="Connects15">
+        <end xmi:type="uml:ConnectorEnd" xmi:id="_5YLOoMNLEeqDcveG-qLs8Q" partWithPort="_zYtzUKrxEeqauMPG7GPMiw" role="_15JjAMNLEeqDcveG-qLs8Q"/>
+        <end xmi:type="uml:ConnectorEnd" xmi:id="_5YL1sMNLEeqDcveG-qLs8Q" role="_vBqt0MNLEeqDcveG-qLs8Q"/>
       </ownedConnector>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_kzM7dKrxEeqauMPG7GPMiw"/>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_tSlikKrxEeqauMPG7GPMiw"/>
@@ -46,8 +54,11 @@
         <ownedAttribute xmi:type="uml:Port" xmi:id="_30mv0KrxEeqauMPG7GPMiw" name="ActivityPort3" aggregation="composite"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="__-8UAKrxEeqauMPG7GPMiw" name="" type="__-tDcKrxEeqauMPG7GPMiw"/>
         <ownedAttribute xmi:type="uml:Port" xmi:id="_ZJX18K_xEeqoUr4pK8_TEQ" name="ActivityPort5" aggregation="composite"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_o3rscK_yEeqoUr4pK8_TEQ" name="" type="_o3XjYK_yEeqoUr4pK8_TEQ"/>
+        <ownedAttribute xmi:type="uml:Port" xmi:id="_15JjAMNLEeqDcveG-qLs8Q" name="ActivityPort7" aggregation="composite"/>
       </nestedClassifier>
       <nestedClassifier xmi:type="uml:Class" xmi:id="_gRGGkK_xEeqoUr4pK8_TEQ"/>
+      <nestedClassifier xmi:type="uml:Class" xmi:id="_y2S2AMNLEeqDcveG-qLs8Q"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Usage" xmi:id="_tSsQQKrxEeqauMPG7GPMiw" client="_tSlikKrxEeqauMPG7GPMiw">
       <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/sensor_msgs.servicedef.uml#svcdefs/P_Image"/>
@@ -58,6 +69,13 @@
     </packagedElement>
     <packagedElement xmi:type="uml:Usage" xmi:id="_gRMNMK_xEeqoUr4pK8_TEQ" client="_gRGGkK_xEeqoUr4pK8_TEQ">
       <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/sensor_msgs.servicedef.uml#svcdefs/P_Image"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:OpaqueBehavior" xmi:id="_o3XjYK_yEeqoUr4pK8_TEQ" name="color_image_handler">
+      <language>C++</language>
+      <body></body>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_y2aKwMNLEeqDcveG-qLs8Q" client="_y2S2AMNLEeqDcveG-qLs8Q">
+      <supplier xmi:type="uml:Interface" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#svcdefs/P_PoseStamped"/>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_kzM7darxEeqauMPG7GPMiw">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_kzM7dqrxEeqauMPG7GPMiw" source="http://www.eclipse.org/uml2/2.0.0/UML">
@@ -150,4 +168,9 @@
   <robotics.components:ComponentService xmi:id="_gRJw8K_xEeqoUr4pK8_TEQ" base_Class="_gRGGkK_xEeqoUr4pK8_TEQ"/>
   <robotics.components:ComponentPort xmi:id="_gRPQgK_xEeqoUr4pK8_TEQ" base_Port="_dJ9WgK_xEeqoUr4pK8_TEQ"/>
   <robotics.generics:Connects xmi:id="_mOpqIK_xEeqoUr4pK8_TEQ" base_Connector="_mOjjgK_xEeqoUr4pK8_TEQ"/>
+  <robotics.functions:Function xmi:id="_o3h7cK_yEeqoUr4pK8_TEQ" base_Class="_o3XjYK_yEeqoUr4pK8_TEQ"/>
+  <robotics.components:ComponentService xmi:id="_y2WgYMNLEeqDcveG-qLs8Q" base_Class="_y2S2AMNLEeqDcveG-qLs8Q"/>
+  <robotics.components:ComponentPort xmi:id="_y2jUsMNLEeqDcveG-qLs8Q" base_Port="_vBqt0MNLEeqDcveG-qLs8Q"/>
+  <robotics.components:ActivityPort xmi:id="_15T7EMNLEeqDcveG-qLs8Q" base_Port="_15JjAMNLEeqDcveG-qLs8Q"/>
+  <robotics.generics:Connects xmi:id="_5YMcwMNLEeqDcveG-qLs8Q" base_Connector="_5YBdoMNLEeqDcveG-qLs8Q"/>
 </xmi:XMI>
