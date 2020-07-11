@@ -3,6 +3,7 @@
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
 #include "chair_manipulation_grasp_detection_advanced/model.h"
 #include "chair_manipulation_grasp_detection_advanced/gripper.h"
+#include "chair_manipulation_grasp_detection_advanced/transform.h"
 #include <string>
 #include <fstream>
 #include <tf2_eigen/tf2_eigen.h>
@@ -73,20 +74,12 @@ int main(int argc, char* argv[])
   for (std::size_t i = 0; i < contacts.size(); i++)
   {
     const auto& contact = contacts[i];
-    Eigen::Vector3d y_direction = contact.normal_;
-    Eigen::Vector3d random_direction = Eigen::Vector3d::Random();
-    auto z_direction = (random_direction - utils::projection(y_direction, random_direction)).normalized();
-    Eigen::Quaterniond q = utils::directionsYZToQuaternion(y_direction, z_direction);
+    Eigen::Isometry3d T;
+    T = Eigen::Translation3d{contact.position_} * transform::fromYAxis(contact.normal_);
+    msg = tf2::eigenToTransform(T);
     msg.header.stamp = ros::Time::now();
     msg.header.frame_id = "parent_world";
     msg.child_frame_id = "contact" + std::to_string(i);
-    msg.transform.translation.x = contact.position_.x();
-    msg.transform.translation.y = contact.position_.y();
-    msg.transform.translation.z = contact.position_.z();
-    msg.transform.rotation.x = q.x();
-    msg.transform.rotation.y = q.y();
-    msg.transform.rotation.z = q.z();
-    msg.transform.rotation.w = q.w();
     broadcaster.sendTransform(msg);
   }
 

@@ -22,5 +22,6 @@
   <depend>tf2_ros</depend>
   <depend>tf2_eigen</depend>
   <depend>moveit_core</depend>
+  <depend>qhull_ros</depend>
 
 </package>

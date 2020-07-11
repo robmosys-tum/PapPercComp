@@ -2,3 +2,7 @@
     local-name: ur10_robotiq_2f_140
     uri: 'https://github.com/Badenhoop/ur10_robotiq_2f_140'
     version: master
+- git:
+    local-name: qhull_ros
+    uri: 'https://github.com/Badenhoop/qhull_ros'
+    version: master

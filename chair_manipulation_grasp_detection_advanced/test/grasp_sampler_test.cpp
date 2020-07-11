@@ -1,9 +1,11 @@
 #include "chair_manipulation_grasp_detection_advanced/grasp_sampler.h"
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
+#include "chair_manipulation_grasp_detection_advanced/transform.h"
 #include <ros/ros.h>
 #include <ros/package.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <tf2_ros/static_transform_broadcaster.h>
+#include <tf2_eigen/tf2_eigen.h>
 
 using namespace chair_manipulation;
 
@@ -36,38 +38,26 @@ int main(int argc, char* argv[])
   GraspSampler sampler{ params };
   auto point_cloud = model.point_cloud_;
   auto point = (*point_cloud)[index];
-  geometry_msgs::Pose grasp_pose;
+  Eigen::Isometry3d grasp_pose;
   bool found = sampler.findGraspPoseAt(point_cloud, point, grasp_pose);
 
   geometry_msgs::TransformStamped msg;
-  msg.header.stamp = ros::Time::now();
-  msg.header.frame_id = "world";
 
   if (found)
   {
+    msg = tf2::eigenToTransform(grasp_pose);
+    msg.header.stamp = ros::Time::now();
+    msg.header.frame_id = "world";
     msg.child_frame_id = "grasp_pose";
-    msg.transform.translation.x = grasp_pose.position.x;
-    msg.transform.translation.y = grasp_pose.position.y;
-    msg.transform.translation.z = grasp_pose.position.z;
-    msg.transform.rotation.x = grasp_pose.orientation.x;
-    msg.transform.rotation.y = grasp_pose.orientation.y;
-    msg.transform.rotation.z = grasp_pose.orientation.z;
-    msg.transform.rotation.w = grasp_pose.orientation.w;
     broadcaster.sendTransform(msg);
   }
 
-  Eigen::Vector3f y_direction = point.getNormalVector3fMap();
-  Eigen::Vector3f random_direction = Eigen::Vector3f::Random();
-  auto z_direction = (random_direction - utils::projection(y_direction, random_direction)).normalized();
-  Eigen::Quaternionf q = utils::directionsYZToQuaternion(y_direction, z_direction);
+  Eigen::Isometry3d point_pose;
+  point_pose = Eigen::Translation3d{point.getVector3fMap().cast<double>()} * transform::fromYAxis(point.getNormalVector3fMap().cast<double>());
+  msg = tf2::eigenToTransform(point_pose);
+  msg.header.stamp = ros::Time::now();
+  msg.header.frame_id = "world";
   msg.child_frame_id = "point";
-  msg.transform.translation.x = point.x;
-  msg.transform.translation.y = point.y;
-  msg.transform.translation.z = point.z;
-  msg.transform.rotation.x = q.x();
-  msg.transform.rotation.y = q.y();
-  msg.transform.rotation.z = q.z();
-  msg.transform.rotation.w = q.w();
   broadcaster.sendTransform(msg);
 
   ros::Rate rate{ 10 };

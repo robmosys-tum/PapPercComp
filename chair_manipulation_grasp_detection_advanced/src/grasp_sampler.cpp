@@ -1,6 +1,7 @@
 #include "chair_manipulation_grasp_detection_advanced/grasp_sampler.h"
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
 #include "chair_manipulation_grasp_detection_advanced/exception.h"
+#include "chair_manipulation_grasp_detection_advanced/transform.h"
 
 namespace chair_manipulation
 {
@@ -20,14 +21,14 @@ void GraspSampler::sampleGrasps(const Model& model, std::size_t sample_trials, s
   const auto& point_cloud = model.point_cloud_;
   for (std::size_t s = 0; s < sample_trials; s++)
   {
-    geometry_msgs::Pose grasp_pose;
+    Eigen::Isometry3d grasp_pose;
     if (!sampleGraspPose(point_cloud, grasp_pose))
       continue;
   }
 }
 
 bool GraspSampler::sampleGraspPose(const pcl::PointCloud<pcl::PointNormal>::ConstPtr& point_cloud,
-                                   geometry_msgs::Pose& grasp_pose)
+                                   Eigen::Isometry3d& grasp_pose)
 {
   // Uniformly sample random point from
   std::uniform_int_distribution<std::size_t> distribution(0, point_cloud->size() - 1);
@@ -37,7 +38,7 @@ bool GraspSampler::sampleGraspPose(const pcl::PointCloud<pcl::PointNormal>::Cons
 }
 
 bool GraspSampler::findGraspPoseAt(const pcl::PointCloud<pcl::PointNormal>::ConstPtr& point_cloud,
-                                   const pcl::PointNormal& reference_point, geometry_msgs::Pose& grasp_pose)
+                                   const pcl::PointNormal& reference_point, Eigen::Isometry3d& grasp_pose)
 {
   // Get neighboring points in radius equal to the gripper pad distance
   std::vector<int> indices;
@@ -101,21 +102,16 @@ bool GraspSampler::findGraspPoseAt(const pcl::PointCloud<pcl::PointNormal>::Cons
   auto equator_point = (*point_cloud)[equator_index];
 
   // The y-axis points in the direction of the normal of the reference point
-  Eigen::Vector3f y_direction = reference_point.getNormalVector3fMap();
+  Eigen::Vector3f y_axis = reference_point.getNormalVector3fMap();
   // Orthonormalization of the equator inverse normal gives the z-axis
   Eigen::Vector3f equator_normal_inverted = -equator_point.getNormalVector3fMap();
-  Eigen::Vector3f z_direction =
-      (equator_normal_inverted - utils::projection(y_direction, equator_normal_inverted)).normalized();
-  Eigen::Quaternionf orientation = utils::directionsYZToQuaternion(y_direction, z_direction);
+  Eigen::Vector3f z_axis = (equator_normal_inverted - utils::projection(y_axis, equator_normal_inverted)).normalized();
 
-  // Output
-  grasp_pose.position.x = center_position.x();
-  grasp_pose.position.y = center_position.y();
-  grasp_pose.position.z = center_position.z();
-  grasp_pose.orientation.x = orientation.x();
-  grasp_pose.orientation.y = orientation.y();
-  grasp_pose.orientation.z = orientation.z();
-  grasp_pose.orientation.w = orientation.w();
+  // Finally, convert to double
+  Eigen::Isometry3d rotation, translation;
+  rotation = transform::fromYZAxes(y_axis.cast<double>(), z_axis.cast<double>());
+  translation = Eigen::Translation3d{ center_position.cast<double>() };
+  grasp_pose = translation * rotation;
 
   return true;
 }

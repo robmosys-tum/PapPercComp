@@ -161,27 +161,31 @@ bool Gripper::moveToContacts(const std::map<std::string, double>& open_values,
         for (const auto& pair : res_world.contacts)
         {
           const auto& detected_contacts = pair.second;
-          for (const auto& contact : detected_contacts)
+          for (const auto& detected_contact : detected_contacts)
           {
-            if (contact.depth <= CONTACT_THRESHOLD)
+            if (detected_contact.depth <= CONTACT_THRESHOLD)
             {
               contact_found = true;
+              Contact added_contact;
+              added_contact.position_ = detected_contact.pos;
 
-              if (contact.body_type_1 == collision_detection::BodyType::ROBOT_LINK &&
-                  contact.body_type_2 == collision_detection::BodyType::WORLD_OBJECT)
+              if (detected_contact.body_type_1 == collision_detection::BodyType::ROBOT_LINK &&
+                  detected_contact.body_type_2 == collision_detection::BodyType::WORLD_OBJECT)
               {
-                contacts.emplace_back(contact.pos, -contact.normal);
+                added_contact.normal_ = -detected_contact.normal;
               }
-              else if (contact.body_type_1 == collision_detection::BodyType::WORLD_OBJECT &&
-                       contact.body_type_2 == collision_detection::BodyType::ROBOT_LINK)
+              else if (detected_contact.body_type_1 == collision_detection::BodyType::WORLD_OBJECT &&
+                       detected_contact.body_type_2 == collision_detection::BodyType::ROBOT_LINK)
               {
-                contacts.emplace_back(contact.pos, contact.normal);
+                added_contact.normal_ = detected_contact.normal;
               }
               else
               {
                 // This must not happen
                 throw exception::IllegalState{ "Exactly one collision body must belong to the robot." };
               }
+              
+              contacts.push_back(added_contact);
             }
           }
         }

@@ -109,7 +109,7 @@ std::string loadStringParameter(const XmlRpc::XmlRpcValue& value, const std::str
     msg << "Attribute '" << key << "' must be of type string.";
     throw exception::Parameter{ msg.str() };
   }
-  return (std::string) attribute;
+  return (std::string)attribute;
 }
 
 }  // namespace utils

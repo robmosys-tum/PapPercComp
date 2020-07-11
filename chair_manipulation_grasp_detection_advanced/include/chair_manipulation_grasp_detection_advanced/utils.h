@@ -29,44 +29,6 @@ Vector3<T> projection(const Vector3<T>& axis, const Vector3<T>& v)
   return v.dot(axis_normalized) * axis_normalized;
 }
 
-template <typename T>
-Eigen::Quaternion<T> directionsXYToQuaternion(const Vector3<T>& x_direction, const Vector3<T>& y_direction)
-{
-  Eigen::Quaternion<T> q;
-
-  Vector3<T> original_x_direction = Vector3<T>::UnitX();
-  Vector3<T> x_rotation_axis = original_x_direction.cross(x_direction).normalized();
-  T x_rotation_angle = std::acos(original_x_direction.dot(x_direction));
-  q = Eigen::AngleAxis<T>{ x_rotation_angle, x_rotation_axis };
-
-  Vector3<T> original_y_direction = Vector3<T>::UnitY();
-  Vector3<T> rotated_original_y_direction = q * original_y_direction;
-  Vector3<T> y_rotation_axis = rotated_original_y_direction.cross(y_direction).normalized();
-  T y_rotation_angle = std::acos(rotated_original_y_direction.dot(y_direction));
-  q = Eigen::AngleAxis<T>{ y_rotation_angle, y_rotation_axis } * q;
-
-  return q.normalized();
-}
-
-template <typename T>
-Eigen::Quaternion<T> directionsYZToQuaternion(const Vector3<T>& y_direction, const Vector3<T>& z_direction)
-{
-  Eigen::Quaternion<T> q;
-
-  Vector3<T> original_y_direction = Vector3<T>::UnitY();
-  Vector3<T> y_rotation_axis = original_y_direction.cross(y_direction).normalized();
-  T y_rotation_angle = std::acos(original_y_direction.dot(y_direction));
-  q = Eigen::AngleAxis<T>{ y_rotation_angle, y_rotation_axis };
-
-  Vector3<T> original_z_direction = Vector3<T>::UnitZ();
-  Vector3<T> rotated_original_z_direction = q * original_z_direction;
-  Vector3<T> z_rotation_axis = rotated_original_z_direction.cross(z_direction).normalized();
-  T z_rotation_angle = std::acos(rotated_original_z_direction.dot(z_direction));
-  q = Eigen::AngleAxis<T>{ z_rotation_angle, z_rotation_axis } * q;
-
-  return q.normalized();
-}
-
 template <typename PointT>
 void publishPointCloud(const pcl::PointCloud<PointT>& pcl_cloud, ros::Publisher& publisher, const std::string& frame)
 {

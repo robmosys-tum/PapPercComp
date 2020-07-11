@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
-#include <chair_manipulation_grasp_planning/GraspExecutionAction.h>
+#include <chair_manipulation_msgs/GraspExecutionAction.h>
 #include "chair_manipulation_grasp_planning/grasp_planner.h"
 
 namespace chair_manipulation
@@ -8,9 +8,9 @@ namespace chair_manipulation
 class GraspPlannerActionServer
 {
 public:
-  using Action = chair_manipulation_grasp_planning::GraspExecutionAction;
-  using Goal = chair_manipulation_grasp_planning::GraspExecutionGoal;
-  using Result = chair_manipulation_grasp_planning::GraspExecutionResult;
+  using Action = chair_manipulation_msgs::GraspExecutionAction;
+  using Goal = chair_manipulation_msgs::GraspExecutionGoal;
+  using Result = chair_manipulation_msgs::GraspExecutionResult;
 
   explicit GraspPlannerActionServer(const std::string& name)
     : nh_priv_("~")

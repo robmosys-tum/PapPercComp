@@ -34,10 +34,10 @@ public:
 
   void sampleGrasps(const Model& model, std::size_t sample_trials, std::vector<Grasp>& grasps);
 
-  bool sampleGraspPose(const PointCloud::ConstPtr& point_cloud, geometry_msgs::Pose& grasp_pose);
+  bool sampleGraspPose(const PointCloud::ConstPtr& point_cloud, Eigen::Isometry3d& grasp_pose);
 
   bool findGraspPoseAt(const PointCloud::ConstPtr& point_cloud, const PointCloud::PointType& point,
-                       geometry_msgs::Pose& grasp_pose);
+                       Eigen::Isometry3d& grasp_pose);
 
 private:
   GraspSamplerParameters params_;
