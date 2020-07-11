@@ -17,6 +17,10 @@
 // abs()
 #include <stdlib.h>
 
+//#include <tf2/transform_datatypes.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <tf2/LinearMath/Quaternion.h>
+
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
@@ -26,6 +30,8 @@ namespace Rgbd_surface_reconstructionCompdef {
 // static attributes (if any)
 int  encoding2mat_type(const std::string & encoding);
 void image_message_to_cv(cv::Mat &frame, sensor_msgs::msg::Image::SharedPtr msg);
+void pose_to_transform(
+    geometry_msgs::msg::PoseStamped::SharedPtr pose, float* matrix_array);
 
 /**
  * 
@@ -34,19 +40,13 @@ void image_message_to_cv(cv::Mat &frame, sensor_msgs::msg::Image::SharedPtr msg)
 Rgbd_surface_reconstruction_impl::Rgbd_surface_reconstruction_impl(
 		rclcpp::NodeOptions /*in*/options) :
 		Rgbd_surface_reconstruction(options) {
-
-			kinectfusion::GlobalConfiguration configuration;
-			configuration.voxel_scale = 2.f;
-			configuration.init_depth = 700.f;
-			configuration.distance_threshold = 10.f;
-			configuration.angle_threshold = 20.f;
-
-			_kinect_pipeline_ptr = new kinectfusion::Pipeline(_camera.get_parameters(), configuration);
+	
+	_tsdf_fusion.init();
+	_tsdf_fusion.set_intrinsics(468.60, 468.61, 318.27, 243.99);
 }
 
 Rgbd_surface_reconstruction_impl::~Rgbd_surface_reconstruction_impl()
 {
-	delete _kinect_pipeline_ptr;
 }
 
 /**
@@ -60,7 +60,7 @@ void Rgbd_surface_reconstruction_impl::depth_image_handler(
 	if(!_depth_image_initialized)
 		_depth_image_initialized = true;
 
-	process_frames();
+	//process_frames();
 }
 
 void Rgbd_surface_reconstruction_impl::pose_handler(
@@ -69,6 +69,8 @@ void Rgbd_surface_reconstruction_impl::pose_handler(
 
 	if(!_pose_initialized)
 		_pose_initialized = true;
+	
+	process_frames();
 
 }
 
@@ -86,15 +88,17 @@ void Rgbd_surface_reconstruction_impl::color_image_handler(
 }
 
 void Rgbd_surface_reconstruction_impl::process_frames(){
-	if(!_depth_image_initialized || !_color_image_initialized)
+	if(!_depth_image_initialized || !_pose_initialized)
 		return;
 	
 	double depth_image_timestamp = _depth_image->header.stamp.sec + _depth_image->header.stamp.nanosec/1000000000.0;
-	double color_image_timestamp = _color_image->header.stamp.sec + _color_image->header.stamp.nanosec/1000000000.0;
+	double pose_timestamp = _pose->header.stamp.sec + _pose->header.stamp.nanosec/1000000000.0;
 	
 	//If two messages are closer than 16ms we assume they belong together.
-	if(!(abs(depth_image_timestamp - color_image_timestamp)  <= 0.016)) 
+	/*if(!(abs(depth_image_timestamp - pose_timestamp)  <= 0.016)) {
+		std::cout << "Out of range " << depth_image_timestamp << " "<< pose_timestamp << " "<< abs(depth_image_timestamp - pose_timestamp) << std::endl;
 		return;
+	}*/
 
 	cv::Mat depth_map, color_map;
 
@@ -102,18 +106,13 @@ void Rgbd_surface_reconstruction_impl::process_frames(){
 	image_message_to_cv(color_map, _color_image);
 
 	cv::imshow("depth_map", depth_map);
-	cv::imshow("color_map", color_map);
+	//cv::imshow("color_map", color_map);
 	cv::waitKey(1);
 
-	bool success = _kinect_pipeline_ptr->process_frame(depth_map, color_map);
-    if (!success)
-        std::cout << "Frame could not be processed" << std::endl;
-	else	
-        std::cout << "Frame could be processed" << std::endl;
+	float matrix_array[16];
+	pose_to_transform(_pose, matrix_array);
+	_tsdf_fusion.integrate_frame(depth_map, matrix_array);
 
-
-	cv::imshow("Pipeline Output", _kinect_pipeline_ptr->get_last_model_frame());
-	cv::waitKey(1);
 
 	// Retrieve camera poses
 	//auto poses = _kinect_pipeline_ptr->get_poses();
@@ -152,6 +151,39 @@ void image_message_to_cv(cv::Mat &frame, sensor_msgs::msg::Image::SharedPtr msg)
         const_cast<unsigned char *>(msg->data.data()), msg->step);
 	
 	frame = tmp_frame;
+}
+
+void pose_to_transform(
+    geometry_msgs::msg::PoseStamped::SharedPtr pose, float* matrix_array){
+
+    tf2::Quaternion q(pose->pose.orientation.x, pose->pose.orientation.y,
+                     pose->pose.orientation.z, pose->pose.orientation.w);
+
+    tf2::Matrix3x3 m(q);
+
+    std::vector<float> matrix;
+
+    for(int i = 0; i < 3; i++)
+        matrix.push_back(m[0][i]);
+
+    matrix.push_back(pose->pose.position.x);
+
+    for(int i = 0; i < 3; i++)
+        matrix.push_back(m[1][i]);
+
+    matrix.push_back(pose->pose.position.y);
+
+    for(int i = 0; i < 3; i++)
+        matrix.push_back(m[2][i]);
+
+    matrix.push_back(pose->pose.position.z);
+
+    for(int i = 0; i < 3; i++)
+        matrix.push_back(0.0);
+
+    matrix.push_back(1.0);
+
+	std::copy(matrix.begin(), matrix.end(), matrix_array); 
 }
 
 } // of namespace Rgbd_surface_reconstructionCompdef

@@ -26,6 +26,7 @@ IF (CUDA_FOUND)
     include_directories("${CUDA_INCLUDE_DIRS}")
     # Optional: Specify the arch of your CUDA hardware here
     #SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-std=c++14 -gencode arch=compute_20,code=sm_21)
+    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++14 -I/usr/local/cuda/include -lcudart -lcublas -lcurand -D_MWAITXINTRIN_H_INCLUDED " )
 ENDIF ()
 
 ## OpenCV
@@ -37,25 +38,15 @@ if (OpenCV_INCLUDE_DIRS)
     link_directories(${OpenCV_DIR}/lib)
 endif (OpenCV_INCLUDE_DIRS)
 
-## Eigen3
-find_package(Eigen3 REQUIRED)
-if (EIGEN3_INCLUDE_DIR)
-    include_directories("${EIGEN3_INCLUDE_DIR}")
-endif (EIGEN3_INCLUDE_DIR)
-
-# ------------------------------------------------
-
 include_directories(
 	# assure that generated .h files are found
 	${PROJECT_SOURCE_DIR}/include
 	${PROJECT_SOURCE_DIR}/src-gen
-	${PROJECT_SOURCE_DIR}/lib/KinectFusionLib/include
+	${PROJECT_SOURCE_DIR}/lib/tsdf-fusion
 )
 
-add_subdirectory(lib/KinectFusionLib)
-
-add_executable(Rgbd_surface_reconstruction src-gen/Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction.cpp src/Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction_impl.cpp src/Rgbd_surface_reconstructionCompdef/depth_camera.cpp)
-target_link_libraries(Rgbd_surface_reconstruction ${OpenCV_LIBS} KinectFusion)
+cuda_add_executable(Rgbd_surface_reconstruction src-gen/Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction.cpp src/Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction_impl.cpp lib/tsdf-fusion/tsdf_fusion.cu)
+target_link_libraries(Rgbd_surface_reconstruction ${OpenCV_LIBS})
 ament_target_dependencies(Rgbd_surface_reconstruction rclcpp rclcpp_lifecycle sensor_msgs shape_msgs)
 
 

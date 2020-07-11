@@ -15,9 +15,7 @@
 #include "sensor_msgs/msg/image.hpp"
 
 //Kinect Fusion
-#include "kinectfusion.h"
-
-#include "Rgbd_surface_reconstructionCompdef/depth_camera.h"
+#include "tsdf_fusion.hcu"
 
 namespace ros2Library {
 namespace rclcpp {
@@ -59,9 +57,7 @@ public:
 			const geometry_msgs::msg::PoseStamped::SharedPtr /*in*/pose);
 	
 private:
-	KinectCamera _camera {};
-
-	kinectfusion::Pipeline* _kinect_pipeline_ptr;
+	TSDFFusion _tsdf_fusion;
 
 	bool _depth_image_initialized = false;
 	bool _color_image_initialized = false;
