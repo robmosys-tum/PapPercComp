@@ -1,0 +1,14 @@
+/usr/local/lib/liblbp.so
+/usr/local/include/package_lbp/LBP.h
+/usr/local/include/package_lbp/BGLBP.h
+/usr/local/include/package_lbp/CSLBP.h
+/usr/local/include/package_lbp/CSLDP.h
+/usr/local/include/package_lbp/CSSILTP.h
+/usr/local/include/package_lbp/ELBP.h
+/usr/local/include/package_lbp/OCLBP.h
+/usr/local/include/package_lbp/OLBP.h
+/usr/local/include/package_lbp/SCSLBP.h
+/usr/local/include/package_lbp/SILTP.h
+/usr/local/include/package_lbp/VARLBP.h
+/usr/local/include/package_lbp/XCSLBP.h
+/usr/local/bin/lbp

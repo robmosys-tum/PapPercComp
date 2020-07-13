@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>instance_recognition</name>
+  <version>0.0.1</version>
+  <description>The instance_recognition package</description>
+
+  <!-- team -->
+    <maintainer email="luz.martinez@tum.de"> Luz Martinez </maintainer>
+
+  <!-- specific developers -->
+  <maintainer email="luz.martinez@tum.de">Luz Martinez</maintainer>
+  <author>Luz Martinez</author>
+
+
+  <license>TODO</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_depend>rclcpp</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>tf2_ros</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>rclcpp_action</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>Eigen3</build_depend>
+  <build_depend>rhome_metadata</build_depend>
+
+  <build_export_depend>tf2</build_export_depend>
+  <build_export_depend>tf2_ros</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>Eigen3</build_export_depend>
+  <build_export_depend>rhome_metadata</build_export_depend>
+
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>tf2</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>Eigen3</exec_depend>
+  <exec_depend>rhome_metadata</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>

@@ -1,0 +1,34 @@
+
+May 21st, 2014
+------------------
+1. Minimization.cpp: Added <pcl/io/pcd_io.h> for incomplete type
+const struct pcl::PointCloud<pcl::PointXYZ>
+
+2. Minimization.cpp: Added <Eigen/LU> for .inverse 
+
+3. Plane.cpp: Changed std::sqrtf by sqrtf
+
+4. SQFitting.cpp: Added <pcl/io/pcd_io.h> for incomplete type
+const struct pcl::PointCloud<pcl::PointXYZ>
+
+5. TableObjectDetector.hpp: Line 176 
+		std::vector <PointType, Eigen::aligned_allocator<PointType>> object_points;
+   to:
+		std::vector <PointType, Eigen::aligned_allocator<PointType> > object_points;
+6. TableObjectModeler.h, line 180:
+
+   From:
+		pcl::PointCloud< PointType >::Ptr tempCloudPtr (new pcl::PointCloud< PointType>);
+	to:
+		typename pcl::PointCloud< PointType >::Ptr tempCloudPtr (new pcl::PointCloud< PointType>);
+
+7. TableObjectModeler.h:
+    Add line 295: (in ObjectModelGenerator)
+	bool detectedObjects;
+
+8. TableObjectModeler.h, line 264: Add std:: to endl;
+
+9. Minimization.h: Add #include <vector>
+
+10.  Add namespace ope { class SQParameters; } to be around classSQParameters in line 57 of SQFitting.h
+believing there are 2 SQParameters)

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>object_pose_estimation</name>
+  <version>0.0.1</version>
+  <description>
+    object_pose_estimation
+  </description>
+  <maintainer email="rorro.mr@gmail.com">Rodrigo Munoz</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_depend>rclcpp</build_depend>
+  <build_depend>Eigen3</build_depend>
+  <build_depend>pcl</build_depend>
+
+  <build_export_depend>Eigen3</build_export_depend>
+
+  <exec_depend>Eigen3</exec_depend>
+    
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+  
+</package>

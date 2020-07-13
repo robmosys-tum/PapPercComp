@@ -1,0 +1,28 @@
+<launch>
+
+	<arg name="base_frame" 	default="base_link" />
+	<arg name="rgbd_frame" 	default="camera_link_ee" />
+	<arg name="rgb_frame" 	default="/camera_rgb_optical_frame" />
+	<arg name="depth_frame" default="/camera_depth_optical_frame" />
+	<arg name="point_topic"	default="/camera/depth/color/points"/>
+	<arg name="depth_topic"	default="/camera/depth/image_rect_raw"/>
+	<arg name="rgb_topic"	default="/camera/color/image_raw"/>
+
+	<arg name="rgb_topic2"	default="/camera/rgb/image_rect_color"/>
+	<arg name="point_topic2"	default="/camera/depth/points"/>
+	<arg name="depth_topic2"	default="/camera/depth/image_rect"/>
+
+	<node name="shape_recognition" pkg="shape_recognition" type="shape_recognition" >
+		<param name="base_frame"	value="$(arg base_frame)"/>
+		<param name="rgbd_frame" 	value="$(arg rgbd_frame)"/>
+		<param name="rgb_frame"		value="$(arg rgb_frame)"/>
+		<param name="depth_frame"	value="$(arg depth_frame)"/>
+		<param name="point_topic" 	value="$(arg point_topic2)"/>
+		<param name="depth_topic" 	value="$(arg depth_topic2)"/>
+		<param name="rgb_topic" 	value="$(arg rgb_topic2)"/>
+	</node>
+
+
+
+</launch>
+

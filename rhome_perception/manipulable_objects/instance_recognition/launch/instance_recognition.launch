@@ -1,0 +1,31 @@
+<launch>
+
+	<arg name="base_frame" 	default="base_link" />
+	<arg name="rgbd_frame" 	default="camera_link_ee" />
+	<arg name="rgb_frame" 	default="/camera_rgb_optical_frame" />
+	<arg name="depth_frame" default="/camera_depth_optical_frame" />
+	<arg name="point_topic"	default="/camera/depth/color/points"/>
+	<arg name="depth_topic"	default="/camera/depth/image_rect_raw"/>
+	<arg name="rgb_topic"	default="/camera/color/image_raw"/>
+	<arg name="algorithm"	default="SURF"/> 
+	<!-- LBP", "ELBP", "SIFT", "SURF", "ORB"
+	-->
+
+
+
+	<node name="instance_recognition" pkg="instance_recognition" type="instance_recognition" >
+		<param name="base_frame"	value="$(arg base_frame)"/>
+		<param name="rgbd_frame" 	value="$(arg rgbd_frame)"/>
+		<param name="rgb_frame"		value="$(arg rgb_frame)"/>
+		<param name="depth_frame"	value="$(arg depth_frame)"/>
+		<param name="point_topic" 	value="$(arg point_topic)"/>
+		<param name="depth_topic" 	value="$(arg depth_topic)"/>
+		<param name="rgb_topic" 	value="$(arg rgb_topic)"/>
+		<param name="algorithm" 	value="$(arg algorithm)"/>
+	</node>
+
+
+
+
+</launch>
+

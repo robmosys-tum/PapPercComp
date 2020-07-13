@@ -1,0 +1,5 @@
+geometry_msgs/Pose2D roi
+Color object_color
+Shape object_shape
+---
+geometry_msgs/PoseStamped[] pose

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>shape_recognition</name>
+  <version>0.0.1</version>
+  <description>The shape_recognition package</description>
+  <!-- team -->
+    <maintainer email="luz.martinez@tum.de"> Luz Martinez </maintainer>
+
+  <!-- specific developers -->
+  <maintainer email="luz.martinez@tum.de">Luz Martinez</maintainer>
+  <author>Luz Martinez</author>
+
+
+  <license>TODO</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_depend>rclcpp</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>rclcpp_action</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>rhome_metadata</build_depend>
+  <build_depend>object_pose_estimation</build_depend>
+  <build_depend>pcl</build_depend>
+
+  <build_export_depend>std_srvs</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>rhome_metadata</build_export_depend>
+  <build_export_depend>object_pose_estimation</build_export_depend>
+  <build_export_depend>pcl</build_export_depend>
+  
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>rhome_metadata</exec_depend>
+  <exec_depend>object_pose_estimation</exec_depend>
+  <exec_depend>pcl</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>
