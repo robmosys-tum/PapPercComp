@@ -41,6 +41,8 @@ void publishPointCloud(const pcl::PointCloud<PointT>& pcl_cloud, ros::Publisher&
 
 std::string loadStringParameter(const XmlRpc::XmlRpcValue& value, const std::string& key);
 
+double loadDoubleParameter(const XmlRpc::XmlRpcValue& value, const std::string& key);
+
 }  // namespace utils
 }  // namespace chair_manipulation
 

@@ -2,15 +2,16 @@
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_GRASP_DATABASE_H
 
 #include "grasp_database_element.h"
+#include <ros/ros.h>
 
 namespace chair_manipulation
 {
 class GraspDatabase
 {
 public:
-  void load(const std::string& filename);
+  void load(ros::NodeHandle& nh);
 
-  void save(const std::string& filename);
+  void store(ros::NodeHandle& nh) const;
 
   void add(const GraspDatabaseElementConstPtr &element)
   {

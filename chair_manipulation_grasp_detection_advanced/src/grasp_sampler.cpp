@@ -7,7 +7,6 @@ namespace chair_manipulation
 {
 void GraspSamplerParameters::load(ros::NodeHandle& nh)
 {
-  grasp_quality_threshold_ = nh.param<double>("grasp_quality_threshold", 0.7);
   max_antipodal_normal_angle_ = nh.param<double>("max_antipodal_normal_angle", 0.1);
   max_antipodal_position_angle_ = nh.param<double>("max_antipodal_position_angle", 0.1);
   max_equator_normal_angle_ = nh.param<double>("max_equator_normal_angle", 0.1);
@@ -15,20 +14,29 @@ void GraspSamplerParameters::load(ros::NodeHandle& nh)
   gripper_pad_length_ = nh.param<double>("gripper_pad_length", 0.2);
 }
 
-void GraspSampler::sampleGrasps(const Model& model, std::size_t sample_trials, std::vector<Grasp>& grasps)
+void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_trials, std::vector<GraspHypothesis>& grasps)
 {
-  const auto& mesh = model.mesh_;
-  const auto& point_cloud = model.point_cloud_;
+  const auto& mesh = model.getMesh();
+  const auto& point_cloud = model.getPointCloud();
+  gripper_->addCollisionObject(mesh);
   for (std::size_t s = 0; s < sample_trials; s++)
   {
     Eigen::Isometry3d grasp_pose;
     if (!sampleGraspPose(point_cloud, grasp_pose))
       continue;
+
+    gripper_->setTcpPose(grasp_pose);
+    gripper_->setStateOpen();
+    GraspHypothesis grasp;
+    if (!gripper_->grasp(grasp.contacts_))
+      continue;
+    grasp.pose_ = grasp_pose;
+    grasps.push_back(grasp);
   }
+  gripper_->clearCollisionObjects();
 }
 
-bool GraspSampler::sampleGraspPose(const pcl::PointCloud<pcl::PointNormal>::ConstPtr& point_cloud,
-                                   Eigen::Isometry3d& grasp_pose)
+bool GraspSampler::sampleGraspPose(const PointCloudConstPtr& point_cloud, Eigen::Isometry3d& grasp_pose)
 {
   // Uniformly sample random point from
   std::uniform_int_distribution<std::size_t> distribution(0, point_cloud->size() - 1);
@@ -37,8 +45,8 @@ bool GraspSampler::sampleGraspPose(const pcl::PointCloud<pcl::PointNormal>::Cons
   return findGraspPoseAt(point_cloud, point_i, grasp_pose);
 }
 
-bool GraspSampler::findGraspPoseAt(const pcl::PointCloud<pcl::PointNormal>::ConstPtr& point_cloud,
-                                   const pcl::PointNormal& reference_point, Eigen::Isometry3d& grasp_pose)
+bool GraspSampler::findGraspPoseAt(const PointCloudConstPtr& point_cloud, const PointT& reference_point,
+                                   Eigen::Isometry3d& grasp_pose)
 {
   // Get neighboring points in radius equal to the gripper pad distance
   std::vector<int> indices;
@@ -116,29 +124,29 @@ bool GraspSampler::findGraspPoseAt(const pcl::PointCloud<pcl::PointNormal>::Cons
   return true;
 }
 
-double GraspSampler::computeAntipodalNormalAngle(const PointT& reference_point, const PointT& antipodal_point)
+double GraspSampler::computeAntipodalNormalAngle(const PointT& reference_point, const PointT& antipodal_point) const
 {
   return std::acos(-reference_point.getNormalVector3fMap().dot(antipodal_point.getNormalVector3fMap()));
 }
 
-double GraspSampler::computeAntipodalPositionAngle(const PointT& reference_point, const PointT& antipodal_point)
+double GraspSampler::computeAntipodalPositionAngle(const PointT& reference_point, const PointT& antipodal_point) const
 {
   return std::acos(reference_point.getNormalVector3fMap().dot(
       (reference_point.getVector3fMap() - antipodal_point.getVector3fMap()).normalized()));
 }
 
-double GraspSampler::computeEquatorNormalAngle(const PointT& reference_point, const PointT& equator_point)
+double GraspSampler::computeEquatorNormalAngle(const PointT& reference_point, const PointT& equator_point) const
 {
   return std::abs(std::acos(reference_point.getNormalVector3fMap().dot(equator_point.getNormalVector3fMap())) - M_PI_2);
 }
 
-double GraspSampler::computeAntipodalCost(const PointT& reference_point, const PointT& antipodal_point)
+double GraspSampler::computeAntipodalCost(const PointT& reference_point, const PointT& antipodal_point) const
 {
   return computeAntipodalNormalAngle(reference_point, antipodal_point) +
          computeAntipodalPositionAngle(reference_point, antipodal_point);
 }
 
-double GraspSampler::computeEquatorCost(const PointT& reference_point, const PointT& equator_point)
+double GraspSampler::computeEquatorCost(const PointT& reference_point, const PointT& equator_point) const
 {
   // Normalize angle from [0, pi/2] to [0, 1].
   // Normalize distance from [0, gripper_pad_length] to [0, 1].

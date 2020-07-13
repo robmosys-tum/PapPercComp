@@ -99,17 +99,35 @@ std::string loadStringParameter(const XmlRpc::XmlRpcValue& value, const std::str
   if (!value.hasMember(key))
   {
     std::ostringstream msg;
-    msg << "Attribute '" << key << "' not found.";
+    msg << "Failed to find load parameter '" << key << "'.";
     throw exception::Parameter{ msg.str() };
   }
   XmlRpc::XmlRpcValue attribute = value[key];
   if (attribute.getType() != XmlRpc::XmlRpcValue::TypeString)
   {
     std::ostringstream msg;
-    msg << "Attribute '" << key << "' must be of type string.";
+    msg << "Parameter '" << key << "' must be of type string.";
     throw exception::Parameter{ msg.str() };
   }
   return (std::string)attribute;
+}
+
+double loadDoubleParameter(const XmlRpc::XmlRpcValue& value, const std::string& key)
+{
+  if (!value.hasMember(key))
+  {
+    std::ostringstream msg;
+    msg << "Failed to find load parameter '" << key << "'.";
+    throw exception::Parameter{ msg.str() };
+  }
+  XmlRpc::XmlRpcValue attribute = value[key];
+  if (attribute.getType() != XmlRpc::XmlRpcValue::TypeDouble)
+  {
+    std::ostringstream msg;
+    msg << "Parameter '" << key << "' must be of type string.";
+    throw exception::Parameter{ msg.str() };
+  }
+  return (double)attribute;
 }
 
 }  // namespace utils

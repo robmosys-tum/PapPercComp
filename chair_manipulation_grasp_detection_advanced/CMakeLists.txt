@@ -17,12 +17,12 @@ find_package(
   tf2_ros
   tf2_eigen
   moveit_core
+  moveit_visual_tools
   qhull_ros
 )
 
 find_package(PCL REQUIRED)
 find_package(FCL REQUIRED)
-
 
 catkin_package(CATKIN_DEPENDS)
 
@@ -34,7 +34,7 @@ include_directories(
 
 set(
   SOURCE_FILES
-  include/chair_manipulation_grasp_detection_advanced/grasp.h
+  include/chair_manipulation_grasp_detection_advanced/grasp_hypothesis.h
   include/chair_manipulation_grasp_detection_advanced/grasp_database.h
   include/chair_manipulation_grasp_detection_advanced/grasp_database_creator.h
   include/chair_manipulation_grasp_detection_advanced/grasp_database_element.h
@@ -46,6 +46,9 @@ set(
   include/chair_manipulation_grasp_detection_advanced/gripper.h
   include/chair_manipulation_grasp_detection_advanced/transform.h
   include/chair_manipulation_grasp_detection_advanced/contact.h
+  include/chair_manipulation_grasp_detection_advanced/multi_arm_grasp.h
+  include/chair_manipulation_grasp_detection_advanced/grasp_synthesizer.h
+  include/chair_manipulation_grasp_detection_advanced/qhull_mutex.h
   src/model.cpp
   src/utils.cpp
   src/grasp_database.cpp
@@ -54,6 +57,14 @@ set(
   src/gripper.cpp
   src/wrench.cpp
   src/transform.cpp
+  src/grasp_synthesizer.cpp
+  src/qhull_mutex.cpp
+)
+
+set(
+  TEST_SOURCE_FILES
+  test/test_common.h
+  test/test_common.cpp
 )
 
 set(
@@ -63,17 +74,24 @@ set(
   ${FCL_LIBRARIES}
 )
 
+# Nodes
+
 add_executable(create_grasp_database_node src/create_grasp_database_node.cpp ${SOURCE_FILES})
 target_link_libraries(create_grasp_database_node ${LIBRARIES})
 
 add_executable(grasp_detection_node src/grasp_detection_node.cpp ${SOURCE_FILES})
 target_link_libraries(grasp_detection_node ${LIBRARIES})
 
-add_executable(convert_mesh_test test/convert_mesh_test.cpp ${SOURCE_FILES})
+# Tests
+
+add_executable(convert_mesh_test test/convert_mesh_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 target_link_libraries(convert_mesh_test ${LIBRARIES})
 
-add_executable(grasp_sampler_test test/grasp_sampler_test.cpp ${SOURCE_FILES})
+add_executable(grasp_sampler_test test/grasp_sampler_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 target_link_libraries(grasp_sampler_test ${LIBRARIES})
 
-add_executable(grasp_test test/grasp_test.cpp ${SOURCE_FILES})
+add_executable(grasp_test test/grasp_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 target_link_libraries(grasp_test ${LIBRARIES})
+
+add_executable(wrench_test test/wrench_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(wrench_test ${LIBRARIES})

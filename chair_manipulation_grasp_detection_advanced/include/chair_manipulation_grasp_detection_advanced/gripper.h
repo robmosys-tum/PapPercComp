@@ -21,8 +21,6 @@ struct GripperParameters
 
   std::string base_frame_;
   std::string tcp_frame_;
-  std::string gripper_description_;
-  std::string gripper_semantic_description_;
   std::vector<FingerGroup> finger_groups_;
 };
 
@@ -33,7 +31,7 @@ public:
 
   static constexpr double CONTACT_THRESHOLD = 0.001;
 
-  explicit Gripper(const GripperParameters& params);
+  Gripper(GripperParameters params, const std::string& gripper_urdf, const std::string& gripper_srdf);
 
   void setTcpPose(const Eigen::Isometry3d& tcp_pose);
 
@@ -78,11 +76,14 @@ private:
   void loadGroupStates();
 
   bool moveToContacts(const std::map<std::string, double>& open_values,
-                         const std::map<std::string, double>& closed_values, const std::string& group_name,
-                         std::vector<Contact>& contacts);
+                      const std::map<std::string, double>& closed_values, const FingerGroup& finger_group,
+                      std::vector<Contact>& contacts);
 
   void updateState();
 };
+
+using GripperPtr = std::shared_ptr<Gripper>;
+using GripperConstPtr = std::shared_ptr<const Gripper>;
 
 }  // namespace chair_manipulation
 

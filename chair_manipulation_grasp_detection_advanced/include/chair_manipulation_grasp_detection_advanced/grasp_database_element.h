@@ -2,14 +2,16 @@
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_GRASP_DATABASE_ELEMENT_H
 
 #include "model.h"
-#include "grasp.h"
+#include "multi_arm_grasp.h"
 
 namespace chair_manipulation
 {
 struct GraspDatabaseElement
 {
-  Model model_;
-  std::vector<Grasp> grasps_;
+  std::string mesh_filename_;
+  std::string point_cloud_filename_;
+  ModelConstPtr model_;
+  std::vector<MultiArmGrasp> grasps_;
 };
 
 using GraspDatabaseElementPtr = std::shared_ptr<GraspDatabaseElement>;

@@ -2,7 +2,8 @@
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_GRASP_SAMPLER_H
 
 #include "model.h"
-#include "grasp.h"
+#include "grasp_hypothesis.h"
+#include "gripper.h"
 #include "ros/ros.h"
 #include <random>
 #include <pcl/search/kdtree.h>
@@ -14,7 +15,6 @@ struct GraspSamplerParameters
 {
   void load(ros::NodeHandle& nh);
 
-  double grasp_quality_threshold_;
   double max_antipodal_normal_angle_;
   double max_antipodal_position_angle_;
   double max_equator_normal_angle_;
@@ -26,21 +26,24 @@ class GraspSampler
 {
 public:
   using PointCloud = Model::PointCloud;
+  using PointCloudPtr = PointCloud::Ptr;
+  using PointCloudConstPtr = PointCloud::ConstPtr;
   using PointT = PointCloud::PointType;
 
-  explicit GraspSampler(const GraspSamplerParameters& params) : params_(params)
+  GraspSampler(GraspSamplerParameters params, GripperPtr gripper)
+    : params_(std::move(params)), gripper_(std::move(gripper))
   {
   }
 
-  void sampleGrasps(const Model& model, std::size_t sample_trials, std::vector<Grasp>& grasps);
+  void sampleGraspHypotheses(const Model& model, std::size_t sample_trials, std::vector<GraspHypothesis>& grasps);
 
-  bool sampleGraspPose(const PointCloud::ConstPtr& point_cloud, Eigen::Isometry3d& grasp_pose);
+  bool sampleGraspPose(const PointCloudConstPtr& point_cloud, Eigen::Isometry3d& grasp_pose);
 
-  bool findGraspPoseAt(const PointCloud::ConstPtr& point_cloud, const PointCloud::PointType& point,
-                       Eigen::Isometry3d& grasp_pose);
+  bool findGraspPoseAt(const PointCloudConstPtr& point_cloud, const PointT& point, Eigen::Isometry3d& grasp_pose);
 
 private:
   GraspSamplerParameters params_;
+  GripperPtr gripper_;
 
   std::default_random_engine random_generator_;
 
@@ -50,29 +53,32 @@ private:
   /**
    * Angle between the normal of the reference point and the normal of the antipodal point
    */
-  double computeAntipodalNormalAngle(const PointT& reference_point, const PointT& antipodal_point);
+  double computeAntipodalNormalAngle(const PointT& reference_point, const PointT& antipodal_point) const;
 
   /**
    * Angle between the normal of the reference point and the connecting line from the antipodal point
    * to the reference point
    */
-  double computeAntipodalPositionAngle(const PointT& reference_point, const PointT& antipodal_point);
+  double computeAntipodalPositionAngle(const PointT& reference_point, const PointT& antipodal_point) const;
 
   /**
    * Angle between the normal of reference point and the normal of the equator point minus pi/2
    */
-  double computeEquatorNormalAngle(const PointT& reference_point, const PointT& equator_point);
+  double computeEquatorNormalAngle(const PointT& reference_point, const PointT& equator_point) const;
 
   /**
    * The cost associated with some antipodal point
    */
-  double computeAntipodalCost(const PointT& reference_point, const PointT& antipodal_point);
+  double computeAntipodalCost(const PointT& reference_point, const PointT& antipodal_point) const;
 
   /**
    * The cost associated with some equator point
    */
-  double computeEquatorCost(const PointT& reference_point, const PointT& equator_point);
+  double computeEquatorCost(const PointT& reference_point, const PointT& equator_point) const;
 };
+
+using GraspSamplerPtr = std::shared_ptr<GraspSampler>;
+using GraspSamplerConstPtr = std::shared_ptr<const GraspSampler>;
 
 }  // namespace chair_manipulation
 

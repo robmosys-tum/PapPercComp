@@ -7,12 +7,13 @@
 
 namespace chair_manipulation
 {
-Gripper::Gripper(const GripperParameters& params) : params_(params)
+Gripper::Gripper(GripperParameters params, const std::string& gripper_urdf, const std::string& gripper_srdf)
+  : params_(std::move(params))
 {
   // Parse urdf and srdf descriptions
-  auto urdf_model = urdf::parseURDF(params_.gripper_description_);
+  auto urdf_model = urdf::parseURDF(gripper_urdf);
   auto srdf_model = std::make_shared<srdf::Model>();
-  srdf_model->initString(*urdf_model, params_.gripper_semantic_description_);
+  srdf_model->initString(*urdf_model, gripper_srdf);
 
   // Initialize robot model, robot state and collision environment
   robot_model_ = std::make_shared<moveit::core::RobotModel>(urdf_model, srdf_model);
@@ -89,17 +90,15 @@ bool Gripper::grasp(std::vector<Contact>& contacts)
   {
     const auto& open_values = open_group_state_values_[finger_group.group_name_];
     const auto& closed_values = closed_group_state_values_[finger_group.group_name_];
-    if (!moveToContacts(open_values, closed_values, finger_group.group_name_, contacts))
-    {
+    if (!moveToContacts(open_values, closed_values, finger_group, contacts))
       return false;
-    }
   }
 
   return true;
 }
 
 bool Gripper::moveToContacts(const std::map<std::string, double>& open_values,
-                             const std::map<std::string, double>& closed_values, const std::string& group_name,
+                             const std::map<std::string, double>& closed_values, const FingerGroup& finger_group,
                              std::vector<Contact>& contacts)
 {
   double t = 0.;
@@ -122,7 +121,7 @@ bool Gripper::moveToContacts(const std::map<std::string, double>& open_values,
     // We treat self-collisions as invalid states, meaning that if only self-collisions appear
     // during the interpolation we will return false.
     collision_detection::CollisionRequest req_self;
-    req_self.group_name = group_name;
+    req_self.group_name = finger_group.group_name_;
     collision_detection::CollisionResult res_self;
     cenv_->checkSelfCollision(req_self, res_self, *robot_state_, *acm_);
     if (res_self.collision)
@@ -139,7 +138,7 @@ bool Gripper::moveToContacts(const std::map<std::string, double>& open_values,
     {
       // Check for collision between the robot and the world
       collision_detection::CollisionRequest req_world;
-      req_world.group_name = group_name;
+      req_world.group_name = finger_group.group_name_;
       req_world.contacts = true;
       req_world.max_contacts = 1;
       req_world.max_contacts_per_pair = 1;
@@ -184,7 +183,7 @@ bool Gripper::moveToContacts(const std::map<std::string, double>& open_values,
                 // This must not happen
                 throw exception::IllegalState{ "Exactly one collision body must belong to the robot." };
               }
-              
+
               contacts.push_back(added_contact);
             }
           }
@@ -247,7 +246,7 @@ void GripperParameters::load(ros::NodeHandle& nh)
   finger_groups_.resize(num_finger_groups);
   for (int i = 0; i < num_finger_groups; i++)
   {
-    auto item = finger_groups_array[i];
+    const auto& item = finger_groups_array[i];
     auto& finger_group = finger_groups_[i];
 
     finger_group.group_name_ = utils::loadStringParameter(item, "group_name");

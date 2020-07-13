@@ -1,5 +1,0 @@
-sample_trials: 1000
-output_filename: $(find chair_manipulation_grasp_detection_advanced)/cfg/grasp_database.yaml
-chair_models:
-  - mesh: $(find chair_manipulation_chair_models)/models/dining_chair/meshes/dining_chair.ply
-    point_cloud: $(find chair_manipulation_chair_models)/models/dining_chair/point_clouds/dining_chair.pcd
