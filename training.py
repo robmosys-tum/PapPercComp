@@ -106,7 +106,7 @@ def run_model(dataloader, args):
 
                 plt.xlabel('Epoch')
                 plt.ylabel('Loss')
-                plt.xlim(0, args.epochs)
+                plt.xlim(0, epoch)
                 plt.legend()
                 plt.grid(True)
                 plt.savefig("TrainedModel/loss_plot.png", bbox_inches='tight')
@@ -258,38 +258,62 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 foreground = embedded_pixelvectors * seg_mask
                 background = embedded_pixelvectors * (1 - seg_mask)
 
-                N, d = embedded_pixelvectors.size()[:2]
+                batch_size, d = embedded_pixelvectors.size()[:2]
                 eps = 1e-5
-                n_tot = embedded_pixelvectors.size()[2] * embedded_pixelvectors.size()[3]
+                N = embedded_pixelvectors.size()[2] * embedded_pixelvectors.size()[3]
                 n_FG = seg_mask.sum(dim=[-1,-2])
 
-                ### Mean and variance resulting in shapes [N, d]
-                mean_FG = foreground.view(N, d, -1).sum(dim=2) / (n_FG + eps) 
-                std_FG = ((foreground.view(N, d, -1) - mean_FG.view(N, d, 1))**2).sum(dim=2) / (n_FG + eps) 
+                ### Mean and covariance with shapes [batch_size, d] and [batch_size, d, d]
+                # We are in fact summing unnecessary zero values.
+                mean_FG = foreground.view(batch_size, d, -1).sum(dim=2) / (n_FG + eps) 
+                
+                # Covariance = 1/N * [d, N] * [N, d] - mean * mean^T with input images size [N, d], in our case [batch_size, d, N] so we transform the data as follows.
+                cov_FG = (1/(n_FG.view(batch_size, 1) + eps) * torch.bmm(
+                        foreground.view(batch_size, d, -1), 
+                        foreground.view(batch_size, d, -1).transpose(1,2)
+                    ) 
+                    - torch.bmm(
+                        mean_FG.view(batch_size, d, 1), 
+                        mean_FG.view(batch_size, d, 1).transpose(1,2)
+                    ))
+                # Compute trace of covariance to minimize later
+                tr_covFG = cov_FG.diagonal(dim1=-2, dim2=-1).sum(dim=-1)
 
-                mean_BG = background.view(N, d, -1).sum(dim=2) / (n_tot - n_FG + eps) 
-                std_BG = ((background.view(N, d, -1) - mean_BG.view(N, d, 1))**2).sum(dim=2) / (n_tot - n_FG + eps)
+
+                mean_BG = background.view(batch_size, d, -1).sum(dim=2) / (N - n_FG + eps)
                 
-                
-                torch.set_printoptions(precision=5)
-                print(f"\n Mean FG: \n {mean_FG[0:2,0:4]} \n and Mean BG: \n {mean_BG[0:2,0:4]} \n and STD FG: \n {std_FG[0:2,0:4]} \n and STD BG: \n {std_BG[0:2,0:4]} \n")
+                cov_BG = (1/(N - n_FG.view(batch_size, 1) + eps) * torch.bmm(
+                        background.view(batch_size, d, -1), 
+                        background.view(batch_size, d, -1).transpose(1,2)
+                    ) 
+                    - torch.bmm(
+                        mean_BG.view(batch_size, d, 1), 
+                        mean_BG.view(batch_size, d, 1).transpose(1,2)
+                    ))
+                tr_covBG = cov_BG.diagonal(dim1=-2, dim2=-1).sum(dim=-1)
+
+
+                torch.set_printoptions(precision=6)
+                print(f"\n Mean FG: \n {mean_FG[0:2,0:4]} \n and Mean BG: \n {mean_BG[0:2,0:4]} \n and Cov FG diagonals: \n {cov_FG.diagonal(dim1=-2, dim2=-1)[0:2,0:4]} \n and Cov BG diagonals: \n {cov_BG.diagonal(dim1=-2, dim2=-1)[0:2,0:4]} \n")
+
 
                 ### Loss function: getting foreground pixels close together, background pixels also close together, then the distance between FG and BG clusters far apart.
-                std_loss = std_FG.mean() + std_BG.mean()
+                cov_loss = tr_covFG.mean() + tr_covBG.mean()
 
-                L2 = nn.MSELoss()
-                mean_margin_loss = - 0.5 * L2(mean_BG, mean_FG)
+                L2 = torch.nn.MSELoss()
+                mean_margin_loss = -L2(mean_BG, mean_FG)
                 
-                # Then add regularization
+                # Then add regularization, force the means to be on the unit ball.
                 reg_strength = 1
-                reg_loss = L2(-10, mean_FG) + L2(10, mean_BG)
+                reg_loss = L2(1, (mean_FG**2).mean(dim=-1)) + L2(1, (mean_BG**2).mean(dim=-1)) 
                 
                 loss = (
-                        0.9 * std_loss 
+                        1 * cov_loss 
+                        + 10 * mean_margin_loss
                         + reg_strength * reg_loss
                     )
                 
-                print(f"Loss is: {loss.item():.6f} of which std has {std_loss.item():.4f} and reg has {reg_loss.item():.4f} \n")
+                print(f"Loss is: {loss.item():.6f} of which cov has {cov_loss.item():.6f} and mean_margin has {mean_margin_loss.item():.6f} reg has {reg_loss.item():.6f} \n")
 
 
                 # In case you wanna debug memory usage for PyTorch
