@@ -10,4 +10,8 @@ find_package(ament_cmake REQUIRED)
 
 ament_export_dependencies(${PROJECT_NAME})
 
+install(DIRECTORY manipulable_objects
+  DESTINATION share/${PROJECT_NAME})
+#   FILES_MATCHING PATTERN "*.png" PATTERN "*.svg")
+
 ament_package()

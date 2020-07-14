@@ -12,10 +12,10 @@ InstanceRecognition::InstanceRecognition(rclcpp::Node::SharedPtr nh):_nh (nh){
     _nh->declare_parameter("rgbd_frame","xtion2_link");
     _nh->declare_parameter("rgb_frame","xtion2_rgb_optical_frame");
     _nh->declare_parameter("depth_frame","xtion2_depth_optical_frame");
-    _nh->declare_parameter("rgb_topic","/xtion2/rgb/image_raw");
-    _nh->declare_parameter("depth_topic","/xtion2/depth/image_raw");
+    _nh->declare_parameter("rgb_topic","/camera/color/image_raw");
+    _nh->declare_parameter("depth_topic","/camera/depth/image_raw");
     _nh->declare_parameter("depth_info","/camera/depth/camera_info");
-    _nh->declare_parameter("algorithm","LBP");
+    _nh->declare_parameter("algorithm","SIFT");
     _nh->declare_parameter("compare_hist","correlation");
 
     _nh->get_parameter("base_frame",_base_frame);
@@ -201,7 +201,7 @@ bool InstanceRecognition::load_database() {
     file_status f = status(directory_train);
 
     if (!(f.type() != status_unknown && f.type() != file_not_found))
-        RCLCPP_ERROR_STREAM(_nh->get_logger(),"Training directory not found");
+        RCLCPP_ERROR_STREAM(_nh->get_logger(),"Training directory not found: "<<path_db.str());
 
    // bool only_one = false;
     for( directory_iterator it( directory_train ); it != end_it; it++ ) {

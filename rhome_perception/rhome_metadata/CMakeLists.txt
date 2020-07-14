@@ -62,6 +62,7 @@ ament_export_dependencies(
     rosidl_default_runtime
     std_msgs
     geometry_msgs
+    sensor_msgs
 )
 
 ament_package()
