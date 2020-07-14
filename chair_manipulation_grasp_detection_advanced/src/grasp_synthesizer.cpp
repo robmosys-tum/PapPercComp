@@ -41,6 +41,8 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
     if (weights_.epsilon1_ != 0. || weights_.v1_ != 0.)
     {
       auto wrench_space = wrenchSpaceFromHypotheses(candidate, model);
+      if (!wrench_space.isForceClosure())
+        continue;
       grasp_quality += weights_.epsilon1_ * wrench_space.getEpsilon1Quality();
       grasp_quality += weights_.v1_ * wrench_space.getV1Quality();
     }

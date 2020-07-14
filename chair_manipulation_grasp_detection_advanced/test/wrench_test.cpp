@@ -73,6 +73,9 @@ int main(int argc, char* argv[])
   WrenchSpace wrench_space{contacts, *params.model_, 0.8, 8};
   for (const auto& wrench : wrench_space.getWrenches())
   {
+    ROS_INFO_STREAM("force magnitude: " << wrench.getForce().norm());
+    ROS_INFO_STREAM("torque magnitude: " << wrench.getTorque().norm());
+
     visual_tools.publishArrow(transform::fromXAxis(wrench.getForce()), rvt::GREEN);
     visual_tools.publishArrow(transform::fromXAxis(wrench.getTorque()), rvt::BLUE);
   }

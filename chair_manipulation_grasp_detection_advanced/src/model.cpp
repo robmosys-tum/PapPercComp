@@ -50,7 +50,7 @@ void Model::init()
   Eigen::Vector3f cogf = cogf4.head<3>();
   center_of_gravity_ = cogf.cast<double>();
 
-  auto it = std::min_element(point_cloud_->begin(), point_cloud_->end(), [&](const PointT& p1, const PointT& p2) {
+  auto it = std::max_element(point_cloud_->begin(), point_cloud_->end(), [&](const PointT& p1, const PointT& p2) {
     return (p1.getVector3fMap() - cogf).norm() < (p2.getVector3fMap() - cogf).norm();
   });
   max_distance_to_center_of_gravity_ = ((*it).getVector3fMap() - cogf).norm();
