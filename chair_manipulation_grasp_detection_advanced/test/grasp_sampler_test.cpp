@@ -11,7 +11,7 @@ using namespace chair_manipulation;
 
 int main(int argc, char* argv[])
 {
-  ros::init(argc, argv, "convert_mesh_test");
+  ros::init(argc, argv, "grasp_sampler_test");
   ros::NodeHandle nh;
   auto point_cloud_pub = nh.advertise<sensor_msgs::PointCloud2>("cloud", 1);
   tf2_ros::StaticTransformBroadcaster broadcaster;

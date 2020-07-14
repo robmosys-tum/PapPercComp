@@ -9,7 +9,7 @@ using namespace chair_manipulation;
 
 int main(int argc, char* argv[])
 {
-  ros::init(argc, argv, "convert_mesh_test");
+  ros::init(argc, argv, "wrench_test");
   ros::NodeHandle nh;
   ros::NodeHandle nh_priv{ "~" };
   ros::AsyncSpinner spinner{ 1 };
@@ -18,9 +18,11 @@ int main(int argc, char* argv[])
   auto point_cloud_pub = nh.advertise<sensor_msgs::PointCloud2>("cloud", 1);
   TestParameters params;
 
-//  std::string contacts_str = "0.4 0 0.93 0.262211 -0.96501 2.02792e-07 0.4 0.03 0.43 0.262211 0.96501 -2.02792e-07 0 "
-//                             "0.03 0.93 -0.262211 0.96501 2.02792e-07 0 0 0 -0.262211 -0.96501 -2.02792e-07";
-  std::string contacts_str = "0.0395327 0.000233644 -4.144e-19 1 4.65414e-12 1.59234e-12 0.000415997 0.0250483 0 -1 2.33685e-12 4.28314e-12 0.383165 5.74431e-21 0.576784 3.43154e-14 -1 -7.32061e-14 0.331477 0.03 0.580225 -7.24013e-13 1 -3.01672e-14";
+  auto contacts_str = nh_priv.param<std::string>("contacts", "0.0395327 0.000233644 -4.144e-19 1 4.65414e-12 "
+                                                             "1.59234e-12 0.000415997 0.0250483 0 -1 2.33685e-12 "
+                                                             "4.28314e-12 0.383165 5.74431e-21 0.576784 3.43154e-14 -1 "
+                                                             "-7.32061e-14 0.331477 0.03 0.580225 -7.24013e-13 1 "
+                                                             "-3.01672e-14");
   auto contacts = utils::contactsFromStr(contacts_str);
 
   namespace rvt = rviz_visual_tools;
@@ -40,6 +42,12 @@ int main(int argc, char* argv[])
     visual_tools.publishArrow(Eigen::Translation3d{ contact.position_ } * transform::fromXAxis(wrench.getTorque()),
                               rvt::BLUE);
   }
+
+  visual_tools.publishSphere(params.model_->getCenterOfGravity(), rvt::RED, rvt::LARGE);
+  visual_tools.publishText(Eigen::Translation3d{ Eigen::Vector3d{ 0., 0., 0.05 } } *
+                               Eigen::Translation3d{ params.model_->getCenterOfGravity() } *
+                               Eigen::Isometry3d::Identity(),
+                           "cog", rvt::WHITE, rvt::LARGE);
 
   ROS_INFO_STREAM("force closure: " << wrench_space.isForceClosure());
   ROS_INFO_STREAM("epsilon1 quality: " << wrench_space.getEpsilon1Quality());

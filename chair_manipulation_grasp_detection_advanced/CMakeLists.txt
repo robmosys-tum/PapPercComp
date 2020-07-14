@@ -91,8 +91,8 @@ target_link_libraries(convert_mesh_test ${LIBRARIES})
 add_executable(grasp_sampler_test test/grasp_sampler_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 target_link_libraries(grasp_sampler_test ${LIBRARIES})
 
-add_executable(grasp_test test/grasp_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-target_link_libraries(grasp_test ${LIBRARIES})
+add_executable(gripper_test test/gripper_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(gripper_test ${LIBRARIES})
 
 add_executable(wrench_test test/wrench_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 target_link_libraries(wrench_test ${LIBRARIES})

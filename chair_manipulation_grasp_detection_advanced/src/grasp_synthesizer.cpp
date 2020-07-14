@@ -79,13 +79,18 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
     ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "");
     ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "=== Candidate " << (i + 1) << "/" << candidates.size() << " ===");
     ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "");
-    stopwatch_candidate.stop();
+
+    stopwatch_candidate.start();
 
     const auto& candidate = candidates[i];
     double epsilon1 = 0;
     double v1 = 0;
     double distance = 0;
     double reachability = 0;
+
+    for (std::size_t j = 0; j < candidate.size(); j++)
+      ROS_DEBUG_STREAM_NAMED("grasp_synthesizer",
+                             "pose of arm " << j << ": [" << utils::poseToStr(candidate[j]->pose_) << "]");
 
     if (weights_.epsilon1_ != 0. || weights_.v1_ != 0.)
     {

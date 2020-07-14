@@ -9,21 +9,25 @@
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <moveit/robot_state/conversions.h>
 #include <moveit_msgs/DisplayRobotState.h>
+#include <moveit_visual_tools/moveit_visual_tools.h>
 
 using namespace chair_manipulation;
 
 int main(int argc, char* argv[])
 {
-  ros::init(argc, argv, "convert_mesh_test");
+  ros::init(argc, argv, "gripper_test");
   ros::NodeHandle nh;
+  ros::NodeHandle nh_priv{ "~" };
   auto mesh_pub = nh.advertise<shape_msgs::Mesh>("mesh", 1);
   auto robot_state_pub = nh.advertise<moveit_msgs::DisplayRobotState>("display_robot_state", 1);
   tf2_ros::StaticTransformBroadcaster broadcaster;
   geometry_msgs::TransformStamped msg;
   TestParameters params;
-  auto gripper = std::make_shared<Gripper>(params.gripper_params_, params.gripper_urdf_, params.gripper_srdf_);
 
-  Eigen::Isometry3d tcp_pose = Eigen::Isometry3d::Identity();
+  auto tcp_pose_str = nh_priv.param<std::string>("tcp_pose", "0.314355 0.015 0.575235 0 -0.707107 0 0.707107");
+  Eigen::Isometry3d tcp_pose = utils::poseFromStr(tcp_pose_str);
+
+  auto gripper = std::make_shared<Gripper>(params.gripper_params_, params.gripper_urdf_, params.gripper_srdf_);
   gripper->setTcpPose(tcp_pose);
   gripper->setStateOpen();
   gripper->addCollisionObject(params.model_->getMesh());
@@ -39,20 +43,16 @@ int main(int argc, char* argv[])
   msg.header.stamp = ros::Time::now();
   msg.header.frame_id = "parent_world";
   msg.child_frame_id = "world";
-
   broadcaster.sendTransform(msg);
 
-  for (std::size_t i = 0; i < contacts.size(); i++)
-  {
-    const auto& contact = contacts[i];
-    Eigen::Isometry3d T;
-    T = Eigen::Translation3d{ contact.position_ } * transform::fromYAxis(contact.normal_);
-    msg = tf2::eigenToTransform(T);
-    msg.header.stamp = ros::Time::now();
-    msg.header.frame_id = "parent_world";
-    msg.child_frame_id = "contact" + std::to_string(i);
-    broadcaster.sendTransform(msg);
-  }
+  namespace rvt = rviz_visual_tools;
+  moveit_visual_tools::MoveItVisualTools visual_tools("parent_world");
+  visual_tools.deleteAllMarkers();
+
+  for (const auto& contact : contacts)
+    visual_tools.publishArrow(Eigen::Translation3d{ contact.position_ } * transform::fromXAxis(contact.normal_));
+
+  visual_tools.trigger();
 
   shape_msgs::Mesh mesh_msg;
   chair_manipulation::utils::convert(*params.model_->getMesh(), mesh_msg);

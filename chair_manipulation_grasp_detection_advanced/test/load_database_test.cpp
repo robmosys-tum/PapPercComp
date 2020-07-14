@@ -11,7 +11,7 @@ using namespace chair_manipulation;
 
 int main(int argc, char* argv[])
 {
-  ros::init(argc, argv, "convert_mesh_test");
+  ros::init(argc, argv, "load_database_test");
   ros::NodeHandle nh;
   ros::AsyncSpinner spinner{ 1 };
   tf2_ros::StaticTransformBroadcaster broadcaster;
