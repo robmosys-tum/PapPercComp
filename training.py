@@ -268,7 +268,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 mean_FG = foreground.view(batch_size, d, -1).sum(dim=2) / (n_FG + eps) 
                 
                 # Covariance = 1/N * [d, N] * [N, d] - mean * mean^T with input images size [N, d], in our case [batch_size, d, N] so we transform the data as follows.
-                cov_FG = (1/(n_FG.view(batch_size, 1) + eps) * torch.bmm(
+                cov_FG = (1/(n_FG.view(batch_size, 1, 1) + eps) * torch.bmm(
                         foreground.view(batch_size, d, -1), 
                         foreground.view(batch_size, d, -1).transpose(1,2)
                     ) 
@@ -335,7 +335,6 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 with torch.no_grad():
                     embedded_reference = embedModel(deepOut[0:1])
 
-                    # TODO: I probably want kNN here instead of distance to mean.
                     foreground = embedded_reference * reference_mask
                     background = embedded_reference * (1 - reference_mask)
 
