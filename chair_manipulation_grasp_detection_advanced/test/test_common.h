@@ -19,6 +19,7 @@ struct TestParameters
   GripperParameters gripper_params_;
   GraspSamplerParameters grasp_sampler_params_;
   GraspQualityWeights grasp_quality_weights_;
+  GraspSynthesizerParameters grasp_synthesizer_params_;
   GraspDatabaseCreatorParameters grasp_database_creator_params_;
 };
 

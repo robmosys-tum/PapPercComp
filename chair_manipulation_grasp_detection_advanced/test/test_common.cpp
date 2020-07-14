@@ -24,10 +24,13 @@ chair_manipulation::TestParameters::TestParameters()
   gripper_srdf_ = loadFileContent(ros::package::getPath("chair_manipulation_grasp_detection_advanced") + "/cfg/gripper/"
                                                                                                          "robotiq_2f_"
                                                                                                          "140.srdf");
-  grasp_database_filename_ = ros::package::getPath("chair_manipulation_grasp_detection_advanced") + "/test/test_grasp_database.yaml";
+  grasp_database_filename_ = ros::package::getPath("chair_manipulation_grasp_detection_advanced") + "/test/"
+                                                                                                    "test_grasp_"
+                                                                                                    "database.yaml";
 
   gripper_params_.base_frame_ = "robotiq_arg2f_base_link";
   gripper_params_.tcp_frame_ = "tcp";
+  gripper_params_.contact_threshold_ = 0.001;
   FingerGroup left_finger_group;
   left_finger_group.group_name_ = "left_finger";
   left_finger_group.open_group_state_name_ = "left_finger_open";
@@ -48,6 +51,13 @@ chair_manipulation::TestParameters::TestParameters()
   grasp_quality_weights_.v1_ = 1.0;
   grasp_quality_weights_.distance_ = 1.0;
   grasp_quality_weights_.reachability_ = 1.0;
+
+  grasp_synthesizer_params_.num_arms_ = 2;
+  grasp_synthesizer_params_.friction_coefficient_ = 0.8;
+  grasp_synthesizer_params_.num_friction_edges_ = 8;
+  grasp_synthesizer_params_.max_arm_radius_ = 1.0;
+  grasp_synthesizer_params_.world_frame_ = "world";
+  grasp_synthesizer_params_.arm_base_frames_ = { "robot1_base_link", "robot2_base_link" };
 
   grasp_database_creator_params_.num_sample_trials_per_model_ = 100;
   grasp_database_creator_params_.min_num_grasps_per_model_ = 3;

@@ -50,7 +50,7 @@ void GraspDatabaseCreator::createGraspDatabase(GraspDatabase& database)
     element->mesh_filename_ = mesh_filename;
     element->point_cloud_filename_ = point_cloud_filename;
     element->model_ = model;
-    database.add(element);
+    database.elements_.push_back(element);
   }
 }
 

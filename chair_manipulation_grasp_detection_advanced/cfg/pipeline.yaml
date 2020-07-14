@@ -1,7 +1,7 @@
 grasp_database_filename: $(find chair_manipulation_grasp_detection_advanced)/cfg/grasp_database.yaml
 
 grasp_database_creator:
-  num_sample_trials_per_model: 1000
+  num_sample_trials_per_model: 100
   min_num_grasps_per_model: 3
   max_num_grasps_per_model: 10
   models:
@@ -11,6 +11,7 @@ grasp_database_creator:
 gripper:
   base_frame: robotiq_arg2f_base_link
   tcp_frame: tcp
+  contact_threshold: 0.001
   # This defines the open and closed configurations for independent fingers.
   # The group names and states are defined in the .srdf file.
   finger_groups:
@@ -30,7 +31,6 @@ grasp_sampler:
 
 grasp_synthesizer:
   num_arms: 2
-  grasp_quality_threshold: 0.7
   friction_coefficient: 0.8
   num_fiction_edges: 8
   max_arm_radius_: 1.0
@@ -40,9 +40,9 @@ grasp_synthesizer:
     - robot2_base_link
 
 weights_offline:
-  epsilon1: 0.0
-  v1: 1.0
-  distance: 1.0
+  epsilon1: 1.0
+  v1: 0.0
+  distance: 0.0
   reachability: 0.0
 
 weights_online:

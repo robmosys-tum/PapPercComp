@@ -26,7 +26,6 @@ struct GraspSynthesizerParameters
   void load(ros::NodeHandle& nh);
 
   int num_arms_;
-  double grasp_quality_threshold_;
   double friction_coefficient_;
   int num_friction_edges_;
   double max_arm_radius_;

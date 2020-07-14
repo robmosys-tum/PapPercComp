@@ -3,7 +3,6 @@
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
 #include "chair_manipulation_grasp_detection_advanced/transform.h"
 #include <tf2_ros/static_transform_broadcaster.h>
-#include <tf2_eigen/tf2_eigen.h>
 #include <moveit_visual_tools/moveit_visual_tools.h>
 
 using namespace chair_manipulation;
@@ -12,72 +11,34 @@ int main(int argc, char* argv[])
 {
   ros::init(argc, argv, "convert_mesh_test");
   ros::NodeHandle nh;
+  ros::NodeHandle nh_priv{ "~" };
   ros::AsyncSpinner spinner{ 1 };
   tf2_ros::StaticTransformBroadcaster broadcaster;
   geometry_msgs::TransformStamped msg;
   auto point_cloud_pub = nh.advertise<sensor_msgs::PointCloud2>("cloud", 1);
-
   TestParameters params;
+
+//  std::string contacts_str = "0.4 0 0.93 0.262211 -0.96501 2.02792e-07 0.4 0.03 0.43 0.262211 0.96501 -2.02792e-07 0 "
+//                             "0.03 0.93 -0.262211 0.96501 2.02792e-07 0 0 0 -0.262211 -0.96501 -2.02792e-07";
+  std::string contacts_str = "0.0395327 0.000233644 -4.144e-19 1 4.65414e-12 1.59234e-12 0.000415997 0.0250483 0 -1 2.33685e-12 4.28314e-12 0.383165 5.74431e-21 0.576784 3.43154e-14 -1 -7.32061e-14 0.331477 0.03 0.580225 -7.24013e-13 1 -3.01672e-14";
+  auto contacts = utils::contactsFromStr(contacts_str);
 
   namespace rvt = rviz_visual_tools;
   moveit_visual_tools::MoveItVisualTools visual_tools("world");
   visual_tools.deleteAllMarkers();
 
-  auto gripper1 = std::make_shared<Gripper>(params.gripper_params_, params.gripper_urdf_, params.gripper_srdf_);
-  auto gripper2 = std::make_shared<Gripper>(params.gripper_params_, params.gripper_urdf_, params.gripper_srdf_);
-
-  auto sampler1 = std::make_shared<GraspSampler>(params.grasp_sampler_params_, gripper1);
-  auto sampler2 = std::make_shared<GraspSampler>(params.grasp_sampler_params_, gripper2);
-
-  int index1 = 12000;
-  int index2 = 3200;
-
-  const auto& point1 = params.model_->getPointCloud()->at(index1);
-  const auto& point2 = params.model_->getPointCloud()->at(index2);
-
-  Eigen::Isometry3d pose1, pose2;
-
-  bool found_pose1 = sampler1->findGraspPoseAt(params.model_->getPointCloud(), point1, pose1);
-  bool found_pose2 = sampler2->findGraspPoseAt(params.model_->getPointCloud(), point2, pose2);
-
-  ROS_INFO_STREAM("found pose1: " << found_pose1);
-  ROS_INFO_STREAM("found pose2: " << found_pose2);
-
-  gripper1->addCollisionObject(params.model_->getMesh());
-  gripper2->addCollisionObject(params.model_->getMesh());
-
-  gripper1->setTcpPose(pose1);
-  gripper2->setTcpPose(pose2);
-
-  gripper1->setStateOpen();
-  gripper2->setStateOpen();
-
-  std::vector<Contact> contacts1, contacts2;
-
-  bool success1 = gripper1->grasp(contacts1);
-  bool success2 = gripper2->grasp(contacts2);
-
-  ROS_INFO_STREAM("grasp1 success: " << success1);
-  ROS_INFO_STREAM("grasp2 success: " << success2);
-
-  for (const auto& contact : contacts1)
-    visual_tools.publishArrow(Eigen::Translation3d{contact.position_} * transform::fromXAxis(contact.normal_), rvt::RED, rvt::SMALL);
-
-  for (const auto& contact : contacts2)
-    visual_tools.publishArrow(Eigen::Translation3d{contact.position_} * transform::fromXAxis(contact.normal_), rvt::RED, rvt::SMALL);
-
-  std::vector<Contact> contacts;
-  std::copy(contacts1.begin(), contacts1.end(), std::back_inserter(contacts));
-  std::copy(contacts2.begin(), contacts2.end(), std::back_inserter(contacts));
-
-  WrenchSpace wrench_space{contacts, *params.model_, 0.8, 8};
-  for (const auto& wrench : wrench_space.getWrenches())
+  double friction_coefficient = params.grasp_synthesizer_params_.friction_coefficient_;
+  std::size_t num_friction_edges = params.grasp_synthesizer_params_.num_friction_edges_;
+  WrenchSpace wrench_space{ contacts, *params.model_, friction_coefficient, num_friction_edges };
+  const auto& wrenches = wrench_space.getWrenches();
+  for (std::size_t i = 0; i < wrenches.size(); i++)
   {
-    ROS_INFO_STREAM("force magnitude: " << wrench.getForce().norm());
-    ROS_INFO_STREAM("torque magnitude: " << wrench.getTorque().norm());
-
-    visual_tools.publishArrow(transform::fromXAxis(wrench.getForce()), rvt::GREEN);
-    visual_tools.publishArrow(transform::fromXAxis(wrench.getTorque()), rvt::BLUE);
+    const auto& wrench = wrenches[i];
+    const auto& contact = contacts[i / num_friction_edges];
+    visual_tools.publishArrow(Eigen::Translation3d{ contact.position_ } * transform::fromXAxis(wrench.getForce()),
+                              rvt::GREEN);
+    visual_tools.publishArrow(Eigen::Translation3d{ contact.position_ } * transform::fromXAxis(wrench.getTorque()),
+                              rvt::BLUE);
   }
 
   ROS_INFO_STREAM("force closure: " << wrench_space.isForceClosure());

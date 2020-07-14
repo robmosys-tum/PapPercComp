@@ -81,7 +81,7 @@ void WrenchSpace::computeConvexHull(std::size_t dim)
     }
 
     // We have force closure if there doesn't exist a positive offset
-    force_closure_ = max_offset <= 0.;
+    force_closure_ = max_offset < 0.;
     if (force_closure_)
     {
       // The epsilon1 quality is smallest offset (in magnitude)

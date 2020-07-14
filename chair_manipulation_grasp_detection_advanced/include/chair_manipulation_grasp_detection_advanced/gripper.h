@@ -21,6 +21,7 @@ struct GripperParameters
 
   std::string base_frame_;
   std::string tcp_frame_;
+  double contact_threshold_;
   std::vector<FingerGroup> finger_groups_;
 };
 
@@ -28,8 +29,6 @@ class Gripper
 {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
-  static constexpr double CONTACT_THRESHOLD = 0.001;
 
   Gripper(GripperParameters params, const std::string& gripper_urdf, const std::string& gripper_srdf);
 

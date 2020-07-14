@@ -1,10 +1,12 @@
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
 #include "chair_manipulation_grasp_detection_advanced/exception.h"
+#include "chair_manipulation_grasp_detection_advanced/contact.h"
 #include <pcl/io/vtk_lib_io.h>
 #include <vtkTriangleFilter.h>
 #include <vtkPolyDataMapper.h>
 #include <shape_msgs/MeshTriangle.h>
 #include <geometry_msgs/Point.h>
+#include <tf2_eigen/tf2_eigen.h>
 
 namespace chair_manipulation
 {
@@ -128,6 +130,77 @@ double loadDoubleParameter(const XmlRpc::XmlRpcValue& value, const std::string& 
     throw exception::Parameter{ msg.str() };
   }
   return (double)attribute;
+}
+
+std::string poseToStr(const Eigen::Isometry3d& pose)
+{
+  auto msg = tf2::toMsg(pose);
+  std::ostringstream oss;
+  oss << msg.position.x << " " << msg.position.y << " " << msg.position.z << " " << msg.orientation.x << " "
+      << msg.orientation.y << " " << msg.orientation.z << " " << msg.orientation.w;
+  return oss.str();
+}
+
+Eigen::Isometry3d poseFromStr(const std::string& str)
+{
+  std::istringstream iss{ str };
+  std::vector<std::string> entries{ std::istream_iterator<std::string>{ iss }, std::istream_iterator<std::string>{} };
+  if (entries.size() != 7)
+    throw exception::Parameter{ "Invalid pose string." };
+
+  geometry_msgs::Pose msg;
+  msg.position.x = std::stod(entries[0]);
+  msg.position.y = std::stod(entries[1]);
+  msg.position.z = std::stod(entries[2]);
+  msg.orientation.x = std::stod(entries[3]);
+  msg.orientation.y = std::stod(entries[4]);
+  msg.orientation.z = std::stod(entries[5]);
+  msg.orientation.w = std::stod(entries[6]);
+
+  Eigen::Isometry3d result;
+  tf2::fromMsg(msg, result);
+  return result;
+}
+
+std::string contactsToStr(const std::vector<Contact>& contacts)
+{
+  if (contacts.empty())
+    return std::string{};
+
+  std::ostringstream oss;
+  for (std::size_t i = 0; i < contacts.size(); i++)
+  {
+    const auto& contact = contacts[i];
+    oss << contact.position_.x() << " " << contact.position_.y() << " " << contact.position_.z() << " "
+        << contact.normal_.x() << " " << contact.normal_.y() << " " << contact.normal_.z();
+
+    if (i < contacts.size() - 1)
+      oss << " ";
+  }
+  return oss.str();
+}
+
+std::vector<Contact> contactsFromStr(const std::string& str)
+{
+  std::istringstream iss{ str };
+  std::vector<std::string> numbers{ std::istream_iterator<std::string>{ iss }, std::istream_iterator<std::string>{} };
+  if (numbers.size() % 6 != 0)
+    throw exception::IllegalArgument{"Invalid contact string."};
+
+  std::vector<Contact> contacts;
+  std::size_t num_contacts = numbers.size() / 6;
+  contacts.resize(num_contacts);
+  for (std::size_t i = 0; i < num_contacts; i++)
+  {
+    auto& contact = contacts[i];
+    contact.position_.x() = std::stod(numbers[6 * i + 0]);
+    contact.position_.y() = std::stod(numbers[6 * i + 1]);
+    contact.position_.z() = std::stod(numbers[6 * i + 2]);
+    contact.normal_.x() = std::stod(numbers[6 * i + 3]);
+    contact.normal_.y() = std::stod(numbers[6 * i + 4]);
+    contact.normal_.z() = std::stod(numbers[6 * i + 5]);
+  }
+  return contacts;
 }
 
 }  // namespace utils

@@ -18,8 +18,10 @@ void GraspDatabase::load(ros::NodeHandle& nh)
   {
     const auto& element_item = element_items[i];
     auto& element = elements_[i];
+    element = std::make_shared<GraspDatabaseElement>();
     element->mesh_filename_ = utils::loadStringParameter(element_item, "mesh_filename");
     element->point_cloud_filename_ = utils::loadStringParameter(element_item, "point_cloud_filename");
+    element->model_ = std::make_shared<Model>(element->mesh_filename_, element->point_cloud_filename_);
 
     if (!element_item.hasMember("grasps"))
       throw exception::Parameter{ "Failed to load parameter 'grasps'." };
@@ -43,22 +45,7 @@ void GraspDatabase::load(ros::NodeHandle& nh)
       {
         auto pose_item = pose_items[k];
         auto& pose = grasp.poses_[k];
-        auto pose_str = (std::string)pose_item;
-        std::istringstream iss_pose{ pose_str };
-        std::vector<std::string> entries{ std::istream_iterator<std::string>{ iss_pose },
-                                          std::istream_iterator<std::string>{} };
-        if (entries.size() != 7)
-          throw exception::Parameter{"Invalid pose."};
-
-        geometry_msgs::Pose msg;
-        msg.position.x = std::stod(entries[0]);
-        msg.position.y = std::stod(entries[1]);
-        msg.position.z = std::stod(entries[2]);
-        msg.orientation.x = std::stod(entries[3]);
-        msg.orientation.y = std::stod(entries[4]);
-        msg.orientation.z = std::stod(entries[5]);
-        msg.orientation.w = std::stod(entries[6]);
-        tf2::fromMsg(msg, pose);
+        pose = utils::poseFromStr((std::string)pose_item);
       }
     }
   }
@@ -90,11 +77,7 @@ void GraspDatabase::store(ros::NodeHandle& nh) const
       for (std::size_t k = 0; k < poses.size(); k++)
       {
         const auto& pose = poses[k];
-        auto msg = tf2::toMsg(pose);
-        std::ostringstream oss_pose;
-        oss_pose << msg.position.x << " " << msg.position.y << " " << msg.position.z << " " << msg.orientation.x << " "
-                 << msg.orientation.y << " " << msg.orientation.z << " " << msg.orientation.w;
-        XmlRpc::XmlRpcValue pose_item{ oss_pose.str() };
+        XmlRpc::XmlRpcValue pose_item{ utils::poseToStr(pose) };
         pose_items[k] = pose_item;
       }
       grasp_item["poses"] = pose_items;

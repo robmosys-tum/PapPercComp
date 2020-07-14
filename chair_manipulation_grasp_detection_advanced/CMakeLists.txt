@@ -49,6 +49,7 @@ set(
   include/chair_manipulation_grasp_detection_advanced/multi_arm_grasp.h
   include/chair_manipulation_grasp_detection_advanced/grasp_synthesizer.h
   include/chair_manipulation_grasp_detection_advanced/qhull_mutex.h
+  include/chair_manipulation_grasp_detection_advanced/stopwatch.h
   src/model.cpp
   src/utils.cpp
   src/grasp_database.cpp
@@ -95,3 +96,6 @@ target_link_libraries(grasp_test ${LIBRARIES})
 
 add_executable(wrench_test test/wrench_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 target_link_libraries(wrench_test ${LIBRARIES})
+
+add_executable(load_database_test test/load_database_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(load_database_test ${LIBRARIES})

@@ -6,19 +6,12 @@
 
 namespace chair_manipulation
 {
-class GraspDatabase
+struct GraspDatabase
 {
-public:
   void load(ros::NodeHandle& nh);
 
   void store(ros::NodeHandle& nh) const;
 
-  void add(const GraspDatabaseElementConstPtr &element)
-  {
-    elements_.push_back(element);
-  }
-
-private:
   std::vector<GraspDatabaseElementPtr> elements_;
 };
 

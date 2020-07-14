@@ -1,6 +1,7 @@
 #ifndef CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_UTILS_H
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_UTILS_H
 
+#include "chair_manipulation_grasp_detection_advanced/contact.h"
 #include <pcl/PolygonMesh.h>
 #include <geometric_shapes/shapes.h>
 #include <shape_msgs/Mesh.h>
@@ -42,6 +43,14 @@ void publishPointCloud(const pcl::PointCloud<PointT>& pcl_cloud, ros::Publisher&
 std::string loadStringParameter(const XmlRpc::XmlRpcValue& value, const std::string& key);
 
 double loadDoubleParameter(const XmlRpc::XmlRpcValue& value, const std::string& key);
+
+std::string poseToStr(const Eigen::Isometry3d& pose);
+
+Eigen::Isometry3d poseFromStr(const std::string& str);
+
+std::string contactsToStr(const std::vector<Contact>& contacts);
+
+std::vector<Contact> contactsFromStr(const std::string& str);
 
 }  // namespace utils
 }  // namespace chair_manipulation

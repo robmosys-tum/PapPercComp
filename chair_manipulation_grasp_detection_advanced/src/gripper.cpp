@@ -7,6 +7,30 @@
 
 namespace chair_manipulation
 {
+void GripperParameters::load(ros::NodeHandle& nh)
+{
+  base_frame_ = nh.param<std::string>("base_frame", "robotiq_arg2f_base_link");
+  tcp_frame_ = nh.param<std::string>("tcp_frame", "tcp");
+  contact_threshold_ = nh.param<double>("contact_threshold", 0.001);
+
+  XmlRpc::XmlRpcValue finger_groups_array;
+  if (!nh.getParam("finger_groups", finger_groups_array) ||
+      finger_groups_array.getType() != XmlRpc::XmlRpcValue::TypeArray || finger_groups_array.size() == 0)
+    throw exception::Parameter{ "No finger groups specified." };
+
+  int num_finger_groups = finger_groups_array.size();
+  finger_groups_.resize(num_finger_groups);
+  for (int i = 0; i < num_finger_groups; i++)
+  {
+    const auto& item = finger_groups_array[i];
+    auto& finger_group = finger_groups_[i];
+
+    finger_group.group_name_ = utils::loadStringParameter(item, "group_name");
+    finger_group.open_group_state_name_ = utils::loadStringParameter(item, "open_group_state");
+    finger_group.closed_group_state_name_ = utils::loadStringParameter(item, "closed_group_state");
+  }
+}
+
 Gripper::Gripper(GripperParameters params, const std::string& gripper_urdf, const std::string& gripper_srdf)
   : params_(std::move(params))
 {
@@ -162,7 +186,7 @@ bool Gripper::moveToContacts(const std::map<std::string, double>& open_values,
           const auto& detected_contacts = pair.second;
           for (const auto& detected_contact : detected_contacts)
           {
-            if (detected_contact.depth <= CONTACT_THRESHOLD)
+            if (detected_contact.depth <= params_.contact_threshold_)
             {
               contact_found = true;
               Contact added_contact;
@@ -221,37 +245,6 @@ void Gripper::loadGroupStates()
     if (!jmg->getVariableDefaultPositions(finger_group.closed_group_state_name_,
                                           closed_group_state_values_[group_name]))
       throw exception::Parameter{ "Failed to retrieve closed group state values." };
-  }
-}
-
-void GripperParameters::load(ros::NodeHandle& nh)
-{
-  base_frame_ = nh.param<std::string>("base_frame", "robotiq_arg2f_base_link");
-  tcp_frame_ = nh.param<std::string>("tcp_frame", "tcp");
-
-  std::string gripper_description;
-  if (!nh.getParam("gripper_description", gripper_description))
-    throw exception::Parameter{ "Parameter 'gripper_description' not found." };
-
-  std::string gripper_semantic_description;
-  if (!nh.getParam("gripper_semantic_description", gripper_semantic_description))
-    throw exception::Parameter{ "Parameter 'gripper_semantic_description' not found." };
-
-  XmlRpc::XmlRpcValue finger_groups_array;
-  if (!nh.getParam("finger_groups", finger_groups_array) ||
-      finger_groups_array.getType() != XmlRpc::XmlRpcValue::TypeArray || finger_groups_array.size() == 0)
-    throw exception::Parameter{ "No finger groups specified." };
-
-  int num_finger_groups = finger_groups_array.size();
-  finger_groups_.resize(num_finger_groups);
-  for (int i = 0; i < num_finger_groups; i++)
-  {
-    const auto& item = finger_groups_array[i];
-    auto& finger_group = finger_groups_[i];
-
-    finger_group.group_name_ = utils::loadStringParameter(item, "group_name");
-    finger_group.open_group_state_name_ = utils::loadStringParameter(item, "open_group_state");
-    finger_group.closed_group_state_name_ = utils::loadStringParameter(item, "closed_group_state");
   }
 }
 

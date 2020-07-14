@@ -2,6 +2,7 @@
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
 #include "chair_manipulation_grasp_detection_advanced/exception.h"
 #include "chair_manipulation_grasp_detection_advanced/transform.h"
+#include "chair_manipulation_grasp_detection_advanced/stopwatch.h"
 
 namespace chair_manipulation
 {
@@ -14,26 +15,53 @@ void GraspSamplerParameters::load(ros::NodeHandle& nh)
   gripper_pad_length_ = nh.param<double>("gripper_pad_length", 0.2);
 }
 
-void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_trials, std::vector<GraspHypothesis>& grasps)
+void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_trials,
+                                         std::vector<GraspHypothesis>& grasps)
 {
+  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Start sampling grasp hypotheses from an entire model.");
+  Stopwatch stopwatch_total, stopwatch_contacts;
+  stopwatch_total.start();
+
   const auto& mesh = model.getMesh();
   const auto& point_cloud = model.getPointCloud();
   gripper_->addCollisionObject(mesh);
   for (std::size_t s = 0; s < sample_trials; s++)
   {
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "=== Sample " << s << "/" << sample_trials << " ===");
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
+
     Eigen::Isometry3d grasp_pose;
-    if (!sampleGraspPose(point_cloud, grasp_pose))
+    bool success = sampleGraspPose(point_cloud, grasp_pose);
+    if (!success)
+    {
+      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Failed to sample grasp pose.");
       continue;
+    }
 
     gripper_->setTcpPose(grasp_pose);
     gripper_->setStateOpen();
     GraspHypothesis grasp;
-    if (!gripper_->grasp(grasp.contacts_))
+    stopwatch_contacts.start();
+    success = gripper_->grasp(grasp.contacts_);
+    stopwatch_contacts.stop();
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Computed grasp contacts.");
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "It took " << stopwatch_contacts.elapsedSeconds() << "s.");
+    if (!success)
+    {
+      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Reject sampled pose because it results in a collision.");
       continue;
+    }
     grasp.pose_ = grasp_pose;
     grasps.push_back(grasp);
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Added sampled grasp hypothesis.");
   }
   gripper_->clearCollisionObjects();
+
+  stopwatch_total.stop();
+  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Finished sampling.");
+  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Found " << grasps.size() << " grasp hypotheses.");
+  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "It took " << stopwatch_total.elapsedSeconds() << "s.");
 }
 
 bool GraspSampler::sampleGraspPose(const PointCloudConstPtr& point_cloud, Eigen::Isometry3d& grasp_pose)
