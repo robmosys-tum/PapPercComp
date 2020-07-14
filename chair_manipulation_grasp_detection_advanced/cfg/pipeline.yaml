@@ -42,7 +42,7 @@ grasp_synthesizer:
 weights_offline:
   epsilon1: 1.0
   v1: 0.0
-  distance: 0.0
+  distance: 1.0
   reachability: 0.0
 
 weights_online:

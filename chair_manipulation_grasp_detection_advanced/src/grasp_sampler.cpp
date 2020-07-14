@@ -3,6 +3,7 @@
 #include "chair_manipulation_grasp_detection_advanced/exception.h"
 #include "chair_manipulation_grasp_detection_advanced/transform.h"
 #include "chair_manipulation_grasp_detection_advanced/stopwatch.h"
+#include <geometric_shapes/shapes.h>
 
 namespace chair_manipulation
 {
@@ -24,7 +25,14 @@ void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_
 
   const auto& mesh = model.getMesh();
   const auto& point_cloud = model.getPointCloud();
+
   gripper_->addCollisionObject(mesh);
+
+  // Add a ground plane which is the x-y-plane offset by the minimum z-coordinate
+  auto ground_plane = std::make_shared<shapes::Plane>(0., 0., 1., 0.);
+  Eigen::Isometry3d ground_plane_pose = Eigen::Translation3d{ model.getMin() } * Eigen::Isometry3d::Identity();
+  gripper_->addCollisionObject(ground_plane, ground_plane_pose);
+
   for (std::size_t s = 0; s < sample_trials; s++)
   {
     ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
