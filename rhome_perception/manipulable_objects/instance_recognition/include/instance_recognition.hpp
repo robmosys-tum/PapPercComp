@@ -62,6 +62,7 @@
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <rhome_metadata/msg/roi.hpp>
+#include <rhome_metadata/msg/objects.hpp>
 #include <sensor_msgs/msg/camera_info.hpp>
 
 
@@ -101,7 +102,7 @@ private:
 	std::vector<std::vector<cv::KeyPoint>> db_kp;
 	std::vector<int> db_width;
 	std::vector<int> db_heigth;
-
+	int level;
 
 	// - - - - - Parameters - - - - - - -
 	std::string _base_frame;
@@ -139,6 +140,7 @@ private:
 	cv::Ptr<cv::DescriptorMatcher> matcher;
 
 	// publishers
+	rclcpp::Publisher<rhome_metadata::msg::Objects>::SharedPtr _objects_pub;
 
 	//Subscribers 
 	rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr  _subs_rgb;
@@ -146,7 +148,6 @@ private:
 	rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr  _subs_dinfo;
 
 	// services
-	rclcpp::Service<rhome_metadata::srv::Onoff>::SharedPtr _active_server;
 	rclcpp::Service<rhome_metadata::srv::Getinformation>::SharedPtr _getobjects_server;
 	rclcpp::Service<rhome_metadata::srv::Queryobject>::SharedPtr _queryobjects_server;
 
@@ -172,8 +173,6 @@ private:
 	void _process_depthinfo(const sensor_msgs::msg::CameraInfo::SharedPtr info);
 
 	// - - - - - - - - - - - - S e r v i c e s - - - - - - - - -
-
-	void _active_service( const std::shared_ptr<rmw_request_id_t> request_header, const std::shared_ptr<rhome_metadata::srv::Onoff::Request> req, std::shared_ptr<rhome_metadata::srv::Onoff::Response> res);
 	void getobjects_service( const std::shared_ptr<rmw_request_id_t> request_header, const std::shared_ptr<rhome_metadata::srv::Getinformation::Request> req, std::shared_ptr<rhome_metadata::srv::Getinformation::Response> res);
 	void queryobjects_service( const std::shared_ptr<rmw_request_id_t> request_header, const std::shared_ptr<rhome_metadata::srv::Queryobject::Request> req, std::shared_ptr<rhome_metadata::srv::Queryobject::Response> res);
 
@@ -186,7 +185,7 @@ private:
 	void remove_duplicates(std::vector<box_obj> &objs, std::vector<cv::Rect> &objs_rects);
 	void point_to_position(cv::Point point2d, geometry_msgs::msg::Point &point3d);
 	geometry_msgs::msg::PoseStamped point2d_to_pose(cv::Point point_in);
-
+	void publish_objects();
 };
 
 } /* namespace  */

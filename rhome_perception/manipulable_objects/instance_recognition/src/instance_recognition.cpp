@@ -17,6 +17,7 @@ InstanceRecognition::InstanceRecognition(rclcpp::Node::SharedPtr nh):_nh (nh){
     _nh->declare_parameter("depth_info","/camera/depth/camera_info");
     _nh->declare_parameter("algorithm","SIFT");
     _nh->declare_parameter("compare_hist","correlation");
+    _nh->declare_parameter("level",1);
 
     _nh->get_parameter("base_frame",_base_frame);
     _nh->get_parameter("rgbd_frame",_rgbd_frame);
@@ -27,8 +28,9 @@ InstanceRecognition::InstanceRecognition(rclcpp::Node::SharedPtr nh):_nh (nh){
     _nh->get_parameter("depth_info",_depth_info_topic);
     _nh->get_parameter("algorithm",_algorithm);
     _nh->get_parameter("compare_hist",_compare_hist);
+    _nh->get_parameter("level",level);
 
-
+    // recognition_alg = {"SIFT", "SURF", "ORB"};
     recognition_alg = {"LBP", "ELBP", "SIFT", "SURF", "ORB"};
     compare_hist_methods = {"correlation", "chisquare", "intersection", "bhattacharyya"};
 //ORB, AKAZE https://docs.opencv.org/3.0-beta/doc/tutorials/features2d/akaze_tracking/akaze_tracking.html#akazetracking
@@ -54,8 +56,12 @@ InstanceRecognition::InstanceRecognition(rclcpp::Node::SharedPtr nh):_nh (nh){
     if (_algorithm == recognition_alg[4]){
         matcher = cv::DescriptorMatcher::create(cv::DescriptorMatcher::BRUTEFORCE_HAMMING);
     }
+    if (_algorithm == recognition_alg[0] || _algorithm == recognition_alg[1]){
+        RCLCPP_ERROR_STREAM(_nh->get_logger(),"The descriptor "<< _algorithm<<"doesn't work with the sensor. Please try with one of these descriptors: "<<recognition_alg[2]<<", "<<recognition_alg[3]<<" or "<<recognition_alg[4]);
+        // return false;
+    } 
 
-
+    //Training
 	db_path = ament_index_cpp::get_package_share_directory("perception_databases");// rclcpp::package::getPath("perception_databases");
 
 	if (db_path.size() == 0){
@@ -69,14 +75,18 @@ InstanceRecognition::InstanceRecognition(rclcpp::Node::SharedPtr nh):_nh (nh){
     ready_depth = false;
 
     // - - - - - - - - p u b l i s h e r s  - - - - - - - - - - - -
+    _objects_pub = _nh->create_publisher<rhome_metadata::msg::Objects>("objects/complete_information", 1);
+
 
     // - - - - - - - - s u b s c r i b e r s  - - - - - - - - - - - -
-    _subs_dinfo = _nh->create_subscription<sensor_msgs::msg::CameraInfo>(_depth_info_topic, 1, std::bind(&InstanceRecognition::_process_depthinfo, this, std::placeholders::_1));
 
+	_subs_depth = _nh->create_subscription<sensor_msgs::msg::Image>(_depth_topic, 1, std::bind(&InstanceRecognition::_process_depth, this, std::placeholders::_1));
+	_subs_rgb = _nh->create_subscription<sensor_msgs::msg::Image>(_rgb_topic, 1, std::bind(&InstanceRecognition::_process_rgb, this, std::placeholders::_1));
+	_subs_dinfo = _nh->create_subscription<sensor_msgs::msg::CameraInfo>(_depth_info_topic, 1, std::bind(&InstanceRecognition::_process_depthinfo, this, std::placeholders::_1));
+	RCLCPP_INFO_STREAM(_nh->get_logger(),"Subscribing "+_rgb_topic+". . . OK");
+	RCLCPP_INFO_STREAM(_nh->get_logger(),"Subscribing "+_depth_topic+". . . OK");
 
     // - - - - - - - - s e r v i c e s  - - - - - - - - - - - - -
-    _active_server  = _nh->create_service<rhome_metadata::srv::Onoff>("active", 
-        std::bind(&InstanceRecognition::_active_service, this, _1,_2,_3));
     _getobjects_server  =  _nh->create_service<rhome_metadata::srv::Getinformation>("get_objects",
         std::bind(&InstanceRecognition::getobjects_service, this, _1,_2,_3));
     _queryobjects_server  =  _nh->create_service<rhome_metadata::srv::Queryobject>("query_objects",
@@ -85,34 +95,6 @@ InstanceRecognition::InstanceRecognition(rclcpp::Node::SharedPtr nh):_nh (nh){
 }
 
 InstanceRecognition::~InstanceRecognition() {
-}
-
-
-void InstanceRecognition::_active_service( const std::shared_ptr<rmw_request_id_t> request_header, const std::shared_ptr<rhome_metadata::srv::Onoff::Request> req, std::shared_ptr<rhome_metadata::srv::Onoff::Response> res){
-
-    if (_algorithm == recognition_alg[0] || _algorithm == recognition_alg[1]){
-        RCLCPP_ERROR_STREAM(_nh->get_logger(),"The descriptor "<< _algorithm<<"doesn't work with the sensor. Please try with one of these descriptors: "<<recognition_alg[2]<<", "<<recognition_alg[3]<<" or "<<recognition_alg[4]);
-        // return false;
-    } 
-
-    if(req->select == true) {
-        if (!_is_on) {
-            _subs_depth = _nh->create_subscription<sensor_msgs::msg::Image>(_depth_topic, 1, std::bind(&InstanceRecognition::_process_depth, this, std::placeholders::_1));
-            _subs_rgb = _nh->create_subscription<sensor_msgs::msg::Image>(_rgb_topic, 1, std::bind(&InstanceRecognition::_process_rgb, this, std::placeholders::_1));
-            _is_on = true;
-
-            RCLCPP_INFO_STREAM(_nh->get_logger(),"Turning on "+_depth_topic+". . . OK");
-        } else RCLCPP_DEBUG_STREAM(_nh->get_logger(),"Already turned on");
-    }
-    else{
-        if (_is_on) {
-              // _subs_depth.shutdown();
-              _is_on = false;
-              // RCLCPP_INFO_STREAM(_nh->get_logger(),"Turning off . . . OK");
-              RCLCPP_DEBUG_STREAM(_nh->get_logger(),"Feature not working yet"); 
-        } else  RCLCPP_DEBUG_STREAM(_nh->get_logger(),"Already turned off"); 
-    }
-    // return true;
 }
 
 
@@ -163,23 +145,26 @@ void InstanceRecognition::queryobjects_service( const std::shared_ptr<rmw_reques
 
 
 void InstanceRecognition::_process_rgb(const sensor_msgs::msg::Image::SharedPtr img){
-    if(!_is_on) return;
     rgb_in=img;
     // image_frameid = img->header.frame_id;
     ImageIn  = cv_bridge::toCvCopy((rgb_in), sensor_msgs::image_encodings::BGR8)->image;
+    ready_rgb = false;
     if (rgb_in->height * rgb_in->width > 0)
         ready_rgb = true;
+
 }
 
 void InstanceRecognition::_process_depth(const sensor_msgs::msg::Image::SharedPtr img){
-    if(!_is_on) return;
     depth_in=img;
     image_frameid = img->header.frame_id;
     DepthIn = cv_bridge::toCvShare(depth_in)->image;
+    // DepthIn = cv_bridge::toCvCopy((depth_in), sensor_msgs::image_encodings::TYPE_16UC1)->image;
+    ready_depth = false;
     if (depth_in->height * depth_in->width > 0)
         ready_depth = true;
 
 }
+
 
 void InstanceRecognition::_process_depthinfo(const sensor_msgs::msg::CameraInfo::SharedPtr info){
 //Exmaple : K: [618.5377197265625, 0.0, 313.529052734375, 0.0, 618.5377807617188, 237.82754516601562, 0.0, 0.0, 1.0]
@@ -222,7 +207,7 @@ bool InstanceRecognition::load_database() {
                     std::stringstream path_img;
                     std::string img=it2->path().filename().c_str();
                     path_img<<path_obj.str()<<"/"<<img;
-                    RCLCPP_INFO_STREAM(_nh->get_logger(),"file "<<path_img.str());
+                    RCLCPP_DEBUG_STREAM(_nh->get_logger(),"file "<<path_img.str());
 
                     cv::Mat mat_img = cv::imread(path_img.str(), cv::IMREAD_COLOR);
                     std::vector<cv::KeyPoint> kp;
@@ -371,12 +356,15 @@ std::vector<int> InstanceRecognition::matching_db(cv::Mat dscr_input, std::vecto
 
     //Printing matching information
     //std::cout<<"best match: "<<db_label[best_id]<<std::endl;
-    for (int i = 0; i < n_matches.size(); ++i)
-        if (n_matches[i] >= 9){
-         //   std::cout<<"match: "<<db_label[i] <<" - "<< n_matches[i]<<std::endl;
+    for (int i = 0; i < n_matches.size(); ++i){
+    	  // std::cout<<"match: "<<db_label[i] <<" - "<< n_matches[i]<<std::endl;
+        if (level == 1 && n_matches[i] >= 4)
             id_matches.push_back(i);
-        }
-
+        
+        if (level == 2 && n_matches[i] >= 9)
+            id_matches.push_back(i);
+        
+	}
 
     return id_matches;
 
@@ -404,6 +392,13 @@ void InstanceRecognition::remove_duplicates(std::vector<box_obj> &objs, std::vec
     for (int i = 0; i < objs.size(); ++i)
     {
         cv::Rect r1 = cv::Rect(std::min(objs[i].p1.x, objs[i].p3.x), std::min(objs[i].p1.y, objs[i].p3.y), std::max(objs[i].p2.x, objs[i].p4.x) - std::min(objs[i].p1.x, objs[i].p3.x), std::max(objs[i].p2.y, objs[i].p4.y) - std::min(objs[i].p1.y, objs[i].p3.y));
+
+        if (r1.x < 5) r1.x = 5;
+        if (r1.y < 5) r1.y = 5;
+        if (r1.width < 5) r1.width = 5;
+        if (r1.height < 5) r1.height = 5;
+        if (r1.x + r1.width > ImageIn.cols-5) r1.width = ImageIn.cols-r1.x-5;
+        if (r1.y + r1.height > ImageIn.rows-5) r1.height = ImageIn.rows-r1.y-5;
         objs_rects.push_back(r1);
     }
 
@@ -417,8 +412,8 @@ void InstanceRecognition::point_to_position(cv::Point point2d, geometry_msgs::ms
 
 geometry_msgs::msg::PoseStamped InstanceRecognition::point2d_to_pose(cv::Point point_in){
 
-      if(! DepthIn.data || DepthIn.cols==0 || DepthIn.rows==0)
-        RCLCPP_ERROR_STREAM(_nh->get_logger(),"geometry_msgs::msg::PoseStamped InstanceRecognition::point2d_to_pose() : depth image null");
+	if(! DepthIn.data || DepthIn.cols==0 || DepthIn.rows==0)
+		RCLCPP_ERROR_STREAM(_nh->get_logger(),"geometry_msgs::msg::PoseStamped InstanceRecognition::point2d_to_pose() : depth image null");
 
 
     geometry_msgs::msg::PoseStamped pose_out;
@@ -436,6 +431,39 @@ geometry_msgs::msg::PoseStamped InstanceRecognition::point2d_to_pose(cv::Point p
 
 }
 
+void InstanceRecognition::publish_objects(){
+
+	rhome_metadata::msg::Objects objects_msg;
+//    objects_msg.pose = detected_pose;  take from depth_img
+    for (int i = 0; i < detected_imgs.size(); ++i)
+    {
+        cv_bridge::CvImage out_msg;
+        out_msg.header   = rgb_in->header; 
+        out_msg.encoding = sensor_msgs::image_encodings::BGR8; 
+        out_msg.image    = detected_imgs[i];
+        sensor_msgs::msg::Image msg = *out_msg.toImageMsg();
+        
+        int c_x = (detected_roi[i].p1.x + detected_roi[i].p2.x + detected_roi[i].p3.x + detected_roi[i].p4.x)/4;
+        int c_y = (detected_roi[i].p1.y + detected_roi[i].p2.y + detected_roi[i].p3.y + detected_roi[i].p4.y)/4;
+        geometry_msgs::msg::PoseStamped posestamped =  point2d_to_pose(cv::Point(c_x, c_y));
+
+        if (posestamped.pose.position.x != 0 || posestamped.pose.position.y != 0 || posestamped.pose.position.z != 0 ) //Validation of the point
+        {
+			objects_msg.imgs.push_back (msg);
+			objects_msg.pose.push_back (posestamped);
+			objects_msg.roi.push_back(detected_roi[i]);
+			objects_msg.inf_label.push_back(detected_label[i]);
+        }
+        else
+        	RCLCPP_INFO_STREAM(_nh->get_logger(),"Object "<<detected_label[i]<<" detected, but without pose available in the depth image");
+
+    }
+
+
+    if (objects_msg.inf_label.size() > 0)
+	    _objects_pub->publish(objects_msg);
+    
+}
 
 // - - - - -  RUN   - - - - - - - - - -
 void InstanceRecognition::run() {
@@ -449,7 +477,7 @@ void InstanceRecognition::run() {
     std::vector<int>  match_ids = matching_db(test_dscr, matches);
 
     std::vector<box_obj> objects;
-
+    
     for (int i = 0; i < match_ids.size(); ++i)
     {
 
@@ -465,14 +493,15 @@ void InstanceRecognition::run() {
         }
 
         cv::Mat H =  cv::findHomography( obj, scene, cv::RANSAC );
-        
-        obj_corners[0] = cvPoint(0,0); obj_corners[1] = cvPoint( db_width[match_ids[i]], 0 );
-        obj_corners[2] = cvPoint( db_width[match_ids[i]], db_heigth[match_ids[i]] ); obj_corners[3] = cvPoint( 0, db_heigth[match_ids[i]] );
+        if (! H.empty()){
+	        obj_corners[0] = cvPoint(0,0); obj_corners[1] = cvPoint( db_width[match_ids[i]], 0 );
+	        obj_corners[2] = cvPoint( db_width[match_ids[i]], db_heigth[match_ids[i]] ); obj_corners[3] = cvPoint( 0, db_heigth[match_ids[i]] );
 
-        cv::perspectiveTransform( obj_corners, scene_corners, H);
-        box.p1 = scene_corners[0]; box.p2 = scene_corners[1]; 
-        box.p3 = scene_corners[2]; box.p4 = scene_corners[3]; 
-        objects.push_back(box);
+	        cv::perspectiveTransform( obj_corners, scene_corners, H);
+	        box.p1 = scene_corners[0]; box.p2 = scene_corners[1]; 
+	        box.p3 = scene_corners[2]; box.p4 = scene_corners[3]; 
+	        objects.push_back(box);
+    	}
     }
     
     std::vector<cv::Rect> objs_rects;
@@ -491,7 +520,6 @@ void InstanceRecognition::run() {
 
         detected_imgs.push_back( ImageIn(objs_rects[i]) );
         detected_label.push_back (db_label[match_ids[i]]);
-
         rhome_metadata::msg::Roi obj_roi;
         point_to_position(objects[i].p1, obj_roi.p1);
         point_to_position(objects[i].p2, obj_roi.p2);
@@ -499,8 +527,10 @@ void InstanceRecognition::run() {
         point_to_position(objects[i].p4, obj_roi.p4);
         detected_roi.push_back (obj_roi);
     }
+     RCLCPP_INFO_STREAM(_nh->get_logger()," Objects Recognized: "<< objects.size());
     depth_img = DepthIn;
 
+    publish_objects();
     cv::imshow("InstanceRecognition", ImageIn); 
     cv::waitKey(5);
 }
@@ -527,7 +557,7 @@ int main(int argc, char** argv) {
     rclcpp::Rate r(10);
 
     while(rclcpp::ok()){
-        if (node->_is_on && node->ready_depth && node->ready_rgb)
+        if (node->ready_depth && node->ready_rgb)
           node->run();
           
         r.sleep();

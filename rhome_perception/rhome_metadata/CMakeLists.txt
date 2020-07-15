@@ -26,6 +26,7 @@ set(msg_files
     "msg/Roi.msg"
     "msg/Color.msg"
     "msg/Shape.msg"
+    "msg/Objects.msg"
 )
 
 
@@ -43,7 +44,7 @@ set(srv_files
 rosidl_generate_interfaces(rhome_metadata
     ${msg_files}
     ${srv_files}
-    DEPENDENCIES builtin_interfaces std_msgs geometry_msgs
+    DEPENDENCIES builtin_interfaces std_msgs geometry_msgs sensor_msgs
 )
 
 
@@ -52,9 +53,6 @@ if(BUILD_TESTING)
 
   ament_lint_auto_find_test_dependencies()
 endif()
-
-#ament_export_dependencies(rosidl_default_runtime)
-#ament_export_include_directories(include)
 
 ament_export_include_directories(include)
 ament_export_dependencies(${PROJECT_NAME})
