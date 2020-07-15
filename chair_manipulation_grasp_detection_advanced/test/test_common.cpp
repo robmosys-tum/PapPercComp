@@ -64,6 +64,19 @@ chair_manipulation::TestParameters::TestParameters()
   grasp_database_creator_params_.max_num_grasps_per_model_ = 10;
   grasp_database_creator_params_.mesh_filenames_ = { mesh_filename };
   grasp_database_creator_params_.point_cloud_filenames_ = { point_cloud_filename };
+
+  point_cloud_preprocessor_params_.voxel_leaf_size_ = 0.01;
+  point_cloud_preprocessor_params_.mean_k_ = 50;
+  point_cloud_preprocessor_params_.stddev_mul_threshold_ = 3.;
+  point_cloud_preprocessor_params_.normal_search_radius_ = 0.05;
+
+  mesh_reconstruction_params_.search_radius_ = 0.05;
+  mesh_reconstruction_params_.max_distance_ = 2.5;
+  mesh_reconstruction_params_.max_nearest_neighbors_ = 100;
+  mesh_reconstruction_params_.max_surface_angle_ = M_PI / 8;
+  mesh_reconstruction_params_.min_angle_ = M_PI / 18;
+  mesh_reconstruction_params_.max_angle_ = 2 * M_PI / 3;
+  mesh_reconstruction_params_.normal_consistency_ = true;
 }
 
 }  // namespace chair_manipulation

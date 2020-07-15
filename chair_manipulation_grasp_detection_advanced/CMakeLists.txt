@@ -66,6 +66,10 @@ set(
   include/chair_manipulation_grasp_detection_advanced/grasp_synthesizer.h
   include/chair_manipulation_grasp_detection_advanced/qhull_mutex.h
   include/chair_manipulation_grasp_detection_advanced/stopwatch.h
+  include/chair_manipulation_grasp_detection_advanced/point_cloud_preprocessor.h
+  include/chair_manipulation_grasp_detection_advanced/point_cloud_segmentation.h
+  include/chair_manipulation_grasp_detection_advanced/point_cloud_registration.h
+  include/chair_manipulation_grasp_detection_advanced/mesh_reconstruction.h
   src/model.cpp
   src/utils.cpp
   src/grasp_database.cpp
@@ -76,6 +80,12 @@ set(
   src/transform.cpp
   src/grasp_synthesizer.cpp
   src/qhull_mutex.cpp
+  src/point_cloud_segmentation_node.cpp
+  src/point_cloud_registration.cpp
+  src/point_cloud_registration_node.cpp
+  src/point_cloud_preprocessor.cpp
+  src/point_cloud_segmentation.cpp
+  src/mesh_reconstruction.cpp
 )
 
 set(
@@ -108,3 +118,9 @@ target_link_libraries(wrench_test ${LIBRARIES})
 
 add_executable(load_database_test test/load_database_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 target_link_libraries(load_database_test ${LIBRARIES})
+
+add_executable(mesh_reconstruction_test test/mesh_reconstruction_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(mesh_reconstruction_test ${LIBRARIES})
+
+add_executable(point_cloud_preprocessor_test test/point_cloud_preprocessor_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(point_cloud_preprocessor_test ${LIBRARIES})

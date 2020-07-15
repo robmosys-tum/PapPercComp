@@ -50,3 +50,34 @@ weights_online:
   v1: 1.0
   distance: 1.0
   reachability: 1.0
+
+point_cloud_preprocessor:
+  # Leaf size of the voxel filter.
+  # If this is set to 0.01 for example, it means that only one point is kept every 1x1x1cm voxel.
+  voxel_leaf_size: 0.01
+  # Number of neighbors to consider for the statistical outlier filter.
+  mean_k: 50
+  # Points with a distance larger than the standard deviation of the mean distance multiplied
+  # by the following value will be considered outliers.
+  stddev_mul_threshold: 3.0
+  # The search radius for normal estimation.
+  normal_search_radius: 0.05
+
+mesh_reconstruction:
+  # Maximum distance between connected points (maximum edge length).
+  search_radius: 0.025
+  # Maximum acceptable distance for a point to be considered,
+  # relative to the distance of the nearest point.
+  max_distance: 2.5
+  # How many neighbors are searched for
+  max_nearest_neighbors: 100
+  # Points will not be connected to the current point
+  #	if their normals deviate more than the specified angle.
+  max_surface_angle: 0.78539 # 45 degrees
+  # Minimum and maximum angle there can be in a triangle.
+  # The first is not guaranteed, the second is.
+  min_angle: 0.17453 # 10 degrees
+  max_angle: 2.09439 # 120 degrees
+  # If false, the direction of normals will not be taken into account
+  # when computing the angle between them.
+  normal_consistency: true
