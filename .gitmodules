@@ -1,0 +1,6 @@
+[submodule "ros_wrappers/cpd_wrapper/cpd"]
+	path = ros_wrappers/cpd_wrapper/cpd
+	url = https://github.com/gadomski/cpd
+[submodule "ros_wrappers/fgt_wrapper/fgt"]
+	path = ros_wrappers/fgt_wrapper/fgt
+	url = https://github.com/gadomski/fgt
