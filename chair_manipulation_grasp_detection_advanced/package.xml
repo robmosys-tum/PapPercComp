@@ -23,6 +23,7 @@
   <depend>tf2_eigen</depend>
   <depend>moveit_core</depend>
   <depend>moveit_visual_tools</depend>
-  <depend>qhull_ros</depend>
+  <depend>cpd_wrapper</depend>
+  <depend>libqhull</depend>
 
 </package>

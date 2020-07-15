@@ -3,6 +3,8 @@ project(chair_manipulation_grasp_detection_advanced)
 
 set(CMAKE_CXX_STANDARD 14)
 
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
 find_package(
   catkin REQUIRED COMPONENTS
   roscpp
@@ -18,18 +20,32 @@ find_package(
   tf2_eigen
   moveit_core
   moveit_visual_tools
-  qhull_ros
+  cpd_wrapper
 )
 
 find_package(PCL REQUIRED)
 find_package(FCL REQUIRED)
 
-catkin_package(CATKIN_DEPENDS)
+find_package(Qhull REQUIRED)
+if (HAVE_QHULL_2011)
+  add_definitions(-DCHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_HAVE_QHULL_2011)
+endif()
+
+catkin_package()
 
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
+  ${QHULL_INCLUDE_DIRS}
+)
+
+set(
+  LIBRARIES
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  ${FCL_LIBRARIES}
+  ${QHULL_LIBRARIES}
 )
 
 set(
@@ -66,13 +82,6 @@ set(
   TEST_SOURCE_FILES
   test/test_common.h
   test/test_common.cpp
-)
-
-set(
-  LIBRARIES
-  ${catkin_LIBRARIES}
-  ${PCL_LIBRARIES}
-  ${FCL_LIBRARIES}
 )
 
 # Nodes

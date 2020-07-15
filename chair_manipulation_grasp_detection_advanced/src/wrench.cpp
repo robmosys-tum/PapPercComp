@@ -1,10 +1,29 @@
 #include "chair_manipulation_grasp_detection_advanced/wrench.h"
 #include "chair_manipulation_grasp_detection_advanced/transform.h"
+#include "chair_manipulation_grasp_detection_advanced/exception.h"
 #include "chair_manipulation_grasp_detection_advanced/qhull_mutex.h"
-#include <libqhullcpp/Qhull.h>
-#include <libqhullcpp/QhullFacetList.h>
-#include <libqhullcpp/QhullFacet.h>
-#include <ros/ros.h>
+
+extern "C" {
+#ifdef CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_HAVE_QHULL_2011
+#include <libqhull/libqhull.h>
+#include <libqhull/mem.h>
+#include <libqhull/qset.h>
+#include <libqhull/geom.h>
+#include <libqhull/merge.h>
+#include <libqhull/poly.h>
+#include <libqhull/io.h>
+#include <libqhull/stat.h>
+#else
+#include <qhull/qhull.h>
+#include <qhull/mem.h>
+#include <qhull/qset.h>
+#include <qhull/geom.h>
+#include <qhull/merge.h>
+#include <qhull/poly.h>
+#include <qhull/io.h>
+#include <qhull/stat.h>
+#endif
+}
 
 namespace chair_manipulation
 {
@@ -38,8 +57,7 @@ void WrenchSpace::addContactWrenches(const Contact& contact, const Model& model)
 
 void WrenchSpace::computeConvexHull(std::size_t dim)
 {
-  QhullLockGuard guard;
-  orgQhull::Qhull qhull;
+  std::lock_guard<std::mutex> guard{ qhull_mutex };
 
   // Copy wrench data in C-style array in order for qhull to process
   auto num_wrenches = wrenches.size();
@@ -51,50 +69,49 @@ void WrenchSpace::computeConvexHull(std::size_t dim)
       wrenches_coords[dim * i + j] = wrench.value_[j];
   }
 
-  // This calls qhull with no input parameters which computes the convex hull
-  const char* input_comment = "";
+  // This calls qhull to computes the convex hull
   // n: normals with offset
   // FA: report total area and volume
-  const char* qhull_command = "n FA";
-
-  try
+  char qhull_cmd[] = "qhull n FA";
+  static FILE* null = fopen("/dev/null", "w");
+  int exitcode = qh_new_qhull(dim, num_wrenches, wrenches_coords, true, qhull_cmd, null, null);
+  if (exitcode != 0)
   {
-    qhull.runQhull(input_comment, dim, num_wrenches, wrenches_coords, qhull_command);
-
-    double max_offset = -std::numeric_limits<double>::max();
-    auto facet_list = qhull.facetList();
-    for (const auto& facet : facet_list)
-    {
-      auto qhull_hyperplane = facet.hyperplane();
-      if (qhull_hyperplane.isValid())
-      {
-        auto hyplerplane_coords = qhull_hyperplane.coordinates();
-
-        Hyperplane hyperplane;
-        hyperplane.offset_ = qhull_hyperplane.offset();
-        for (std::size_t i = 0; i < dim; i++)
-          hyperplane.coeffs_[i] = hyplerplane_coords[i];
-
-        hyperplanes_.push_back(hyperplane);
-        max_offset = std::max(max_offset, hyperplane.offset_);
-      }
-    }
-
-    // We have force closure if there doesn't exist a positive offset
-    force_closure_ = max_offset < 0.;
-    if (force_closure_)
-    {
-      // The epsilon1 quality is smallest offset (in magnitude)
-      epsilon1_quality_ = -max_offset;
-      // The v1 quality is simply the volume of the convex hull
-      v1_quality_ = qhull.volume();
-    }
+    qh_freeqhull(!qh_ALL);
+    int curlong, totlong;
+    qh_memfreeshort(&curlong, &totlong);
+    throw exception::Runtime{ "Convex hull creation failed." };
   }
-  catch (const orgQhull::QhullError& e)
+  int num_facets = qh num_facets;
+  hyperplanes_.resize(num_facets);
+
+  double max_offset = -std::numeric_limits<double>::max();
+  std::size_t i = 0;
+  facetT* facet;
+  FORALLfacets
   {
-    // Leave default values
+    auto& hyperplane = hyperplanes_[i];
+    hyperplane.offset_ = facet->offset;
+    for (std::size_t j = 0; j < dim; j++)
+      hyperplane.coeffs_[j] = facet->normal[j];
+
+    max_offset = std::max(max_offset, hyperplane.offset_);
+    i++;
   }
-  delete[] wrenches_coords;
+
+  // We have force closure if there doesn't exist a positive offset
+  force_closure_ = max_offset < 0.;
+  if (force_closure_)
+  {
+    // The epsilon1 quality is smallest offset (in magnitude)
+    epsilon1_quality_ = -max_offset;
+    // The v1 quality is simply the volume of the convex hull
+    v1_quality_ = qh totvol;
+  }
+
+  qh_freeqhull(!qh_ALL);
+  int curlong, totlong;
+  qh_memfreeshort(&curlong, &totlong);
 }
 
 }  // namespace chair_manipulation

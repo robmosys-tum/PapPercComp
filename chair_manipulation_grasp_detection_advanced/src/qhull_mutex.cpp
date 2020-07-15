@@ -2,6 +2,6 @@
 
 namespace chair_manipulation
 {
-QMutex qhull_mutex;
+std::mutex qhull_mutex;
 
 }
