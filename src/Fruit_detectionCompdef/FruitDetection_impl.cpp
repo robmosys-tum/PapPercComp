@@ -113,10 +113,18 @@ void FruitDetection_impl::detectFruits(cv_bridge::CvImagePtr cv_ptr) {
 
 void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr,
                             std::vector<fruit_detection::msg::ClassBox> boxes) {
+    RCLCPP_INFO(this->get_logger(), "Publish Image");
+    auto boxImage = fruit_detection::msg::BoxesImage();
+    boxImage.img = *cv_ptr->toImageMsg();
+    boxImage.boxes = boxes;
+    this->BoxImage_pub_->publish(boxImage);
+    RCLCPP_INFO(this->get_logger(), "Drawing Image");
     cv::Mat img = cv_ptr->image;
-    cv::Size sz = img.size();
+    cv::Size sz = cv::Size(512,512);
     int imageWidth = sz.width;
     int imageHeight = sz.height;
+    cv::namedWindow("Labeled Image", cv::WINDOW_NORMAL);
+    cv::resize(img, img, sz);
     RCLCPP_INFO(this->get_logger(), "Generate BoxImage");
     for (auto box : boxes) {
         auto color = colorMap[box.fruit.data()];
@@ -126,8 +134,8 @@ void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr,
 
         std::string label = createLabel(box);
         int fontFace = cv::FONT_HERSHEY_SIMPLEX;
-        double fontScale = 0.8;
-        int thickness = 2;
+        double fontScale = 0.5;
+        int thickness = 1;
         int baseline = 0;
         cv::Size textSize = cv::getTextSize(label, fontFace,
                                             fontScale, thickness, &baseline);
@@ -135,14 +143,8 @@ void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr,
                          (box.ymin * imageHeight) + textSize.height);
         putText(img, label, textOrg, fontFace, fontScale, color, thickness, 0);
     }
-    RCLCPP_INFO(this->get_logger(), "Drawing Image");
-    cv::imshow("LABELED", img);
-    cv::waitKey(0);
-    RCLCPP_INFO(this->get_logger(), "Publish Image");
-    auto boxImage = fruit_detection::msg::BoxesImage();
-    boxImage.img = *cv_ptr->toImageMsg();
-    boxImage.boxes = boxes;
-    this->BoxImage_pub_->publish(boxImage);
+    cv::imshow("Labeled Image", img);
+    cv::waitKey(5000);
 }
 }  // namespace Fruit_detectionCompdef
 
