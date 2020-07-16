@@ -53,7 +53,7 @@ FruitDetection_impl::FruitDetection_impl(rclcpp::NodeOptions /*in*/ options) : F
         RCLCPP_INFO(this->get_logger(),
                     "Detection service not available, waiting again...");
     }
-    RCLCPP_ERROR(this->get_logger(), "Services Ready");
+    RCLCPP_INFO(this->get_logger(), "Services Ready");
 }
 
 void FruitDetection_impl::FruitDetectionHandler(

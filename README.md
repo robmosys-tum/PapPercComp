@@ -78,7 +78,7 @@ Simple example:
 3. Source the setup: `source install/setup.bash`
 4. Launch the nodes: `ros2 launch fruit_detection fruit_detection_launch.py`
 5. Unzip the example: `unzip src/fruit_detection/example/example.zip -d src/fruit_detection/example`
-6. Play the example bag: `ros2 bag play src/fruit_detection/example/bag.db3`
+6. Play the example bag: `ros2 bag play src/fruit_detection/example/êxample_0.db3`
 
 Keep in mind that logging doesn't work properly when using `ros2 launch`.
 If you use the the nodes individually make sure to set their parameters!
