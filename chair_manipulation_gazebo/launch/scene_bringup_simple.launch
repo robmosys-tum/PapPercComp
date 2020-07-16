@@ -17,8 +17,8 @@
     <arg name="limited" value="false" />
 
     <!-- position, orientation and initial joint values of first robot -->
-    <arg name="robot1_x" value="-0.5" />
-    <arg name="robot1_y" value="-1.0" />
+    <arg name="robot1_x" value="0.5" />
+    <arg name="robot1_y" value="1.0" />
     <arg name="robot1_z" value="0.1" />
     <arg name="robot1_roll" value="0.0" />
     <arg name="robot1_pitch" value="0.0" />
@@ -33,7 +33,7 @@
     <arg name="robot1_right_finger_joint" value="0.0" />
 
     <!-- position, orientation and initial joint values of second robot -->
-    <arg name="robot2_x" value="0.5" />
+    <arg name="robot2_x" value="-0.5" />
     <arg name="robot2_y" value="-1.0" />
     <arg name="robot2_z" value="0.1" />
     <arg name="robot2_roll" value="0.0" />
@@ -53,24 +53,24 @@
   <include ns="camera1" file="$(find chair_manipulation_gazebo)/launch/spawn_camera.launch">
     <arg name="camera_name" value="camera1" />
     <arg name="tf_prefix" value="camera1" />
-    <arg name="x" value="-1.0" />
-    <arg name="y" value="0.0" />
-    <arg name="z" value="0.5" />
-    <arg name="roll" value="0.0" />
-    <arg name="pitch" value="0.1" />
-    <arg name="yaw" value="0.0" />
-  </include>
-
-  <!-- second camera -->
-  <include ns="camera2" file="$(find chair_manipulation_gazebo)/launch/spawn_camera.launch">
-    <arg name="camera_name" value="camera2" />
-    <arg name="tf_prefix" value="camera2" />
     <arg name="x" value="1.0" />
     <arg name="y" value="0.0" />
     <arg name="z" value="0.5" />
     <arg name="roll" value="0.0" />
     <arg name="pitch" value="0.1" />
     <arg name="yaw" value="3.14159" />
+  </include>
+
+  <!-- second camera -->
+  <include ns="camera2" file="$(find chair_manipulation_gazebo)/launch/spawn_camera.launch">
+    <arg name="camera_name" value="camera2" />
+    <arg name="tf_prefix" value="camera2" />
+    <arg name="x" value="-1.0" />
+    <arg name="y" value="0.0" />
+    <arg name="z" value="0.5" />
+    <arg name="roll" value="0.0" />
+    <arg name="pitch" value="0.1" />
+    <arg name="yaw" value="0.0" />
   </include>
 
   <!-- camera1/world -> world -->
