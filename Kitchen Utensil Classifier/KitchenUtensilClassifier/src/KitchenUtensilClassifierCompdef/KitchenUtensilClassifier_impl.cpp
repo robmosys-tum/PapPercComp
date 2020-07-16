@@ -5,6 +5,9 @@
 #define KitchenUtensilClassifierCompdef_KitchenUtensilClassifier_impl_BODY
 
 #define MODEL_PATH "data/kitchen_classifier.onnx"
+#define CLASS_LIST_PATH "data/class_list.txt"
+#define NR_SKIP_FRAMES 30
+#define IMG_SCALE_FACTOR 1.0
 
 /************************************************************
  KitchenUtensilClassifier_impl class body
@@ -16,6 +19,9 @@
 // Derived includes directives
 #include "rclcpp/rclcpp.hpp"
 #include "stdio.h"
+#include <sstream>
+#include <string>
+#include <fstream>
 
 #include <unistd.h>
 
@@ -37,74 +43,117 @@ KitchenUtensilClassifier_impl::KitchenUtensilClassifier_impl(
 		rclcpp::NodeOptions /*in*/options) :
 		KitchenUtensilClassifier(options) {
 	net = dnn::readNet(MODEL_PATH);
-	counter = 200;
+	counter = NR_SKIP_FRAMES;
+	classes = {};
+	read_classes_from_file(CLASS_LIST_PATH);
 }
 
 /**
+ * This function is called whenever an image is published. Every NR_SKIP_FRAMES'th
+ * frame will resul in a class name being published for a specific piece of cutlery
+ * (though it is worth noting that, depending on the model being used and the
+ * configuration of the class-name list file, any type of object can be potentially
+ * classified).
  * 
- * @param image 
+ * @param image An input image
  */
 void KitchenUtensilClassifier_impl::classifyKitchenUtensil(
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
-
-	const char *class_name;
-	Mat blob;
+	Mat blob, prob;
+	Point classIdPoint;
+	int classId;
+	double confidence;
+	std_msgs::msg::String className = std_msgs::msg::String();
 	Mat frame(image->height, image->width, CV_8UC3, image->data.data());
 
-	if (counter++ < 30)
+	// simply skip some frames so that we don't get clogged up on too many input images
+	if (counter++ < NR_SKIP_FRAMES)
 		return;
 	counter = 0;
-	Scalar mean = Scalar(124.16, 116.736, 103.936);
 
-	double scaleFactor = 1.0;
-	Size inputSize(inputWidth, inputHeight);
-
-	blob = dnn::blobFromImage(frame, scaleFactor, inputSize, mean);
+	blob = dnn::blobFromImage(frame, IMG_SCALE_FACTOR, Size{inputWidth, inputHeight}, mean);
 	net.setInput(blob);
-	Mat prob = net.forward();
-	Point classIdPoint;
-	double confidence;
+	prob = net.forward();
+	debug_net_efficiency();
+
 	minMaxLoc(prob, 0, &confidence, 0, &classIdPoint);
-
 	softmax(&prob, confidence);
+    debug_confidences(&prob);
 
-	// Print out probability for each class
-	MatIterator_<float> it, end;
-	RCLCPP_INFO(this->get_logger(), format("%d", prob.type()));
-	for(it = prob.begin<float>(), end = prob.end<float>(); it != end; ++it) {
+	classId = classIdPoint.x;
+	if (0 <= classId && classId < classes.size()) {
+		className.set__data(classes[classId]);
+	} else {
+		RCLCPP_WARN(this->get_logger(), "Name list is shorter than output tensor;"
+				"this is most likely due to using an incorrect model or an invalid"
+				"class list.");
+		className.set__data("Unknown");
+	}
+
+	RCLCPP_INFO(this->get_logger(), format("%s: %.4f",
+			(format("Class %s (#%d)", className.data.c_str(), classId).c_str()), confidence));
+
+	utensilClass_pub_->publish(className);
+}
+
+/*
+ * Outputs the confidence values for the individual classes, based on a matrix
+ * containing confidences (ideally between 0 and 1).
+ */
+void KitchenUtensilClassifier_impl::debug_confidences(Mat *confidences){
+	// print out probability for each class
+	MatIterator_<float> it = confidences->begin<float>();
+	MatIterator_<float> end = confidences->end<float>();
+	uint class_counter = 0;
+	const char *class_name;
+    RCLCPP_INFO(this->get_logger(), format("Confidences:"));
+	for(;it != end; ++it, ++class_counter) {
+		if (class_counter < classes.size()) {
+			class_name = classes[class_counter];
+		} else {
+			RCLCPP_WARN(this->get_logger(), "Name list is shorter than output tensor;"
+					"this is most likely due to using an incorrect model or an invalid"
+					"class list.");
+			class_name = "UNKNOWN";
+		}
 		Point p = it.pos();
-		RCLCPP_INFO(this->get_logger(), format("%f", prob.at<float>(p)));
+		RCLCPP_INFO(this->get_logger(), format("  %.2f for %s",
+				confidences->at<float>(p)), class_name);
 	}
+}
 
-	int classId = classIdPoint.x;
-	switch (classId) {
-	case 0:
-		class_name = "Fork";
-		break;
-	case 1:
-		class_name = "Knife";
-		break;
-	case 2:
-		class_name = "Ladle";
-		break;
-	case 3:
-		class_name = "Spoon";
-		break;
-	default:
-		class_name = "UNKOWN";
+/*
+ * Simple function for reading a list of classes from a file; each line
+ * of the file should have exactly one class name in it (empty lines are ignored).
+ */
+void KitchenUtensilClassifier_impl::read_classes_from_file(const char *path){
+	std::ifstream infile(path);
+	std::string line;
+	while (std::getline(infile, line))
+	{
+		if (line == "") {
+			continue;
+	    }
+	    classes.push_back(strdup(line.c_str()));
 	}
+}
 
+/*
+ * Outputs the most recent inference time of the net
+ */
+void KitchenUtensilClassifier_impl::debug_net_efficiency(){
 	// Efficiency information.
 	std::vector<double> layersTimes;
 	double freq = getTickFrequency() / 1000;
 	double t = net.getPerfProfile(layersTimes) / freq;
 
-	// Print predicted class.
 	RCLCPP_INFO(this->get_logger(), format("Inference time: %.2f ms", t));
-	RCLCPP_INFO(this->get_logger(), format("%s: %.4f",
-			(format("Class %s (#%d)", class_name, classId).c_str()), confidence));
 }
 
+/*
+ * Applies the softmax function to a series of outputs,
+ * editing the values of the matrix in-place.
+ */
 static void softmax(Mat *outputs, double max_val) {
 	*outputs = *outputs - max_val;
 	exp(*outputs, *outputs);

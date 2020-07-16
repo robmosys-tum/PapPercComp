@@ -51,10 +51,26 @@ public:
 			const sensor_msgs::msg::Image::SharedPtr /*in*/image);
 
 private:
-	static const int inputWidth = 224;
-	static const int inputHeight = 224;
+	void read_classes_from_file(const char *path);
+	void debug_confidences(cv::Mat *confidences);
+	void debug_net_efficiency();
+
 	cv::dnn::Net net;
 	int counter;
+	std::vector<const char*> classes;
+	cv::Scalar mean = cv::Scalar(124.16, 116.736, 103.936);
+
+	/*
+	 * These are statically chosen values that depend on the model being used;
+	 * VGG19 for example uses an input width and height of 224 pixels
+	 */
+	static const int inputWidth = 224;
+	static const int inputHeight = 224;
+
+	/*
+	 * This is an empirically found value, and could potentially be replaced
+	 * in the future
+	 */
 
 };
 /************************************************************/
