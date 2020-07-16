@@ -95,10 +95,22 @@ specify a way to add them to the package directly. If you add additional folders
 make sure you add them in the CMakeLists.txt.
 The code was linted with pylint and cpplint respectively. 
 
+### Available Models
+
+Currently two neural networks are provided. To change the network update the launch
+file and parameters accordingly:
+1. squeezenet.h5
+    - Binary classifier `python ['healthy', 'rotten]`
+    - Trained on a public [Kaggle](https://www.kaggle.com/sriramr/fruits-fresh-and-rotten-for-classification) dataset
+2. squeezenet_v1.h5
+    - Six class classifier `python ['blotch', 'canker', 'healthy', 'mold', 'rot', 'scab']`
+    - Trained on a private dataset (no licensing) of 2106 images. The images were collected
+    from google and contain fruits according to the OpenImages_v6 classes.
+
 ### Customizing models
 
 If you want to customize the neural networks you can use the provided squeezenet
-for classification. The file can be run as python3 script. Just define the desried
+for classification. The file can be run as python3 script. Just define the desired
 classes and create a dataset in the form off:
 ```
 train
@@ -109,6 +121,6 @@ train
 
 The detection network is a pretrained network from tensorflow hub.
 Tensorflow provides promising detection Networks (especially ShapeMask) which
-in theory perform far better especially if you train them on open images.
+in theory perform far better especially if you train them on OpenImages.
 Unfortunately the [tensorflow model garden](https://github.com/tensorflow/models)
 is still under development and prediction was not working on my machine.
