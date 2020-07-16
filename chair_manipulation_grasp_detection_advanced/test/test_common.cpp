@@ -28,6 +28,9 @@ chair_manipulation::TestParameters::TestParameters()
                                                                                                     "test_grasp_"
                                                                                                     "database.yaml";
 
+  point_cloud_receiver_params_.topics_ = { "cloud1, cloud2" };
+  point_cloud_receiver_params_.world_frame_ = "world";
+
   gripper_params_.base_frame_ = "robotiq_arg2f_base_link";
   gripper_params_.tcp_frame_ = "tcp";
   gripper_params_.contact_threshold_ = 0.001;

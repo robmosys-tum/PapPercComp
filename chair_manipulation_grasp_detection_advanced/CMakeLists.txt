@@ -70,6 +70,7 @@ set(
   include/chair_manipulation_grasp_detection_advanced/point_cloud_segmentation.h
   include/chair_manipulation_grasp_detection_advanced/point_cloud_registration.h
   include/chair_manipulation_grasp_detection_advanced/mesh_reconstruction.h
+  include/chair_manipulation_grasp_detection_advanced/point_cloud_receiver.h
   src/model.cpp
   src/utils.cpp
   src/grasp_database.cpp
@@ -80,9 +81,8 @@ set(
   src/transform.cpp
   src/grasp_synthesizer.cpp
   src/qhull_mutex.cpp
-  src/point_cloud_segmentation_node.cpp
+  src/point_cloud_receiver.cpp
   src/point_cloud_registration.cpp
-  src/point_cloud_registration_node.cpp
   src/point_cloud_preprocessor.cpp
   src/point_cloud_segmentation.cpp
   src/mesh_reconstruction.cpp
@@ -101,6 +101,9 @@ target_link_libraries(create_grasp_database_node ${LIBRARIES})
 
 add_executable(grasp_detection_node src/grasp_detection_node.cpp ${SOURCE_FILES})
 target_link_libraries(grasp_detection_node ${LIBRARIES})
+
+add_executable(point_cloud_segmentation_node src/point_cloud_segmentation_node.cpp ${SOURCE_FILES})
+target_link_libraries(point_cloud_segmentation_node ${LIBRARIES})
 
 # Tests
 

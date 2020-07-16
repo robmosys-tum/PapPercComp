@@ -1,8 +1,6 @@
 #ifndef CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_POINT_CLOUD_PREPROCESSOR_H
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_POINT_CLOUD_PREPROCESSOR_H
 
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
 #include <pcl/search/kdtree.h>
 #include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/filters/voxel_grid.h>
@@ -28,6 +26,7 @@ public:
   using InputPointCloudPtr = InputPointCloud::Ptr;
   using InputPointCloudConstPtr = InputPointCloud::ConstPtr;
   using OutputPointCloud = pcl::PointCloud<pcl::PointNormal>;
+  using OutputPointCloudPtr = pcl::PointCloud<pcl::PointNormal>;
   using SurfaceNormals = pcl::PointCloud<pcl::Normal>;
   using SurfaceNormalsPtr = SurfaceNormals::Ptr;
   using SearchMethod = pcl::search::KdTree<pcl::PointXYZ>;

@@ -49,8 +49,7 @@ GraspSynthesizer::GraspSynthesizer(GraspSynthesizerParameters params, GraspQuali
     for (std::size_t i = 0; i < params_.num_arms_; i++)
     {
       const auto& arm_base_frame = params_.arm_base_frames_[i];
-      geometry_msgs::TransformStamped msg;
-      msg = tf_buffer.lookupTransform(params_.world_frame_, arm_base_frame, ros::Time{ 0 }, ros::Duration{ 3. });
+      auto msg = tf_buffer.lookupTransform(params_.world_frame_, arm_base_frame, ros::Time{ 0 }, ros::Duration{ 3. });
       arm_base_poses_[i] = tf2::transformToEigen(msg);
     }
   }

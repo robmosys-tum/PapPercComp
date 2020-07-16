@@ -5,6 +5,7 @@
 #include "chair_manipulation_grasp_detection_advanced/grasp_sampler.h"
 #include "chair_manipulation_grasp_detection_advanced/grasp_synthesizer.h"
 #include "chair_manipulation_grasp_detection_advanced/grasp_database_creator.h"
+#include "chair_manipulation_grasp_detection_advanced/point_cloud_receiver.h"
 #include "chair_manipulation_grasp_detection_advanced/point_cloud_preprocessor.h"
 #include "chair_manipulation_grasp_detection_advanced/mesh_reconstruction.h"
 
@@ -24,6 +25,7 @@ struct TestParameters
   GraspSynthesizerParameters grasp_synthesizer_params_;
   GraspDatabaseCreatorParameters grasp_database_creator_params_;
 
+  PointCloudReceiverParameters point_cloud_receiver_params_;
   PointCloudPreprocessorParameters point_cloud_preprocessor_params_;
   MeshReconstructionParameters mesh_reconstruction_params_;
 };
