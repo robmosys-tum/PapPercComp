@@ -28,10 +28,12 @@ class DiseaseService(Node):
     def __init__(self):
         """
         Initialises the service by creating the cvBridge, loading the model from
-        the given parameter and declaring the list of valid disease classes.
+        the given parameter and loading the list of valid disease classes.
         """
         super().__init__('DiseaseService')
         self.declare_parameter('model_file')
+        self.declare_parameter('diseases')
+
         model_file = self.get_parameter(
             'model_file').get_parameter_value().string_value
         self.get_logger().info('Loading Model %s' % model_file)
@@ -39,7 +41,8 @@ class DiseaseService(Node):
         self.bridge = CvBridge()
         self.width = 256
         self.height = 256
-        self.diseases = ['healthy', 'rotten']
+        self.diseases = self.get_parameter(
+            'diseases').get_parameter_value().string_array_value
         self.srv = self.create_service(Classification, 'DiseaseService',
                                        self.predict)
         self.get_logger().info('Service Started')

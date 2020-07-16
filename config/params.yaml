@@ -1,3 +1,6 @@
 detection_service:
   ros__parameters:
     module_handle: "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"
+disease_service:
+  ros__parameters:
+    diseases: ['blotch', 'canker', 'healthy', 'mold', 'rot', 'scab']

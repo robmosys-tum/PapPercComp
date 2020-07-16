@@ -14,8 +14,9 @@ def generate_launch_description():
     """
     config = os.path.join(get_package_share_directory('fruit_detection'),
                           'config', 'params.yaml')
+    # we cant define a relative path in the yaml file so we do it here
     model = os.path.join(get_package_share_directory('fruit_detection'),
-                         'networks', 'squeezenet.h5')
+                         'networks', 'squeezenet_v1.h5')
     return LaunchDescription([
         Node(package='fruit_detection',
              node_executable='detection_service.py',
@@ -26,7 +27,7 @@ def generate_launch_description():
              node_name='disease_service',
              parameters=[{
                  "model_file": model
-             }]),
+             }, config]),
         Node(package='fruit_detection',
              node_executable='FruitDetection',
              node_name='FruitDetection')
