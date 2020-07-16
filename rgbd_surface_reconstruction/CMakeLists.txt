@@ -49,6 +49,8 @@ cuda_add_executable(Rgbd_surface_reconstruction src-gen/Rgbd_surface_reconstruct
 target_link_libraries(Rgbd_surface_reconstruction ${OpenCV_LIBS})
 ament_target_dependencies(Rgbd_surface_reconstruction rclcpp rclcpp_lifecycle sensor_msgs shape_msgs)
 
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME})
 
 # Start of user code dependencies
 # End of user code
