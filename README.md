@@ -94,3 +94,21 @@ sure to add them to the installation part of this readme since ROS2 does not
 specify a way to add them to the package directly. If you add additional folders
 make sure you add them in the CMakeLists.txt.
 The code was linted with pylint and cpplint respectively. 
+
+### Customizing models
+
+If you want to customize the neural networks you can use the provided squeezenet
+for classification. The file can be run as python3 script. Just define the desried
+classes and create a dataset in the form off:
+```
+train
+'---class1
+'---class2
+...
+```
+
+The detection network is a pretrained network from tensorflow hub.
+Tensorflow provides promising detection Networks (especially ShapeMask) which
+in theory perform far better especially if you train them on open images.
+Unfortunately the [tensorflow model garden](https://github.com/tensorflow/models)
+is still under development and prediction was not working on my machine.
