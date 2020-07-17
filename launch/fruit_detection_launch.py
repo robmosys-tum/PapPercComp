@@ -21,14 +21,20 @@ def generate_launch_description():
         Node(package='fruit_detection',
              node_executable='detection_service.py',
              node_name='detection_service',
+             output='screen',
+             emulate_tty=True,
              parameters=[config]),
         Node(package='fruit_detection',
              node_executable='disease_service.py',
              node_name='disease_service',
+             output='screen',
+             emulate_tty=True,
              parameters=[{
                  "model_file": model
              }, config]),
         Node(package='fruit_detection',
              node_executable='FruitDetection',
-             node_name='FruitDetection')
+             node_name='FruitDetection',
+             output='screen',
+             emulate_tty=True)
     ])
