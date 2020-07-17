@@ -15,6 +15,11 @@ PointCloudRegistration::PointCloudRegistration(PointCloudRegistrationParameters 
   nonrigid_.beta((params.beta_));
   nonrigid_.max_iterations(params.max_iterations_);
   nonrigid_.normalize(false);
+  nonrigid_.add_callback([&](const cpd::NonrigidResult& result) {
+    double runtime_seconds = (result.runtime.count() / 1000000.);
+    ROS_DEBUG_STREAM_NAMED("point_cloud_registration", "CPD iteration " << result.iterations);
+    ROS_DEBUG_STREAM_NAMED("point_cloud_registration", "CPD runtime " << runtime_seconds << "s.");
+  });
 }
 
 void PointCloudRegistration::setInputSource(const PointCloudRegistration::PointCloudConstPtr& source_cloud)
@@ -29,9 +34,10 @@ void PointCloudRegistration::setInputTarget(const PointCloudRegistration::PointC
 
 void PointCloudRegistration::align(PointCloud& aligned_cloud, NonrigidTransform& transform)
 {
-  auto result = nonrigid_.run(*source_cloud_, *target_cloud_);
+  auto result = nonrigid_.run(*target_cloud_, *source_cloud_);
   aligned_cloud = result.points;
-  transform = NonrigidTransform{result.points, result.w, params_.beta_};
+  auto w = std::make_shared<Eigen::MatrixXd>(result.w);
+  transform = NonrigidTransform{ source_cloud_, w, params_.beta_ };
 }
 
 }  // namespace chair_manipulation

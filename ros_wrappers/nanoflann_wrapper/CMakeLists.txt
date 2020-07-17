@@ -5,5 +5,5 @@ catkin_package(
     INCLUDE_DIRS
         nanoflann/include
 )
-option(BUILD_TESTS "Build unit tests" OFF)
+option(BUILD_TESTS "" OFF)
 add_subdirectory(nanoflann)

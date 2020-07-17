@@ -6,5 +6,6 @@ catkin_package(
         cpd/include
     LIBRARIES cpd
 )
-option(WITH_TESTS "Build test suite" OFF)
+option(WITH_TESTS "" OFF)
+option(WITH_FGT "" ON)
 add_subdirectory(cpd)

@@ -38,17 +38,23 @@ using Vector3 = Eigen::Matrix<T, 3, 1>;
 template <typename T>
 using Matrix3 = Eigen::Matrix<T, 3, 3>;
 
-template <typename T>
-Vector3<T> projection(const Vector3<T>& axis, const Vector3<T>& v)
+template <typename Vector>
+Vector projection(const Vector& axis, const Vector& v)
 {
-  Vector3<T> axis_normalized = axis.normalized();
+  Vector axis_normalized = axis.normalized();
   return v.dot(axis_normalized) * axis_normalized;
 }
 
 template <typename T>
 Matrix3<T> orthonormalize(const Matrix3<T>& mat)
 {
-  return mat.householderQr().householderQ();
+  Vector3<T> u1, u2, u3;
+  u1 = mat.col(0);
+  u2 = mat.col(1) - projection(u1, mat.col(1).eval());
+  u3 = mat.col(2) - projection(u1, mat.col(2).eval()) - projection(u2, mat.col(2).eval());
+  Matrix3<T> result;
+  result << u1.normalized(), u2.normalized(), u3.normalized();
+  return result;
 }
 
 template<typename PointT>

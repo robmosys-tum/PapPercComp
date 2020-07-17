@@ -6,5 +6,5 @@ catkin_package(
         fgt/include
     LIBRARIES fgt
 )
-option(WITH_TESTS "Build test suite" OFF)
+option(WITH_TESTS "" OFF)
 add_subdirectory(fgt)

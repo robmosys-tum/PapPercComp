@@ -81,7 +81,7 @@ chair_manipulation::TestParameters::TestParameters()
 
   point_cloud_registration_params_.lambda_ = cpd::DEFAULT_LAMBDA;
   point_cloud_registration_params_.beta_ = cpd::DEFAULT_BETA;
-  point_cloud_registration_params_.max_iterations_ = cpd::DEFAULT_MAX_ITERATIONS;
+  point_cloud_registration_params_.max_iterations_ = 150;
 
   mesh_reconstruction_params_.search_radius_ = 0.05;
   mesh_reconstruction_params_.max_distance_ = 2.5;
