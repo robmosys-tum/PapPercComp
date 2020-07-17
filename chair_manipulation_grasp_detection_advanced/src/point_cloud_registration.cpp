@@ -14,8 +14,7 @@ PointCloudRegistration::PointCloudRegistration(PointCloudRegistrationParameters 
   nonrigid_.lambda(params_.lambda_);
   nonrigid_.beta((params.beta_));
   nonrigid_.max_iterations(params.max_iterations_);
-  nonrigid_.linked(true);
-  nonrigid_.normalize(true);
+  nonrigid_.normalize(false);
 }
 
 void PointCloudRegistration::setInputSource(const PointCloudRegistration::PointCloudConstPtr& source_cloud)
@@ -26,6 +25,13 @@ void PointCloudRegistration::setInputSource(const PointCloudRegistration::PointC
 void PointCloudRegistration::setInputTarget(const PointCloudRegistration::PointCloudConstPtr& target_cloud)
 {
   target_cloud_ = target_cloud;
+}
+
+void PointCloudRegistration::align(PointCloud& aligned_cloud, NonrigidTransform& transform)
+{
+  auto result = nonrigid_.run(*source_cloud_, *target_cloud_);
+  aligned_cloud = result.points;
+  transform = NonrigidTransform{result.points, result.w, params_.beta_};
 }
 
 }  // namespace chair_manipulation

@@ -22,7 +22,7 @@ struct PointCloudSegmentationParameters
 class PointCloudSegmentation
 {
 public:
-  using PointT = pcl::PointNormal;
+  using PointT = pcl::PointXYZ;
   using PointCloud = pcl::PointCloud<PointT>;
   using PointCloudPtr = PointCloud::Ptr;
   using PointCloudConstPtr = PointCloud::ConstPtr;

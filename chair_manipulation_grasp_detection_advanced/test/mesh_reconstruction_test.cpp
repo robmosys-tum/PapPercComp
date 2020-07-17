@@ -21,10 +21,10 @@ int main(int argc, char *argv[])
   reconstruction.reconstruct(polygon_mesh);
 
   shapes::Mesh shape_mesh;
-  chair_manipulation::utils::convert(polygon_mesh, shape_mesh);
+  chair_manipulation::utils::polygonToShapeMesh(polygon_mesh, shape_mesh);
 
   shape_msgs::Mesh mesh_msg;
-  chair_manipulation::utils::convert(shape_mesh, mesh_msg);
+  chair_manipulation::utils::shapeMeshToMsg(shape_mesh, mesh_msg);
 
   ros::Rate rate{10};
   while (ros::ok())

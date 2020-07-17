@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
   visual_tools.trigger();
 
   shape_msgs::Mesh mesh_msg;
-  chair_manipulation::utils::convert(*params.model_->getMesh(), mesh_msg);
+  chair_manipulation::utils::shapeMeshToMsg(*params.model_->getMesh(), mesh_msg);
 
   auto robot_state = gripper->getRobotState();
   moveit_msgs::DisplayRobotState robot_state_msg;

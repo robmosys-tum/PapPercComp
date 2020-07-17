@@ -12,10 +12,10 @@ namespace chair_manipulation
 {
 namespace utils
 {
-void convert(const pcl::PolygonMesh& from, shapes::Mesh& to)
+void polygonToShapeMesh(const pcl::PolygonMesh& polygon_mesh, shapes::Mesh& shape_mesh)
 {
   vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
-  pcl::io::mesh2vtk(from, polydata);
+  pcl::io::mesh2vtk(polygon_mesh, polydata);
 
   // Make sure that the polygons are triangles
   vtkSmartPointer<vtkTriangleFilter> triangle_filter = vtkSmartPointer<vtkTriangleFilter>::New();
@@ -36,25 +36,25 @@ void convert(const pcl::PolygonMesh& from, shapes::Mesh& to)
 
   // The shapes::Mesh class does not have an assignment operator (which is a shame) so we have to
   // do the memory management by ourselves...
-  if (to.vertices)
-    delete[] to.vertices;
-  if (to.vertex_normals)
-    delete[] to.vertex_normals;
-  if (to.triangles)
-    delete[] to.triangles;
-  if (to.triangle_normals)
-    delete[] to.triangle_normals;
-  to.vertex_count = num_vertices;
-  to.triangle_count = num_triangles;
-  to.vertices = new double[num_vertices * 3];
-  to.vertex_normals = new double[num_vertices * 3];
-  to.triangles = new unsigned int[num_triangles * 3];
-  to.triangle_normals = new double[num_triangles * 3];
+  if (shape_mesh.vertices)
+    delete[] shape_mesh.vertices;
+  if (shape_mesh.vertex_normals)
+    delete[] shape_mesh.vertex_normals;
+  if (shape_mesh.triangles)
+    delete[] shape_mesh.triangles;
+  if (shape_mesh.triangle_normals)
+    delete[] shape_mesh.triangle_normals;
+  shape_mesh.vertex_count = num_vertices;
+  shape_mesh.triangle_count = num_triangles;
+  shape_mesh.vertices = new double[num_vertices * 3];
+  shape_mesh.vertex_normals = new double[num_vertices * 3];
+  shape_mesh.triangles = new unsigned int[num_triangles * 3];
+  shape_mesh.triangle_normals = new double[num_triangles * 3];
 
   // Copy vertices
   for (std::size_t i = 0; i < num_vertices; i++)
   {
-    points->GetPoint(i, to.vertices + i * 3);
+    points->GetPoint(i, shape_mesh.vertices + i * 3);
   }
 
   // Copy triangle indices
@@ -63,36 +63,36 @@ void convert(const pcl::PolygonMesh& from, shapes::Mesh& to)
   std::size_t cell_id = 0;
   for (cells->InitTraversal(); cells->GetNextCell(num_points, point_ids); cell_id++)
   {
-    to.triangles[cell_id * 3 + 0] = point_ids[0];
-    to.triangles[cell_id * 3 + 1] = point_ids[1];
-    to.triangles[cell_id * 3 + 2] = point_ids[2];
+    shape_mesh.triangles[cell_id * 3 + 0] = point_ids[0];
+    shape_mesh.triangles[cell_id * 3 + 1] = point_ids[1];
+    shape_mesh.triangles[cell_id * 3 + 2] = point_ids[2];
   }
 
   // Compute normals
-  to.computeTriangleNormals();
-  to.computeVertexNormals();
+  shape_mesh.computeTriangleNormals();
+  shape_mesh.computeVertexNormals();
 }
 
-void convert(const shapes::Mesh& from, shape_msgs::Mesh& to)
+void shapeMeshToMsg(const shapes::Mesh& shape_mesh, shape_msgs::Mesh& msg)
 {
   // Copy vertices
-  for (std::size_t i = 0; i < from.vertex_count; i++)
+  for (std::size_t i = 0; i < shape_mesh.vertex_count; i++)
   {
     geometry_msgs::Point point;
-    point.x = from.vertices[i * 3 + 0];
-    point.y = from.vertices[i * 3 + 1];
-    point.z = from.vertices[i * 3 + 2];
-    to.vertices.push_back(point);
+    point.x = shape_mesh.vertices[i * 3 + 0];
+    point.y = shape_mesh.vertices[i * 3 + 1];
+    point.z = shape_mesh.vertices[i * 3 + 2];
+    msg.vertices.push_back(point);
   }
 
   // Copy triangles
-  for (std::size_t i = 0; i < from.triangle_count; i++)
+  for (std::size_t i = 0; i < shape_mesh.triangle_count; i++)
   {
     shape_msgs::MeshTriangle triangle;
-    triangle.vertex_indices[0] = from.triangles[i * 3 + 0];
-    triangle.vertex_indices[1] = from.triangles[i * 3 + 1];
-    triangle.vertex_indices[2] = from.triangles[i * 3 + 2];
-    to.triangles.push_back(triangle);
+    triangle.vertex_indices[0] = shape_mesh.triangles[i * 3 + 0];
+    triangle.vertex_indices[1] = shape_mesh.triangles[i * 3 + 1];
+    triangle.vertex_indices[2] = shape_mesh.triangles[i * 3 + 2];
+    msg.triangles.push_back(triangle);
   }
 }
 
@@ -185,7 +185,7 @@ std::vector<Contact> contactsFromStr(const std::string& str)
   std::istringstream iss{ str };
   std::vector<std::string> numbers{ std::istream_iterator<std::string>{ iss }, std::istream_iterator<std::string>{} };
   if (numbers.size() % 6 != 0)
-    throw exception::IllegalArgument{"Invalid contact string."};
+    throw exception::IllegalArgument{ "Invalid contact string." };
 
   std::vector<Contact> contacts;
   std::size_t num_contacts = numbers.size() / 6;

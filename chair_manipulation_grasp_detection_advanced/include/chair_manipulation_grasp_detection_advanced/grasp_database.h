@@ -15,6 +15,9 @@ struct GraspDatabase
   std::vector<GraspDatabaseElementPtr> elements_;
 };
 
+using GraspDatabasePtr = std::shared_ptr<GraspDatabase>;
+using GraspDatabaseConstPtr = std::shared_ptr<const GraspDatabase>;
+
 }  // namespace chair_manipulation
 
 #endif  // CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_GRASP_DATABASE_H

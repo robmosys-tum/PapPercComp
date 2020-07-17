@@ -21,27 +21,30 @@ PointCloudPreprocessor::PointCloudPreprocessor(PointCloudPreprocessorParameters 
   normal_estimation_.setSearchMethod(search_method_);
 }
 
-void PointCloudPreprocessor::setInputCloud(const PointCloudPreprocessor::InputPointCloudConstPtr& input)
+void PointCloudPreprocessor::setInputCloud(const PointCloudConstPtr& input)
 {
   input_ = input;
 }
 
-void PointCloudPreprocessor::preprocess(OutputPointCloud& output)
+void PointCloudPreprocessor::preprocess(PointCloud& output)
 {
-  auto voxel_filtered = InputPointCloudPtr{ new InputPointCloud };
-  auto outlier_filtered = InputPointCloudPtr{ new InputPointCloud };
+  auto voxel_filtered = PointCloudPtr{ new PointCloud };
+  auto outlier_filtered = PointCloudPtr{ new PointCloud };
   auto normals = SurfaceNormalsPtr{ new SurfaceNormals };
 
   voxel_filter_.setInputCloud(input_);
   voxel_filter_.filter(*voxel_filtered);
 
   outlier_filter_.setInputCloud(voxel_filtered);
-  outlier_filter_.filter(*outlier_filtered);
+  outlier_filter_.filter(output);
+}
 
-  normal_estimation_.setInputCloud(outlier_filtered);
+void PointCloudPreprocessor::estimateNormals(PointNormalCloud& output)
+{
+  auto normals = SurfaceNormalsPtr{ new SurfaceNormals };
+  normal_estimation_.setInputCloud(input_);
   normal_estimation_.compute(*normals);
-
-  pcl::concatenateFields(*outlier_filtered, *normals, output);
+  pcl::concatenateFields(*input_, *normals, output);
 }
 
 }  // namespace chair_manipulation

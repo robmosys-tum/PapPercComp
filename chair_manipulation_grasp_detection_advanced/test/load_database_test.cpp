@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
   }
 
   shape_msgs::Mesh mesh_msg;
-  chair_manipulation::utils::convert(*params.model_->getMesh(), mesh_msg);
+  chair_manipulation::utils::shapeMeshToMsg(*params.model_->getMesh(), mesh_msg);
 
   ros::Rate rate{ 10 };
   while (ros::ok())

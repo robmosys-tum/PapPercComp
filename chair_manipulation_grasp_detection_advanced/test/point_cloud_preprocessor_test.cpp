@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
   TestParameters params;
 
   auto input_point_cloud = pcl::PointCloud<pcl::PointXYZ>::Ptr{ new pcl::PointCloud<pcl::PointXYZ> };
-  pcl::PointCloud<pcl::PointNormal> preprocessed_point_cloud;
+  pcl::PointCloud<pcl::PointXYZ> preprocessed_point_cloud;
 
   pcl::copyPointCloud(*params.model_->getPointCloud(), *input_point_cloud);
 

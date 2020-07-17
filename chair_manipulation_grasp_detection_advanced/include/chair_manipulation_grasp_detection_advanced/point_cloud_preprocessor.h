@@ -22,11 +22,10 @@ struct PointCloudPreprocessorParameters
 class PointCloudPreprocessor
 {
 public:
-  using InputPointCloud = pcl::PointCloud<pcl::PointXYZ>;
-  using InputPointCloudPtr = InputPointCloud::Ptr;
-  using InputPointCloudConstPtr = InputPointCloud::ConstPtr;
-  using OutputPointCloud = pcl::PointCloud<pcl::PointNormal>;
-  using OutputPointCloudPtr = pcl::PointCloud<pcl::PointNormal>;
+  using PointCloud = pcl::PointCloud<pcl::PointXYZ>;
+  using PointCloudPtr = PointCloud::Ptr;
+  using PointCloudConstPtr = PointCloud::ConstPtr;
+  using PointNormalCloud = pcl::PointCloud<pcl::PointNormal>;
   using SurfaceNormals = pcl::PointCloud<pcl::Normal>;
   using SurfaceNormalsPtr = SurfaceNormals::Ptr;
   using SearchMethod = pcl::search::KdTree<pcl::PointXYZ>;
@@ -34,13 +33,15 @@ public:
 
   explicit PointCloudPreprocessor(PointCloudPreprocessorParameters params);
 
-  void setInputCloud(const InputPointCloudConstPtr& input);
+  void setInputCloud(const PointCloudConstPtr& input);
 
-  void preprocess(OutputPointCloud& output);
+  void preprocess(PointCloud& output);
+
+  void estimateNormals(PointNormalCloud& output);
 
 private:
   PointCloudPreprocessorParameters params_;
-  InputPointCloudConstPtr input_;
+  PointCloudConstPtr input_;
   SearchMethodPtr search_method_;
   pcl::VoxelGrid<pcl::PointXYZ> voxel_filter_;
   pcl::StatisticalOutlierRemoval<pcl::PointXYZ> outlier_filter_;

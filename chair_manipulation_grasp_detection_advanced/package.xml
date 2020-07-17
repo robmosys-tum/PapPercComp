@@ -24,6 +24,7 @@
   <depend>moveit_core</depend>
   <depend>moveit_visual_tools</depend>
   <depend>cpd_wrapper</depend>
+  <depend>nanoflann_wrapper</depend>
   <depend>libqhull</depend>
 
 </package>

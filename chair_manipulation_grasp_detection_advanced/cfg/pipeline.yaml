@@ -9,6 +9,12 @@ grasp_database_creator:
     - mesh: $(find chair_manipulation_chair_models)/models/dining_chair/meshes/dining_chair.ply
       point_cloud: $(find chair_manipulation_chair_models)/models/dining_chair/point_clouds/dining_chair.pcd
 
+grasp_detection:
+  num_sample_trials: 100
+  grasp_frames:
+    - robot1_grasp
+    - robot2_grasp
+
 gripper:
   base_frame: robotiq_arg2f_base_link
   tcp_frame: tcp
@@ -69,6 +75,26 @@ point_cloud_preprocessor:
   stddev_mul_threshold: 3.0
   # The search radius for normal estimation.
   normal_search_radius: 0.05
+
+point_cloud_segmentation:
+  # Number of iterations of the plane extraction algorithm.
+  plane_max_iterations: 100
+  # The maximum allowed distance to the plane model.
+  plane_distance_threshold: 0.03
+  # The cluster tolerance. Small values may cause objects to be divided
+  #	in several clusters, whereas big values may join objects in a same cluster.
+  cluster_tolerance: 0.1
+  # Set the minimum and maximum number of points that a cluster can have.
+  min_cluster_size: 250
+  max_cluster_size: 1000000000
+
+point_cloud_registration:
+  # Regularization parameter of the non-rigid coherent point drift algorithm.
+  lambda: 3.0
+  # Smoothness parameter of the non-rigid coherent point drift algorithm.
+  beta: 3.0
+  # Number of iteration of the coherent point drift algorithm.
+  max_iterations: 150
 
 mesh_reconstruction:
   # Maximum distance between connected points (maximum edge length).

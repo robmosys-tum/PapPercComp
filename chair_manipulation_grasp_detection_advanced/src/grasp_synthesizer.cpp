@@ -58,9 +58,7 @@ GraspSynthesizer::GraspSynthesizer(GraspSynthesizerParameters params, GraspQuali
 void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses, const Model& model,
                                   std::size_t max_num_grasps, std::vector<MultiArmGrasp>& synthesized_grasps) const
 {
-  ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Synthesizing " << hypotheses.size() << " grasp hypotheses.");
-  Stopwatch stopwatch_total, stopwatch_candidate, stopwatch_wrench;
-  stopwatch_total.start();
+  Stopwatch stopwatch_candidate, stopwatch_wrench;
 
   if (hypotheses.size() < params_.num_arms_)
     throw exception::IllegalArgument{ "The number of hypotheses must be at least as large as the number of arms." };
@@ -73,6 +71,7 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
   if (weight_sum == 0)
     throw exception::Parameter{ "The sum of the weights must not be zero." };
 
+  ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Start scoring grasp candidates.");
   for (std::size_t i = 0; i < candidates.size(); i++)
   {
     ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "");
@@ -159,10 +158,6 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
                            "Need to clip the number of returned grasps to " << max_num_grasps << ".");
     synthesized_grasps.resize(max_num_grasps);
   }
-
-  stopwatch_total.stop();
-  ROS_DEBUG_STREAM_NAMED("grasp_synthesizer",
-                         "Synthesizing took " << stopwatch_total.elapsedSeconds() << "s in total.");
 }  // namespace chair_manipulation
 
 void GraspSynthesizer::generateGraspCandidates(const std::vector<GraspHypothesis>& hypotheses,

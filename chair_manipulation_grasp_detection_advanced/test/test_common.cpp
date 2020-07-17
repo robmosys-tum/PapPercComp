@@ -73,6 +73,16 @@ chair_manipulation::TestParameters::TestParameters()
   point_cloud_preprocessor_params_.stddev_mul_threshold_ = 3.;
   point_cloud_preprocessor_params_.normal_search_radius_ = 0.05;
 
+  point_cloud_segmentation_params_.plane_max_iterations_ = 100;
+  point_cloud_segmentation_params_.plane_distance_threshold_ = 0.03;
+  point_cloud_segmentation_params_.cluster_tolerance_ = 0.1;
+  point_cloud_segmentation_params_.min_cluster_size_ = 250;
+  point_cloud_segmentation_params_.max_cluster_size_ = std::numeric_limits<int>::max();
+
+  point_cloud_registration_params_.lambda_ = cpd::DEFAULT_LAMBDA;
+  point_cloud_registration_params_.beta_ = cpd::DEFAULT_BETA;
+  point_cloud_registration_params_.max_iterations_ = cpd::DEFAULT_MAX_ITERATIONS;
+
   mesh_reconstruction_params_.search_radius_ = 0.05;
   mesh_reconstruction_params_.max_distance_ = 2.5;
   mesh_reconstruction_params_.max_nearest_neighbors_ = 100;

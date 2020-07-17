@@ -3,6 +3,7 @@
 
 #include "model.h"
 #include "grasp_hypothesis.h"
+#include "multi_arm_grasp.h"
 #include "gripper.h"
 #include "ros/ros.h"
 #include <random>
@@ -35,7 +36,10 @@ public:
   {
   }
 
-  void sampleGraspHypotheses(const Model& model, std::size_t sample_trials, std::vector<GraspHypothesis>& grasps);
+  void sampleGraspHypotheses(const Model& model, std::size_t sample_trials, std::vector<GraspHypothesis>& hypotheses);
+
+  void sampleGraspHypothesesFromPrior(const Model& model, const std::vector<MultiArmGrasp>& prior_grasps,
+                                      std::size_t sample_trials, std::vector<GraspHypothesis>& hypotheses);
 
   bool sampleGraspPose(const PointCloudConstPtr& point_cloud, Eigen::Isometry3d& grasp_pose);
 

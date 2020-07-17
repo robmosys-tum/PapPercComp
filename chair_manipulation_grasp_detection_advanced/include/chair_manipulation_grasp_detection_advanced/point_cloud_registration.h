@@ -1,6 +1,7 @@
 #ifndef CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_POINT_CLOUD_REGISTRATION_H
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_POINT_CLOUD_REGISTRATION_H
 
+#include "nonrigid_transform.h"
 #include <ros/ros.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -20,10 +21,9 @@ struct PointCloudRegistrationParameters
 class PointCloudRegistration
 {
 public:
-  using PointT = pcl::PointNormal;
-  using PointCloud = pcl::PointCloud<PointT>;
-  using PointCloudPtr = PointCloud::Ptr;
-  using PointCloudConstPtr = PointCloud::ConstPtr;
+  using PointCloud = Eigen::MatrixXd;
+  using PointCloudPtr = std::shared_ptr<PointCloud>;
+  using PointCloudConstPtr = std::shared_ptr<const PointCloud>;
 
   explicit PointCloudRegistration(PointCloudRegistrationParameters params);
 
@@ -31,7 +31,7 @@ public:
 
   void setInputTarget(const PointCloudConstPtr& target_cloud);
 
-  void align(PointCloud& aligned_cloud);
+  void align(PointCloud& aligned_cloud, NonrigidTransform& transform);
 
 private:
   PointCloudRegistrationParameters params_;

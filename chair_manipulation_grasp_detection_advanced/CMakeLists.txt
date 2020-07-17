@@ -21,6 +21,7 @@ find_package(
   moveit_core
   moveit_visual_tools
   cpd_wrapper
+  nanoflann_wrapper
 )
 
 find_package(PCL REQUIRED)
@@ -71,6 +72,11 @@ set(
   include/chair_manipulation_grasp_detection_advanced/point_cloud_registration.h
   include/chair_manipulation_grasp_detection_advanced/mesh_reconstruction.h
   include/chair_manipulation_grasp_detection_advanced/point_cloud_receiver.h
+  include/chair_manipulation_grasp_detection_advanced/nonrigid_transform.h
+  include/chair_manipulation_grasp_detection_advanced/point_cloud_matcher.h
+  include/chair_manipulation_grasp_detection_advanced/point_cloud_segmentation_pipeline.h
+  include/chair_manipulation_grasp_detection_advanced/create_grasp_database_pipeline.h
+  include/chair_manipulation_grasp_detection_advanced/grasp_detection_pipeline.h
   src/model.cpp
   src/utils.cpp
   src/grasp_database.cpp
@@ -86,6 +92,10 @@ set(
   src/point_cloud_preprocessor.cpp
   src/point_cloud_segmentation.cpp
   src/mesh_reconstruction.cpp
+  src/point_cloud_matcher.cpp
+  src/point_cloud_segmentation_pipeline.cpp
+  src/create_grasp_database_pipeline.cpp
+  src/grasp_detection_pipeline.cpp
 )
 
 set(

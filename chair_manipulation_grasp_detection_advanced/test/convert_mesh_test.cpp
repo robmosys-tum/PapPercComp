@@ -20,11 +20,11 @@ int main(int argc, char *argv[])
 
   shapes::Mesh shape_mesh;
   ROS_INFO("Converting pcl::PolygonMesh to shapes::Mesh");
-  chair_manipulation::utils::convert(polygon_mesh, shape_mesh);
+  chair_manipulation::utils::polygonToShapeMesh(polygon_mesh, shape_mesh);
 
   shape_msgs::Mesh mesh_msg;
   ROS_INFO("Converting shapes::Mesh to shape_msgs::Mesh");
-  chair_manipulation::utils::convert(shape_mesh, mesh_msg);
+  chair_manipulation::utils::shapeMeshToMsg(shape_mesh, mesh_msg);
 
   ros::Rate rate{10};
   while (ros::ok())

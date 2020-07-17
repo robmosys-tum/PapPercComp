@@ -7,6 +7,8 @@
 #include "chair_manipulation_grasp_detection_advanced/grasp_database_creator.h"
 #include "chair_manipulation_grasp_detection_advanced/point_cloud_receiver.h"
 #include "chair_manipulation_grasp_detection_advanced/point_cloud_preprocessor.h"
+#include "chair_manipulation_grasp_detection_advanced/point_cloud_segmentation.h"
+#include "chair_manipulation_grasp_detection_advanced/point_cloud_registration.h"
 #include "chair_manipulation_grasp_detection_advanced/mesh_reconstruction.h"
 
 namespace chair_manipulation
@@ -27,6 +29,8 @@ struct TestParameters
 
   PointCloudReceiverParameters point_cloud_receiver_params_;
   PointCloudPreprocessorParameters point_cloud_preprocessor_params_;
+  PointCloudSegmentationParameters point_cloud_segmentation_params_;
+  PointCloudRegistrationParameters point_cloud_registration_params_;
   MeshReconstructionParameters mesh_reconstruction_params_;
 };
 

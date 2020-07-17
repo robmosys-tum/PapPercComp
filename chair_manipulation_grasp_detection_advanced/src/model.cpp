@@ -27,7 +27,7 @@ Model::Model(const std::string& mesh_filename, const std::string& point_cloud_fi
     msg << "Failed to load model mesh '" << mesh_filename << "'.";
     throw exception::IO{ msg.str() };
   }
-  utils::convert(mesh, *loaded_mesh);
+  utils::polygonToShapeMesh(mesh, *loaded_mesh);
 
   // Load point cloud
   if (pcl::io::loadPCDFile(point_cloud_filename, *loaded_point_cloud) != 0)
