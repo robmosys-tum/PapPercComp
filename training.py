@@ -347,14 +347,13 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 embedded_pixelvectors = embedModel(deepOut)
 
                 ### Compute distances to means
-
                 distFG = ((embedded_pixelvectors - runningFGmean)**2).mean(dim=1, keepdims=True)    
                 # Result has shape [N,1,H,W]
 
                 distBG = ((embedded_pixelvectors - runningBGmean)**2).mean(dim=1, keepdims=True)    
                 # Result has shape [N,1,H,W]
 
-                margin = 100
+                margin = 0
                 predMask = torch.where(distFG + margin < distBG, torch.ones_like(distFG), torch.zeros_like(distFG))
 
 
@@ -394,8 +393,8 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
 
                 # Beta defines how much we should keep the old mean
                 beta = 0.99
-                runningFGmean = beta * runningFGmean + (1-beta) * mean_FG
-                runningBGmean = beta * runningBGmean + (1-beta) * mean_BG
+                runningFGmean = beta * runningFGmean + (1-beta) * mean_FG.view(batch_size, d, 1, 1)
+                runningBGmean = beta * runningBGmean + (1-beta) * mean_BG.view(batch_size, d, 1, 1)
 
 
             ### Statistics, using Intersection over Union (IoU) for accuracy
