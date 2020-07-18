@@ -338,22 +338,64 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                     foreground = embedded_reference * reference_mask
                     background = embedded_reference * (1 - reference_mask)
 
-                    mean_refFG = foreground.mean(dim=[2,3], keepdims=True)
-                    mean_refBG = background.mean(dim=[2,3], keepdims=True)
+                    runningFGmean = foreground.mean(dim=[2,3], keepdims=True)
+                    runningBGmean = background.mean(dim=[2,3], keepdims=True)
 
 
             ### Compute embeddings and see to which mean of the reference image every pixel is closer.
             with torch.no_grad():
                 embedded_pixelvectors = embedModel(deepOut)
 
-                distFG = ((embedded_pixelvectors - mean_refFG)**2).mean(dim=1, keepdims=True)    
+                ### Compute distances to means
+
+                distFG = ((embedded_pixelvectors - runningFGmean)**2).mean(dim=1, keepdims=True)    
                 # Result has shape [N,1,H,W]
 
-                distBG = ((embedded_pixelvectors - mean_refBG)**2).mean(dim=1, keepdims=True)    
+                distBG = ((embedded_pixelvectors - runningBGmean)**2).mean(dim=1, keepdims=True)    
                 # Result has shape [N,1,H,W]
 
                 margin = 100
                 predMask = torch.where(distFG + margin < distBG, torch.ones_like(distFG), torch.zeros_like(distFG))
+
+
+                ### Recompute running mean
+                foreground = embedded_pixelvectors * predMask
+                background = embedded_pixelvectors * (1 - predMask)
+
+                eps = 1e-5 
+                batch_size, d = embedded_pixelvectors.size()[:2]
+                N = embedded_pixelvectors.size()[2] * embedded_pixelvectors.size()[3]
+                n_FG = predMask.sum(dim=[-1,-2])
+
+                mean_FG = foreground.view(batch_size, d, -1).sum(dim=2) / (n_FG + eps) 
+
+                #cov_FG = (1/(n_FG.view(batch_size, 1, 1) + eps) * torch.bmm(
+                    #     foreground.view(batch_size, d, -1), 
+                    #     foreground.view(batch_size, d, -1).transpose(1,2)
+                    # ) 
+                    # - torch.bmm(
+                    #     mean_FG.view(batch_size, d, 1), 
+                    #     mean_FG.view(batch_size, d, 1).transpose(1,2)
+                    # ))
+                #tr_covFG = cov_FG.diagonal(dim1=-2, dim2=-1).sum(dim=-1)
+
+
+                mean_BG = background.view(batch_size, d, -1).sum(dim=2) / (N - n_FG + eps)
+                
+                #cov_BG = (1/(N - n_FG.view(batch_size, 1) + eps) * torch.bmm(
+                    #     background.view(batch_size, d, -1), 
+                    #     background.view(batch_size, d, -1).transpose(1,2)
+                    # ) 
+                    # - torch.bmm(
+                    #     mean_BG.view(batch_size, d, 1), 
+                    #     mean_BG.view(batch_size, d, 1).transpose(1,2)
+                    # ))
+                #tr_covBG = cov_BG.diagonal(dim1=-2, dim2=-1).sum(dim=-1)
+
+                # Beta defines how much we should keep the old mean
+                beta = 0.99
+                runningFGmean = beta * runningFGmean + (1-beta) * mean_FG
+                runningBGmean = beta * runningBGmean + (1-beta) * mean_BG
 
 
             ### Statistics, using Intersection over Union (IoU) for accuracy
