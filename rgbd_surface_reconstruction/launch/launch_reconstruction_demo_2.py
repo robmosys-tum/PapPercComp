@@ -9,8 +9,8 @@ def generate_launch_description():
             package='ros2_corbs_publisher',
             node_executable='ros2_corbs_publisher_node',
             parameters=[
-                {"data_path": "/home/drkmtr/Downloads/CORBS/H1_pre_registereddata/",
-                 "trajectory_path": "/home/drkmtr/Downloads/CORBS/H1_Trajectory/"}],
+                {"data_path": "/home/drkmtr/Downloads/CORBS/E1_pre_registereddata/",
+                 "trajectory_path": "/home/drkmtr/Downloads/CORBS/E1_Trajectory/"}],
             output='screen',
             emulate_tty=True,
         ),
