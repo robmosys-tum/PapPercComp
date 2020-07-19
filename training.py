@@ -392,9 +392,9 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 #tr_covBG = cov_BG.diagonal(dim1=-2, dim2=-1).sum(dim=-1)
 
                 # Beta defines how much we should keep the old mean
-                beta = 0.99
-                runningFGmean = beta * runningFGmean + (1-beta) * mean_FG.view(batch_size, d, 1, 1)
-                runningBGmean = beta * runningBGmean + (1-beta) * mean_BG.view(batch_size, d, 1, 1)
+                beta = 0.0
+                runningFGmean = beta * runningFGmean + (1-beta) * mean_FG.mean(dim=0).view(1, d, 1, 1)
+                runningBGmean = beta * runningBGmean + (1-beta) * mean_BG.mean(dim=0).view(1, d, 1, 1)
 
 
             ### Statistics, using Intersection over Union (IoU) for accuracy
@@ -414,6 +414,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 #pos = fig.add_axes([0.93,0.1,0.02,0.35])
                 #fig.colorbar(im, cax=pos)
                 plt.savefig(f"Output/{imcount : 06d}.png")
+                plt.close(fig)
                 
                 imcount += 1
 
