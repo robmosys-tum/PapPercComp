@@ -67,6 +67,9 @@ private:
 	sensor_msgs::msg::Image::SharedPtr _color_image;
 	geometry_msgs::msg::PoseStamped::SharedPtr _pose;
 
+	std::queue<sensor_msgs::msg::Image::SharedPtr> _depth_images;
+	std::queue<geometry_msgs::msg::PoseStamped::SharedPtr> _poses;
+
 	void process_frames();
 };
 /************************************************************/

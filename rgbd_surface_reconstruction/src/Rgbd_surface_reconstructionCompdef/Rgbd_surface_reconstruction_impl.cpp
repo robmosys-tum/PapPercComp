@@ -56,6 +56,7 @@ Rgbd_surface_reconstruction_impl::~Rgbd_surface_reconstruction_impl()
 void Rgbd_surface_reconstruction_impl::depth_image_handler(
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
 	_depth_image = image;
+	_depth_images.push(image);
 
 	if(!_depth_image_initialized)
 		_depth_image_initialized = true;
@@ -66,6 +67,8 @@ void Rgbd_surface_reconstruction_impl::depth_image_handler(
 void Rgbd_surface_reconstruction_impl::pose_handler(
 		const geometry_msgs::msg::PoseStamped::SharedPtr /*in*/pose) {
 	_pose = pose;
+
+	_poses.push(pose);
 
 	if(!_pose_initialized)
 		_pose_initialized = true;
@@ -88,17 +91,40 @@ void Rgbd_surface_reconstruction_impl::color_image_handler(
 }
 
 void Rgbd_surface_reconstruction_impl::process_frames(){
-	if(!_depth_image_initialized || !_pose_initialized)
+	if(_poses.empty() || _depth_images.empty())
 		return;
-	
-	double depth_image_timestamp = _depth_image->header.stamp.sec + _depth_image->header.stamp.nanosec/1000000000.0;
-	double pose_timestamp = _pose->header.stamp.sec + _pose->header.stamp.nanosec/1000000000.0;
-	
-	//If two messages are closer than 16ms we assume they belong together.
-	/*if(!(abs(depth_image_timestamp - pose_timestamp)  <= 0.016)) {
-		std::cout << "Out of range " << depth_image_timestamp << " "<< pose_timestamp << " "<< abs(depth_image_timestamp - pose_timestamp) << std::endl;
-		return;
-	}*/
+
+	//align_queues
+	bool aligned = false;
+	_pose = _poses.front();
+	_poses.pop();
+	_depth_image = _depth_images.front();
+	_depth_images.pop();
+
+	while(!aligned){
+		
+		double depth_image_timestamp = _depth_image->header.stamp.sec + _depth_image->header.stamp.nanosec/1000000000.0;
+		double pose_timestamp = _pose->header.stamp.sec + _pose->header.stamp.nanosec/1000000000.0;
+
+		double diff = depth_image_timestamp - pose_timestamp;
+
+		//If two messages are closer than 16ms we assume they belong together.
+		if (abs(diff) <= 0.015){
+			aligned = true;
+		}
+		else if (diff  < 0.0){
+			if(_poses.empty())
+				return;
+			_pose = _poses.front();
+			_poses.pop();
+		}
+		else if (diff  > 0.0){
+			if(_depth_images.empty())
+				return;
+			_depth_image = _depth_images.front();
+			_depth_images.pop();
+		}
+	} 
 
 	cv::Mat depth_map, color_map;
 
