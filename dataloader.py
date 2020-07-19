@@ -24,7 +24,8 @@ class DAVISData(torch.utils.data.Dataset):
     """
     def __init__(self, mode, video=None):
 
-        assert not video in ['dog', 'surf'], "CURRENTLY 'dog' or 'surf' IS NOT SUPPORTED! Dataset names are generally prefix-free, except for these. 'surf'  in train vs 'kite-surf' in val."
+        ### Prefix-free issue only when using trainval as set. Otherwise train and val separately are prefix-free.
+        #assert not video in ['breakdance','dog', 'surf'], "CURRENTLY 'breakdance', 'dog', 'surf' IS NOT SUPPORTED! Dataset names are generally prefix-free, except for these. 'surf'  in train vs 'kite-surf' in val."
 
         self.davisDir = "Data/DAVIS/"
 

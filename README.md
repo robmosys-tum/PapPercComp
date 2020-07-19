@@ -43,7 +43,7 @@ In order to run **PyTorch** models in C++, we need to convert the model into a *
 
 The first step is to fully load your trained model `model`. Then create an example input with the correct shape (using a random values) `example`. Lastly run it through the network and store the traced model as follows:
 
-```
+```python
 traced_script_module = torch.jit.trace(model, example)
 traced_script_module.save("/some_dir/tracedModel.pt")
 ```
@@ -52,8 +52,23 @@ traced_script_module.save("/some_dir/tracedModel.pt")
 
 Now that we have the trained model as a traced script, we can load it in C++ using the **LibTorch** library. After installing the library, you can include the `<torch/script.h>` header and run:
 
-```
+```cpp
 torch::jit::script::Module module = torch::jit::load(model_path);
 ```
 
 A more detailed explanation can be found in <https://pytorch.org/tutorials/advanced/cpp_export.html>.
+
+
+### Linux VM
+
+Due to RAM constraints and CUDA not being directly available on the VM, we suggest running the model in C++ using eval mode and disabling gradient computation:
+
+```cpp
+module.eval();
+{
+    torch::NoGradGuard no_grad;
+    at::Tensor output = module.forward(inputs).toTensor();
+}
+```
+
+From experiments our model seems to use about 2GB of RAM on the VM in this manner, running on CPU.
