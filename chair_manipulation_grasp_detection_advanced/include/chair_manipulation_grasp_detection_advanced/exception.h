@@ -42,6 +42,13 @@ struct IllegalArgument : Runtime
   }
 };
 
+struct PointCloud : Runtime
+{
+  explicit PointCloud(const std::string& msg) : Runtime(msg)
+  {
+  }
+};
+
 }  // namespace exception
 }  // namespace chair_manipulation
 

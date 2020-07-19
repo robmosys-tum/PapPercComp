@@ -4,6 +4,6 @@
 int main(int argc, char* argv[])
 {
   ros::init(argc, argv, "grasp_detection_node");
-  chair_manipulation::run_grasp_detection_pipeline();
+  chair_manipulation::runGraspDetectionPipeline();
   return 0;
 }

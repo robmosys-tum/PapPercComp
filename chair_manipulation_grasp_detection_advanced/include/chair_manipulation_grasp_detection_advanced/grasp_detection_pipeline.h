@@ -9,11 +9,13 @@ struct GraspDetectionParameters
 {
   void load(ros::NodeHandle& nh);
 
+  double pre_registration_voxel_leaf_size_;
   int num_sample_trials_;
+  double sample_radius_;
   std::vector<std::string> grasp_frames_;
 };
 
-void run_grasp_detection_pipeline();
+void runGraspDetectionPipeline();
 
 }  // namespace chair_manipulation
 

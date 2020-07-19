@@ -4,6 +4,6 @@
 int main(int argc, char* argv[])
 {
   ros::init(argc, argv, "create_grasp_database_node");
-  chair_manipulation::run_create_grasp_database_pipeline();
+  chair_manipulation::runCreateGraspDatabasePipeline();
   return 0;
 }

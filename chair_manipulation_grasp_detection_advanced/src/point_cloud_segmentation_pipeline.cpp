@@ -16,7 +16,7 @@ using PointCloudPtr = PointCloud::Ptr;
 using PointNormalCloud = pcl::PointCloud<pcl::PointNormal>;
 using PointNormalCloudPtr = PointNormalCloud::Ptr;
 
-void run_point_cloud_segmentation_pipeline()
+void runPointCloudSegmentationPipeline()
 {
   try
   {
@@ -79,7 +79,7 @@ void run_point_cloud_segmentation_pipeline()
       ROS_DEBUG_STREAM_NAMED("main", "Normal estimation finished.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
-      utils::publishPointCloud(*segmented_cloud, segmented_cloud_pub, world_frame);
+      utils::publishPointCloud(*point_normal_cloud, segmented_cloud_pub, world_frame);
 
       stopwatch_iteration.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Finished current iteration.");

@@ -239,12 +239,15 @@ double GraspSynthesizer::computeReachability(const GraspCandidate& candidate) co
       }
     }
 
-    // If the arm is already assigned we reject the grasp by setting output to negative infinity
-    if (assigned[arm_index])
+    // If the arm is already assigned we reject the grasp by setting output to negative infinity.
+    // The same is done if the position is out of reach.
+    if (assigned[arm_index] || min_distance > params_.max_arm_radius_)
       return -std::numeric_limits<double>::infinity();
 
+    assigned[arm_index] = true;
+
     // The closer the grasp is to the base, the higher the computed score, normalized to [0, 1].
-    reachability += 1. - (std::min(min_distance, params_.max_arm_radius_) / params_.max_arm_radius_);
+    reachability += 1. - (min_distance / params_.max_arm_radius_);
   }
   return reachability / params_.num_arms_;
 }

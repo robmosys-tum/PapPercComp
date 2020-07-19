@@ -30,7 +30,7 @@ find_package(FCL REQUIRED)
 find_package(Qhull REQUIRED)
 if (HAVE_QHULL_2011)
   add_definitions(-DCHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_HAVE_QHULL_2011)
-endif()
+endif ()
 
 catkin_package()
 
@@ -77,6 +77,7 @@ set(
   include/chair_manipulation_grasp_detection_advanced/point_cloud_segmentation_pipeline.h
   include/chair_manipulation_grasp_detection_advanced/create_grasp_database_pipeline.h
   include/chair_manipulation_grasp_detection_advanced/grasp_detection_pipeline.h
+  include/chair_manipulation_grasp_detection_advanced/mesh_reconstruction_pipeline.h
   src/model.cpp
   src/utils.cpp
   src/grasp_database.cpp
@@ -93,9 +94,7 @@ set(
   src/point_cloud_segmentation.cpp
   src/mesh_reconstruction.cpp
   src/point_cloud_matcher.cpp
-  src/point_cloud_segmentation_pipeline.cpp
-  src/create_grasp_database_pipeline.cpp
-  src/grasp_detection_pipeline.cpp
+  src/nonrigid_transform.cpp
 )
 
 set(
@@ -106,14 +105,17 @@ set(
 
 # Nodes
 
-# add_executable(create_grasp_database_node src/create_grasp_database_node.cpp ${SOURCE_FILES})
-# target_link_libraries(create_grasp_database_node ${LIBRARIES})
+add_executable(create_grasp_database_node src/create_grasp_database_node.cpp src/create_grasp_database_pipeline.cpp ${SOURCE_FILES})
+target_link_libraries(create_grasp_database_node ${LIBRARIES})
 
-# add_executable(grasp_detection_node src/grasp_detection_node.cpp ${SOURCE_FILES})
-# target_link_libraries(grasp_detection_node ${LIBRARIES})
+add_executable(grasp_detection_node src/grasp_detection_node.cpp src/grasp_detection_pipeline.cpp ${SOURCE_FILES})
+target_link_libraries(grasp_detection_node ${LIBRARIES})
 
-# add_executable(point_cloud_segmentation_node src/point_cloud_segmentation_node.cpp ${SOURCE_FILES})
-# target_link_libraries(point_cloud_segmentation_node ${LIBRARIES})
+add_executable(point_cloud_segmentation_node src/point_cloud_segmentation_node.cpp src/point_cloud_segmentation_pipeline.cpp ${SOURCE_FILES})
+target_link_libraries(point_cloud_segmentation_node ${LIBRARIES})
+
+add_executable(mesh_reconstruction_node src/mesh_reconstruction_node.cpp src/mesh_reconstruction_pipeline.cpp ${SOURCE_FILES})
+target_link_libraries(mesh_reconstruction_node ${LIBRARIES})
 
 # Tests
 
@@ -138,5 +140,8 @@ set(
 # add_executable(point_cloud_preprocessor_test test/point_cloud_preprocessor_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 # target_link_libraries(point_cloud_preprocessor_test ${LIBRARIES})
 
-add_executable(registration_test test/registration_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-target_link_libraries(registration_test ${LIBRARIES})
+# add_executable(registration_test test/registration_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+# target_link_libraries(registration_test ${LIBRARIES})
+
+add_executable(pcl_viewer test/pcl_viewer.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(pcl_viewer ${LIBRARIES})

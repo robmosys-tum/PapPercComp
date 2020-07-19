@@ -39,7 +39,8 @@ public:
   void sampleGraspHypotheses(const Model& model, std::size_t sample_trials, std::vector<GraspHypothesis>& hypotheses);
 
   void sampleGraspHypothesesFromPrior(const Model& model, const std::vector<MultiArmGrasp>& prior_grasps,
-                                      std::size_t sample_trials, std::vector<GraspHypothesis>& hypotheses);
+                                      std::size_t sample_trials, double sample_radius,
+                                      std::vector<GraspHypothesis>& hypotheses);
 
   bool sampleGraspPose(const PointCloudConstPtr& point_cloud, Eigen::Isometry3d& grasp_pose);
 

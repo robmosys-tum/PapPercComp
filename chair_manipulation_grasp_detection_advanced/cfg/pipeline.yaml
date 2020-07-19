@@ -1,5 +1,7 @@
 grasp_database_filename: $(find chair_manipulation_grasp_detection_advanced)/cfg/grasp_database.yaml
 segmented_cloud_topic: cloud_segmented
+transformed_cloud_topic: cloud_transformed
+reconstructed_mesh_topic: reconstructed_mesh
 
 grasp_database_creator:
   num_sample_trials_per_model: 100
@@ -10,7 +12,10 @@ grasp_database_creator:
       point_cloud: $(find chair_manipulation_chair_models)/models/dining_chair/point_clouds/dining_chair.pcd
 
 grasp_detection:
+  # Leaf size for voxel filter applied to the template model before registration.
+  pre_registration_voxel_leaf_size: 0.03
   num_sample_trials: 100
+  sample_radius: 0.1
   grasp_frames:
     - robot1_grasp
     - robot2_grasp
@@ -40,7 +45,7 @@ grasp_synthesizer:
   num_arms: 2
   friction_coefficient: 0.8
   num_fiction_edges: 8
-  max_arm_radius_: 1.0
+  max_arm_radius_: 1.5
   world_frame: world
   arm_base_frames:
     - robot1_base_link
@@ -49,12 +54,12 @@ grasp_synthesizer:
 weights_offline:
   epsilon1: 1.0
   v1: 0.0
-  distance: 1.0
+  distance: 0.01
   reachability: 0.0
 
 weights_online:
-  epsilon1: 0.0
-  v1: 1.0
+  epsilon1: 1.0
+  v1: 0.0
   distance: 1.0
   reachability: 1.0
 
@@ -67,7 +72,7 @@ point_cloud_receiver:
 point_cloud_preprocessor:
   # Leaf size of the voxel filter.
   # If this is set to 0.01 for example, it means that only one point is kept every 1x1x1cm voxel.
-  voxel_leaf_size: 0.01
+  voxel_leaf_size: 0.02
   # Number of neighbors to consider for the statistical outlier filter.
   mean_k: 50
   # Points with a distance larger than the standard deviation of the mean distance multiplied
@@ -94,14 +99,14 @@ point_cloud_registration:
   # Smoothness parameter of the non-rigid coherent point drift algorithm.
   beta: 3.0
   # Number of iteration of the coherent point drift algorithm.
-  max_iterations: 150
+  max_iterations: 30
 
 mesh_reconstruction:
   # Maximum distance between connected points (maximum edge length).
-  search_radius: 0.025
+  search_radius: 0.05
   # Maximum acceptable distance for a point to be considered,
   # relative to the distance of the nearest point.
-  max_distance: 2.5
+  relative_max_distance: 2.5
   # How many neighbors are searched for
   max_nearest_neighbors: 100
   # Points will not be connected to the current point
@@ -110,7 +115,7 @@ mesh_reconstruction:
   # Minimum and maximum angle there can be in a triangle.
   # The first is not guaranteed, the second is.
   min_angle: 0.17453 # 10 degrees
-  max_angle: 2.09439 # 120 degrees
+  max_angle: 2.96705 # 170 degrees
   # If false, the direction of normals will not be taken into account
   # when computing the angle between them.
   normal_consistency: true

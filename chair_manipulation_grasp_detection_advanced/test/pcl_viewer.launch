@@ -1,0 +1,6 @@
+<launch>
+  <node name="pcl_viewer" pkg="chair_manipulation_grasp_detection_advanced" type="pcl_viewer"
+        output="screen">
+    <param name="cloud_topic" value="cloud_transformed" />
+  </node>
+</launch>

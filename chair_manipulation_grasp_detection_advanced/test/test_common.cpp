@@ -28,9 +28,6 @@ chair_manipulation::TestParameters::TestParameters()
                                                                                                     "test_grasp_"
                                                                                                     "database.yaml";
 
-  point_cloud_receiver_params_.topics_ = { "cloud1, cloud2" };
-  point_cloud_receiver_params_.world_frame_ = "world";
-
   gripper_params_.base_frame_ = "robotiq_arg2f_base_link";
   gripper_params_.tcp_frame_ = "tcp";
   gripper_params_.contact_threshold_ = 0.001;
@@ -68,7 +65,10 @@ chair_manipulation::TestParameters::TestParameters()
   grasp_database_creator_params_.mesh_filenames_ = { mesh_filename };
   grasp_database_creator_params_.point_cloud_filenames_ = { point_cloud_filename };
 
-  point_cloud_preprocessor_params_.voxel_leaf_size_ = 0.01;
+  point_cloud_receiver_params_.topics_ = { "/camera1/kinect/depth/points", "/camera2/kinect/depth/points" };
+  point_cloud_receiver_params_.world_frame_ = "world";
+
+  point_cloud_preprocessor_params_.voxel_leaf_size_ = 0.03;
   point_cloud_preprocessor_params_.mean_k_ = 50;
   point_cloud_preprocessor_params_.stddev_mul_threshold_ = 3.;
   point_cloud_preprocessor_params_.normal_search_radius_ = 0.05;
@@ -84,7 +84,7 @@ chair_manipulation::TestParameters::TestParameters()
   point_cloud_registration_params_.max_iterations_ = 150;
 
   mesh_reconstruction_params_.search_radius_ = 0.05;
-  mesh_reconstruction_params_.max_distance_ = 2.5;
+  mesh_reconstruction_params_.relative_max_distance_ = 2.5;
   mesh_reconstruction_params_.max_nearest_neighbors_ = 100;
   mesh_reconstruction_params_.max_surface_angle_ = M_PI / 8;
   mesh_reconstruction_params_.min_angle_ = M_PI / 18;

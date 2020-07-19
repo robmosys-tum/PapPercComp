@@ -39,6 +39,7 @@ void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_
 
     Eigen::Isometry3d grasp_pose;
     bool success = sampleGraspPose(point_cloud, grasp_pose);
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Sampled grasp pose [" << utils::poseToStr(grasp_pose) << "]");
     if (!success)
     {
       ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Failed to sample grasp pose.");
@@ -58,10 +59,12 @@ void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_
       ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Reject sampled pose because it results in a collision.");
       continue;
     }
+
     hypothesis.pose_ = grasp_pose;
     hypotheses.push_back(hypothesis);
     ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Added sampled grasp hypothesis.");
   }
+
   gripper_->clearCollisionObjects();
 
   ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Finished sampling grasp hypotheses.");
@@ -69,9 +72,90 @@ void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_
 }
 
 void GraspSampler::sampleGraspHypothesesFromPrior(const Model& model, const std::vector<MultiArmGrasp>& prior_grasps,
-                                                  std::size_t sample_trials, std::vector<GraspHypothesis>& hypotheses)
+                                                  std::size_t sample_trials, double sample_radius,
+                                                  std::vector<GraspHypothesis>& hypotheses)
 {
-  // TODO: implementation
+  Stopwatch stopwatch_contacts;
+
+  const auto& mesh = model.getMesh();
+  const auto& point_cloud = model.getPointCloud();
+
+  gripper_->addCollisionObject(mesh);
+
+  // Add a ground plane which is the x-y-plane offset by the minimum z-coordinate
+  auto ground_plane = std::make_shared<shapes::Plane>(0., 0., 1., 0.);
+  Eigen::Isometry3d ground_plane_pose = Eigen::Translation3d{ model.getMin() } * Eigen::Isometry3d::Identity();
+  gripper_->addCollisionObject(ground_plane, ground_plane_pose);
+
+  std::uniform_int_distribution<std::size_t> prior_index_distribution(0, prior_grasps.size() - 1);
+  search_method_.setInputCloud(point_cloud);
+
+  for (std::size_t s = 0; s < sample_trials; s++)
+  {
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "=== Sample " << s << "/" << sample_trials << " ===");
+    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
+
+    // Choose a random prior grasp
+    auto prior_index = prior_index_distribution(random_generator_);
+    const auto& prior_grasp = prior_grasps[prior_index];
+
+    // For each pose of that randomly chosen grasp, randomly choose a point that's inside
+    // the given radius and use that to find the grasp hypothesis
+    for (const auto& pose : prior_grasp.poses_)
+    {
+      Eigen::Vector3d position = pose.translation();
+      pcl::PointXYZ point(position.x(), position.y(), position.z());
+      std::vector<int> indices;
+      std::vector<float> sqr_distances;
+      search_method_.radiusSearchT(point, sample_radius, indices, sqr_distances);
+      if (indices.empty())
+      {
+        ROS_WARN_STREAM_NAMED("grasp_sampler",
+                              "Failed to find nearby points for pose [" << utils::poseToStr(pose) << "]");
+        continue;
+      }
+
+      std::uniform_int_distribution<std::size_t> nearest_index_distribution(0, indices.size() - 1);
+      auto nearby_index = nearest_index_distribution(random_generator_);
+      const auto& nearby_point = (*point_cloud)[indices[nearby_index]];
+      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Considering nearby point ["
+                                                  << utils::vectorToStr(nearby_point.getVector3fMap().cast<double>())
+                                                  << "]");
+
+      Eigen::Isometry3d grasp_pose;
+      bool success = findGraspPoseAt(point_cloud, nearby_point, grasp_pose);
+      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Sampled grasp pose [" << utils::poseToStr(grasp_pose) << "]");
+      if (!success)
+      {
+        ROS_WARN_STREAM_NAMED("grasp_sampler", "Failed to sample grasp pose.");
+        continue;
+      }
+
+      gripper_->setTcpPose(grasp_pose);
+      gripper_->setStateOpen();
+      GraspHypothesis hypothesis;
+      stopwatch_contacts.start();
+      success = gripper_->grasp(hypothesis.contacts_);
+      stopwatch_contacts.stop();
+      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Computed grasp contacts.");
+      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "It took " << stopwatch_contacts.elapsedSeconds() << "s.");
+      if (!success)
+      {
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Reject sampled pose because it results in a collision.");
+        continue;
+      }
+
+      hypothesis.pose_ = grasp_pose;
+      hypotheses.push_back(hypothesis);
+      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Added sampled grasp hypothesis.");
+    }
+  }
+
+  gripper_->clearCollisionObjects();
+
+  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Finished sampling grasp hypotheses.");
+  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Found " << hypotheses.size() << " grasp hypotheses.");
 }
 
 bool GraspSampler::sampleGraspPose(const PointCloudConstPtr& point_cloud, Eigen::Isometry3d& grasp_pose)

@@ -68,6 +68,9 @@ void PointCloudSegmentation::segment(PointCloud& output)
   clustering_.setInputCloud(filtered_cloud);
   clustering_.extract(cluster_indices);
 
+  if (cluster_indices.empty())
+    throw exception::PointCloud{"No clusters found."};
+
   // Find the indices with the most points
   auto it =
       std::max_element(cluster_indices.begin(), cluster_indices.end(), [&](const auto& indices1, const auto& indices2) {

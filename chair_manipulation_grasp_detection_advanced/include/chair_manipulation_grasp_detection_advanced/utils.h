@@ -2,6 +2,8 @@
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_UTILS_H
 
 #include "chair_manipulation_grasp_detection_advanced/contact.h"
+#include "chair_manipulation_grasp_detection_advanced/multi_arm_grasp.h"
+#include "chair_manipulation_grasp_detection_advanced/nonrigid_transform.h"
 #include <pcl/PolygonMesh.h>
 #include <geometric_shapes/shapes.h>
 #include <shape_msgs/Mesh.h>
@@ -20,6 +22,8 @@ void polygonToShapeMesh(const pcl::PolygonMesh& polygon_mesh, shapes::Mesh& shap
 
 void shapeMeshToMsg(const shapes::Mesh& shape_mesh, shape_msgs::Mesh& msg);
 
+void polygonMeshToMsg(const pcl::PolygonMesh& polygon_mesh, shape_msgs::Mesh& msg);
+
 std::string loadStringParameter(const XmlRpc::XmlRpcValue& value, const std::string& key);
 
 double loadDoubleParameter(const XmlRpc::XmlRpcValue& value, const std::string& key);
@@ -27,6 +31,10 @@ double loadDoubleParameter(const XmlRpc::XmlRpcValue& value, const std::string& 
 std::string poseToStr(const Eigen::Isometry3d& pose);
 
 Eigen::Isometry3d poseFromStr(const std::string& str);
+
+std::string vectorToStr(const Eigen::Vector3d& vector);
+
+Eigen::Vector3d vectorFromStr(const std::string& str);
 
 std::string contactsToStr(const std::vector<Contact>& contacts);
 
@@ -57,7 +65,7 @@ Matrix3<T> orthonormalize(const Matrix3<T>& mat)
   return result;
 }
 
-template<typename PointT>
+template <typename PointT>
 void pointCloudToEigen(const pcl::PointCloud<PointT>& point_cloud, Eigen::MatrixXd& mat)
 {
   mat.resize(point_cloud.size(), 3);
@@ -89,6 +97,12 @@ void publishPointCloud(const pcl::PointCloud<PointT>& pcl_cloud, ros::Publisher&
   pc2_cloud->header.stamp = ros::Time::now();
   publisher.publish(pc2_cloud);
 }
+
+void transformPointCloud(const pcl::PointCloud<pcl::PointNormal>& source_cloud,
+                         pcl::PointCloud<pcl::PointNormal>& target_cloud, const NonrigidTransform& transform);
+
+void transformGrasps(const std::vector<MultiArmGrasp>& source_grasps, std::vector<MultiArmGrasp>& target_grasps,
+                     const NonrigidTransform& transform);
 
 }  // namespace utils
 }  // namespace chair_manipulation

@@ -4,6 +4,6 @@
 int main(int argc, char* argv[])
 {
   ros::init(argc, argv, "point_cloud_segmentation");
-  chair_manipulation::run_point_cloud_segmentation_pipeline();
+  chair_manipulation::runPointCloudSegmentationPipeline();
   return 0;
 }

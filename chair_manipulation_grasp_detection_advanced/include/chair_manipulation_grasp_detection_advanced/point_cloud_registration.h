@@ -37,7 +37,6 @@ private:
   PointCloudRegistrationParameters params_;
   PointCloudConstPtr source_cloud_;
   PointCloudConstPtr target_cloud_;
-  cpd::Nonrigid nonrigid_;
 };
 
 }

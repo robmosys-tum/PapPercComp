@@ -12,7 +12,7 @@ struct MeshReconstructionParameters
   void load(ros::NodeHandle& nh);
 
   double search_radius_;
-  double max_distance_;
+  double relative_max_distance_;
   int max_nearest_neighbors_;
   double max_surface_angle_;
   double min_angle_;

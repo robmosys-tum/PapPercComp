@@ -2,6 +2,7 @@
 #include "chair_manipulation_grasp_detection_advanced/transform.h"
 #include "chair_manipulation_grasp_detection_advanced/exception.h"
 #include "chair_manipulation_grasp_detection_advanced/qhull_mutex.h"
+#include <ros/ros.h>
 
 extern "C" {
 #ifdef CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_HAVE_QHULL_2011
@@ -80,7 +81,8 @@ void WrenchSpace::computeConvexHull(std::size_t dim)
     qh_freeqhull(!qh_ALL);
     int curlong, totlong;
     qh_memfreeshort(&curlong, &totlong);
-    throw exception::Runtime{ "Convex hull creation failed." };
+    ROS_WARN_STREAM_NAMED("wrench_space", "Convex hull creation failed.");
+    return;
   }
   int num_facets = qh num_facets;
   hyperplanes_.resize(num_facets);

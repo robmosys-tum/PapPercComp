@@ -3,7 +3,7 @@
 
 namespace chair_manipulation
 {
-void run_point_cloud_segmentation_pipeline();
+void runPointCloudSegmentationPipeline();
 
 }
 

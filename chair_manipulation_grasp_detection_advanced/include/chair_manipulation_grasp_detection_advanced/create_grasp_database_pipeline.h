@@ -3,7 +3,7 @@
 
 namespace chair_manipulation
 {
-void run_create_grasp_database_pipeline();
+void runCreateGraspDatabasePipeline();
 
 }
 
