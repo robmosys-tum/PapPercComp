@@ -196,24 +196,22 @@ void runGraspDetectionPipeline()
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
-      PolygonMesh polygon_mesh;
+      auto shape_mesh = std::make_shared<ShapeMesh>();
       mesh_reconstruction.setInputCloud(transformed_cloud);
-      mesh_reconstruction.reconstruct(polygon_mesh);
+      mesh_reconstruction.reconstruct(*shape_mesh);
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Mesh reconstruction finished.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
       shape_msgs::Mesh mesh_msg;
-      utils::polygonMeshToMsg(polygon_mesh, mesh_msg);
+      utils::shapeMeshToMsg(*shape_mesh, mesh_msg);
       reconstructed_mesh_pub.publish(mesh_msg);
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Converted and published reconstructed mesh.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
-      auto shape_mesh = std::make_shared<ShapeMesh>();
-      utils::polygonToShapeMesh(polygon_mesh, *shape_mesh);
       Model model{ shape_mesh, transformed_cloud };
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Creating model finished.");

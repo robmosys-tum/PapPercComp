@@ -13,12 +13,15 @@
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <ros/ros.h>
+#include <vtkPolyDataMapper.h>
 
 namespace chair_manipulation
 {
 namespace utils
 {
 void polygonToShapeMesh(const pcl::PolygonMesh& polygon_mesh, shapes::Mesh& shape_mesh);
+
+void polydataToShapeMesh(vtkPolyData* polydata, shapes::Mesh& shape_mesh);
 
 void shapeMeshToMsg(const shapes::Mesh& shape_mesh, shape_msgs::Mesh& msg);
 

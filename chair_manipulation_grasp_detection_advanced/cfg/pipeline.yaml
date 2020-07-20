@@ -102,20 +102,41 @@ point_cloud_registration:
   max_iterations: 30
 
 mesh_reconstruction:
-  # Maximum distance between connected points (maximum edge length).
-  search_radius: 0.05
-  # Maximum acceptable distance for a point to be considered,
-  # relative to the distance of the nearest point.
-  relative_max_distance: 2.5
-  # How many neighbors are searched for
-  max_nearest_neighbors: 100
-  # Points will not be connected to the current point
-  #	if their normals deviate more than the specified angle.
-  max_surface_angle: 0.78539 # 45 degrees
-  # Minimum and maximum angle there can be in a triangle.
-  # The first is not guaranteed, the second is.
-  min_angle: 0.17453 # 10 degrees
-  max_angle: 2.96705 # 170 degrees
-  # If false, the direction of normals will not be taken into account
-  # when computing the angle between them.
-  normal_consistency: true
+  # Specifies which method to use.
+  # This can be either "greedy" for greedy projection triangulation or "delauny" for delauny triangulation.
+  method: "greedy"
+
+  # greedy parameters
+  greedy:
+    # Maximum distance between connected points (maximum edge length).
+    search_radius: 0.05
+    # Maximum acceptable distance for a point to be considered,
+    # relative to the distance of the nearest point.
+    relative_max_distance: 2.5
+    # How many neighbors are searched for
+    max_nearest_neighbors: 100
+    # Points will not be connected to the current point
+    #	if their normals deviate more than the specified angle.
+    max_surface_angle: 0.78539 # 45 degrees
+    # Minimum and maximum angle there can be in a triangle.
+    # The first is not guaranteed, the second is.
+    min_angle: 0.17453 # 10 degrees
+    max_angle: 2.96705 # 170 degrees
+    # If false, the direction of normals will not be taken into account
+    # when computing the angle between them.
+    normal_consistency: true
+
+  # delauny parameters
+  delauny:
+    # Specify alpha (or distance) value to control output of this filter.
+    # For a non-zero alpha value, only edges or triangles contained within
+    # a sphere centered at mesh vertices will be output. Otherwise, only
+    # triangles will be output.
+    alpha: 0.01
+    # Specify a tolerance to control discarding of closely spaced points.
+    # This tolerance is specified as a fraction of the diagonal length of
+    # the bounding box of the points.
+    tolerance: 0.01
+    # Specify a multiplier to control the size of the initial, bounding
+    # Delaunay triangulation.
+    offset: 1

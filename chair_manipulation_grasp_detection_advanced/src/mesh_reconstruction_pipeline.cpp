@@ -15,6 +15,8 @@ using PointNormalCloud = pcl::PointCloud<pcl::PointNormal>;
 using PointNormalCloudPtr = PointNormalCloud::Ptr;
 using PolygonMesh = pcl::PolygonMesh;
 using PolygonMeshPtr = PolygonMesh::Ptr;
+using ShapeMesh = shapes::Mesh;
+using ShapeMeshPtr = std::shared_ptr<ShapeMesh>;
 
 void runMeshReconstructionPipeline()
 {
@@ -45,15 +47,15 @@ void runMeshReconstructionPipeline()
       ROS_DEBUG_STREAM_NAMED("main", "Received and converted point cloud.");
 
       stopwatch_step.start();
-      PolygonMesh polygon_mesh;
+      ShapeMesh shape_mesh;
       mesh_reconstruction.setInputCloud(point_cloud);
-      mesh_reconstruction.reconstruct(polygon_mesh);
+      mesh_reconstruction.reconstruct(shape_mesh);
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Mesh reconstruction finished.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       shape_msgs::Mesh mesh_msg;
-      utils::polygonMeshToMsg(polygon_mesh, mesh_msg);
+      utils::shapeMeshToMsg(shape_mesh, mesh_msg);
       mesh_pub.publish(mesh_msg);
       ROS_DEBUG_STREAM_NAMED("main", "Published reconstructed mesh.");
 

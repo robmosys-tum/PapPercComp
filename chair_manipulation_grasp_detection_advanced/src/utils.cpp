@@ -24,11 +24,11 @@ void polygonToShapeMesh(const pcl::PolygonMesh& polygon_mesh, shapes::Mesh& shap
   triangle_filter->SetInputData(polydata);
   triangle_filter->Update();
 
-  vtkSmartPointer<vtkPolyDataMapper> triangle_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  triangle_mapper->SetInputConnection(triangle_filter->GetOutputPort());
-  triangle_mapper->Update();
-  polydata = triangle_mapper->GetInput();
+  polydataToShapeMesh(triangle_filter->GetOutput(), shape_mesh);
+}
 
+void polydataToShapeMesh(vtkPolyData* polydata, shapes::Mesh& shape_mesh)
+{
   polydata->BuildCells();
   auto points = polydata->GetPoints();
   vtkSmartPointer<vtkCellArray> cells = polydata->GetPolys();

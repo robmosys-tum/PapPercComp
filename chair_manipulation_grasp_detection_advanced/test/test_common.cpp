@@ -83,13 +83,17 @@ chair_manipulation::TestParameters::TestParameters()
   point_cloud_registration_params_.beta_ = cpd::DEFAULT_BETA;
   point_cloud_registration_params_.max_iterations_ = 150;
 
-  mesh_reconstruction_params_.search_radius_ = 0.05;
-  mesh_reconstruction_params_.relative_max_distance_ = 2.5;
-  mesh_reconstruction_params_.max_nearest_neighbors_ = 100;
-  mesh_reconstruction_params_.max_surface_angle_ = M_PI / 8;
-  mesh_reconstruction_params_.min_angle_ = M_PI / 18;
-  mesh_reconstruction_params_.max_angle_ = 2 * M_PI / 3;
-  mesh_reconstruction_params_.normal_consistency_ = true;
+  mesh_reconstruction_params_.method_ = "greedy";
+  mesh_reconstruction_params_.greedy_search_radius_ = 0.05;
+  mesh_reconstruction_params_.greedy_relative_max_distance_ = 2.5;
+  mesh_reconstruction_params_.greedy_max_nearest_neighbors_ = 100;
+  mesh_reconstruction_params_.greedy_max_surface_angle_ = M_PI / 8;
+  mesh_reconstruction_params_.greedy_min_angle_ = M_PI / 18;
+  mesh_reconstruction_params_.greedy_max_angle_ = 2 * M_PI / 3;
+  mesh_reconstruction_params_.greedy_normal_consistency_ = true;
+  mesh_reconstruction_params_.delauny_alpha_ = 0.2;
+  mesh_reconstruction_params_.delauny_tolerance_ = 0.01;
+  mesh_reconstruction_params_.delauny_offset_ = 0.75;
 }
 
 }  // namespace chair_manipulation
