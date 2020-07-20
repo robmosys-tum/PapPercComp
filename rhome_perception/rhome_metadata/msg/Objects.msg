@@ -1,0 +1,6 @@
+sensor_msgs/Image[] imgs
+geometry_msgs/PoseStamped[] pose
+rhome_metadata/Roi[] roi
+bool[] inf_bool
+string[] inf_label
+int32[] inf_int

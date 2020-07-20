@@ -370,6 +370,23 @@ std::vector<int> InstanceRecognition::matching_db(cv::Mat dscr_input, std::vecto
 
 }
 
+bool InstanceRecognition::intersection(cv::Point a1, cv::Point a2, cv::Point b1, cv::Point b2)
+{
+    cv::Point p = a1;
+    cv::Point q = b1;
+    cv::Point r(a2-a1);
+    cv::Point s(b2-b1);
+
+    std::cout<<"cross "<<abs(r.x*s.y - r.y*s.x)<<std::endl;
+
+    if(abs(r.x*s.y - r.y*s.x) <1000) 
+    	return false;
+
+    return true;
+}
+
+
+
 void InstanceRecognition::remove_duplicates(std::vector<box_obj> &objs, std::vector<cv::Rect> &objs_rects){
     for (int i = 1; i < objs.size(); ++i)
     {
@@ -399,7 +416,9 @@ void InstanceRecognition::remove_duplicates(std::vector<box_obj> &objs, std::vec
         if (r1.height < 5) r1.height = 5;
         if (r1.x + r1.width > ImageIn.cols-5) r1.width = ImageIn.cols-r1.x-5;
         if (r1.y + r1.height > ImageIn.rows-5) r1.height = ImageIn.rows-r1.y-5;
-        objs_rects.push_back(r1);
+
+        if (r1.width < ImageIn.cols*0.8 && r1.height < ImageIn.rows*0.8 ) // Removing extrange detections
+        	objs_rects.push_back(r1);
     }
 
 }
@@ -511,7 +530,7 @@ void InstanceRecognition::run() {
     detected_imgs.clear();
     detected_label.clear();
     detected_roi.clear();
-    for (int i = 0; i < objects.size(); ++i)
+    for (int i = 0; i < objs_rects.size(); ++i)
     {
         cv::line( ImageIn, objects[i].p1, objects[i].p2, cv::Scalar(255, 0, 0), 4 );
         cv::line( ImageIn, objects[i].p2, objects[i].p3, cv::Scalar( 255, 0, 0), 4 );

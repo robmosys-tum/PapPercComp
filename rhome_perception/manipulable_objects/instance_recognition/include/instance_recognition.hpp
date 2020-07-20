@@ -182,6 +182,7 @@ private:
 	cv::Mat get_histogram(cv::Mat1b const& image);
 	cv::Mat extract_dscr(cv::Mat image_input, std::vector<cv::KeyPoint> &kp);
 	std::vector<int>  matching_db(cv::Mat dscr_input, std::vector< std::vector<cv::DMatch> > &matches);
+	bool intersection(cv::Point o1, cv::Point p1, cv::Point o2, cv::Point p2);
 	void remove_duplicates(std::vector<box_obj> &objs, std::vector<cv::Rect> &objs_rects);
 	void point_to_position(cv::Point point2d, geometry_msgs::msg::Point &point3d);
 	geometry_msgs::msg::PoseStamped point2d_to_pose(cv::Point point_in);
