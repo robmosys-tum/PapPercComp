@@ -25,6 +25,8 @@
 #define DIM1 384
 #define DIM2 512
 
+#define TOPK 5
+
 static std::unordered_map<int, std::string> CLASSES = {
 		{GLASS, "GLASS" },
 		{ PAPER, "PAPER" },
@@ -46,7 +48,7 @@ Garbage_classification_impl::Garbage_classification_impl(
 		rclcpp::NodeOptions /*in*/options) :
 		Garbage_classification(options) {
 	//TODO make configurable
-	classifier_ = torch::jit::load("/home/seedship/TUM/SS20/Model-Driven\ Approach\ for\ Robotics\ Perception/PapPercComp/models/resnet152/transcripted_model_cuda.pt");
+	classifier_ = torch::jit::load("/home/seedship/TUM/SS20/Model-Driven\ Approach\ for\ Robotics\ Perception/PapPercComp/models/resnet18/transcripted_model_cuda.pt");
 	camNum_ = 0;
 }
 
@@ -60,7 +62,7 @@ void Garbage_classification_impl::classify(
 	img_msg_ = *image;
 
 	cv::Mat img(img_msg_.height, img_msg_.width, CV_8UC3,img_msg_.data.data());
-	cv::Mat img_resized;
+	cv::Mat img_resized, img_show;
 	cv::resize(img, img_resized, cv::Size(DIM1, DIM2));
 
 	torch::Tensor img_tensor = torch::from_blob(img_resized.data, {img_resized.rows, img_resized.cols, 3}, torch::kByte).clone();
@@ -72,19 +74,22 @@ void Garbage_classification_impl::classify(
 	input.emplace_back(img_tensor);
 
 	torch::Tensor output = classifier_.forward(input).toTensor();
-	auto prediction = output.topk(5);
+	auto prediction = output.topk(TOPK);
 	auto topClasses = std::get<1>(prediction);
 	topClasses = topClasses.flatten();
 
-	std::string ans("Top 5 Predicted Class:");
-	for (unsigned idx = 0; idx < 5; idx++) {
+	std::string ans("Top " + std::to_string(TOPK) + ":");
+	for (unsigned idx = 0; idx < TOPK; idx++) {
 		ans += (" " + CLASSES[topClasses[idx].item().toInt()]);
 	}
 	classification_.set__data(ans);
 
 
 	// Does not work on my Arch Linux
-//	imshow("Garbage Classification Image", img);
+	cv::resize(img, img_show, cv::Size(1280, 960));
+	cv::putText(img_show, ans, cv::Point2i(10, 40), cv::FONT_HERSHEY_TRIPLEX, 1.4, cv::Scalar(0, 255 ,0));
+	cv::imshow("Garbage Classification Image", img_show);
+	cv::waitKey(10);
 
 	RCLCPP_INFO(this->get_logger(), ans);
 	classification_pub_->publish(classification_);
