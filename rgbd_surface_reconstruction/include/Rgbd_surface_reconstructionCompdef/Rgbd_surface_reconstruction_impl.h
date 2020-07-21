@@ -9,13 +9,17 @@
  Rgbd_surface_reconstruction_impl class header
  ************************************************************/
 
+#include <queue>
+
 #include "Rgbd_surface_reconstructionCompdef/Pkg_Rgbd_surface_reconstructionCompdef.h"
 
 #include "Rgbd_surface_reconstructionCompdef/Rgbd_surface_reconstruction.h"
 #include "sensor_msgs/msg/image.hpp"
 
 //Kinect Fusion
-#include "tsdf_fusion.hcu"
+//#include "tsdf_fusion.hcu"
+#include "kinectfusion.h"
+#include "Rgbd_surface_reconstructionCompdef/depth_camera.h"
 
 namespace ros2Library {
 namespace rclcpp {
@@ -56,8 +60,25 @@ public:
 	void pose_handler(
 			const geometry_msgs::msg::PoseStamped::SharedPtr /*in*/pose);
 	
+	bool _finished = false;
+	void process_frames();
+
 private:
-	TSDFFusion _tsdf_fusion;
+	//TSDFFusion _tsdf_fusion;
+	KinectCamera _camera {};
+
+	kinectfusion::Pipeline* _kinect_pipeline_ptr;
+
+	float _voxel_scale;
+	int3 _volume_size;
+	float3 _offset;
+	bool _use_output_frame;
+	bool _use_kinect_noise_model;
+	int _use_every_nth_frame;
+	int _export_frame;
+	std::string _export_name;
+
+	int _frame_counter = 0;
 
 	bool _depth_image_initialized = false;
 	bool _color_image_initialized = false;
@@ -68,9 +89,9 @@ private:
 	geometry_msgs::msg::PoseStamped::SharedPtr _pose;
 
 	std::queue<sensor_msgs::msg::Image::SharedPtr> _depth_images;
+	std::queue<sensor_msgs::msg::Image::SharedPtr> _color_images;
 	std::queue<geometry_msgs::msg::PoseStamped::SharedPtr> _poses;
 
-	void process_frames();
 };
 /************************************************************/
 /* External declarations (package visibility)               */

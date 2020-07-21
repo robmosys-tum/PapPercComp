@@ -34,7 +34,10 @@ int main(int argc, char **argv) {
 
 	executor.add_node(rgbd_surface_reconstruction->get_node_base_interface());
 
-	executor.spin();
+	while(!rgbd_surface_reconstruction->_finished){
+		executor.spin_once();
+		rgbd_surface_reconstruction->process_frames();
+	}
 	rclcpp::shutdown();
 }
 
