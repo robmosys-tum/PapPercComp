@@ -13,6 +13,7 @@ find_package(catkin REQUIRED
     moveit_ros_perception
     pluginlib
     geometric_shapes
+    shape_msgs
     pcl_ros
     pcl_conversions
     rosbag
@@ -20,6 +21,7 @@ find_package(catkin REQUIRED
     tf2_eigen
     tf2_geometry_msgs
     chair_manipulation_msgs
+    control_msgs
 )
 
 find_package(Eigen3 REQUIRED)
@@ -37,3 +39,6 @@ target_link_libraries(grasp_action_planner_server_node ${catkin_LIBRARIES} ${Boo
 
 add_executable(dual_grasp_planner_node include/chair_manipulation_grasp_planning/grasp_planner.h include/chair_manipulation_grasp_planning/dual_grasp_planner.h src/grasp_planner.cpp src/dual_grasp_planner.cpp src/dual_grasp_planner_node.cpp include/chair_manipulation_grasp_planning/utils.h src/utils.cpp)
 target_link_libraries(dual_grasp_planner_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(gripper_command_action_server_node include/chair_manipulation_grasp_planning/grasp_planner.h include/chair_manipulation_grasp_planning/dual_grasp_planner.h src/grasp_planner.cpp src/dual_grasp_planner.cpp include/chair_manipulation_grasp_planning/utils.h src/utils.cpp src/gripper_command_action_server_node.cpp)
+target_link_libraries(gripper_command_action_server_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})

@@ -29,6 +29,7 @@ using ShapeMeshPtr = std::shared_ptr<ShapeMesh>;
 
 void GraspDetectionParameters::load(ros::NodeHandle& nh)
 {
+  run_once_ = nh.param<bool>("run_once", false);
   pre_registration_voxel_leaf_size_ = nh.param<double>("pre_registration_voxel_leaf_size", 0.05);
   num_sample_trials_ = nh.param<int>("num_sample_trials", 100);
   sample_radius_ = nh.param<double>("sample_radius", 0.1);
@@ -130,7 +131,7 @@ void runGraspDetectionPipeline()
                              grasp_detection_params.pre_registration_voxel_leaf_size_);
     Stopwatch stopwatch_iteration, stopwatch_step;
 
-    while (ros::ok())
+    do
     {
       ROS_DEBUG_STREAM_NAMED("main", "Start next iteration.");
       stopwatch_iteration.start();
@@ -257,6 +258,7 @@ void runGraspDetectionPipeline()
       ROS_DEBUG_STREAM_NAMED("main", "Finished current iteration.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_iteration.elapsedSeconds() << "s.");
     }
+    while (!grasp_detection_params.run_once_ && ros::ok());
   }
   catch (const exception::Runtime& e)
   {

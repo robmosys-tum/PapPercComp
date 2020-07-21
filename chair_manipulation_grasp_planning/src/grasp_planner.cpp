@@ -7,7 +7,7 @@
 
 namespace chair_manipulation
 {
-GraspPlanner::GraspPlanner(const ros::NodeHandle& nh)
+GraspPlanner::GraspPlanner(ros::NodeHandle& nh)
 {
   arm_group_name_ = nh.param<std::string>("arm_group", "arm");
   gripper_group_name_ = nh.param<std::string>("gripper_group", "gripper");
@@ -23,11 +23,18 @@ GraspPlanner::GraspPlanner(const ros::NodeHandle& nh)
   planned_grasp_frame_ = nh.param<std::string>("planned_grasp_frame", "planned_grasp");
   planned_lift_frame_ = nh.param<std::string>("planned_lift_frame", "planned_lift");
 
+  object_mesh_topic_ = nh.param<std::string>("object_mesh_topic", "object_mesh");
+
   planning_attempts_ = nh.param<int>("planning_attempts", 10);
   planning_attempt_time_ = nh.param<double>("planning_attempt_time", 5.);
   pre_grasp_distance_ = nh.param<double>("pre_grasp_distance", 0.1);
   lift_height_ = nh.param<double>("lift_height", 0.2);
   max_velocity_scaling_factor_ = nh.param<double>("max_velocity_scaling_factor", 0.1);
+
+  touch_links_ = nh.param<std::vector<std::string>>("touch_links", {});
+
+  gripper_command_action_ns_ = nh.param<std::string>("gripper_command_action_ns", "gripper_command");
+  gripper_command_client_ = std::make_unique<GripperCommandActionClient>(gripper_command_action_ns_, true);
 
   using moveit::planning_interface::MoveGroupInterface;
   using moveit::planning_interface::PlanningSceneInterface;
@@ -38,10 +45,17 @@ GraspPlanner::GraspPlanner(const ros::NodeHandle& nh)
 
 void GraspPlanner::prepare()
 {
+  // Wait until we received the object mesh
+  ROS_INFO_STREAM_NAMED("grasp_planner", "Waiting to receive object mesh...");
+  object_mesh_ = ros::topic::waitForMessage<shape_msgs::Mesh>(object_mesh_topic_);
+  ROS_INFO_STREAM_NAMED("grasp_planner", "Object mesh received.");
+
   tf2_ros::Buffer tf_buffer;
   tf2_ros::TransformListener tf_listener(tf_buffer);
   try
   {
+    ROS_INFO_STREAM_NAMED("grasp_planner", "Retrieving transform...");
+
     // Declare all transforms that we need
     tf2::Transform world_to_grasp;
     tf2::Transform world_to_pre_grasp;
@@ -56,6 +70,7 @@ void GraspPlanner::prepare()
     // Retrieve transforms
     geometry_msgs::TransformStamped msg;
 
+    ROS_DEBUG_STREAM_NAMED("grasp_planner", "Looking up transforms.");
     msg = tf_buffer.lookupTransform(world_frame_, grasp_frame_, ros::Time{ 0 }, ros::Duration{ 3. });
     tf2::fromMsg(msg.transform, world_to_grasp);
 
@@ -96,6 +111,8 @@ void GraspPlanner::prepare()
     msg.child_frame_id = planned_lift_frame_;
     tf2::convert(world_to_lift_to_ik_, msg.transform);
     broadcaster_.sendTransform(msg);
+
+    ROS_INFO_STREAM_NAMED("grasp_planner", "Finished retrieving transform.");
   }
   catch (const tf2::TransformException& e)
   {
@@ -105,6 +122,7 @@ void GraspPlanner::prepare()
 
 void GraspPlanner::planPreGrasp()
 {
+  addGroundPlane(*planning_scene_interface_, world_frame_);
   planArmPose(world_to_pre_grasp_to_ik_, "pre-grasp");
 }
 
@@ -120,6 +138,7 @@ void GraspPlanner::executePreGrasp()
 
 void GraspPlanner::planGrasp()
 {
+  constrainOrientation();
   planArmPose(world_to_grasp_to_ik_, "grasp");
 }
 
@@ -127,15 +146,11 @@ void GraspPlanner::executeGrasp()
 {
   auto result = arm_group_->execute(plan_);
   if (result != moveit::planning_interface::MoveItErrorCode::SUCCESS)
-    throw GraspPlanningException{ "Failed to execute grasp." };
+    throw GraspPlanningException{ "Failed to execute grasp while moving arm." };
 
-  gripper_group_->setNamedTarget(closed_group_state_);
-  gripper_group_->move();
-
-  // Wait a couple of seconds, the grasp execution is likely to fail because it doesn't reach the closed
-  // position entirely. This is absolutely fine and we just wait until the gripper exerts enough force.
-  using namespace std::chrono_literals;
-  std::this_thread::sleep_for(5s);
+  attachMesh(*planning_scene_interface_, *arm_group_, *object_mesh_, "object_mesh", world_frame_, tcp_frame_,
+             touch_links_);
+  closeGripper();
 }
 
 void GraspPlanner::planLift()
@@ -156,13 +171,15 @@ void GraspPlanner::stop()
   gripper_group_->stop();
 }
 
+void GraspPlanner::cleanup()
+{
+  removeGroundPlane(*planning_scene_interface_);
+  planning_scene_interface_->removeCollisionObjects({ "object_mesh" });
+  arm_group_->clearPathConstraints();
+}
+
 void GraspPlanner::planArmPose(const tf2::Transform& pose_tf, const std::string& pose_name)
 {
-  // Weird Moveit bug? - If we put addGroundPlane() in the constructor, it doesn't add
-  // the ground plane to the planning scene. If we put it here, however, it works.
-  // This seems to be strange...
-  addGroundPlane(*planning_scene_interface_, arm_group_->getPlanningFrame());
-
   geometry_msgs::Pose pose;
   tf2::toMsg(pose_tf, pose);
   arm_group_->setPoseReferenceFrame(world_frame_);
@@ -174,14 +191,51 @@ void GraspPlanner::planArmPose(const tf2::Transform& pose_tf, const std::string&
   {
     auto result = arm_group_->plan(plan_);
     if (result == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-    {
       return;
-    }
   }
 
   std::ostringstream msg;
   msg << "Failed to plan " << pose_name << " pose.";
   throw GraspPlanningException{ msg.str() };
+}
+
+void GraspPlanner::openGripper()
+{
+  GripperCommandGoal goal;
+  goal.goal = GripperCommandGoal::OPEN;
+  gripper_command_client_->sendGoal(goal);
+  gripper_command_client_->waitForResult(ros::Duration{ 5. });
+  if (gripper_command_client_->getState() != actionlib::SimpleClientGoalState::SUCCEEDED)
+    throw GraspPlanningException{ "Failed to open gripper." };
+}
+
+void GraspPlanner::closeGripper()
+{
+  GripperCommandGoal goal;
+  goal.goal = GripperCommandGoal::CLOSE;
+  gripper_command_client_->sendGoal(goal);
+  gripper_command_client_->waitForResult(ros::Duration{ 5. });
+  if (gripper_command_client_->getState() != actionlib::SimpleClientGoalState::SUCCEEDED)
+    throw GraspPlanningException{ "Failed to close gripper." };
+}
+
+void GraspPlanner::constrainOrientation()
+{
+  const auto& orientation = world_to_grasp_to_ik_.getRotation();
+  moveit_msgs::OrientationConstraint ocm;
+  ocm.header.frame_id = world_frame_;
+  ocm.link_name = ik_frame_;
+  ocm.orientation.x = orientation.x();
+  ocm.orientation.y = orientation.y();
+  ocm.orientation.z = orientation.z();
+  ocm.orientation.w = orientation.w();
+  ocm.absolute_x_axis_tolerance = 0.1;
+  ocm.absolute_y_axis_tolerance = 0.1;
+  ocm.absolute_z_axis_tolerance = 0.1;
+  ocm.weight = 1.0;
+  moveit_msgs::Constraints constraints;
+  constraints.orientation_constraints.push_back(ocm);
+  arm_group_->setPathConstraints(constraints);
 }
 
 }  // namespace chair_manipulation

@@ -85,34 +85,14 @@
   <node name="$(arg robot_name)_spawn_controllers" pkg="controller_manager" type="spawner" 
     args="
       robot1_arm_trajectory_controller
-      robot1_gripper_trajectory_controller 
+      robot1_left_finger_action_controller
+      robot1_right_finger_action_controller
 
       robot2_arm_trajectory_controller
-      robot2_gripper_trajectory_controller 
+      robot2_left_finger_action_controller
+      robot2_right_finger_action_controller
 
       joint_state_controller"
-    respawn="false" output="screen" />
-
-  <!-- load other controllers -->
-  <node name="$(arg robot_name)_load_controllers" pkg="controller_manager" type="controller_manager" 
-    args="load 
-      robot1_shoulder_pan_joint_controller
-      robot1_shoulder_lift_joint_controller
-      robot1_elbow_joint_controller
-      robot1_wrist_1_joint_controller
-      robot1_wrist_2_joint_controller
-      robot1_wrist_3_joint_controller
-      robot1_left_finger_joint_controller
-      robot1_right_finger_joint_controller
-
-      robot2_shoulder_pan_joint_controller
-      robot2_shoulder_lift_joint_controller
-      robot2_elbow_joint_controller
-      robot2_wrist_1_joint_controller
-      robot2_wrist_2_joint_controller
-      robot2_wrist_3_joint_controller
-      robot2_left_finger_joint_controller
-      robot2_right_finger_joint_controller"
     respawn="false" output="screen" />
 
   <!-- robot state publisher for tf -->

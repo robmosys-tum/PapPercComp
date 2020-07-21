@@ -14,6 +14,7 @@ set(SRV_FILES
 
 set(ACT_FILES
   GraspExecution.action
+  GripperCommand.action
 )
 
 find_package(catkin REQUIRED COMPONENTS message_generation ${MSG_DEPS})

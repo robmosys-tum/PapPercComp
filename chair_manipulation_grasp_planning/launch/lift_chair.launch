@@ -1,63 +1,86 @@
 <?xml version="1.0" ?>
 <launch>
+  <arg name="debug" default="false" />
+  <env if="$(arg debug)" name="ROSCONSOLE_CONFIG_FILE"
+       value="$(find chair_manipulation_grasp_planning)/cfg/rosconsole.conf" />
 
-  <node ns="robot1" name="robot1_action_server" pkg="chair_manipulation_grasp_planning" type="grasp_action_planner_server_node" output="screen">
-    <!-- planning parameters -->
-    <rosparam file="$(find chair_manipulation_grasp_planning)/cfg/grasp_planner.yaml" />
+  <group ns="robot1">
+    <node name="robot1_grasp_planner_action_server" pkg="chair_manipulation_grasp_planning" type="grasp_action_planner_server_node" output="screen">
+      <!-- Planning parameters -->
+      <rosparam file="$(find chair_manipulation_grasp_planning)/cfg/grasp_planner.yaml" />
 
-    <!-- name for actionlib in order to distinguish connections that run in the same namespace -->
-    <param name="action_name" value="planner" />
+      <!-- Action namespace -->
+      <param name="action_ns" value="planner" />
 
-    <!-- world frame as reference frame -->
-    <param name="world_frame" value="world" />
+      <!-- World frame as reference frame -->
+      <param name="world_frame" value="world" />
 
-    <!-- this must be the frame that Moveit uses for inverse kinematics (the one at the end of the kinematic chain) -->
-    <param name="ik_frame" value="robot1_wrist_3_link" />
+      <!-- This must be the frame that Moveit uses for inverse kinematics (the one at the end of the kinematic chain) -->
+      <param name="ik_frame" value="robot1_wrist_3_link" />
 
-    <!-- tool center point of the end-effector -->
-    <param name="tcp_frame" value="robot1_tcp" />
+      <!-- Tool center point of the end-effector -->
+      <param name="tcp_frame" value="robot1_tcp" />
 
-    <!-- This is the grasp frame where the Z-axis points towards the chair and the Y-axis points up.
-          It is used to compute the pre-grasp and lift frames. -->
-    <param name="grasp_frame" value="robot1_grasp" />
+      <!-- This is the grasp frame where the Z-axis points towards the chair and the Y-axis points up.
+            It is used to compute the pre-grasp and lift frames. -->
+      <param name="grasp_frame" value="robot1_grasp" />
 
-    <!-- This is the grasp frame which has the same position as grasp_frame but its orientation is
-         the desired orientation of the tcp frame.
-         So the planner computes the position of the pre-grasp and lift in the grasp_frame first
-         and then expresses those positions relative to the desired orientation of the tcp frame. -->
-    <param name="grasp_tcp_aligned_frame" value="robot1_grasp_tcp_aligned" />
+      <!-- This is the grasp frame which has the same position as grasp_frame but its orientation is
+           the desired orientation of the tcp frame.
+           So the planner computes the position of the pre-grasp and lift in the grasp_frame first
+           and then expresses those positions relative to the desired orientation of the tcp frame. -->
+      <param name="grasp_tcp_aligned_frame" value="robot1_grasp_tcp_aligned" />
 
-    <!-- Planned output frames for visualization -->
-    <param name="planned_pre_grasp_frame" value="robot1_planned_pre_grasp" />
-    <param name="planned_grasp_frame" value="robot1_planned_grasp" />
-    <param name="planned_lift_frame" value="robot1_planned_lift" />
+      <!-- Planned output frames for visualization -->
+      <param name="planned_pre_grasp_frame" value="robot1_planned_pre_grasp" />
+      <param name="planned_grasp_frame" value="robot1_planned_grasp" />
+      <param name="planned_lift_frame" value="robot1_planned_lift" />
 
-    <param name="arm_group" value="robot1_arm" />
-    <param name="gripper_group" value="robot1_gripper" />
-    <param name="open_group_state" value="robot1_open" />
-    <param name="closed_group_state" value="robot1_closed" />
-  </node>
+      <param name="arm_group" value="robot1_arm" />
+      <param name="gripper_group" value="robot1_gripper" />
+      <param name="open_group_state" value="robot1_open" />
+      <param name="closed_group_state" value="robot1_closed" />
 
-  <node ns="robot2" name="robot2_action_server" pkg="chair_manipulation_grasp_planning" type="grasp_action_planner_server_node" output="screen">
-    <rosparam file="$(find chair_manipulation_grasp_planning)/cfg/grasp_planner.yaml" />
-    <param name="action_name" value="planner" />
-    <param name="world_frame" value="world" />
-    <param name="ik_frame" value="robot2_wrist_3_link" />
-    <param name="tcp_frame" value="robot2_tcp" />
-    <param name="grasp_frame" value="robot2_grasp" />
-    <param name="grasp_tcp_aligned_frame" value="robot2_grasp_tcp_aligned" />
-    <param name="planned_pre_grasp_frame" value="robot2_planned_pre_grasp" />
-    <param name="planned_grasp_frame" value="robot2_planned_grasp" />
-    <param name="planned_lift_frame" value="robot2_planned_lift" />
-    <param name="arm_group" value="robot2_arm" />
-    <param name="gripper_group" value="robot2_gripper" />
-    <param name="open_group_state" value="robot2_open" />
-    <param name="closed_group_state" value="robot2_closed" />
-  </node>
+      <!-- Action namespace for the custom gripper command action server -->
+      <param name="gripper_command_action_ns" value="gripper" />
+    </node>
+
+    <node name="robot1_gripper_command_action_server" pkg="chair_manipulation_grasp_planning" type="gripper_command_action_server_node" output="screen">
+      <param name="action_ns" value="gripper" />
+      <param name="left_finger_action_ns" value="/robot1_left_finger_action_controller/gripper_cmd" />
+      <param name="right_finger_action_ns" value="/robot1_right_finger_action_controller/gripper_cmd" />
+    </node>
+  </group>
+
+  <group ns="robot2">
+    <node name="robot2_grasp_planner_action_server" pkg="chair_manipulation_grasp_planning" type="grasp_action_planner_server_node" output="screen">
+      <rosparam file="$(find chair_manipulation_grasp_planning)/cfg/grasp_planner.yaml" />
+      <param name="action_ns" value="planner" />
+      <param name="world_frame" value="world" />
+      <param name="ik_frame" value="robot2_wrist_3_link" />
+      <param name="tcp_frame" value="robot2_tcp" />
+      <param name="grasp_frame" value="robot2_grasp" />
+      <param name="grasp_tcp_aligned_frame" value="robot2_grasp_tcp_aligned" />
+      <param name="planned_pre_grasp_frame" value="robot2_planned_pre_grasp" />
+      <param name="planned_grasp_frame" value="robot2_planned_grasp" />
+      <param name="planned_lift_frame" value="robot2_planned_lift" />
+      <param name="arm_group" value="robot2_arm" />
+      <param name="gripper_group" value="robot2_gripper" />
+      <param name="open_group_state" value="robot2_open" />
+      <param name="closed_group_state" value="robot2_closed" />
+      <param name="gripper_command_action_ns" value="gripper" />
+    </node>
+
+    <node name="robot2_gripper_command_action_server" pkg="chair_manipulation_grasp_planning" type="gripper_command_action_server_node" output="screen">
+      <param name="action_ns" value="gripper" />
+      <param name="left_finger_action_ns" value="/robot2_left_finger_action_controller/gripper_cmd" />
+      <param name="right_finger_action_ns" value="/robot2_right_finger_action_controller/gripper_cmd" />
+    </node>
+  </group>
 
   <node name="lift_chair" pkg="chair_manipulation_grasp_planning" type="dual_grasp_planner_node" output="screen">
-    <param name="planner1_action_name" value="robot1/planner" />
-    <param name="planner2_action_name" value="robot2/planner" />
+    <param name="planner1_action_ns" value="robot1/planner" />
+    <param name="planner2_action_ns" value="robot2/planner" />
   </node>
 
 </launch>

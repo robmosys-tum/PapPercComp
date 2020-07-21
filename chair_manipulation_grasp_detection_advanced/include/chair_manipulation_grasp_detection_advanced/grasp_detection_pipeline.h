@@ -9,6 +9,7 @@ struct GraspDetectionParameters
 {
   void load(ros::NodeHandle& nh);
 
+  bool run_once_;
   double pre_registration_voxel_leaf_size_;
   int num_sample_trials_;
   double sample_radius_;

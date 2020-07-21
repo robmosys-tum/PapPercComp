@@ -12,6 +12,7 @@ grasp_database_creator:
       point_cloud: $(find chair_manipulation_chair_models)/models/dining_chair/point_clouds/dining_chair.pcd
 
 grasp_detection:
+  run_once: false
   # Leaf size for voxel filter applied to the template model before registration.
   pre_registration_voxel_leaf_size: 0.03
   num_sample_trials: 100

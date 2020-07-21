@@ -22,7 +22,7 @@
 	<!-- position and rotation of the first robot in the world frame -->
 	<xacro:arg name="robot1_x" default="0.5"/>
 	<xacro:arg name="robot1_y" default="1.0"/>
-	<xacro:arg name="robot1_z" default="0.1"/>
+	<xacro:arg name="robot1_z" default="0.01"/>
 	<xacro:arg name="robot1_roll" default="0.0"/>
 	<xacro:arg name="robot1_pitch" default="0.0"/>
 	<xacro:arg name="robot1_yaw" default="-1.5707"/>
@@ -30,7 +30,7 @@
     <!-- position and rotation of the second robot in the world frame -->
 	<xacro:arg name="robot2_x" default="-0.5"/>
 	<xacro:arg name="robot2_y" default="-1.0"/>
-	<xacro:arg name="robot2_z" default="0.1"/>
+	<xacro:arg name="robot2_z" default="0.01"/>
 	<xacro:arg name="robot2_roll" default="0.0"/>
 	<xacro:arg name="robot2_pitch" default="0.0"/>
 	<xacro:arg name="robot2_yaw" default="1.5707"/>

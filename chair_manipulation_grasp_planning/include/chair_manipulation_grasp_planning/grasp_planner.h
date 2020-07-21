@@ -6,14 +6,23 @@
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
-#include <moveit_msgs/CollisionObject.h>
+#include <shape_msgs/Mesh.h>
+#include <std_msgs/String.h>
+#include <mutex>
+#include <actionlib/client/simple_action_client.h>
+#include <chair_manipulation_msgs/GripperCommandAction.h>
 
 namespace chair_manipulation
 {
 class GraspPlanner
 {
 public:
-  explicit GraspPlanner(const ros::NodeHandle& nh);
+  using GripperCommandAction = chair_manipulation_msgs::GripperCommandAction;
+  using GripperCommandGoal = chair_manipulation_msgs::GripperCommandGoal;
+  using GripperCommandResult = chair_manipulation_msgs::GripperCommandResult;
+  using GripperCommandActionClient = actionlib::SimpleActionClient<GripperCommandAction>;
+
+  explicit GraspPlanner(ros::NodeHandle& nh);
 
   void prepare();
 
@@ -31,6 +40,8 @@ public:
 
   void stop();
 
+  void cleanup();
+
 private:
   std::string arm_group_name_;
   std::string gripper_group_name_;
@@ -46,11 +57,18 @@ private:
   std::string planned_grasp_frame_;
   std::string planned_lift_frame_;
 
+  std::string object_mesh_topic_;
+
   int planning_attempts_;
   double planning_attempt_time_;
   double pre_grasp_distance_;
   double lift_height_;
   double max_velocity_scaling_factor_;
+
+  std::vector<std::string> touch_links_;
+
+  std::string gripper_command_action_ns_;
+  std::unique_ptr<GripperCommandActionClient> gripper_command_client_;
 
   // std::unique_ptr because we need to initialize them with values from the parameter server
   std::unique_ptr<moveit::planning_interface::MoveGroupInterface> arm_group_;
@@ -65,7 +83,15 @@ private:
 
   tf2_ros::StaticTransformBroadcaster broadcaster_;
 
+  shape_msgs::MeshConstPtr object_mesh_;
+
   void planArmPose(const tf2::Transform& pose_tf, const std::string& pose_name);
+
+  void openGripper();
+
+  void closeGripper();
+
+  void constrainOrientation();
 };
 
 class GraspPlanningException : public std::runtime_error

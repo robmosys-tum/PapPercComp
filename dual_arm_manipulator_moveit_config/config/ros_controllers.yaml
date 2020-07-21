@@ -44,12 +44,18 @@ controller_list:
       - robot1_wrist_2_joint
       - robot1_wrist_3_joint
 
-  - name: robot1_gripper_trajectory_controller
-    action_ns: follow_joint_trajectory
+  - name: robot1_left_finger_action_controller
+    action_ns: gripper_cmd
     default: True
-    type: FollowJointTrajectory
+    type: GripperCommand
     joints:
       - robot1_left_finger_joint
+
+  - name: robot1_right_finger_action_controller
+    action_ns: gripper_cmd
+    default: True
+    type: GripperCommand
+    joints:
       - robot1_right_finger_joint
 
   - name: robot2_arm_trajectory_controller
@@ -63,11 +69,17 @@ controller_list:
       - robot2_wrist_1_joint
       - robot2_wrist_2_joint
       - robot2_wrist_3_joint
-
-  - name: robot2_gripper_trajectory_controller
-    action_ns: follow_joint_trajectory
+  
+  - name: robot2_left_finger_action_controller
+    action_ns: gripper_cmd
     default: True
-    type: FollowJointTrajectory
+    type: GripperCommand
     joints:
       - robot2_left_finger_joint
+  
+  - name: robot2_right_finger_action_controller
+    action_ns: gripper_cmd
+    default: True
+    type: GripperCommand
+    joints:
       - robot2_right_finger_joint

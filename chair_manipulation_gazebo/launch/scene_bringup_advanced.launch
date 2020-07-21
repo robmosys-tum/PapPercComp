@@ -19,7 +19,7 @@
     <!-- position, orientation and initial joint values of first robot -->
     <arg name="robot1_x" value="0.5" />
     <arg name="robot1_y" value="1.0" />
-    <arg name="robot1_z" value="0.1" />
+    <arg name="robot1_z" value="0.01" />
     <arg name="robot1_roll" value="0.0" />
     <arg name="robot1_pitch" value="0.0" />
     <arg name="robot1_yaw" value="-1.5707" />
@@ -35,7 +35,7 @@
     <!-- position, orientation and initial joint values of second robot -->
     <arg name="robot2_x" value="-0.5" />
     <arg name="robot2_y" value="-1.0" />
-    <arg name="robot2_z" value="0.1" />
+    <arg name="robot2_z" value="0.01" />
     <arg name="robot2_roll" value="0.0" />
     <arg name="robot2_pitch" value="0.0" />
     <arg name="robot2_yaw" value="1.5707" />

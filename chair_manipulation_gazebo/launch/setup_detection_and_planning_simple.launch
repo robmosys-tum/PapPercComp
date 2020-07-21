@@ -8,25 +8,25 @@
   <group ns="robot1">
     <!-- remap controllers -->
     <remap from="/robot1/robot1_arm_trajectory_controller"                              to="/robot1_arm_trajectory_controller" />
-    <remap from="/robot1/robot1_gripper_trajectory_controller"                          to="/robot1_gripper_trajectory_controller" />
+    <remap from="/robot1/robot1_left_finger_action_controller"                          to="/robot1_left_finger_action_controller" />
+    <remap from="/robot1/robot1_right_finger_action_controller"                         to="/robot1_right_finger_action_controller" />
     <remap from="/robot1/robot2_arm_trajectory_controller"                              to="/robot2_arm_trajectory_controller" />
-    <remap from="/robot1/robot2_gripper_trajectory_controller"                          to="/robot2_gripper_trajectory_controller" />
+    <remap from="/robot1/robot2_left_finger_action_controller"                          to="/robot2_left_finger_action_controller" />
+    <remap from="/robot1/robot2_right_finger_action_controller"                         to="/robot2_right_finger_action_controller" />
 
     <remap from="/robot1/robot1_arm_trajectory_controller/follow_joint_trajectory"      to="/robot1_arm_trajectory_controller/follow_joint_trajectory" />
     <remap from="/robot1/robot1_arm_trajectory_controller/state"                        to="/robot1_arm_trajectory_controller/state" />
     <remap from="/robot1/robot1_arm_trajectory_controller/command"                      to="/robot1_arm_trajectory_controller/command" />
 
-    <remap from="/robot1/robot1_gripper_trajectory_controller/follow_joint_trajectory"  to="/robot1_gripper_trajectory_controller/follow_joint_trajectory" />
-    <remap from="/robot1/robot1_gripper_trajectory_controller/state"                    to="/robot1_gripper_trajectory_controller/state" />
-    <remap from="/robot1/robot1_gripper_trajectory_controller/command"                  to="/robot1_gripper_trajectory_controller/command" />
+    <remap from="/robot1/robot1_left_finger_action_controller/gripper_cmd"              to="/robot1_left_finger_action_controller/gripper_cmd" />
+    <remap from="/robot1/robot1_right_finger_action_controller/gripper_cmd"             to="/robot1_right_finger_action_controller/gripper_cmd" />
 
     <remap from="/robot1/robot2_arm_trajectory_controller/follow_joint_trajectory"      to="/robot2_arm_trajectory_controller/follow_joint_trajectory" />
     <remap from="/robot1/robot2_arm_trajectory_controller/state"                        to="/robot2_arm_trajectory_controller/state" />
     <remap from="/robot1/robot2_arm_trajectory_controller/command"                      to="/robot2_arm_trajectory_controller/command" />
 
-    <remap from="/robot1/robot2_gripper_trajectory_controller/follow_joint_trajectory"  to="/robot2_gripper_trajectory_controller/follow_joint_trajectory" />
-    <remap from="/robot1/robot2_gripper_trajectory_controller/state"                    to="/robot2_gripper_trajectory_controller/state" />
-    <remap from="/robot1/robot2_gripper_trajectory_controller/command"                  to="/robot2_gripper_trajectory_controller/command" />
+    <remap from="/robot1/robot2_left_finger_action_controller/gripper_cmd"              to="/robot2_left_finger_action_controller/gripper_cmd" />
+    <remap from="/robot1/robot2_right_finger_action_controller/gripper_cmd"             to="/robot2_right_finger_action_controller/gripper_cmd" />
 
     <remap from="/robot1/robot_description" to="/robot_description" />
     <remap from="/robot1/joint_states" to="/joint_states" />
@@ -44,25 +44,25 @@
   <group ns="robot2">
     <!-- remap controllers -->
     <remap from="/robot2/robot1_arm_trajectory_controller"                              to="/robot1_arm_trajectory_controller" />
-    <remap from="/robot2/robot1_gripper_trajectory_controller"                          to="/robot1_gripper_trajectory_controller" />
+    <remap from="/robot2/robot1_left_finger_action_controller"                          to="/robot1_left_finger_action_controller" />
+    <remap from="/robot2/robot1_right_finger_action_controller"                         to="/robot1_right_finger_action_controller" />
     <remap from="/robot2/robot2_arm_trajectory_controller"                              to="/robot2_arm_trajectory_controller" />
-    <remap from="/robot2/robot2_gripper_trajectory_controller"                          to="/robot2_gripper_trajectory_controller" />
+    <remap from="/robot2/robot2_left_finger_action_controller"                          to="/robot2_left_finger_action_controller" />
+    <remap from="/robot2/robot2_right_finger_action_controller"                         to="/robot2_right_finger_action_controller" />
 
     <remap from="/robot2/robot1_arm_trajectory_controller/follow_joint_trajectory"      to="/robot1_arm_trajectory_controller/follow_joint_trajectory" />
     <remap from="/robot2/robot1_arm_trajectory_controller/state"                        to="/robot1_arm_trajectory_controller/state" />
     <remap from="/robot2/robot1_arm_trajectory_controller/command"                      to="/robot1_arm_trajectory_controller/command" />
 
-    <remap from="/robot2/robot1_gripper_trajectory_controller/follow_joint_trajectory"  to="/robot1_gripper_trajectory_controller/follow_joint_trajectory" />
-    <remap from="/robot2/robot1_gripper_trajectory_controller/state"                    to="/robot1_gripper_trajectory_controller/state" />
-    <remap from="/robot2/robot1_gripper_trajectory_controller/command"                  to="/robot1_gripper_trajectory_controller/command" />
+    <remap from="/robot2/robot1_left_finger_action_controller/gripper_cmd"              to="/robot1_left_finger_action_controller/gripper_cmd" />
+    <remap from="/robot2/robot1_right_finger_action_controller/gripper_cmd"             to="/robot1_right_finger_action_controller/gripper_cmd" />
 
     <remap from="/robot2/robot2_arm_trajectory_controller/follow_joint_trajectory"      to="/robot2_arm_trajectory_controller/follow_joint_trajectory" />
     <remap from="/robot2/robot2_arm_trajectory_controller/state"                        to="/robot2_arm_trajectory_controller/state" />
     <remap from="/robot2/robot2_arm_trajectory_controller/command"                      to="/robot2_arm_trajectory_controller/command" />
 
-    <remap from="/robot2/robot2_gripper_trajectory_controller/follow_joint_trajectory"  to="/robot2_gripper_trajectory_controller/follow_joint_trajectory" />
-    <remap from="/robot2/robot2_gripper_trajectory_controller/state"                    to="/robot2_gripper_trajectory_controller/state" />
-    <remap from="/robot2/robot2_gripper_trajectory_controller/command"                  to="/robot2_gripper_trajectory_controller/command" />
+    <remap from="/robot2/robot2_left_finger_action_controller/gripper_cmd"              to="/robot2_left_finger_action_controller/gripper_cmd" />
+    <remap from="/robot2/robot2_right_finger_action_controller/gripper_cmd"             to="/robot2_right_finger_action_controller/gripper_cmd" />
 
     <remap from="/robot2/robot_description" to="/robot_description" />
     <remap from="/robot2/joint_states" to="/joint_states" />
