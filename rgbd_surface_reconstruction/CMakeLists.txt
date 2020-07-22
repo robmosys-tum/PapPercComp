@@ -25,12 +25,12 @@ find_package(CUDA 8.0 REQUIRED)
 IF (CUDA_FOUND)
     include_directories("${CUDA_INCLUDE_DIRS}")
     # Optional: Specify the arch of your CUDA hardware here
-    #SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-std=c++14 -gencode arch=compute_20,code=sm_21)
+    SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; --expt-relaxed-constexpr -w)
 ENDIF ()
 
 ## OpenCV
 # Optional: Set OpenCV_DIR if you want to use a custom version of OpenCV
-SET("OpenCV_DIR" "/opt/opencv/share/OpenCV")
+#SET("OpenCV_DIR" "/opt/opencv/share/OpenCV")
 find_package(OpenCV 3.0 REQUIRED)
 if (OpenCV_INCLUDE_DIRS)
     include_directories("${OpenCV_INCLUDE_DIRS}")
