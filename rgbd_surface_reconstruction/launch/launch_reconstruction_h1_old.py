@@ -59,7 +59,7 @@ def generate_launch_description():
                  "offset_y": 800.0,
                  "offset_z": -800.0,
                  "use_kinect_noise_model": False,
-                 "use_every_nth_frame": 25,
+                 "use_every_nth_frame": 1,
                  "export_frame" : 1400,
                  "export_name": "model_h1_w500"
                  }],
