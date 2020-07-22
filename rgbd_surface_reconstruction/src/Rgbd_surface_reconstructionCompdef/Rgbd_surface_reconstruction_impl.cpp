@@ -49,16 +49,17 @@ Rgbd_surface_reconstruction_impl::Rgbd_surface_reconstruction_impl(
 	_offset.y = this->declare_parameter("offset_y", 800.f);
 	_offset.z = this->declare_parameter("offset_z", -800.f);
 	_use_output_frame = this->declare_parameter("use_output_frame", true);
-	_use_kinect_noise_model = this->declare_parameter("use_kinect_noise_model", true);
+	_use_kinect_noise_model = this->declare_parameter("use_kinect_noise_model", false);
 	_use_every_nth_frame = this->declare_parameter("use_every_nth_frame", 25);
 	_export_frame = this->declare_parameter("export_frame", 1400);
-	_export_name = this->declare_parameter("export_name", "model_skip_noise");
+	_export_name = this->declare_parameter("export_name", "model");
 	
 	kinectfusion::GlobalConfiguration configuration;
 	configuration.voxel_scale = _voxel_scale;
 	configuration.volume_size = _volume_size;
 	configuration.model_offset = _offset;
 	configuration.use_output_frame = _use_output_frame;
+	configuration.use_kinect_noise_model = _use_kinect_noise_model;
 	configuration.triangles_buffer_size = 12000000;
 
 	_kinect_pipeline_ptr = new kinectfusion::Pipeline(_camera.get_parameters(), configuration);
