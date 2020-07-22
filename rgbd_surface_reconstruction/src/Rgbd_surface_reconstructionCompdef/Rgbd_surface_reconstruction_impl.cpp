@@ -201,8 +201,14 @@ void Rgbd_surface_reconstruction_impl::process_frames(){
 	{
 		// Export surface mesh
 		auto mesh = _kinect_pipeline_ptr->extract_mesh();
-		kinectfusion::export_ply("./"+ _export_name +".ply", mesh);
-		std::cout << "Export finished" << std::endl;
+		std::string filename = "./" + _export_name 
+							 + (_use_kinect_noise_model ? "_new" : "_org")
+							 + "_" + std::to_string(_voxel_scale) 
+							 + "_" + std::to_string(_export_frame)
+							 + "_" + std::to_string(_use_every_nth_frame)
+							 + ".ply";
+		kinectfusion::export_ply(filename, mesh);
+		std::cout << "Exported to " << filename << std::endl;
 		_finished = true;
 	}
 
