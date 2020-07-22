@@ -47,15 +47,17 @@ chair_manipulation::TestParameters::TestParameters()
   grasp_sampler_params_.gripper_pad_distance_ = 0.1;
   grasp_sampler_params_.gripper_pad_length_ = 0.3;
 
-  grasp_quality_weights_.epsilon1_ = 1.0;
-  grasp_quality_weights_.v1_ = 1.0;
-  grasp_quality_weights_.distance_ = 1.0;
-  grasp_quality_weights_.reachability_ = 1.0;
+  for (const auto& pair : grasp_quality_weights_.values_)
+  {
+    const auto& key = pair.first;
+    grasp_quality_weights_.values_[key] = 1.;
+  }
 
   grasp_synthesizer_params_.num_arms_ = 2;
   grasp_synthesizer_params_.friction_coefficient_ = 0.8;
   grasp_synthesizer_params_.num_friction_edges_ = 8;
   grasp_synthesizer_params_.max_arm_radius_ = 1.0;
+  grasp_synthesizer_params_.max_yaw_angle_ = M_PI_2;
   grasp_synthesizer_params_.world_frame_ = "world";
   grasp_synthesizer_params_.arm_base_frames_ = { "robot1_base_link", "robot2_base_link" };
 

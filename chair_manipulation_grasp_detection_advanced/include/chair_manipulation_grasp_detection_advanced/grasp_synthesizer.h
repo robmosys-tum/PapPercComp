@@ -11,14 +11,92 @@
 
 namespace chair_manipulation
 {
-struct GraspQualityWeights
+struct GraspQuality
+{
+  GraspQuality()
+  {
+    epsilon1() = 0.;
+    v1() = 0.;
+    graspDistance() = 0.;
+    nearestArmDistance() = 0.;
+    nearestArmOrientation() = 0.;
+  }
+
+  std::map<std::string, double> values_;
+
+  double& epsilon1()
+  {
+    return values_["epsilon1"];
+  }
+
+  double epsilon1() const
+  {
+    return values_.at("epsilon1");
+  }
+
+  double& v1()
+  {
+    return values_["v1"];
+  }
+
+  double v1() const
+  {
+    return values_.at("v1");
+  }
+
+  double& graspDistance()
+  {
+    return values_["grasp_distance"];
+  }
+
+  double graspDistance() const
+  {
+    return values_.at("grasp_distance");
+  }
+
+  double& nearestArmDistance()
+  {
+    return values_["nearest_arm_distance"];
+  }
+
+  double nearestArmDistance() const
+  {
+    return values_.at("nearest_arm_distance");
+  }
+
+  double& nearestArmOrientation()
+  {
+    return values_["nearest_arm_orientation"];
+  }
+
+  double nearestArmOrientation() const
+  {
+    return values_.at("nearest_arm_orientation");
+  }
+
+  GraspQuality operator*(GraspQuality& other) const
+  {
+    GraspQuality product;
+    for (const auto& pair : values_)
+    {
+      const auto& key = pair.first;
+      product.values_[key] = values_.at(key) * other.values_.at(key);
+    }
+    return product;
+  }
+
+  double sum() const
+  {
+    double result = 0.;
+    for (const auto& pair : values_)
+      result += pair.second;
+    return result;
+  }
+};
+
+struct GraspQualityWeights : GraspQuality
 {
   void load(ros::NodeHandle& nh);
-
-  double epsilon1_;
-  double v1_;
-  double distance_;
-  double reachability_;
 };
 
 struct GraspSynthesizerParameters
@@ -29,6 +107,7 @@ struct GraspSynthesizerParameters
   double friction_coefficient_;
   int num_friction_edges_;
   double max_arm_radius_;
+  double max_yaw_angle_;
   std::string world_frame_;
   std::vector<std::string> arm_base_frames_;
 };
@@ -52,11 +131,11 @@ private:
                                const GraspCandidate& curr_candidate = GraspCandidate{}, std::size_t arm_index = 0,
                                std::size_t hypothesis_index = 0) const;
 
-  WrenchSpace wrenchSpaceFromHypotheses(const GraspCandidate& candidate, const Model& model) const;
+  bool computeWrenchSpaceQualities(const GraspCandidate& candidate, const Model& model, GraspQuality& quality) const;
 
-  double computeNormalizedPairwiseDistanceSum(const GraspCandidate& candidate, const Model& model) const;
+  bool computeGraspDistanceQuality(const GraspCandidate& candidate, const Model& model, GraspQuality& quality) const;
 
-  double computeReachability(const GraspCandidate& candidate) const;
+  bool computeNearestArmQualities(const GraspCandidate& candidate, GraspQuality& quality) const;
 };
 
 using GraspSynthesizerPtr = std::shared_ptr<GraspSynthesizer>;

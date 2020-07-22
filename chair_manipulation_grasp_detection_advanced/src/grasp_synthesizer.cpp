@@ -10,10 +10,11 @@ namespace chair_manipulation
 {
 void GraspQualityWeights::load(ros::NodeHandle& nh)
 {
-  epsilon1_ = nh.param<double>("epsilon1", 1.0);
-  v1_ = nh.param<double>("v1", 1.0);
-  distance_ = nh.param<double>("distance", 1.0);
-  reachability_ = nh.param<double>("reachability", 1.0);
+  epsilon1() = nh.param<double>("epsilon1", 1.0);
+  v1() = nh.param<double>("v1", 1.0);
+  graspDistance() = nh.param<double>("grasp_distance", 1.0);
+  nearestArmDistance() = nh.param<double>("nearest_arm_distance", 1.0);
+  nearestArmOrientation() = nh.param<double>("nearest_arm_orientation", 1.0);
 }
 
 void GraspSynthesizerParameters::load(ros::NodeHandle& nh)
@@ -22,6 +23,7 @@ void GraspSynthesizerParameters::load(ros::NodeHandle& nh)
   friction_coefficient_ = nh.param<double>("friction_coefficient", 0.8);
   num_friction_edges_ = nh.param<int>("num_friction_edges", 8);
   max_arm_radius_ = nh.param<double>("max_arm_radius", 1.0);
+  max_yaw_angle_ = nh.param<double>("max_yaw_angle", M_PI_2);
   world_frame_ = nh.param<std::string>("world_frame", "world");
 
   XmlRpc::XmlRpcValue arm_base_frames_array;
@@ -41,7 +43,7 @@ void GraspSynthesizerParameters::load(ros::NodeHandle& nh)
 GraspSynthesizer::GraspSynthesizer(GraspSynthesizerParameters params, GraspQualityWeights weights)
   : params_(std::move(params)), weights_(std::move(weights))
 {
-  if (weights_.reachability_ != 0.)
+  if (weights_.nearestArmDistance() != 0. || weights_.nearestArmOrientation() != 0.)
   {
     // Get arm base poses (with respect to the world frame) using tf2
     tf2_ros::Buffer tf_buffer;
@@ -59,7 +61,7 @@ GraspSynthesizer::GraspSynthesizer(GraspSynthesizerParameters params, GraspQuali
 void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses, const Model& model,
                                   std::size_t max_num_grasps, std::vector<MultiArmGrasp>& synthesized_grasps) const
 {
-  Stopwatch stopwatch_candidate, stopwatch_wrench;
+  Stopwatch stopwatch;
 
   if (hypotheses.size() < params_.num_arms_)
     throw exception::IllegalArgument{ "The number of hypotheses must be at least as large as the number of arms." };
@@ -68,12 +70,12 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
   generateGraspCandidates(hypotheses, candidates);
   ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Generated " << candidates.size() << " grasp candidates.");
 
-  double weight_sum = weights_.epsilon1_ + weights_.v1_ + weights_.distance_ + weights_.reachability_;
+  double weight_sum = weights_.sum();
   if (weight_sum == 0)
     throw exception::Parameter{ "The sum of the weights must not be zero." };
 
-  std::vector<double> epsilon1_values, epsilon1_weighted_values, v1_values, v1_weighted_values, distance_values,
-      distance_weighted_values, reachability_values, reachability_weighted_values, grasp_quality_values;
+  std::map<std::string, std::vector<double>> values, weighted_values;
+  std::vector<double> quality_scores;
 
   ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Start scoring grasp candidates.");
   for (std::size_t i = 0; i < candidates.size(); i++)
@@ -82,90 +84,46 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
     ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "=== Candidate " << (i + 1) << "/" << candidates.size() << " ===");
     ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "");
 
-    stopwatch_candidate.start();
+    stopwatch.start();
 
     const auto& candidate = candidates[i];
-    double epsilon1 = 0;
-    double v1 = 0;
-    double distance = 0;
-    double reachability = 0;
+    GraspQuality quality;
 
     for (std::size_t j = 0; j < candidate.size(); j++)
       ROS_DEBUG_STREAM_NAMED("grasp_synthesizer",
                              "pose of arm " << j << ": [" << utils::poseToStr(candidate[j]->pose_) << "]");
 
-    if (weights_.epsilon1_ != 0. || weights_.v1_ != 0.)
-    {
-      stopwatch_wrench.start();
-      auto wrench_space = wrenchSpaceFromHypotheses(candidate, model);
-      stopwatch_wrench.stop();
-      ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Computed wrench space.");
-      ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "It took " << stopwatch_wrench.elapsedSeconds() << "s.");
-      if (!wrench_space.isForceClosure())
-      {
-        ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "No force closure - omit this candidate.");
-        continue;
-      }
-      epsilon1 = wrench_space.getEpsilon1Quality();
-      v1 = wrench_space.getV1Quality();
-    }
+    if (!computeWrenchSpaceQualities(candidate, model, quality) ||
+        !computeGraspDistanceQuality(candidate, model, quality) || !computeNearestArmQualities(candidate, quality))
+      continue;
 
-    if (weights_.distance_ != 0.)
-      distance = computeNormalizedPairwiseDistanceSum(candidate, model);
-
-    if (weights_.reachability_ != 0.)
-    {
-      reachability = computeReachability(candidate);
-      if (reachability == -std::numeric_limits<double>::infinity())
-      {
-        ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Grasp unreachable - omit this candidate.");
-        continue;
-      }
-    }
-
-    double epsilon1_weighted = weights_.epsilon1_ * epsilon1;
-    double v1_weighted = weights_.v1_ * v1;
-    double distance_weighted = weights_.distance_ * distance;
-    double reachability_weighted = weights_.reachability_ * reachability;
-
-    double grasp_quality = epsilon1_weighted + v1_weighted + distance_weighted + reachability_weighted;
-    grasp_quality /= weight_sum;
+    auto weighted_quality = weights_ * quality;
+    double quality_score = weighted_quality.sum() / weight_sum;
 
     MultiArmGrasp grasp;
-    grasp.quality_ = grasp_quality;
+    grasp.quality_ = quality_score;
     for (const auto& hypothesis : candidate)
       grasp.poses_.push_back(hypothesis->pose_);
 
     synthesized_grasps.push_back(grasp);
 
-    stopwatch_candidate.stop();
+    // Store values for computing statistics at the end
+    for (const auto& pair : weights_.values_)
+    {
+      const auto& key = pair.first;
+      double value = quality.values_[key];
+      double weighted_value = weighted_quality.values_[key];
+      values[key].push_back(value);
+      weighted_values[key].push_back(weighted_value);
+      ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", key << ": " << value);
+      ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", key << " weighted: " << weighted_value);
+    }
+    quality_scores.push_back(quality_score);
+    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "grasp quality: " << quality_score);
 
-    epsilon1_values.push_back(epsilon1);
-    v1_values.push_back(v1);
-    distance_values.push_back(distance);
-    reachability_values.push_back(reachability);
-
-    epsilon1_weighted_values.push_back(epsilon1_weighted);
-    v1_weighted_values.push_back(v1_weighted);
-    distance_weighted_values.push_back(distance_weighted);
-    reachability_weighted_values.push_back(reachability_weighted);
-
-    grasp_quality_values.push_back(grasp_quality);
-
-    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "epsilon1: " << epsilon1);
-    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "v1: " << v1);
-    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "distance: " << distance);
-    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "reachability: " << reachability);
-
-    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "epsilon1 weighted: " << epsilon1_weighted);
-    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "v1 weighted: " << v1_weighted);
-    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "distance weighted: " << distance_weighted);
-    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "reachability weighted: " << reachability_weighted);
-
-    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "grasp quality: " << grasp_quality);
-
+    stopwatch.stop();
     ROS_DEBUG_STREAM_NAMED("grasp_synthesizer",
-                           "Processing current candidate took " << stopwatch_candidate.elapsedSeconds() << "s.");
+                           "Processing current candidate took " << stopwatch.elapsedSeconds() << "s.");
   }
 
   ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Sorting " << synthesized_grasps.size()
@@ -182,17 +140,13 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
     synthesized_grasps.resize(max_num_grasps);
   }
 
-  statistics::debugSummary(epsilon1_values, "epsilon1");
-  statistics::debugSummary(v1_values, "v1");
-  statistics::debugSummary(distance_values, "distance");
-  statistics::debugSummary(reachability_values, "reachability");
+  for (auto& pair : values)
+    statistics::debugSummary(pair.second, pair.first);
 
-  statistics::debugSummary(epsilon1_weighted_values, "weighted epsilon1");
-  statistics::debugSummary(v1_weighted_values, "weighted v1");
-  statistics::debugSummary(distance_weighted_values, "weighted distance");
-  statistics::debugSummary(reachability_weighted_values, "weighted reachability");
+  for (auto& pair : weighted_values)
+    statistics::debugSummary(pair.second, pair.first);
 
-  statistics::debugSummary(grasp_quality_values, "grasp_quality");
+  statistics::debugSummary(quality_scores, "grasp_quality");
 }
 
 void GraspSynthesizer::generateGraspCandidates(const std::vector<GraspHypothesis>& hypotheses,
@@ -212,8 +166,16 @@ void GraspSynthesizer::generateGraspCandidates(const std::vector<GraspHypothesis
   }
 }
 
-WrenchSpace GraspSynthesizer::wrenchSpaceFromHypotheses(const GraspCandidate& candidate, const Model& model) const
+bool GraspSynthesizer::computeWrenchSpaceQualities(const GraspCandidate& candidate, const Model& model,
+                                                   GraspQuality& quality) const
 {
+  if (weights_.epsilon1() == 0. && weights_.v1() == 0.)
+    return true;
+
+  Stopwatch stopwatch;
+  stopwatch.start();
+
+  // Extract all contacts from the grasp hypotheses of this candidate
   std::size_t num_contacts = 0;
   for (const auto& hypothesis : candidate)
     num_contacts += hypothesis->contacts_.size();
@@ -230,12 +192,29 @@ WrenchSpace GraspSynthesizer::wrenchSpaceFromHypotheses(const GraspCandidate& ca
 
   ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "contacts: [" << utils::contactsToStr(contacts) << "]");
 
-  return WrenchSpace(contacts, model, params_.friction_coefficient_, params_.num_friction_edges_);
+  WrenchSpace wrench_space(contacts, model, params_.friction_coefficient_, params_.num_friction_edges_);
+
+  stopwatch.stop();
+  ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Computed wrench space.");
+  ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "It took " << stopwatch.elapsedSeconds() << "s.");
+
+  if (!wrench_space.isForceClosure())
+  {
+    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "No force closure - omit candidate.");
+    return false;
+  }
+
+  quality.epsilon1() = wrench_space.getEpsilon1Quality();
+  quality.v1() = wrench_space.getV1Quality();
+  return true;
 }
 
-double GraspSynthesizer::computeNormalizedPairwiseDistanceSum(const GraspSynthesizer::GraspCandidate& candidate,
-                                                              const Model& model) const
+bool GraspSynthesizer::computeGraspDistanceQuality(const GraspCandidate& candidate, const Model& model,
+                                                   GraspQuality& quality) const
 {
+  if (weights_.graspDistance() == 0.)
+    return true;
+
   double max_distance = (model.getMax() - model.getMin()).norm();
   double sum = 0.;
   std::size_t n = 0;
@@ -247,12 +226,17 @@ double GraspSynthesizer::computeNormalizedPairwiseDistanceSum(const GraspSynthes
       n++;
     }
   }
-  return sum / n;
+  quality.graspDistance() = sum / n;
+  return true;
 }
 
-double GraspSynthesizer::computeReachability(const GraspCandidate& candidate) const
+bool GraspSynthesizer::computeNearestArmQualities(const GraspCandidate& candidate, GraspQuality& quality) const
 {
-  double reachability = 0;
+  if (weights_.nearestArmDistance() == 0. && weights_.nearestArmOrientation() == 0.)
+    return true;
+
+  double nearest_arm_distance = 0.;
+  double nearest_arm_orientation = 0.;
 
   // We want every grasp to be assigned to a unique arm so this tells us whether grasp i
   // is already assigned to arm i where we assign grasp i to the arm that is closest to it.
@@ -260,31 +244,59 @@ double GraspSynthesizer::computeReachability(const GraspCandidate& candidate) co
 
   for (const auto& grasp : candidate)
   {
-    // Get nearest arm
+    // Get nearest arm.
+    // We only consider the distance on the xy-plane.
     double min_distance = std::numeric_limits<double>::max();
+    Eigen::Vector3d min_arm_to_grasp_xy;
     std::size_t arm_index = 0;
     for (std::size_t i = 0; i < params_.num_arms_; i++)
     {
       const auto& arm_base_pose = arm_base_poses_[i];
-      double distance = (grasp->pose_.translation() - arm_base_pose.translation()).norm();
+      Eigen::Vector3d arm_to_grasp = (grasp->pose_.translation() - arm_base_pose.translation());
+      Eigen::Vector3d arm_to_grasp_xy = arm_to_grasp - utils::projection(Eigen::Vector3d::UnitZ().eval(), arm_to_grasp);
+      double distance = arm_to_grasp_xy.norm();
       if (distance < min_distance)
       {
         min_distance = distance;
+        min_arm_to_grasp_xy = arm_to_grasp_xy;
         arm_index = i;
       }
     }
 
-    // If the arm is already assigned we reject the grasp by setting output to negative infinity.
-    // The same is done if the position is out of reach.
-    if (assigned[arm_index] || min_distance > params_.max_arm_radius_)
-      return -std::numeric_limits<double>::infinity();
+    // If the arm is already assigned we reject the grasp by setting output to negative infinity
+    if (assigned[arm_index])
+    {
+      ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Nearest arm assigned more than once - omit candidate.");
+      return false;
+    }
+
+    // We also reject this candidate if the distance to the nearest arm exceeds the given maximum
+    if (min_distance > params_.max_arm_radius_)
+    {
+      ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Exceeding maximum distance to nearest robot - omit candidate.");
+      return false;
+    }
+
+    // We compute the angle between the grasps' z-direction and the vector that
+    // goes from the base to the grasp where both vectors are projected onto the xy-plane.
+    Eigen::Vector3d grasp_direction = grasp->pose_.rotation().col(2);
+    Eigen::Vector3d grasp_direction_xy =
+        grasp_direction - utils::projection(Eigen::Vector3d::UnitZ().eval(), grasp_direction);
+    double yaw_angle = std::acos(min_arm_to_grasp_xy.normalized().dot(grasp_direction_xy.normalized()));
+    if (yaw_angle > params_.max_yaw_angle_)
+    {
+      ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Exceeding maximum yaw angle - omit candidate.");
+      return false;
+    }
 
     assigned[arm_index] = true;
 
-    // The closer the grasp is to the base, the higher the computed score, normalized to [0, 1].
-    reachability += 1. - (min_distance / params_.max_arm_radius_);
+    nearest_arm_distance += 1. - (min_distance / params_.max_arm_radius_);
+    nearest_arm_orientation += 1. - (yaw_angle / params_.max_yaw_angle_);
   }
-  return reachability / params_.num_arms_;
+  quality.nearestArmDistance() = nearest_arm_distance / params_.num_arms_;
+  quality.nearestArmOrientation() = nearest_arm_orientation / params_.num_arms_;
+  return true;
 }
 
 }  // namespace chair_manipulation

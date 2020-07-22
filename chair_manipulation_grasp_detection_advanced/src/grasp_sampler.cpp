@@ -109,7 +109,7 @@ void GraspSampler::sampleGraspHypothesesFromPrior(const Model& model, const std:
       for (std::size_t s = 0; s < sample_trials_per_grasp; s++)
       {
         ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
-        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "=== Sample " << s << "/" << sample_trials_per_grasp << " ===");
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "=== Sample " << (s + 1) << "/" << sample_trials_per_grasp << " ===");
         ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
 
         std::uniform_int_distribution<std::size_t> nearest_index_distribution(0, indices.size() - 1);
