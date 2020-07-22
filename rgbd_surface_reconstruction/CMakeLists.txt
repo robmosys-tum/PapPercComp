@@ -65,6 +65,10 @@ ament_target_dependencies(Rgbd_surface_reconstruction rclcpp rclcpp_lifecycle se
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME})
 
+
+install(DIRECTORY datasets
+  DESTINATION share/${PROJECT_NAME})
+
 install(TARGETS
 	Rgbd_surface_reconstruction
 	DESTINATION lib/${PROJECT_NAME}
