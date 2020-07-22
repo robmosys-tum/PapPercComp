@@ -12,12 +12,12 @@ InstanceRecognition::InstanceRecognition(rclcpp::Node::SharedPtr nh):_nh (nh){
     _nh->declare_parameter("rgbd_frame","xtion2_link");
     _nh->declare_parameter("rgb_frame","xtion2_rgb_optical_frame");
     _nh->declare_parameter("depth_frame","xtion2_depth_optical_frame");
-    _nh->declare_parameter("rgb_topic","/camera/color/image_raw");
-    _nh->declare_parameter("depth_topic","/camera/depth/image_raw");
-    _nh->declare_parameter("depth_info","/camera/depth/camera_info");
+    _nh->declare_parameter("rgb_topic","/color/image_raw");
+    _nh->declare_parameter("depth_topic","/depth/image_raw");
+    _nh->declare_parameter("depth_info","/depth/camera_info");
     _nh->declare_parameter("algorithm","SIFT");
     _nh->declare_parameter("compare_hist","correlation");
-    _nh->declare_parameter("level",1);
+    _nh->declare_parameter("level",2);
 
     _nh->get_parameter("base_frame",_base_frame);
     _nh->get_parameter("rgbd_frame",_rgbd_frame);
@@ -412,10 +412,10 @@ void InstanceRecognition::remove_duplicates(std::vector<box_obj> &objs, std::vec
 
         if (r1.x < 5) r1.x = 5;
         if (r1.y < 5) r1.y = 5;
-        if (r1.width < 5) r1.width = 5;
-        if (r1.height < 5) r1.height = 5;
-        if (r1.x + r1.width > ImageIn.cols-5) r1.width = ImageIn.cols-r1.x-5;
-        if (r1.y + r1.height > ImageIn.rows-5) r1.height = ImageIn.rows-r1.y-5;
+        if (r1.x + r1.width > ImageIn.cols) r1.width = ImageIn.cols - r1.x;
+        if (r1.y + r1.height > ImageIn.rows) r1.height = ImageIn.rows - r1.y;
+
+        if (r1.width < 5 || r1.height < 5) continue;
 
         if (r1.width < ImageIn.cols*0.8 && r1.height < ImageIn.rows*0.8 ) // Removing extrange detections
         	objs_rects.push_back(r1);
@@ -532,10 +532,7 @@ void InstanceRecognition::run() {
     detected_roi.clear();
     for (int i = 0; i < objs_rects.size(); ++i)
     {
-        cv::line( ImageIn, objects[i].p1, objects[i].p2, cv::Scalar(255, 0, 0), 4 );
-        cv::line( ImageIn, objects[i].p2, objects[i].p3, cv::Scalar( 255, 0, 0), 4 );
-        cv::line( ImageIn, objects[i].p3, objects[i].p4, cv::Scalar( 255, 0, 0), 4 );
-        cv::line( ImageIn, objects[i].p4, objects[i].p1, cv::Scalar( 255, 0, 0), 4 );
+		rectangle(ImageIn, objs_rects[i], cv::Scalar(255, 0, 0), 4);
 
         detected_imgs.push_back( ImageIn(objs_rects[i]) );
         detected_label.push_back (db_label[match_ids[i]]);
