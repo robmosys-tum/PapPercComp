@@ -8,6 +8,5 @@
   <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>fgt_wrapper</build_depend>
 
 </package>

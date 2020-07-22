@@ -122,6 +122,7 @@ void GraspPlanner::prepare()
 
 void GraspPlanner::planPreGrasp()
 {
+  arm_group_->clearPathConstraints();
   addGroundPlane(*planning_scene_interface_, world_frame_);
   planArmPose(world_to_pre_grasp_to_ik_, "pre-grasp");
 }

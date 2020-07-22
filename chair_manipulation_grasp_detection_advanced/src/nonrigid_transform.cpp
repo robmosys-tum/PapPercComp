@@ -46,7 +46,7 @@ Eigen::Vector3d NonrigidTransform::operator*(const Eigen::Vector3d& q) const
     const Eigen::MatrixXd& g_i = g_.row(indices[i]);
     // Compute the affinity between th                                                                              e
     // input point and the current nearest point
-    double affinity = cpd::affinity(q.transpose(), p_i, beta_)(0, 0);
+    double affinity = cpd::affinity(q.transpose(), p_i.transpose(), beta_)(0, 0);
     // Compute the transformation of the nearest point
     Eigen::Vector3d v = (g_i * *w_).transpose();
     // Weight transform by affinity
