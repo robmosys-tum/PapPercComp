@@ -31,7 +31,7 @@ void GraspDetectionParameters::load(ros::NodeHandle& nh)
 {
   run_once_ = nh.param<bool>("run_once", false);
   pre_registration_voxel_leaf_size_ = nh.param<double>("pre_registration_voxel_leaf_size", 0.05);
-  num_sample_trials_ = nh.param<int>("num_sample_trials", 100);
+  num_sample_trials_per_grasp_ = nh.param<int>("num_sample_trials_per_grasp", 100);
   sample_radius_ = nh.param<double>("sample_radius", 0.1);
 
   XmlRpc::XmlRpcValue grasp_frame_items;
@@ -220,7 +220,8 @@ void runGraspDetectionPipeline()
 
       stopwatch_step.start();
       std::vector<GraspHypothesis> hypotheses;
-      grasp_sampler.sampleGraspHypothesesFromPrior(model, prior_grasps, grasp_detection_params.num_sample_trials_,
+      grasp_sampler.sampleGraspHypothesesFromPrior(model, prior_grasps,
+                                                   grasp_detection_params.num_sample_trials_per_grasp_,
                                                    grasp_detection_params.sample_radius_, hypotheses);
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Sampling grasp hypotheses finished.");
@@ -257,8 +258,7 @@ void runGraspDetectionPipeline()
       stopwatch_iteration.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Finished current iteration.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_iteration.elapsedSeconds() << "s.");
-    }
-    while (!grasp_detection_params.run_once_ && ros::ok());
+    } while (!grasp_detection_params.run_once_ && ros::ok());
   }
   catch (const exception::Runtime& e)
   {

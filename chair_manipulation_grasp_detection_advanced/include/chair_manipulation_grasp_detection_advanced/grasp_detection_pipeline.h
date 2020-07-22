@@ -11,7 +11,7 @@ struct GraspDetectionParameters
 
   bool run_once_;
   double pre_registration_voxel_leaf_size_;
-  int num_sample_trials_;
+  int num_sample_trials_per_grasp_;
   double sample_radius_;
   std::vector<std::string> grasp_frames_;
 };

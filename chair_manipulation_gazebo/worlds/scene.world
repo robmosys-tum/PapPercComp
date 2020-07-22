@@ -15,13 +15,21 @@
       <pose>-0.2 -0.2 0 0 0 0</pose>
       <uri>model://dining_chair</uri>
     </include> -->
-    <include>
+    <!-- <include>
       <pose>0 0 0 0 0 1.5707</pose>
       <uri>model://ikea_harry_chair</uri>
-    </include>
-    <!-- <include>1
-      <pose>0 0 0 0 0 1.5707</pose>
+    </include> -->
+    <!-- <include>
+      <pose>0 0 0.05 0 0 1.5707</pose>
       <uri>model://ikea_urban_chair</uri>
     </include> -->
+    <!-- <include>
+      <pose>0 0 0 0 0 0</pose>
+      <uri>model://office_chair</uri>
+    </include> -->
+    <include>
+      <pose>0 0 0 0 0 1.5707</pose>
+      <uri>model://ikea_stefan_chair</uri>
+    </include>
   </world>
 </sdf>

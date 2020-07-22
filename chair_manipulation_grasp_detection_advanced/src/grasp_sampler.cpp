@@ -72,7 +72,7 @@ void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_
 }
 
 void GraspSampler::sampleGraspHypothesesFromPrior(const Model& model, const std::vector<MultiArmGrasp>& prior_grasps,
-                                                  std::size_t sample_trials, double sample_radius,
+                                                  std::size_t sample_trials_per_grasp, double sample_radius,
                                                   std::vector<GraspHypothesis>& hypotheses)
 {
   Stopwatch stopwatch_contacts;
@@ -90,21 +90,11 @@ void GraspSampler::sampleGraspHypothesesFromPrior(const Model& model, const std:
   std::uniform_int_distribution<std::size_t> prior_index_distribution(0, prior_grasps.size() - 1);
   search_method_.setInputCloud(point_cloud);
 
-  for (std::size_t s = 0; s < sample_trials; s++)
+  for (const auto& prior_grasp : prior_grasps)
   {
-    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
-    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "=== Sample " << s << "/" << sample_trials << " ===");
-    ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
-
-    // Choose a random prior grasp
-    auto prior_index = prior_index_distribution(random_generator_);
-    const auto& prior_grasp = prior_grasps[prior_index];
-
-    // For each pose of that randomly chosen grasp, randomly choose a point that's inside
-    // the given radius and use that to find the grasp hypothesis
-    for (const auto& pose : prior_grasp.poses_)
+    for (const auto& prior_pose : prior_grasp.poses_)
     {
-      Eigen::Vector3d position = pose.translation();
+      Eigen::Vector3d position = prior_pose.translation();
       pcl::PointXYZ point(position.x(), position.y(), position.z());
       std::vector<int> indices;
       std::vector<float> sqr_distances;
@@ -112,43 +102,51 @@ void GraspSampler::sampleGraspHypothesesFromPrior(const Model& model, const std:
       if (indices.empty())
       {
         ROS_WARN_STREAM_NAMED("grasp_sampler",
-                              "Failed to find nearby points for pose [" << utils::poseToStr(pose) << "]");
+                              "Failed to find nearby points for pose [" << utils::poseToStr(prior_pose) << "]");
         continue;
       }
 
-      std::uniform_int_distribution<std::size_t> nearest_index_distribution(0, indices.size() - 1);
-      auto nearby_index = nearest_index_distribution(random_generator_);
-      const auto& nearby_point = (*point_cloud)[indices[nearby_index]];
-      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Considering nearby point ["
-                                                  << utils::vectorToStr(nearby_point.getVector3fMap().cast<double>())
-                                                  << "]");
-
-      Eigen::Isometry3d grasp_pose;
-      bool success = findGraspPoseAt(point_cloud, nearby_point, grasp_pose);
-      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Sampled grasp pose [" << utils::poseToStr(grasp_pose) << "]");
-      if (!success)
+      for (std::size_t s = 0; s < sample_trials_per_grasp; s++)
       {
-        ROS_WARN_STREAM_NAMED("grasp_sampler", "Failed to sample grasp pose.");
-        continue;
-      }
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "=== Sample " << s << "/" << sample_trials_per_grasp << " ===");
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "");
 
-      gripper_->setTcpPose(grasp_pose);
-      gripper_->setStateOpen();
-      GraspHypothesis hypothesis;
-      stopwatch_contacts.start();
-      success = gripper_->grasp(hypothesis.contacts_);
-      stopwatch_contacts.stop();
-      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Computed grasp contacts.");
-      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "It took " << stopwatch_contacts.elapsedSeconds() << "s.");
-      if (!success)
-      {
-        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Reject sampled pose because it results in a collision.");
-        continue;
-      }
+        std::uniform_int_distribution<std::size_t> nearest_index_distribution(0, indices.size() - 1);
+        auto nearby_index = nearest_index_distribution(random_generator_);
+        const auto& nearby_point = (*point_cloud)[indices[nearby_index]];
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Considering nearby point ["
+                                                    << utils::vectorToStr(nearby_point.getVector3fMap().cast<double>())
+                                                    << "]");
 
-      hypothesis.pose_ = grasp_pose;
-      hypotheses.push_back(hypothesis);
-      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Added sampled grasp hypothesis.");
+        Eigen::Isometry3d grasp_pose;
+        bool success = findGraspPoseAt(point_cloud, nearby_point, grasp_pose);
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Sampled grasp pose [" << utils::poseToStr(grasp_pose) << "]");
+        if (!success)
+        {
+          ROS_WARN_STREAM_NAMED("grasp_sampler",
+                                "Failed to sample grasp from [" << utils::poseToStr(prior_pose) << "]");
+          continue;
+        }
+
+        gripper_->setTcpPose(grasp_pose);
+        gripper_->setStateOpen();
+        GraspHypothesis hypothesis;
+        stopwatch_contacts.start();
+        success = gripper_->grasp(hypothesis.contacts_);
+        stopwatch_contacts.stop();
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Computed grasp contacts.");
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "It took " << stopwatch_contacts.elapsedSeconds() << "s.");
+        if (!success)
+        {
+          ROS_WARN_STREAM_NAMED("grasp_sampler", "Reject sampled pose because it results in a collision.");
+          continue;
+        }
+
+        hypothesis.pose_ = grasp_pose;
+        hypotheses.push_back(hypothesis);
+        ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Added sampled grasp hypothesis.");
+      }
     }
   }
 

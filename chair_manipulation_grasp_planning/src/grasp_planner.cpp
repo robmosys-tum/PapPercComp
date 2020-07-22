@@ -71,13 +71,13 @@ void GraspPlanner::prepare()
     geometry_msgs::TransformStamped msg;
 
     ROS_DEBUG_STREAM_NAMED("grasp_planner", "Looking up transforms.");
-    msg = tf_buffer.lookupTransform(world_frame_, grasp_frame_, ros::Time{ 0 }, ros::Duration{ 3. });
+    msg = tf_buffer.lookupTransform(world_frame_, grasp_frame_, ros::Time{ 0 }, ros::Duration{ 120. });
     tf2::fromMsg(msg.transform, world_to_grasp);
 
-    msg = tf_buffer.lookupTransform(grasp_frame_, grasp_tcp_aligned_frame_, ros::Time{ 0 }, ros::Duration{ 3. });
+    msg = tf_buffer.lookupTransform(grasp_frame_, grasp_tcp_aligned_frame_, ros::Time{ 0 }, ros::Duration{ 120. });
     tf2::fromMsg(msg.transform, grasp_to_grasp_tcp_aligned);
 
-    msg = tf_buffer.lookupTransform(tcp_frame_, ik_frame_, ros::Time{ 0 }, ros::Duration{ 3. });
+    msg = tf_buffer.lookupTransform(tcp_frame_, ik_frame_, ros::Time{ 0 }, ros::Duration{ 120. });
     tf2::fromMsg(msg.transform, tcp_to_ik);
 
     grasp_to_ik = grasp_to_grasp_tcp_aligned * tcp_to_ik;

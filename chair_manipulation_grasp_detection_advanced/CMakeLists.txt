@@ -78,6 +78,7 @@ set(
   include/chair_manipulation_grasp_detection_advanced/create_grasp_database_pipeline.h
   include/chair_manipulation_grasp_detection_advanced/grasp_detection_pipeline.h
   include/chair_manipulation_grasp_detection_advanced/mesh_reconstruction_pipeline.h
+  include/chair_manipulation_grasp_detection_advanced/statistics.h
   src/model.cpp
   src/utils.cpp
   src/grasp_database.cpp

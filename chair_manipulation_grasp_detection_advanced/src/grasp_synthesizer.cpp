@@ -2,6 +2,7 @@
 #include "chair_manipulation_grasp_detection_advanced/exception.h"
 #include "chair_manipulation_grasp_detection_advanced/stopwatch.h"
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
+#include "chair_manipulation_grasp_detection_advanced/statistics.h"
 #include <tf2_ros/transform_listener.h>
 #include <tf2_eigen/tf2_eigen.h>
 
@@ -71,6 +72,9 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
   if (weight_sum == 0)
     throw exception::Parameter{ "The sum of the weights must not be zero." };
 
+  std::vector<double> epsilon1_values, epsilon1_weighted_values, v1_values, v1_weighted_values, distance_values,
+      distance_weighted_values, reachability_values, reachability_weighted_values, grasp_quality_values;
+
   ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Start scoring grasp candidates.");
   for (std::size_t i = 0; i < candidates.size(); i++)
   {
@@ -110,7 +114,14 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
       distance = computeNormalizedPairwiseDistanceSum(candidate, model);
 
     if (weights_.reachability_ != 0.)
+    {
       reachability = computeReachability(candidate);
+      if (reachability == -std::numeric_limits<double>::infinity())
+      {
+        ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Grasp unreachable - omit this candidate.");
+        continue;
+      }
+    }
 
     double epsilon1_weighted = weights_.epsilon1_ * epsilon1;
     double v1_weighted = weights_.v1_ * v1;
@@ -128,6 +139,18 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
     synthesized_grasps.push_back(grasp);
 
     stopwatch_candidate.stop();
+
+    epsilon1_values.push_back(epsilon1);
+    v1_values.push_back(v1);
+    distance_values.push_back(distance);
+    reachability_values.push_back(reachability);
+
+    epsilon1_weighted_values.push_back(epsilon1_weighted);
+    v1_weighted_values.push_back(v1_weighted);
+    distance_weighted_values.push_back(distance_weighted);
+    reachability_weighted_values.push_back(reachability_weighted);
+
+    grasp_quality_values.push_back(grasp_quality);
 
     ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "epsilon1: " << epsilon1);
     ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "v1: " << v1);
@@ -158,7 +181,19 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
                            "Need to clip the number of returned grasps to " << max_num_grasps << ".");
     synthesized_grasps.resize(max_num_grasps);
   }
-}  // namespace chair_manipulation
+
+  statistics::debugSummary(epsilon1_values, "epsilon1");
+  statistics::debugSummary(v1_values, "v1");
+  statistics::debugSummary(distance_values, "distance");
+  statistics::debugSummary(reachability_values, "reachability");
+
+  statistics::debugSummary(epsilon1_weighted_values, "weighted epsilon1");
+  statistics::debugSummary(v1_weighted_values, "weighted v1");
+  statistics::debugSummary(distance_weighted_values, "weighted distance");
+  statistics::debugSummary(reachability_weighted_values, "weighted reachability");
+
+  statistics::debugSummary(grasp_quality_values, "grasp_quality");
+}
 
 void GraspSynthesizer::generateGraspCandidates(const std::vector<GraspHypothesis>& hypotheses,
                                                std::vector<GraspCandidate>& candidates,
@@ -225,9 +260,9 @@ double GraspSynthesizer::computeReachability(const GraspCandidate& candidate) co
 
   for (const auto& grasp : candidate)
   {
+    // Get nearest arm
     double min_distance = std::numeric_limits<double>::max();
     std::size_t arm_index = 0;
-
     for (std::size_t i = 0; i < params_.num_arms_; i++)
     {
       const auto& arm_base_pose = arm_base_poses_[i];
