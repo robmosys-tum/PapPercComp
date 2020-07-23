@@ -84,6 +84,8 @@ chair_manipulation::TestParameters::TestParameters()
   point_cloud_registration_params_.lambda_ = cpd::DEFAULT_LAMBDA;
   point_cloud_registration_params_.beta_ = cpd::DEFAULT_BETA;
   point_cloud_registration_params_.max_iterations_ = 150;
+  point_cloud_registration_params_.pre_voxel_grid_leaf_size_ = 0.04;
+  point_cloud_registration_params_.post_voxel_grid_leaf_size_ = 0.02;
 
   mesh_reconstruction_params_.method_ = "greedy";
   mesh_reconstruction_params_.greedy_search_radius_ = 0.05;

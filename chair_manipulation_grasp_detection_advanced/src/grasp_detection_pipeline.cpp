@@ -30,7 +30,6 @@ using ShapeMeshPtr = std::shared_ptr<ShapeMesh>;
 void GraspDetectionParameters::load(ros::NodeHandle& nh)
 {
   run_once_ = nh.param<bool>("run_once", false);
-  pre_registration_voxel_leaf_size_ = nh.param<double>("pre_registration_voxel_leaf_size", 0.05);
   num_sample_trials_per_grasp_ = nh.param<int>("num_sample_trials_per_grasp", 100);
   sample_radius_ = nh.param<double>("sample_radius", 0.1);
 
@@ -54,7 +53,7 @@ void runGraspDetectionPipeline()
   {
     ros::NodeHandle nh;
     ros::NodeHandle nh_priv{ "~" };
-    std::string gripper_urdf, gripper_srdf, segmented_cloud_topic, transformed_cloud_topic, reconstructed_mesh_topic;
+    std::string gripper_urdf, gripper_srdf, segmented_cloud_topic, registered_cloud_topic, reconstructed_mesh_topic;
     if (!nh_priv.getParam("gripper_urdf", gripper_urdf))
       throw exception::Parameter{ "Failed to load parameter 'gripper_urdf'." };
     if (!nh_priv.getParam("gripper_srdf", gripper_srdf))
@@ -63,7 +62,7 @@ void runGraspDetectionPipeline()
       throw exception::Parameter{ "Failed to load parameter 'segmented_cloud_topic'." };
     if (!nh_priv.getParam("reconstructed_mesh_topic", reconstructed_mesh_topic))
       throw exception::Parameter{ "Failed to load parameter 'reconstructed_mesh_topic'." };
-    if (!nh_priv.getParam("transformed_cloud_topic", transformed_cloud_topic))
+    if (!nh_priv.getParam("registered_cloud_topic", registered_cloud_topic))
       throw exception::Parameter{ "Failed to load parameter 'transformed_cloud_topic'." };
 
     GraspDetectionParameters grasp_detection_params;
@@ -124,11 +123,7 @@ void runGraspDetectionPipeline()
 
     tf2_ros::StaticTransformBroadcaster broadcaster;
     auto reconstructed_mesh_pub = nh.advertise<shape_msgs::Mesh>(reconstructed_mesh_topic, 1);
-    auto transformed_cloud_pub = nh.advertise<sensor_msgs::PointCloud2>(transformed_cloud_topic, 1);
-    pcl::VoxelGrid<pcl::PointNormal> voxel_filter;
-    voxel_filter.setLeafSize(grasp_detection_params.pre_registration_voxel_leaf_size_,
-                             grasp_detection_params.pre_registration_voxel_leaf_size_,
-                             grasp_detection_params.pre_registration_voxel_leaf_size_);
+    auto transformed_cloud_pub = nh.advertise<sensor_msgs::PointCloud2>(registered_cloud_topic, 1);
     Stopwatch stopwatch_iteration, stopwatch_step;
 
     do
@@ -147,35 +142,18 @@ void runGraspDetectionPipeline()
       point_cloud_matcher.setInputCloud(segmented_point_cloud);
       point_cloud_matcher.setInputDatabase(grasp_database);
       point_cloud_matcher.match(matched_element);
+      const auto& matched_cloud = matched_element->model_->getPointCloud();
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Matching finished.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
-      const auto& matched_cloud = matched_element->model_->getPointCloud();
-      auto filtered_cloud = PointNormalCloudPtr{ new PointNormalCloud };
-      voxel_filter.setInputCloud(matched_cloud);
-      voxel_filter.filter(*filtered_cloud);
-      stopwatch_step.stop();
-      ROS_DEBUG_STREAM_NAMED("main", "Voxel grid filter on matched cloud finished.");
-      ROS_DEBUG_STREAM_NAMED("main", "The filtered cloud now has " << filtered_cloud->size() << " point.");
-      ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
-
-      stopwatch_step.start();
-      auto source_eigen_cloud = std::make_shared<EigenCloud>();
-      auto target_eigen_cloud = std::make_shared<EigenCloud>();
-      utils::pointCloudToEigen(*filtered_cloud, *source_eigen_cloud);
-      utils::pointCloudToEigen(*segmented_point_cloud, *target_eigen_cloud);
-      stopwatch_step.stop();
-      ROS_DEBUG_STREAM_NAMED("main", "Conversion from point cloud to eigen cloud finished.");
-      ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
-
-      stopwatch_step.start();
-      EigenCloud aligned_eigen_cloud;
+      auto registered_cloud = PointNormalCloudPtr{ new PointNormalCloud };
       NonrigidTransform nonrigid_transform;
-      point_cloud_registration.setInputSource(source_eigen_cloud);
-      point_cloud_registration.setInputTarget(target_eigen_cloud);
-      point_cloud_registration.align(aligned_eigen_cloud, nonrigid_transform);
+      point_cloud_registration.setInputSource(matched_cloud);
+      point_cloud_registration.setInputTarget(segmented_point_cloud);
+      point_cloud_registration.align(*registered_cloud, nonrigid_transform);
+      utils::publishPointCloud(*registered_cloud, transformed_cloud_pub, world_frame);
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Registration finished.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
@@ -189,16 +167,8 @@ void runGraspDetectionPipeline()
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
-      auto transformed_cloud = PointNormalCloudPtr{ new PointNormalCloud };
-      utils::transformPointCloud(*matched_cloud, *transformed_cloud, nonrigid_transform);
-      utils::publishPointCloud(*transformed_cloud, transformed_cloud_pub, world_frame);
-      stopwatch_step.stop();
-      ROS_DEBUG_STREAM_NAMED("main", "Transformed and published matched cloud finished.");
-      ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
-
-      stopwatch_step.start();
       auto shape_mesh = std::make_shared<ShapeMesh>();
-      mesh_reconstruction.setInputCloud(transformed_cloud);
+      mesh_reconstruction.setInputCloud(registered_cloud);
       mesh_reconstruction.reconstruct(*shape_mesh);
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Mesh reconstruction finished.");
@@ -213,7 +183,7 @@ void runGraspDetectionPipeline()
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
-      Model model{ shape_mesh, transformed_cloud };
+      Model model{ shape_mesh, registered_cloud };
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Creating model finished.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");

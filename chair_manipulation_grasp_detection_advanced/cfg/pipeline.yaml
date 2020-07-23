@@ -1,6 +1,6 @@
 grasp_database_filename: $(find chair_manipulation_grasp_detection_advanced)/cfg/grasp_database.yaml
 segmented_cloud_topic: cloud_segmented
-transformed_cloud_topic: cloud_transformed
+registered_cloud_topic: cloud_registered
 reconstructed_mesh_topic: reconstructed_mesh
 
 grasp_database_creator:
@@ -13,8 +13,6 @@ grasp_database_creator:
 
 grasp_detection:
   run_once: true
-  # Leaf size for voxel filter applied to the template model before registration.
-  pre_registration_voxel_leaf_size: 0.04
   num_sample_trials_per_grasp: 5
   sample_radius: 0.05
   grasp_frames:
@@ -104,6 +102,10 @@ point_cloud_registration:
   beta: 3.0
   # Number of iteration of the coherent point drift algorithm.
   max_iterations: 30
+  # Leaf size for voxel filter applied to the template model before registration.
+  pre_voxel_grid_leaf_size: 0.04
+  # Leaf size for voxel filter applied to the transformed template model after registration.
+  post_voxel_grid_leaf_size: 0.02
 
 mesh_reconstruction:
   # Specifies which method to use.

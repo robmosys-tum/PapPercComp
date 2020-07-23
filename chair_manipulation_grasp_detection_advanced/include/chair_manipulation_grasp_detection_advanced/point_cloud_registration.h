@@ -5,6 +5,7 @@
 #include <ros/ros.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+#include <pcl/filters/voxel_grid.h>
 #include <cpd/nonrigid.hpp>
 
 namespace chair_manipulation
@@ -16,27 +17,34 @@ struct PointCloudRegistrationParameters
   double lambda_;
   double beta_;
   int max_iterations_;
+  double pre_voxel_grid_leaf_size_;
+  double post_voxel_grid_leaf_size_;
 };
 
 class PointCloudRegistration
 {
 public:
-  using PointCloud = Eigen::MatrixXd;
-  using PointCloudPtr = std::shared_ptr<PointCloud>;
-  using PointCloudConstPtr = std::shared_ptr<const PointCloud>;
+  using PointCloud = pcl::PointCloud<pcl::PointXYZ>;
+  using PointCloudPtr = PointCloud::Ptr;
+  using PointNormalCloud = pcl::PointCloud<pcl::PointNormal>;
+  using PointNormalCloudPtr = PointNormalCloud::Ptr;
+  using PointNormalCloudConstPtr = PointNormalCloud::ConstPtr;
+  using EigenCloud = Eigen::MatrixXd;
 
   explicit PointCloudRegistration(PointCloudRegistrationParameters params);
 
-  void setInputSource(const PointCloudConstPtr& source_cloud);
+  void setInputSource(const PointNormalCloudConstPtr& source_cloud);
 
-  void setInputTarget(const PointCloudConstPtr& target_cloud);
+  void setInputTarget(const PointNormalCloudConstPtr& target_cloud);
 
-  void align(PointCloud& aligned_cloud, NonrigidTransform& transform);
+  void align(PointNormalCloud& aligned_cloud, NonrigidTransform& transform);
 
 private:
   PointCloudRegistrationParameters params_;
-  PointCloudConstPtr source_cloud_;
-  PointCloudConstPtr target_cloud_;
+  PointNormalCloudConstPtr source_cloud_;
+  PointNormalCloudConstPtr target_cloud_;
+  pcl::VoxelGrid<pcl::PointNormal> pre_voxel_filter_;
+  pcl::VoxelGrid<pcl::PointNormal> post_voxel_filter_;
 };
 
 }
