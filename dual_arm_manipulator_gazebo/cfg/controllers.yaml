@@ -22,7 +22,7 @@ robot1_arm_trajectory_controller:
     robot1_elbow_joint:         {p: 10000, d: 100, i: 5, i_clamp: 1000}
     robot1_wrist_1_joint:       {p: 10000, d: 10, i: 5, i_clamp: 1000}
     robot1_wrist_2_joint:       {p: 10000, d: 0, i: 5, i_clamp: 1000}
-    robot1_wrist_3_joint:       {p: 100, d: 0.05, i: 0.01, i_clamp: 1000}
+    robot1_wrist_3_joint:       {p: 10, d: 0.5, i: 0.01, i_clamp: 1000}
   stop_trajectory_duration: 0.5
   state_publish_rate:  25
   action_monitor_rate: 10
@@ -117,7 +117,7 @@ robot2_arm_trajectory_controller:
     robot2_elbow_joint:         {p: 10000, d: 100, i: 5, i_clamp: 1000}
     robot2_wrist_1_joint:       {p: 10000, d: 10, i: 5, i_clamp: 1000}
     robot2_wrist_2_joint:       {p: 10000, d: 0, i: 5, i_clamp: 1000}
-    robot2_wrist_3_joint:       {p: 100, d: 0.05, i: 0.01, i_clamp: 1000}
+    robot2_wrist_3_joint:       {p: 10, d: 0.5, i: 0.01, i_clamp: 1000}
   stop_trajectory_duration: 0.5
   state_publish_rate:  25
   action_monitor_rate: 10

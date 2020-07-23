@@ -65,11 +65,11 @@ weights_offline:
   nearest_arm_orientation: 0.0
 
 weights_online:
-  epsilon1: 10.0
+  epsilon1: 1.0
   v1: 0.0
   grasp_distance: 1.0
   nearest_arm_distance: 10.0
-  nearest_arm_orientation: 10.0
+  nearest_arm_orientation: 1.0
 
 point_cloud_receiver:
   topics:

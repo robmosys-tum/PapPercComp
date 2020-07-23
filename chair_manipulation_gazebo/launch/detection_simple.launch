@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- grasp detection (first robot) -->
+  <include ns="camera1" file="$(find chair_manipulation_grasp_detection_simple)/launch/depth_image_detection.launch">
+    <arg name="grasp_frame" value="robot1_grasp" />
+  </include>
+
+  <!-- grasp detection (second robot) -->
+  <include ns="camera2" file="$(find chair_manipulation_grasp_detection_simple)/launch/depth_image_detection.launch">
+    <arg name="grasp_frame" value="robot2_grasp" />
+  </include>
+
+</launch>

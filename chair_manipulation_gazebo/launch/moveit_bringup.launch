@@ -76,12 +76,6 @@
     </include>
   </group>
 
-  <!-- advanced grasp detection -->
-  <!-- <include file="$(find chair_manipulation_grasp_detection_advanced)/launch/point_cloud_segmentation.launch" />
-  <include file="$(find chair_manipulation_grasp_detection_advanced)/launch/grasp_detection.launch">
-    <arg name="debug" value="true" />
-  </include> -->
-
   <!-- grasp -> grasp_tcp_aligned (first robot) -->
   <node name="robot1_grasp_to_grasp_tcp_aligned" pkg="tf2_ros" type="static_transform_publisher"
         args="$(arg grasp_to_grasp_aligned_XYZYPR) robot1_grasp robot1_grasp_tcp_aligned" />

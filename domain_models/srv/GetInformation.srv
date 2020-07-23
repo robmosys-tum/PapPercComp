@@ -1,9 +1,0 @@
-# query - request
-string[] inf_label
----
-sensor_msgs/Image[] imgs
-geometry_msgs/PoseStamped[] pose
-domain_models/Roi[] roi
-bool[] inf_bool
-string[] inf_label
-int32[] inf_int
