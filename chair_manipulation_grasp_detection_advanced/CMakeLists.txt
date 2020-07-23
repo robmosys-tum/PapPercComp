@@ -141,8 +141,8 @@ target_link_libraries(mesh_reconstruction_node ${LIBRARIES})
 # add_executable(point_cloud_preprocessor_test test/point_cloud_preprocessor_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 # target_link_libraries(point_cloud_preprocessor_test ${LIBRARIES})
 
-add_executable(registration_test test/registration_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-target_link_libraries(registration_test ${LIBRARIES})
+# add_executable(registration_test test/registration_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+# target_link_libraries(registration_test ${LIBRARIES})
 
-# add_executable(pcl_viewer test/pcl_viewer.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-# target_link_libraries(pcl_viewer ${LIBRARIES})
+add_executable(pcl_viewer test/pcl_viewer.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(pcl_viewer ${LIBRARIES})

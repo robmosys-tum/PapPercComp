@@ -1,5 +1,5 @@
-planning_attempts: 1
-planning_attempt_time: 60
+planning_attempts: 10
+planning_attempt_time: 10
 pre_grasp_distance: 0.1
 lift_height: 0.1
 max_velocity_scaling_factor: 1.0

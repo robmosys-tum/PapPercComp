@@ -2,7 +2,7 @@ stomp/robot1_arm:
   group_name: robot1_arm
   optimization:
     num_timesteps: 60
-    num_iterations: 40
+    num_iterations: 60
     num_iterations_after_valid: 0
     num_rollouts: 30
     max_rollouts: 30
@@ -25,7 +25,7 @@ stomp/robot1_arm:
       - class: stomp_moveit/MultiTrajectoryVisualization
         line_width: 0.02
         rgb: [255, 255, 0]
-        marker_array_topic: stomp_trajectories
+        marker_array_topic: /robot1/stomp_trajectories
         marker_namespace: noisy
     update_filters:
       - class: stomp_moveit/PolynomialSmoother
@@ -35,14 +35,14 @@ stomp/robot1_arm:
         rgb: [0, 191, 255]
         error_rgb: [255, 0, 0]
         publish_intermediate: True
-        marker_topic: stomp_trajectory
+        marker_topic: /robot1/stomp_trajectory
         marker_namespace: optimized
 
 stomp/robot2_arm:
   group_name: robot2_arm
   optimization:
     num_timesteps: 60
-    num_iterations: 40
+    num_iterations: 60
     num_iterations_after_valid: 0
     num_rollouts: 30
     max_rollouts: 30
@@ -65,7 +65,7 @@ stomp/robot2_arm:
       - class: stomp_moveit/MultiTrajectoryVisualization
         line_width: 0.02
         rgb: [255, 255, 0]
-        marker_array_topic: stomp_trajectories
+        marker_array_topic: /robot2/stomp_trajectories
         marker_namespace: noisy
     update_filters:
       - class: stomp_moveit/PolynomialSmoother
@@ -75,6 +75,6 @@ stomp/robot2_arm:
         rgb: [0, 191, 255]
         error_rgb: [255, 0, 0]
         publish_intermediate: True
-        marker_topic: stomp_trajectory
+        marker_topic: /robot2/stomp_trajectory
         marker_namespace: optimized
         
