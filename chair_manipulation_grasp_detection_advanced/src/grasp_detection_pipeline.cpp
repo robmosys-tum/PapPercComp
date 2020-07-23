@@ -26,6 +26,7 @@ using PolygonMesh = pcl::PolygonMesh;
 using PolygonMeshPtr = PolygonMesh::Ptr;
 using ShapeMesh = shapes::Mesh;
 using ShapeMeshPtr = std::shared_ptr<ShapeMesh>;
+using GraspCandidate = GraspSynthesizer::GraspCandidate;
 
 void GraspDetectionParameters::load(ros::NodeHandle& nh)
 {
@@ -189,17 +190,17 @@ void runGraspDetectionPipeline()
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
-      std::vector<GraspHypothesis> hypotheses;
-      grasp_sampler.sampleGraspHypothesesFromPrior(model, prior_grasps,
-                                                   grasp_detection_params.num_sample_trials_per_grasp_,
-                                                   grasp_detection_params.sample_radius_, hypotheses);
+      std::vector<GraspHypothesis> grasp_hypotheses;
+      grasp_sampler.filterCollisionFree(model, prior_grasps, grasp_hypotheses);
       stopwatch_step.stop();
-      ROS_DEBUG_STREAM_NAMED("main", "Sampling grasp hypotheses finished.");
+      ROS_DEBUG_STREAM_NAMED("main", "Filtered collision free grasps.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
       std::vector<MultiArmGrasp> grasps;
-      grasp_synthesizer.synthesize(hypotheses, model, 1, grasps);
+      std::vector<GraspCandidate> candidates;
+      grasp_synthesizer.generateGraspCandidates(grasp_hypotheses, candidates);
+      grasp_synthesizer.synthesize(candidates, model, 1, grasps);
       if (grasps.empty())
       {
         ROS_WARN_STREAM_NAMED("main", "Failed to find a valid grasp.");

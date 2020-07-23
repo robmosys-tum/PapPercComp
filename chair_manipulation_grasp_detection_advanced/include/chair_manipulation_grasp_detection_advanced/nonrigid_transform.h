@@ -20,7 +20,7 @@ public:
   NonrigidTransform() = default;
 
   NonrigidTransform(const PointCloudConstPtr& source_points, const DeformationFieldConstPtr& w, double beta = 1.,
-                    std::size_t k = 10);
+                    std::size_t k = 10, double basis_scale = 0.1);
 
   Eigen::Vector3d operator*(const Eigen::Vector3d& q) const;
 
@@ -32,6 +32,7 @@ private:
   Eigen::MatrixXd g_;
   double beta_{ 0. };
   std::size_t k_{ 0 };
+  double basis_scale_;
   std::shared_ptr<SearchMethod> search_method_;
 };
 

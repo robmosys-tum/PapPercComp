@@ -26,6 +26,8 @@ struct GraspDatabaseCreatorParameters
 class GraspDatabaseCreator
 {
 public:
+  using GraspCandidate = GraspSynthesizer::GraspCandidate;
+
   GraspDatabaseCreator(GraspDatabaseCreatorParameters params, GraspSamplerPtr grasp_sampler,
                        GraspSynthesizerPtr grasp_synthesizer)
     : params_(std::move(params))

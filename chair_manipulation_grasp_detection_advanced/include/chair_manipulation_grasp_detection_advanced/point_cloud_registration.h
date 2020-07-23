@@ -22,6 +22,7 @@ struct PointCloudRegistrationParameters
   double pre_voxel_grid_leaf_size_;
   double post_voxel_grid_leaf_size_;
   double normal_search_radius_;
+  double basis_scale_;
 };
 
 class PointCloudRegistration

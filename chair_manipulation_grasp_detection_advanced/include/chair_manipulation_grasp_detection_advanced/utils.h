@@ -59,12 +59,13 @@ Vector projection(const Vector& axis, const Vector& v)
 template <typename T>
 Matrix3<T> orthonormalize(const Matrix3<T>& mat)
 {
-  Vector3<T> u1, u2, u3;
-  u1 = mat.col(0);
-  u2 = mat.col(1) - projection(u1, mat.col(1).eval());
-  u3 = mat.col(2) - projection(u1, mat.col(2).eval()) - projection(u2, mat.col(2).eval());
+  // Preference: z-axis > x-axis > y-axis
+  Vector3<T> x, y, z;
+  z = mat.col(2);
+  x = mat.col(0) - projection(z, mat.col(0).eval());
+  y = mat.col(1) - projection(z, mat.col(1).eval()) - projection(x, mat.col(1).eval());
   Matrix3<T> result;
-  result << u1.normalized(), u2.normalized(), u3.normalized();
+  result << x.normalized(), y.normalized(), z.normalized();
   return result;
 }
 
@@ -103,9 +104,6 @@ void publishPointCloud(const pcl::PointCloud<PointT>& pcl_cloud, ros::Publisher&
 
 void transformPointCloud(const pcl::PointCloud<pcl::PointNormal>& source_cloud,
                          pcl::PointCloud<pcl::PointXYZ>& target_cloud, const NonrigidTransform& transform);
-
-void transformPointCloud(const pcl::PointCloud<pcl::PointNormal>& source_cloud,
-                         pcl::PointCloud<pcl::PointNormal>& target_cloud, const NonrigidTransform& transform);
 
 void transformGrasps(const std::vector<MultiArmGrasp>& source_grasps, std::vector<MultiArmGrasp>& target_grasps,
                      const NonrigidTransform& transform);

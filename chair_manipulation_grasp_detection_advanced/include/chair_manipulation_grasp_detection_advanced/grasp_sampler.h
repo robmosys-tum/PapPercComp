@@ -42,11 +42,29 @@ public:
                                       std::size_t sample_trials_per_grasp, double sample_radius,
                                       std::vector<GraspHypothesis>& hypotheses);
 
+  void filterCollisionFree(const Model& model, const std::vector<MultiArmGrasp>& grasps,
+                           std::vector<GraspHypothesis>& hypotheses);
+
   bool sampleGraspPose(const PointCloudConstPtr& point_cloud, Eigen::Isometry3d& grasp_pose);
 
   bool findGraspPoseAt(const PointCloudConstPtr& point_cloud, const PointT& point, Eigen::Isometry3d& grasp_pose);
 
 private:
+  struct CollisionCheckingScope
+  {
+    CollisionCheckingScope(GraspSampler& sampler, const Model& model) : sampler_(sampler)
+    {
+      sampler_.prepareCollisionChecking(model);
+    }
+
+    ~CollisionCheckingScope()
+    {
+      sampler_.cleanupCollisionChecking();
+    }
+
+    GraspSampler& sampler_;
+  };
+
   GraspSamplerParameters params_;
   GripperPtr gripper_;
 
@@ -54,6 +72,12 @@ private:
 
   using SearchMethod = pcl::search::KdTree<PointCloud::PointType>;
   SearchMethod search_method_;
+
+  void prepareCollisionChecking(const Model& model);
+
+  void cleanupCollisionChecking();
+
+  bool computeContacts(const Eigen::Isometry3d& pose, std::vector<Contact>& contacts);
 
   /**
    * Angle between the normal of the reference point and the normal of the antipodal point

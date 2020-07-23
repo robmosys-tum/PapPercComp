@@ -286,25 +286,6 @@ void transformPointCloud(const pcl::PointCloud<pcl::PointNormal>& source_cloud,
   }
 }
 
-void transformPointCloud(const pcl::PointCloud<pcl::PointNormal>& source_cloud,
-                         pcl::PointCloud<pcl::PointNormal>& target_cloud, const NonrigidTransform& transform)
-{
-  target_cloud.resize(source_cloud.size());
-  for (std::size_t i = 0; i < source_cloud.size(); i++)
-  {
-    const auto& source_point = source_cloud[i];
-    auto& target_point = target_cloud[i];
-
-    Eigen::Vector3d source_position = source_point.getVector3fMap().cast<double>();
-    Eigen::Vector3d target_position = transform * source_position;
-    target_point.getVector3fMap() = target_position.cast<float>();
-
-    Eigen::Vector3d source_normal = source_point.getNormalVector3fMap().cast<double>();
-    Eigen::Vector3d target_normal = ((transform * (source_normal + source_position)) - target_position).normalized();
-    target_point.getNormalVector3fMap() = target_normal.cast<float>();
-  }
-}
-
 void transformGrasps(const std::vector<MultiArmGrasp>& source_grasps, std::vector<MultiArmGrasp>& target_grasps,
                      const NonrigidTransform& transform)
 {

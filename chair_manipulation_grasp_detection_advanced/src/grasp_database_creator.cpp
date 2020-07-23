@@ -39,7 +39,9 @@ void GraspDatabaseCreator::createGraspDatabase(GraspDatabase& database)
     auto element = std::make_shared<GraspDatabaseElement>();
     std::vector<GraspHypothesis> grasp_hypotheses;
     grasp_sampler_->sampleGraspHypotheses(*model, params_.num_sample_trials_per_model_, grasp_hypotheses);
-    grasp_synthesizer_->synthesize(grasp_hypotheses, *model, params_.max_num_grasps_per_model_, element->grasps_);
+    std::vector<GraspCandidate> candidates;
+    grasp_synthesizer_->generateGraspCandidates(grasp_hypotheses, candidates);
+    grasp_synthesizer_->synthesize(candidates, *model, params_.max_num_grasps_per_model_, element->grasps_);
     if (element->grasps_.size() < params_.min_num_grasps_per_model_)
     {
       ROS_WARN_STREAM_NAMED("grasp_database_creator",

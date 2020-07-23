@@ -58,17 +58,20 @@ GraspSynthesizer::GraspSynthesizer(GraspSynthesizerParameters params, GraspQuali
   }
 }
 
-void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses, const Model& model,
-                                  std::size_t max_num_grasps, std::vector<MultiArmGrasp>& synthesized_grasps) const
+void GraspSynthesizer::generateGraspCandidates(const std::vector<GraspHypothesis>& hypotheses,
+                                               std::vector<GraspCandidate>& candidates)
 {
-  Stopwatch stopwatch;
-
   if (hypotheses.size() < params_.num_arms_)
     throw exception::IllegalArgument{ "The number of hypotheses must be at least as large as the number of arms." };
 
-  std::vector<GraspCandidate> candidates;
-  generateGraspCandidates(hypotheses, candidates);
+  generateGraspCandidatesRecursively(hypotheses, candidates);
   ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Generated " << candidates.size() << " grasp candidates.");
+}
+
+void GraspSynthesizer::synthesize(const std::vector<GraspCandidate>& candidates, const Model& model,
+                                  std::size_t max_num_grasps, std::vector<MultiArmGrasp>& synthesized_grasps) const
+{
+  Stopwatch stopwatch;
 
   double weight_sum = weights_.sum();
   if (weight_sum == 0)
@@ -155,10 +158,10 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
   statistics::debugSummary(quality_scores, "grasp_quality");
 }
 
-void GraspSynthesizer::generateGraspCandidates(const std::vector<GraspHypothesis>& hypotheses,
-                                               std::vector<GraspCandidate>& candidates,
-                                               const GraspCandidate& curr_candidate, std::size_t arm_index,
-                                               std::size_t hypothesis_index) const
+void GraspSynthesizer::generateGraspCandidatesRecursively(const std::vector<GraspHypothesis>& hypotheses,
+                                                          std::vector<GraspCandidate>& candidates,
+                                                          const GraspCandidate& curr_candidate, std::size_t arm_index,
+                                                          std::size_t hypothesis_index) const
 {
   for (std::size_t j = hypothesis_index; j < hypotheses.size() - params_.num_arms_ + arm_index + 1; j++)
   {
@@ -168,7 +171,7 @@ void GraspSynthesizer::generateGraspCandidates(const std::vector<GraspHypothesis
     if (arm_index == params_.num_arms_ - 1)
       candidates.push_back(new_candidate);
     else
-      generateGraspCandidates(hypotheses, candidates, new_candidate, arm_index + 1, j + 1);
+      generateGraspCandidatesRecursively(hypotheses, candidates, new_candidate, arm_index + 1, j + 1);
   }
 }
 

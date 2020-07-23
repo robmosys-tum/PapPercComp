@@ -5,12 +5,13 @@
 namespace chair_manipulation
 {
 NonrigidTransform::NonrigidTransform(const PointCloudConstPtr& source_points, const DeformationFieldConstPtr& w,
-                                     double beta, std::size_t k)
+                                     double beta, std::size_t k, double basis_scale)
   : source_points_(source_points)
   , w_(w)
   , g_(cpd::affinity(*source_points, *source_points, beta))
   , beta_(beta)
   , k_(std::min(k, (std::size_t)source_points->rows()))
+  , basis_scale_(basis_scale)
 {
   // These two have to be shared pointers in order to make the class copyable.
   // The problem is that the nanoflann KDTree doesn't copy but takes a std::reference_wrapper to the points.
@@ -63,9 +64,9 @@ Eigen::Isometry3d NonrigidTransform::operator*(const Eigen::Isometry3d& transfor
   Eigen::Vector3d t_new = *this * t_old;
   Eigen::Matrix3d r_old = transform.rotation();
   Eigen::Matrix3d r_new;
-  r_new.col(0) = (*this * (r_old.col(0) + t_old)) - t_new;
-  r_new.col(1) = (*this * (r_old.col(1) + t_old)) - t_new;
-  r_new.col(2) = (*this * (r_old.col(2) + t_old)) - t_new;
+  r_new.col(0) = (*this * (basis_scale_ * r_old.col(0) + t_old)) - t_new;
+  r_new.col(1) = (*this * (basis_scale_ * r_old.col(1) + t_old)) - t_new;
+  r_new.col(2) = (*this * (basis_scale_ * r_old.col(2) + t_old)) - t_new;
   Eigen::Quaterniond q;
   q = utils::orthonormalize(r_new);
   q.normalize();

@@ -108,6 +108,8 @@ point_cloud_registration:
   post_voxel_grid_leaf_size: 0.001
   # The search radius for normal estimation of the transformed template.
   normal_search_radius: 0.01
+  # This value is used for non-rigidly transforming a rotation basis.
+  basis_scale: 0.1
 
 mesh_reconstruction:
   # Specifies which method to use.

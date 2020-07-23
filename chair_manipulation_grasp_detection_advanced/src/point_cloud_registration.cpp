@@ -12,6 +12,7 @@ void PointCloudRegistrationParameters::load(ros::NodeHandle& nh)
   pre_voxel_grid_leaf_size_ = nh.param<double>("pre_voxel_grid_leaf_size", 0.04);
   post_voxel_grid_leaf_size_ = nh.param<double>("post_voxel_grid_leaf_size", 0.02);
   normal_search_radius_ = nh.param<double>("normal_search_radius", 0.05);
+  basis_scale_ = nh.param<double>("basis_scale", 0.1);
 }
 
 PointCloudRegistration::PointCloudRegistration(PointCloudRegistrationParameters params) : params_(std::move(params))
@@ -71,7 +72,7 @@ void PointCloudRegistration::align(PointNormalCloud& aligned_cloud, NonrigidTran
   ROS_DEBUG_STREAM_NAMED("point_cloud_registration", "It took" << stopwatch.elapsedSeconds() << "s.");
 
   auto w = std::make_shared<Eigen::MatrixXd>(result.w);
-  transform = NonrigidTransform{ source_eigen_cloud, w, params_.beta_ };
+  transform = NonrigidTransform{ source_eigen_cloud, w, params_.beta_, 10, params_.basis_scale_ };
 
   auto transformed_cloud = PointCloudPtr{ new PointCloud };
   utils::transformPointCloud(*source_cloud_, *transformed_cloud, transform);

@@ -115,21 +115,24 @@ struct GraspSynthesizerParameters
 class GraspSynthesizer
 {
 public:
+  using GraspCandidate = std::vector<const GraspHypothesis*>;
+
   GraspSynthesizer(GraspSynthesizerParameters params, GraspQualityWeights weights);
 
-  void synthesize(const std::vector<GraspHypothesis>& hypotheses, const Model& model, std::size_t max_num_grasps,
+  void generateGraspCandidates(const std::vector<GraspHypothesis>& hypotheses, std::vector<GraspCandidate>& candidates);
+
+  void synthesize(const std::vector<GraspCandidate>& candidates, const Model& model, std::size_t max_num_grasps,
                   std::vector<MultiArmGrasp>& synthesized_grasps) const;
 
 private:
-  using GraspCandidate = std::vector<const GraspHypothesis*>;
-
   GraspSynthesizerParameters params_;
   GraspQualityWeights weights_;
   std::vector<Eigen::Isometry3d> arm_base_poses_;
 
-  void generateGraspCandidates(const std::vector<GraspHypothesis>& hypotheses, std::vector<GraspCandidate>& candidates,
-                               const GraspCandidate& curr_candidate = GraspCandidate{}, std::size_t arm_index = 0,
-                               std::size_t hypothesis_index = 0) const;
+  void generateGraspCandidatesRecursively(const std::vector<GraspHypothesis>& hypotheses,
+                                          std::vector<GraspCandidate>& candidates,
+                                          const GraspCandidate& curr_candidate = GraspCandidate{},
+                                          std::size_t arm_index = 0, std::size_t hypothesis_index = 0) const;
 
   bool computeWrenchSpaceQualities(const GraspCandidate& candidate, const Model& model, GraspQuality& quality) const;
 
