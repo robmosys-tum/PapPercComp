@@ -58,7 +58,7 @@ private:
 	cv::dnn::Net net;
 	int counter;
 	std::vector<const char*> classes;
-	cv::Scalar mean = cv::Scalar(124.16, 116.736, 103.936);
+	cv::Scalar mean = cv::Scalar(0.4399, 0.4211, 0.3609);
 
 	/*
 	 * These are statically chosen values that depend on the model being used;

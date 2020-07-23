@@ -64,14 +64,18 @@ void KitchenUtensilClassifier_impl::classifyKitchenUtensil(
 	int classId;
 	double confidence;
 	std_msgs::msg::String className = std_msgs::msg::String();
-	Mat frame(image->height, image->width, CV_8UC3, image->data.data());
+	Mat frameIn(image->height, image->width, CV_8UC3, image->data.data());
+	Mat frame;
+
+	frameIn.convertTo(frame, CV_32F);
+	frame = frame / 256;
 
 	// simply skip some frames so that we don't get clogged up on too many input images
 	if (counter++ < NR_SKIP_FRAMES)
 		return;
 	counter = 0;
 
-	blob = dnn::blobFromImage(frame, IMG_SCALE_FACTOR, Size{inputWidth, inputHeight}, mean);
+	blob = dnn::blobFromImage(frame, IMG_SCALE_FACTOR, Size{inputWidth, inputHeight}, mean, false, CV_32F);
 	net.setInput(blob);
 	prob = net.forward();
 	debug_net_efficiency();
@@ -104,10 +108,10 @@ void KitchenUtensilClassifier_impl::debug_confidences(Mat *confidences){
 	// print out probability for each class
 	MatIterator_<float> it = confidences->begin<float>();
 	MatIterator_<float> end = confidences->end<float>();
-	uint class_counter = 0;
-	const char *class_name;
+	int class_counter = 0;
     RCLCPP_INFO(this->get_logger(), format("Confidences:"));
 	for(;it != end; ++it, ++class_counter) {
+		const char *class_name;
 		if (class_counter < classes.size()) {
 			class_name = classes[class_counter];
 		} else {
@@ -118,7 +122,7 @@ void KitchenUtensilClassifier_impl::debug_confidences(Mat *confidences){
 		}
 		Point p = it.pos();
 		RCLCPP_INFO(this->get_logger(), format("  %.2f for %s",
-				confidences->at<float>(p)), class_name);
+				confidences->at<float>(p), class_name));
 	}
 }
 
