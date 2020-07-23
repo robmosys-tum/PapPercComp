@@ -64,16 +64,18 @@ void KitchenUtensilClassifier_impl::classifyKitchenUtensil(
 	int classId;
 	double confidence;
 	std_msgs::msg::String className = std_msgs::msg::String();
-	Mat frameIn(image->height, image->width, CV_8UC3, image->data.data());
-	Mat frame;
-
-	frameIn.convertTo(frame, CV_32F);
-	frame = frame / 256;
 
 	// simply skip some frames so that we don't get clogged up on too many input images
 	if (counter++ < NR_SKIP_FRAMES)
 		return;
 	counter = 0;
+
+
+	Mat frameIn(image->height, image->width, CV_8UC3, image->data.data());
+	Mat frame;
+
+	frameIn.convertTo(frame, CV_32F);
+	frame = frame / 256;
 
 	blob = dnn::blobFromImage(frame, IMG_SCALE_FACTOR, Size{inputWidth, inputHeight}, mean, false, CV_32F);
 	net.setInput(blob);
@@ -85,7 +87,7 @@ void KitchenUtensilClassifier_impl::classifyKitchenUtensil(
     debug_confidences(&prob);
 
 	classId = classIdPoint.x;
-	if (0 <= classId && classId < classes.size()) {
+	if (0 <= classId && (unsigned)classId < classes.size()) {
 		className.set__data(classes[classId]);
 	} else {
 		RCLCPP_WARN(this->get_logger(), "Name list is shorter than output tensor;"
@@ -108,7 +110,11 @@ void KitchenUtensilClassifier_impl::debug_confidences(Mat *confidences){
 	// print out probability for each class
 	MatIterator_<float> it = confidences->begin<float>();
 	MatIterator_<float> end = confidences->end<float>();
-	int class_counter = 0;
+	Point p;
+	String fancy_output;
+	unsigned nr_of_chars;
+	unsigned class_counter = 0;
+
     RCLCPP_INFO(this->get_logger(), format("Confidences:"));
 	for(;it != end; ++it, ++class_counter) {
 		const char *class_name;
@@ -120,9 +126,19 @@ void KitchenUtensilClassifier_impl::debug_confidences(Mat *confidences){
 					"class list.");
 			class_name = "UNKNOWN";
 		}
-		Point p = it.pos();
-		RCLCPP_INFO(this->get_logger(), format("  %.2f for %s",
-				confidences->at<float>(p), class_name));
+		p = it.pos();
+		nr_of_chars = (unsigned)(50 * confidences->at<float>(p));
+		fancy_output = "";
+
+		for (unsigned i = 0; i < nr_of_chars; ++i){
+			fancy_output.append("|");
+		}
+		for (unsigned i = 0; i < 50 - nr_of_chars; ++i){
+			fancy_output.append(" ");
+		}
+
+		RCLCPP_INFO(this->get_logger(), format("  %s %s",
+				fancy_output.c_str(), class_name));
 	}
 }
 
