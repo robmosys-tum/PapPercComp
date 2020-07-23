@@ -102,6 +102,9 @@ void publishPointCloud(const pcl::PointCloud<PointT>& pcl_cloud, ros::Publisher&
 }
 
 void transformPointCloud(const pcl::PointCloud<pcl::PointNormal>& source_cloud,
+                         pcl::PointCloud<pcl::PointXYZ>& target_cloud, const NonrigidTransform& transform);
+
+void transformPointCloud(const pcl::PointCloud<pcl::PointNormal>& source_cloud,
                          pcl::PointCloud<pcl::PointNormal>& target_cloud, const NonrigidTransform& transform);
 
 void transformGrasps(const std::vector<MultiArmGrasp>& source_grasps, std::vector<MultiArmGrasp>& target_grasps,

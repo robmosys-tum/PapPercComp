@@ -11,6 +11,7 @@ void PointCloudRegistrationParameters::load(ros::NodeHandle& nh)
   max_iterations_ = nh.param<int>("max_iterations", cpd::DEFAULT_MAX_ITERATIONS);
   pre_voxel_grid_leaf_size_ = nh.param<double>("pre_voxel_grid_leaf_size", 0.04);
   post_voxel_grid_leaf_size_ = nh.param<double>("post_voxel_grid_leaf_size", 0.02);
+  normal_search_radius_ = nh.param<double>("normal_search_radius", 0.05);
 }
 
 PointCloudRegistration::PointCloudRegistration(PointCloudRegistrationParameters params) : params_(std::move(params))
@@ -19,6 +20,9 @@ PointCloudRegistration::PointCloudRegistration(PointCloudRegistrationParameters 
                                 params_.pre_voxel_grid_leaf_size_);
   post_voxel_filter_.setLeafSize(params_.post_voxel_grid_leaf_size_, params_.post_voxel_grid_leaf_size_,
                                  params_.post_voxel_grid_leaf_size_);
+  search_method_ = SearchMethodPtr{ new SearchMethod };
+  normal_estimation_.setRadiusSearch(params_.normal_search_radius_);
+  normal_estimation_.setSearchMethod(search_method_);
 }
 
 void PointCloudRegistration::setInputSource(const PointNormalCloudConstPtr& source_cloud)
@@ -68,7 +72,23 @@ void PointCloudRegistration::align(PointNormalCloud& aligned_cloud, NonrigidTran
 
   auto w = std::make_shared<Eigen::MatrixXd>(result.w);
   transform = NonrigidTransform{ source_eigen_cloud, w, params_.beta_ };
-  utils::transformPointCloud(*source_cloud_, aligned_cloud, transform);
+
+  auto transformed_cloud = PointCloudPtr{ new PointCloud };
+  utils::transformPointCloud(*source_cloud_, *transformed_cloud, transform);
+
+  auto filtered_transformed_cloud = PointCloudPtr{ new PointCloud };
+  post_voxel_filter_.setInputCloud(transformed_cloud);
+  post_voxel_filter_.filter(*filtered_transformed_cloud);
+
+  auto normals = SurfaceNormalsPtr{ new SurfaceNormals };
+  normal_estimation_.setInputCloud(filtered_transformed_cloud);
+  normal_estimation_.compute(*normals);
+
+  PointNormalCloud aligned_normal_cloud;
+  pcl::concatenateFields(*filtered_transformed_cloud, *normals, aligned_normal_cloud);
+
+  std::vector<int> indices;
+  pcl::removeNaNNormalsFromPointCloud(aligned_normal_cloud, aligned_cloud, indices);
 }
 
 }  // namespace chair_manipulation

@@ -126,6 +126,12 @@ void GraspSynthesizer::synthesize(const std::vector<GraspHypothesis>& hypotheses
                            "Processing current candidate took " << stopwatch.elapsedSeconds() << "s.");
   }
 
+  if (synthesized_grasps.empty())
+  {
+    ROS_WARN_STREAM_NAMED("grasp_synthesizer", "Failed to synthesize any valid grasp candidates.");
+    return;
+  }
+
   ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Sorting " << synthesized_grasps.size()
                                                          << " remaining synthesized grasps by grasp quality in "
                                                             "descending order.");

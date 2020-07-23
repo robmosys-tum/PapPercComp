@@ -1,10 +1,10 @@
 #ifndef CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_POINT_CLOUD_PREPROCESSOR_H
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_POINT_CLOUD_PREPROCESSOR_H
 
-#include <pcl/search/kdtree.h>
 #include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/features/normal_3d.h>
+#include <pcl/search/kdtree.h>
 #include <ros/ros.h>
 
 namespace chair_manipulation

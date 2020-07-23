@@ -6,6 +6,8 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/search/kdtree.h>
 #include <cpd/nonrigid.hpp>
 
 namespace chair_manipulation
@@ -19,6 +21,7 @@ struct PointCloudRegistrationParameters
   int max_iterations_;
   double pre_voxel_grid_leaf_size_;
   double post_voxel_grid_leaf_size_;
+  double normal_search_radius_;
 };
 
 class PointCloudRegistration
@@ -30,6 +33,10 @@ public:
   using PointNormalCloudPtr = PointNormalCloud::Ptr;
   using PointNormalCloudConstPtr = PointNormalCloud::ConstPtr;
   using EigenCloud = Eigen::MatrixXd;
+  using SurfaceNormals = pcl::PointCloud<pcl::Normal>;
+  using SurfaceNormalsPtr = SurfaceNormals::Ptr;
+  using SearchMethod = pcl::search::KdTree<pcl::PointXYZ>;
+  using SearchMethodPtr = SearchMethod::Ptr;
 
   explicit PointCloudRegistration(PointCloudRegistrationParameters params);
 
@@ -44,7 +51,9 @@ private:
   PointNormalCloudConstPtr source_cloud_;
   PointNormalCloudConstPtr target_cloud_;
   pcl::VoxelGrid<pcl::PointNormal> pre_voxel_filter_;
-  pcl::VoxelGrid<pcl::PointNormal> post_voxel_filter_;
+  pcl::VoxelGrid<pcl::PointXYZ> post_voxel_filter_;
+  pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimation_;
+  SearchMethodPtr search_method_;
 };
 
 }

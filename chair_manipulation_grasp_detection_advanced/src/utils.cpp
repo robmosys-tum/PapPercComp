@@ -272,6 +272,21 @@ std::vector<Contact> contactsFromStr(const std::string& str)
 }
 
 void transformPointCloud(const pcl::PointCloud<pcl::PointNormal>& source_cloud,
+                         pcl::PointCloud<pcl::PointXYZ>& target_cloud, const NonrigidTransform& transform)
+{
+  target_cloud.resize(source_cloud.size());
+  for (std::size_t i = 0; i < source_cloud.size(); i++)
+  {
+    const auto& source_point = source_cloud[i];
+    auto& target_point = target_cloud[i];
+
+    Eigen::Vector3d source_position = source_point.getVector3fMap().cast<double>();
+    Eigen::Vector3d target_position = transform * source_position;
+    target_point.getVector3fMap() = target_position.cast<float>();
+  }
+}
+
+void transformPointCloud(const pcl::PointCloud<pcl::PointNormal>& source_cloud,
                          pcl::PointCloud<pcl::PointNormal>& target_cloud, const NonrigidTransform& transform)
 {
   target_cloud.resize(source_cloud.size());
