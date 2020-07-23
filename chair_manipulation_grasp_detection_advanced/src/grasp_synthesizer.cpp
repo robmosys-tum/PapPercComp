@@ -24,6 +24,9 @@ void GraspSynthesizerParameters::load(ros::NodeHandle& nh)
   num_friction_edges_ = nh.param<int>("num_friction_edges", 8);
   max_arm_radius_ = nh.param<double>("max_arm_radius", 1.0);
   max_yaw_angle_ = nh.param<double>("max_yaw_angle", M_PI_2);
+  min_height_ = nh.param<double>("min_height", 0.);
+  nms_distance_threshold_ = nh.param<double>("nms_distance_threshold", 0.1);
+  nms_orientation_threshold_ = nh.param<double>("nms_orientation_threshold", 0.1);
   world_frame_ = nh.param<std::string>("world_frame", "world");
 
   XmlRpc::XmlRpcValue arm_base_frames_array;
@@ -96,7 +99,7 @@ void GraspSynthesizer::synthesize(const std::vector<GraspCandidate>& candidates,
       ROS_DEBUG_STREAM_NAMED("grasp_synthesizer",
                              "pose of arm " << j << ": [" << utils::poseToStr(candidate[j]->pose_) << "]");
 
-    if (!computeWrenchSpaceQualities(candidate, model, quality) ||
+    if (!checkMinHeight(candidate) || !computeWrenchSpaceQualities(candidate, model, quality) ||
         !computeGraspDistanceQuality(candidate, model, quality) || !computeNearestArmQualities(candidate, quality))
       continue;
 
@@ -135,10 +138,13 @@ void GraspSynthesizer::synthesize(const std::vector<GraspCandidate>& candidates,
     return;
   }
 
-  ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Sorting " << synthesized_grasps.size()
-                                                         << " remaining synthesized grasps by grasp quality in "
-                                                            "descending order.");
+  std::size_t num_grasps_before = synthesized_grasps.size();
+  nonMaximumSuppression(synthesized_grasps);
+  std::size_t num_grasps_after = synthesized_grasps.size();
+  ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Filtered out " << (num_grasps_before - num_grasps_after) << " grasps.");
 
+  ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Sorting remaining grasps by grasp quality in "
+                                              "descending order.");
   std::sort(synthesized_grasps.begin(), synthesized_grasps.end(),
             [&](const auto& grasp1, const auto& grasp2) { return grasp1.quality_ > grasp2.quality_; });
 
@@ -153,7 +159,7 @@ void GraspSynthesizer::synthesize(const std::vector<GraspCandidate>& candidates,
     statistics::debugSummary(pair.second, pair.first);
 
   for (auto& pair : weighted_values)
-    statistics::debugSummary(pair.second, pair.first);
+    statistics::debugSummary(pair.second, pair.first + " weighted");
 
   statistics::debugSummary(quality_scores, "grasp_quality");
 }
@@ -173,6 +179,20 @@ void GraspSynthesizer::generateGraspCandidatesRecursively(const std::vector<Gras
     else
       generateGraspCandidatesRecursively(hypotheses, candidates, new_candidate, arm_index + 1, j + 1);
   }
+}
+
+bool GraspSynthesizer::checkMinHeight(const GraspCandidate& candidate) const
+{
+  for (const auto& grasp : candidate)
+  {
+    // Filter out if grasp position is too low
+    if (grasp->pose_.translation().z() < params_.min_height_)
+    {
+      ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Grasp position is too low - omit candidate.");
+      return false;
+    }
+  }
+  return true;
 }
 
 bool GraspSynthesizer::computeWrenchSpaceQualities(const GraspCandidate& candidate, const Model& model,
@@ -253,6 +273,8 @@ bool GraspSynthesizer::computeNearestArmQualities(const GraspCandidate& candidat
 
   for (const auto& grasp : candidate)
   {
+    const auto& grasp_pose = grasp->pose_;
+
     // Get nearest arm.
     // We only consider the distance on the xy-plane.
     double min_distance = std::numeric_limits<double>::max();
@@ -261,7 +283,7 @@ bool GraspSynthesizer::computeNearestArmQualities(const GraspCandidate& candidat
     for (std::size_t i = 0; i < params_.num_arms_; i++)
     {
       const auto& arm_base_pose = arm_base_poses_[i];
-      Eigen::Vector3d arm_to_grasp = (grasp->pose_.translation() - arm_base_pose.translation());
+      Eigen::Vector3d arm_to_grasp = (grasp_pose.translation() - arm_base_pose.translation());
       Eigen::Vector3d arm_to_grasp_xy = arm_to_grasp - utils::projection(Eigen::Vector3d::UnitZ().eval(), arm_to_grasp);
       double distance = arm_to_grasp_xy.norm();
       if (distance < min_distance)
@@ -288,7 +310,7 @@ bool GraspSynthesizer::computeNearestArmQualities(const GraspCandidate& candidat
 
     // We compute the angle between the grasps' z-direction and the vector that
     // goes from the base to the grasp where both vectors are projected onto the xy-plane.
-    Eigen::Vector3d grasp_direction = grasp->pose_.rotation().col(2);
+    Eigen::Vector3d grasp_direction = grasp_pose.rotation().col(2);
     Eigen::Vector3d grasp_direction_xy =
         grasp_direction - utils::projection(Eigen::Vector3d::UnitZ().eval(), grasp_direction);
     double yaw_angle = std::acos(min_arm_to_grasp_xy.normalized().dot(grasp_direction_xy.normalized()));
@@ -306,6 +328,64 @@ bool GraspSynthesizer::computeNearestArmQualities(const GraspCandidate& candidat
   quality.nearestArmDistance() = nearest_arm_distance / params_.num_arms_;
   quality.nearestArmOrientation() = nearest_arm_orientation / params_.num_arms_;
   return true;
+}
+
+void GraspSynthesizer::nonMaximumSuppression(std::vector<MultiArmGrasp>& synthesized_grasps) const
+{
+  ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Performing non maximum suppression.");
+  std::vector<MultiArmGrasp> filtered_grasps;
+  for (std::size_t i = 0; i < synthesized_grasps.size(); i++)
+  {
+    ROS_DEBUG_STREAM_NAMED("grasp_synthesizer", "Processing " << (i + 1) << "/" << synthesized_grasps.size());
+    const auto& grasp_i = synthesized_grasps[i];
+    bool is_max = true;
+    for (std::size_t j = 0; j < synthesized_grasps.size(); j++)
+    {
+      if (i == j)
+        continue;
+
+      const auto& grasp_j = synthesized_grasps[j];
+
+      // We are only interested in pairs that look similar
+      bool all_similar = true;
+      for (std::size_t k = 0; k < params_.num_arms_; k++)
+      {
+        const auto& pose_i = grasp_i.poses_[k];
+        Eigen::Vector3d z_axis_i = pose_i.rotation().col(2);
+        // A similar pose could be at any arm index in the array
+        bool exists_similar = false;
+        for (std::size_t l = 0; l < params_.num_arms_; l++)
+        {
+          const auto& pose_j = grasp_j.poses_[l];
+          double distance = (pose_i.translation() - pose_j.translation()).norm();
+          // Consider the angle between the z-axes
+          Eigen::Vector3d z_axis_j = pose_j.rotation().col(2);
+          double angle = std::acos(z_axis_i.dot(z_axis_j));
+          if (distance < params_.nms_distance_threshold_ && angle < params_.nms_orientation_threshold_)
+          {
+            exists_similar = true;
+            break;
+          }
+        }
+
+        if (!exists_similar)
+        {
+          all_similar = false;
+          break;
+        }
+      }
+
+      if (all_similar && grasp_j.quality_ > grasp_i.quality_)
+      {
+        is_max = false;
+        break;
+      }
+    }
+
+    if (is_max)
+      filtered_grasps.push_back(grasp_i);
+  }
+  synthesized_grasps = filtered_grasps;
 }
 
 }  // namespace chair_manipulation

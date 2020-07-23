@@ -108,6 +108,9 @@ struct GraspSynthesizerParameters
   int num_friction_edges_;
   double max_arm_radius_;
   double max_yaw_angle_;
+  double min_height_;
+  double nms_distance_threshold_;
+  double nms_orientation_threshold_;
   std::string world_frame_;
   std::vector<std::string> arm_base_frames_;
 };
@@ -134,11 +137,15 @@ private:
                                           const GraspCandidate& curr_candidate = GraspCandidate{},
                                           std::size_t arm_index = 0, std::size_t hypothesis_index = 0) const;
 
+  bool checkMinHeight(const GraspCandidate& candidate) const;
+
   bool computeWrenchSpaceQualities(const GraspCandidate& candidate, const Model& model, GraspQuality& quality) const;
 
   bool computeGraspDistanceQuality(const GraspCandidate& candidate, const Model& model, GraspQuality& quality) const;
 
   bool computeNearestArmQualities(const GraspCandidate& candidate, GraspQuality& quality) const;
+
+  void nonMaximumSuppression(std::vector<MultiArmGrasp>& synthesized_grasps) const;
 };
 
 using GraspSynthesizerPtr = std::shared_ptr<GraspSynthesizer>;

@@ -23,6 +23,7 @@ struct GripperParameters
   std::string tcp_frame_;
   double contact_threshold_;
   std::vector<FingerGroup> finger_groups_;
+  std::vector<std::string> touch_links_;
 };
 
 class Gripper

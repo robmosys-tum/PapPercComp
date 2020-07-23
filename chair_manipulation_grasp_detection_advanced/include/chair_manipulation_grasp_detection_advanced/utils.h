@@ -44,6 +44,12 @@ std::string contactsToStr(const std::vector<Contact>& contacts);
 std::vector<Contact> contactsFromStr(const std::string& str);
 
 template <typename T>
+bool contains(const std::vector<T>& container, const T& element)
+{
+  return std::find(container.begin(), container.end(), element) != container.end();
+}
+
+template <typename T>
 using Vector3 = Eigen::Matrix<T, 3, 1>;
 
 template <typename T>

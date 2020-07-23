@@ -6,7 +6,7 @@ reconstructed_mesh_topic: reconstructed_mesh
 grasp_database_creator:
   num_sample_trials_per_model: 100
   min_num_grasps_per_model: 3
-  max_num_grasps_per_model: 10
+  max_num_grasps_per_model: 20
   models:
     - mesh: $(find chair_manipulation_chair_models)/models/dining_chair/meshes/dining_chair.ply
       point_cloud: $(find chair_manipulation_chair_models)/models/dining_chair/point_clouds/dining_chair.pcd
@@ -32,13 +32,16 @@ gripper:
     - group_name: right_finger
       open_group_state: right_finger_open
       closed_group_state: right_finger_closed
+  touch_links:
+    - left_inner_finger_pad
+    - right_inner_finger_pad
 
 grasp_sampler:
   max_antipodal_normal_angle: 0.1
   max_antipodal_position_angle: 0.1
   max_equator_normal_angle: 0.1
   gripper_pad_distance: 0.136
-  gripper_pad_length: 0.06
+  gripper_pad_length: 0.04 # true gripper pad length is 0.06 but a little less is better for avoiding collisions
 
 grasp_synthesizer:
   num_arms: 2
@@ -46,15 +49,18 @@ grasp_synthesizer:
   num_fiction_edges: 8
   max_arm_radius: 2
   max_yaw_angle: 1.5707
+  min_height: 0.2
+  nms_distance_threshold: 0.2
+  nms_orientation_threshold: 0.34906 # 20 degrees
   world_frame: world
   arm_base_frames:
     - robot1_base_link
     - robot2_base_link
 
 weights_offline:
-  epsilon1: 10.0
+  epsilon1: 1.0
   v1: 0.0
-  grasp_distance: 0.01
+  grasp_distance: 0.5
   nearest_arm_distance: 0.0
   nearest_arm_orientation: 0.0
 
@@ -62,8 +68,8 @@ weights_online:
   epsilon1: 10.0
   v1: 0.0
   grasp_distance: 1.0
-  nearest_arm_distance: 1000.0
-  nearest_arm_orientation: 1.0
+  nearest_arm_distance: 10.0
+  nearest_arm_orientation: 10.0
 
 point_cloud_receiver:
   topics:
@@ -105,9 +111,9 @@ point_cloud_registration:
   # Leaf size for voxel filter applied to the template model before registration.
   pre_voxel_grid_leaf_size: 0.04
   # Leaf size for voxel filter applied to the transformed template model after registration.
-  post_voxel_grid_leaf_size: 0.001
+  post_voxel_grid_leaf_size: 0.01
   # The search radius for normal estimation of the transformed template.
-  normal_search_radius: 0.01
+  normal_search_radius: 0.03
   # This value is used for non-rigidly transforming a rotation basis.
   basis_scale: 0.1
 

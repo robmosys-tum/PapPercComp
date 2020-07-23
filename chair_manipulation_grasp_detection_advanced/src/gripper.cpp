@@ -13,10 +13,13 @@ void GripperParameters::load(ros::NodeHandle& nh)
   tcp_frame_ = nh.param<std::string>("tcp_frame", "tcp");
   contact_threshold_ = nh.param<double>("contact_threshold", 0.001);
 
+  if (!nh.getParam("touch_links", touch_links_))
+    throw exception::Parameter{ "Failed to load parameter 'touch_links'." };
+
   XmlRpc::XmlRpcValue finger_groups_array;
   if (!nh.getParam("finger_groups", finger_groups_array) ||
       finger_groups_array.getType() != XmlRpc::XmlRpcValue::TypeArray || finger_groups_array.size() == 0)
-    throw exception::Parameter{ "No finger groups specified." };
+    throw exception::Parameter{ "Failed to load parameter 'finger_groups'." };
 
   int num_finger_groups = finger_groups_array.size();
   finger_groups_.resize(num_finger_groups);
@@ -186,30 +189,33 @@ bool Gripper::moveToContacts(const std::map<std::string, double>& open_values,
           const auto& detected_contacts = pair.second;
           for (const auto& detected_contact : detected_contacts)
           {
-            if (detected_contact.depth <= params_.contact_threshold_)
-            {
-              contact_found = true;
-              Contact added_contact;
-              added_contact.position_ = detected_contact.pos;
+            if (detected_contact.depth > params_.contact_threshold_)
+              continue;
 
-              if (detected_contact.body_type_1 == collision_detection::BodyType::ROBOT_LINK &&
-                  detected_contact.body_type_2 == collision_detection::BodyType::WORLD_OBJECT)
-              {
-                added_contact.normal_ = -detected_contact.normal;
-              }
-              else if (detected_contact.body_type_1 == collision_detection::BodyType::WORLD_OBJECT &&
-                       detected_contact.body_type_2 == collision_detection::BodyType::ROBOT_LINK)
-              {
-                added_contact.normal_ = detected_contact.normal;
-              }
-              else
-              {
-                // This must not happen
-                throw exception::IllegalState{ "Exactly one collision body must belong to the robot." };
-              }
+            assert((detected_contact.body_type_1 == collision_detection::BodyType::ROBOT_LINK &&
+                    detected_contact.body_type_2 == collision_detection::BodyType::WORLD_OBJECT) ||
+                   (detected_contact.body_type_1 == collision_detection::BodyType::WORLD_OBJECT &&
+                    detected_contact.body_type_2 == collision_detection::BodyType::ROBOT_LINK));
 
-              contacts.push_back(added_contact);
-            }
+            // Only allow collisions with specified touch links
+            if (detected_contact.body_type_1 == collision_detection::BodyType::ROBOT_LINK &&
+                !utils::contains(params_.touch_links_, detected_contact.body_name_1))
+              return false;
+
+            if (detected_contact.body_type_2 == collision_detection::BodyType::ROBOT_LINK &&
+                !utils::contains(params_.touch_links_, detected_contact.body_name_2))
+              return false;
+
+            contact_found = true;
+            Contact added_contact;
+            added_contact.position_ = detected_contact.pos;
+
+            if (detected_contact.body_type_1 == collision_detection::BodyType::ROBOT_LINK)
+              added_contact.normal_ = -detected_contact.normal;
+            else if (detected_contact.body_type_2 == collision_detection::BodyType::ROBOT_LINK)
+              added_contact.normal_ = detected_contact.normal;
+
+            contacts.push_back(added_contact);
           }
         }
         if (contact_found)

@@ -31,6 +31,7 @@ chair_manipulation::TestParameters::TestParameters()
   gripper_params_.base_frame_ = "robotiq_arg2f_base_link";
   gripper_params_.tcp_frame_ = "tcp";
   gripper_params_.contact_threshold_ = 0.001;
+  gripper_params_.touch_links_ = { "left_inner_finger_pad", "right_inner_finger_pad" };
   FingerGroup left_finger_group;
   left_finger_group.group_name_ = "left_finger";
   left_finger_group.open_group_state_name_ = "left_finger_open";
@@ -58,6 +59,9 @@ chair_manipulation::TestParameters::TestParameters()
   grasp_synthesizer_params_.num_friction_edges_ = 8;
   grasp_synthesizer_params_.max_arm_radius_ = 1.0;
   grasp_synthesizer_params_.max_yaw_angle_ = M_PI_2;
+  grasp_synthesizer_params_.min_height_ = 0.2;
+  grasp_synthesizer_params_.nms_distance_threshold_ = 0.1;
+  grasp_synthesizer_params_.nms_orientation_threshold_ = 0.1;
   grasp_synthesizer_params_.world_frame_ = "world";
   grasp_synthesizer_params_.arm_base_frames_ = { "robot1_base_link", "robot2_base_link" };
 

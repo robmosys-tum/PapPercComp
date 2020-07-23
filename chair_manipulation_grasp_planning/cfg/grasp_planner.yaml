@@ -1,16 +1,22 @@
-planning_attempts: 10
-planning_attempt_time: 10
+planning_attempts: 20
+planning_attempt_time: 3
 pre_grasp_distance: 0.1
 lift_height: 0.1
 max_velocity_scaling_factor: 1.0
 object_mesh_topic: /reconstructed_mesh
 # The list of links which the gripper can touch the object
 touch_links:
+  - robot1_robotiq_arg2f_base_link
   - robot1_left_inner_finger_pad
   - robot1_left_inner_finger
+  - robot1_left_inner_knuckle
   - robot1_right_inner_finger_pad
   - robot1_right_inner_finger
+  - robot1_right_inner_knuckle
+  - robot2_robotiq_arg2f_base_link
   - robot2_left_inner_finger_pad
   - robot2_left_inner_finger
+  - robot2_left_inner_knuckle
   - robot2_right_inner_finger_pad
   - robot2_right_inner_finger
+  - robot2_right_inner_knuckle
