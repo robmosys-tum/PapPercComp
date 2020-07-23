@@ -76,6 +76,7 @@ void KitchenUtensilClassifier_impl::classifyKitchenUtensil(
 
 	frameIn.convertTo(frame, CV_32F);
 	frame = frame / 256;
+	frame = frame / 0.13;
 
 	blob = dnn::blobFromImage(frame, IMG_SCALE_FACTOR, Size{inputWidth, inputHeight}, mean, false, CV_32F);
 	net.setInput(blob);
