@@ -466,6 +466,9 @@ void InstanceRecognition::publish_objects(){
         int c_y = (detected_roi[i].p1.y + detected_roi[i].p2.y + detected_roi[i].p3.y + detected_roi[i].p4.y)/4;
         geometry_msgs::msg::PoseStamped posestamped =  point2d_to_pose(cv::Point(c_x, c_y));
 
+        posestamped.header.frame_id = image_frameid;
+        
+
         if (posestamped.pose.position.x != 0 || posestamped.pose.position.y != 0 || posestamped.pose.position.z != 0 ) //Validation of the point
         {
 			objects_msg.imgs.push_back (msg);
