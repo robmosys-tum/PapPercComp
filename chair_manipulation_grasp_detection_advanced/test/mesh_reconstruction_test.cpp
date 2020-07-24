@@ -17,11 +17,8 @@ int main(int argc, char *argv[])
   MeshReconstruction reconstruction{params.mesh_reconstruction_params_ };
   reconstruction.setInputCloud(params.model_->getPointCloud());
 
-  pcl::PolygonMesh polygon_mesh;
-  reconstruction.reconstruct(polygon_mesh);
-
   shapes::Mesh shape_mesh;
-  chair_manipulation::utils::polygonToShapeMesh(polygon_mesh, shape_mesh);
+  reconstruction.reconstruct(shape_mesh);
 
   shape_msgs::Mesh mesh_msg;
   chair_manipulation::utils::shapeMeshToMsg(shape_mesh, mesh_msg);

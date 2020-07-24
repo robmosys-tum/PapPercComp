@@ -120,26 +120,26 @@ target_link_libraries(mesh_reconstruction_node ${LIBRARIES})
 
 # Tests
 
-# add_executable(convert_mesh_test test/convert_mesh_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-# target_link_libraries(convert_mesh_test ${LIBRARIES})
+add_executable(convert_mesh_test test/convert_mesh_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(convert_mesh_test ${LIBRARIES})
 
-# add_executable(grasp_sampler_test test/grasp_sampler_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-# target_link_libraries(grasp_sampler_test ${LIBRARIES})
+add_executable(grasp_sampler_test test/grasp_sampler_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(grasp_sampler_test ${LIBRARIES})
 
-# add_executable(gripper_test test/gripper_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-# target_link_libraries(gripper_test ${LIBRARIES})
+add_executable(gripper_test test/gripper_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(gripper_test ${LIBRARIES})
 
-# add_executable(wrench_test test/wrench_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-# target_link_libraries(wrench_test ${LIBRARIES})
+add_executable(wrench_test test/wrench_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(wrench_test ${LIBRARIES})
 
-# add_executable(load_database_test test/load_database_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-# target_link_libraries(load_database_test ${LIBRARIES})
+add_executable(load_database_test test/load_database_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(load_database_test ${LIBRARIES})
 
-# add_executable(mesh_reconstruction_test test/mesh_reconstruction_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-# target_link_libraries(mesh_reconstruction_test ${LIBRARIES})
+add_executable(mesh_reconstruction_test test/mesh_reconstruction_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(mesh_reconstruction_test ${LIBRARIES})
 
-# add_executable(point_cloud_preprocessor_test test/point_cloud_preprocessor_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-# target_link_libraries(point_cloud_preprocessor_test ${LIBRARIES})
+add_executable(point_cloud_preprocessor_test test/point_cloud_preprocessor_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
+target_link_libraries(point_cloud_preprocessor_test ${LIBRARIES})
 
 add_executable(registration_test test/registration_test.cpp ${SOURCE_FILES} ${TEST_SOURCE_FILES})
 target_link_libraries(registration_test ${LIBRARIES})

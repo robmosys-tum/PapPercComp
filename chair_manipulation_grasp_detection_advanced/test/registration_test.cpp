@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
   auto filtered_target_cloud = PointCloudPtr{ new PointCloud };
   pcl::VoxelGrid<pcl::PointXYZ> voxel_filter;
-  voxel_filter.setLeafSize(0.03, 0.05, 0.05);
+  voxel_filter.setLeafSize(0.03, 0.03, 0.03);
   voxel_filter.setInputCloud(target_cloud);
   voxel_filter.filter(*filtered_target_cloud);
 
