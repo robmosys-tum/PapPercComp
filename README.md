@@ -2,7 +2,7 @@
 
 ## Video Object Tracking through Segmentation Embeddings
 
-Based on the embedding method by: 
+Inspired by the following embedding method: 
 
 `Chen, Y., Pont-Tuset, J., Montes, A., & Van Gool, L. (2018). Blazingly fast video object segmentation with pixel-wise metric learning.`
 
@@ -72,3 +72,13 @@ module.eval();
 ```
 
 From experiments our model seems to use about 2GB of RAM on the VM in this manner, running on CPU.
+
+
+### Papyrus Component
+
+Using `colcon build` and then `ros2 run vos VOS` you can run the Papyrus component defined in the VOS directory. However, make sure to first change the paths in "VOS/src/VOSCompdef/VOS.cpp" for annotated\_path and model\_path. The first path should point to the image file that contains the annotated first frame for the video, and the second path should point to the traced model that you want to load.
+
+
+
+
+

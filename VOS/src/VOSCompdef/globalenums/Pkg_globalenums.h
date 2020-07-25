@@ -5,7 +5,7 @@
  Pkg_globalenums package header
  ************************************************************/
 
-#include "VOSCompdef/Pkg_VOSCompdef.h"
+#include "../../../src/VOSCompdef/Pkg_VOSCompdef.h"
 
 #ifndef _IN_
 #define _IN_

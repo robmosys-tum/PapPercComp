@@ -16,14 +16,15 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Torch REQUIRED)
+find_package(cv_bridge REQUIRED)
 
 include_directories(
 	# assure that generated .h files are found
-	${PROJECT_SOURCE_DIR}/src-gen
+	${PROJECT_SOURCE_DIR}/src
 )
 
-add_executable(VOS src-gen/VOSCompdef/VOS.cpp)
-ament_target_dependencies(VOS rclcpp rclcpp_lifecycle sensor_msgs "OpenCV")
+add_executable(VOS src/VOSCompdef/VOS.cpp)
+ament_target_dependencies(VOS rclcpp rclcpp_lifecycle sensor_msgs "OpenCV" cv_bridge)
 
 
 # Start of user code dependencies
@@ -34,7 +35,8 @@ install(TARGETS
 	DESTINATION lib/${PROJECT_NAME}
 )
 
-list(APPEND CMAKE_PREFIX_PATH "~/Documents/ConversionCpp/libtorch")
+### Path should be to installed libtorch library
+#list(APPEND CMAKE_PREFIX_PATH "~/Documents/ConversionCpp/libtorch")
 target_link_libraries(VOS "${TORCH_LIBRARIES}")
 
 ament_package()

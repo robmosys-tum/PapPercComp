@@ -9,13 +9,28 @@
  VOS class header
  ************************************************************/
 
-#include "VOSCompdef/Pkg_VOSCompdef.h"
-
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
+
+#include <torch/script.h>
+
+
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/objdetect.hpp"
+#include "opencv2/opencv.hpp"
+#include "../../src/VOSCompdef/Pkg_VOSCompdef.h"
+#include <cv_bridge/cv_bridge.h>
+
+using namespace cv;
+
+
 // Include from Include stereotype (header)
 #include <rclcpp/rclcpp.hpp>
+#include <iostream>
+#include <string>
 
 // End of Include stereotype (header)
 
