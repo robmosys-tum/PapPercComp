@@ -14,6 +14,12 @@ First, we install the a library for Fast Gauss Transforms which is the only non-
     $ cmake ..
     $ sudo make install
 
+Now, we install a compiler cache to decrease the compile time.
+
+    $ sudo apt-get install ccache
+    $ echo 'export PATH=/usr/lib/ccache:$PATH' >> $HOME/.bashrc
+    $ source $HOME/.bashrc 
+
 Next, we setup the workspace for the project.
 
     $ cd ~
