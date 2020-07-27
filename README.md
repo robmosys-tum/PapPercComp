@@ -21,7 +21,6 @@ Next, we setup the workspace for the project.
     $ cd chair_manipulation_ws
     $ mkdir src
     $ catkin init --workspace .
-    $ source devel/setup.bash
     $ git clone --recurse-submodules https://github.com/robmosys-tum/PapPercComp -b chair_manipulation src/chair_manipulation
     $ wstool init src
     $ wstool merge -t src src/chair_manipulation/dependencies.rosinstall
