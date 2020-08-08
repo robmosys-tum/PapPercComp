@@ -280,9 +280,8 @@ double GraspSampler::computeEquatorCost(const PointT& reference_point, const Poi
 {
   // Normalize angle from [0, pi/2] to [0, 1].
   // Normalize distance from [0, gripper_pad_length] to [0, 1].
-  const double sqr_gripper_pad_length = params_.gripper_pad_length_ * params_.gripper_pad_length_;
   auto distance = (reference_point.getVector3fMap() - equator_point.getVector3fMap()).norm();
-  return computeEquatorNormalAngle(reference_point, equator_point) / M_PI_2 + distance / sqr_gripper_pad_length;
+  return computeEquatorNormalAngle(reference_point, equator_point) / M_PI_2 + distance / params_.gripper_pad_length_;
 }
 
 }  // namespace chair_manipulation
