@@ -18,7 +18,7 @@ struct GraspSamplerParameters
 
   double max_antipodal_normal_angle_;
   double max_antipodal_position_angle_;
-  double max_equator_normal_angle_;
+  double max_palm_normal_angle_;
   double gripper_pad_distance_;
   double gripper_pad_length_;
 };
@@ -91,9 +91,9 @@ private:
   double computeAntipodalPositionAngle(const PointT& reference_point, const PointT& antipodal_point) const;
 
   /**
-   * Angle between the normal of reference point and the normal of the equator point minus pi/2
+   * Angle between the normal of reference point and the normal of the palm point minus pi/2
    */
-  double computeEquatorNormalAngle(const PointT& reference_point, const PointT& equator_point) const;
+  double computePalmNormalAngle(const PointT& reference_point, const PointT& palm_point) const;
 
   /**
    * The cost associated with some antipodal point
@@ -101,9 +101,9 @@ private:
   double computeAntipodalCost(const PointT& reference_point, const PointT& antipodal_point) const;
 
   /**
-   * The cost associated with some equator point
+   * The cost associated with some palm point
    */
-  double computeEquatorCost(const PointT& reference_point, const PointT& equator_point) const;
+  double computePalmCost(const PointT& reference_point, const PointT& palm_point) const;
 };
 
 using GraspSamplerPtr = std::shared_ptr<GraspSampler>;

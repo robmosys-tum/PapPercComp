@@ -11,7 +11,7 @@ void GraspSamplerParameters::load(ros::NodeHandle& nh)
 {
   max_antipodal_normal_angle_ = nh.param<double>("max_antipodal_normal_angle", 0.1);
   max_antipodal_position_angle_ = nh.param<double>("max_antipodal_position_angle", 0.1);
-  max_equator_normal_angle_ = nh.param<double>("max_equator_normal_angle", 0.1);
+  max_palm_normal_angle_ = nh.param<double>("max_palm_normal_angle", 0.1);
   gripper_pad_distance_ = nh.param<double>("gripper_pad_distance", 0.1);
   gripper_pad_length_ = nh.param<double>("gripper_pad_length", 0.2);
 }
@@ -186,32 +186,32 @@ bool GraspSampler::findGraspPoseAt(const PointCloudConstPtr& point_cloud, const 
   sqr_distances = std::vector<float>{};
   search_method_.radiusSearch(center_point, params_.gripper_pad_length_, indices, sqr_distances);
 
-  // Filter out the points where the equator normal angle is larger than the given threshold
-  const auto filter_max_equator_angle = [&](int k) {
-    auto equator_point = (*point_cloud)[k];
-    return computeEquatorNormalAngle(reference_point, equator_point) > params_.max_equator_normal_angle_;
+  // Filter out the points where the palm normal angle is larger than the given threshold
+  const auto filter_max_palm_angle = [&](int k) {
+    auto palm_point = (*point_cloud)[k];
+    return computePalmNormalAngle(reference_point, palm_point) > params_.max_palm_normal_angle_;
   };
-  indices.erase(std::remove_if(indices.begin(), indices.end(), filter_max_equator_angle), indices.end());
+  indices.erase(std::remove_if(indices.begin(), indices.end(), filter_max_palm_angle), indices.end());
   if (indices.empty())
     return false;
 
-  // From the filtered indices, find the point that minimizes the sum of the equator angle and the distance
+  // From the filtered indices, find the point that minimizes the sum of the palm angle and the distance
   // between the point and the center
-  const auto equator_cost_comp = [&](int k1, int k2) {
-    auto equator_point1 = (*point_cloud)[k1];
-    auto equator_point2 = (*point_cloud)[k2];
-    return computeEquatorCost(reference_point, equator_point1) < computeEquatorCost(reference_point, equator_point2);
+  const auto palm_cost_comp = [&](int k1, int k2) {
+    auto palm_point1 = (*point_cloud)[k1];
+    auto palm_point2 = (*point_cloud)[k2];
+    return computePalmCost(reference_point, palm_point1) < computePalmCost(reference_point, palm_point2);
   };
-  it = std::min_element(indices.begin(), indices.end(), equator_cost_comp);
+  it = std::min_element(indices.begin(), indices.end(), palm_cost_comp);
 
-  auto equator_index = *it;
-  auto equator_point = (*point_cloud)[equator_index];
+  auto palm_index = *it;
+  auto palm_point = (*point_cloud)[palm_index];
 
   // The y-axis points in the direction of the normal of the reference point
   Eigen::Vector3f y_axis = reference_point.getNormalVector3fMap();
-  // Orthonormalization of the equator inverse normal gives the z-axis
-  Eigen::Vector3f equator_normal_inverted = -equator_point.getNormalVector3fMap();
-  Eigen::Vector3f z_axis = (equator_normal_inverted - utils::projection(y_axis, equator_normal_inverted)).normalized();
+  // Orthonormalization of the palm inverse normal gives the z-axis
+  Eigen::Vector3f palm_normal_inverted = -palm_point.getNormalVector3fMap();
+  Eigen::Vector3f z_axis = (palm_normal_inverted - utils::projection(y_axis, palm_normal_inverted)).normalized();
 
   // Finally, convert to double
   Eigen::Isometry3d rotation, translation;
@@ -265,9 +265,9 @@ double GraspSampler::computeAntipodalPositionAngle(const PointT& reference_point
       (reference_point.getVector3fMap() - antipodal_point.getVector3fMap()).normalized()));
 }
 
-double GraspSampler::computeEquatorNormalAngle(const PointT& reference_point, const PointT& equator_point) const
+double GraspSampler::computePalmNormalAngle(const PointT& reference_point, const PointT& palm_point) const
 {
-  return std::abs(std::acos(reference_point.getNormalVector3fMap().dot(equator_point.getNormalVector3fMap())) - M_PI_2);
+  return std::abs(std::acos(reference_point.getNormalVector3fMap().dot(palm_point.getNormalVector3fMap())) - M_PI_2);
 }
 
 double GraspSampler::computeAntipodalCost(const PointT& reference_point, const PointT& antipodal_point) const
@@ -276,12 +276,12 @@ double GraspSampler::computeAntipodalCost(const PointT& reference_point, const P
          computeAntipodalPositionAngle(reference_point, antipodal_point);
 }
 
-double GraspSampler::computeEquatorCost(const PointT& reference_point, const PointT& equator_point) const
+double GraspSampler::computePalmCost(const PointT& reference_point, const PointT& palm_point) const
 {
   // Normalize angle from [0, pi/2] to [0, 1].
   // Normalize distance from [0, gripper_pad_length] to [0, 1].
-  auto distance = (reference_point.getVector3fMap() - equator_point.getVector3fMap()).norm();
-  return computeEquatorNormalAngle(reference_point, equator_point) / M_PI_2 + distance / params_.gripper_pad_length_;
+  auto distance = (reference_point.getVector3fMap() - palm_point.getVector3fMap()).norm();
+  return computePalmNormalAngle(reference_point, palm_point) / M_PI_2 + distance / params_.gripper_pad_length_;
 }
 
 }  // namespace chair_manipulation

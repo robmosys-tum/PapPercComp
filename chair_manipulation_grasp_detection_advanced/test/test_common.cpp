@@ -44,7 +44,7 @@ chair_manipulation::TestParameters::TestParameters()
 
   grasp_sampler_params_.max_antipodal_normal_angle_ = 0.1;
   grasp_sampler_params_.max_antipodal_position_angle_ = 0.1;
-  grasp_sampler_params_.max_equator_normal_angle_ = 0.1;
+  grasp_sampler_params_.max_palm_normal_angle_ = 0.1;
   grasp_sampler_params_.gripper_pad_distance_ = 0.1;
   grasp_sampler_params_.gripper_pad_length_ = 0.3;
 
