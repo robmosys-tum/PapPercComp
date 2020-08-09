@@ -30,4 +30,8 @@ or install it using apt-get:
 
 ``./run.sh ``
 
+6. Run RVIZ, use config file gesturesRecognition.rviz
+
+``rviz2``
+
 
