@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/papyrus/infra/gmfdiag/style" xmi:id="_75Ll4MppEeqtiqzFX2xlXQ" type="CompositeStructure" name="HandGestureDetectionSystem diagram" measurementUnit="Pixel">
+  <children xsi:type="notation:Shape" xmi:id="_75Ll4cppEeqtiqzFX2xlXQ" type="Class_Shape">
+    <children xsi:type="notation:DecorationNode" xmi:id="_75Ll4sppEeqtiqzFX2xlXQ" type="Class_NameLabel"/>
+    <children xsi:type="notation:DecorationNode" xmi:id="_75Ll48ppEeqtiqzFX2xlXQ" type="Class_FloatingNameLabel">
+      <layoutConstraint xsi:type="notation:Location" xmi:id="_75Ll5MppEeqtiqzFX2xlXQ" y="15"/>
+    </children>
+    <children xsi:type="notation:BasicCompartment" xmi:id="_75Ll5cppEeqtiqzFX2xlXQ" type="Class_StructureCompartment">
+      <styles xsi:type="notation:TitleStyle" xmi:id="_75Ll5sppEeqtiqzFX2xlXQ"/>
+      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_75Ll58ppEeqtiqzFX2xlXQ"/>
+    </children>
+    <element href="HandGestureDetectionSystem.system.uml#_743c08ppEeqtiqzFX2xlXQ"/>
+    <layoutConstraint xsi:type="notation:Bounds" xmi:id="_75Ll6MppEeqtiqzFX2xlXQ" x="40" y="40" width="781" height="421"/>
+  </children>
+  <children xsi:type="notation:Shape" xmi:id="_75Ll6cppEeqtiqzFX2xlXQ" type="StereotypeComment">
+    <styles xsi:type="notation:TitleStyle" xmi:id="_75Ll6sppEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_75Ll68ppEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="HandGestureDetectionSystem.system.uml#_743c08ppEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <layoutConstraint xsi:type="notation:Bounds" xmi:id="_75Ll7MppEeqtiqzFX2xlXQ" x="240" y="40"/>
+  </children>
+  <children xsi:type="notation:Shape" xmi:id="_75Ll7cppEeqtiqzFX2xlXQ" type="StereotypeComment">
+    <styles xsi:type="notation:TitleStyle" xmi:id="_75Ll7sppEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_75Ll78ppEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="HandGestureDetectionSystem.system.uml#_743c08ppEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <layoutConstraint xsi:type="notation:Bounds" xmi:id="_75Ll8MppEeqtiqzFX2xlXQ" x="240" y="40"/>
+  </children>
+  <styles xsi:type="notation:StringValueStyle" xmi:id="_75Ll8cppEeqtiqzFX2xlXQ" name="diagram_compatibility_version" stringValue="1.4.0"/>
+  <styles xsi:type="notation:DiagramStyle" xmi:id="_75Ll8sppEeqtiqzFX2xlXQ"/>
+  <styles xsi:type="style:PapyrusDiagramStyle" xmi:id="_75Ll88ppEeqtiqzFX2xlXQ" diagramKindId="org.eclipse.papyrus.robotics.diagram.assembly">
+    <owner href="HandGestureDetectionSystem.system.uml#_743c08ppEeqtiqzFX2xlXQ"/>
+  </styles>
+  <element href="HandGestureDetectionSystem.system.uml#_743c08ppEeqtiqzFX2xlXQ"/>
+  <edges xsi:type="notation:Connector" xmi:id="_75Ll9MppEeqtiqzFX2xlXQ" type="StereotypeCommentLink" source="_75Ll4cppEeqtiqzFX2xlXQ">
+    <styles xsi:type="notation:FontStyle" xmi:id="_75Ll9cppEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_75Ll9sppEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="HandGestureDetectionSystem.system.uml#_743c08ppEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_75Ll98ppEeqtiqzFX2xlXQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_75Ll-MppEeqtiqzFX2xlXQ"/>
+    <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_75Ll-cppEeqtiqzFX2xlXQ"/>
+  </edges>
+  <edges xsi:type="notation:Connector" xmi:id="_75Ll-sppEeqtiqzFX2xlXQ" type="StereotypeCommentLink" source="_75Ll4cppEeqtiqzFX2xlXQ" target="_75Ll6cppEeqtiqzFX2xlXQ">
+    <styles xsi:type="notation:FontStyle" xmi:id="_75Ll-8ppEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_75Ll_MppEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="HandGestureDetectionSystem.system.uml#_743c08ppEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_75Ll_cppEeqtiqzFX2xlXQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_75Ll_sppEeqtiqzFX2xlXQ"/>
+    <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_75Ll_8ppEeqtiqzFX2xlXQ"/>
+  </edges>
+  <edges xsi:type="notation:Connector" xmi:id="_75LmAMppEeqtiqzFX2xlXQ" type="StereotypeCommentLink" source="_75Ll4cppEeqtiqzFX2xlXQ" target="_75Ll7cppEeqtiqzFX2xlXQ">
+    <styles xsi:type="notation:FontStyle" xmi:id="_75LmAcppEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_75MM8MppEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="HandGestureDetectionSystem.system.uml#_743c08ppEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_75MM8cppEeqtiqzFX2xlXQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_75MM8sppEeqtiqzFX2xlXQ"/>
+    <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_75MM88ppEeqtiqzFX2xlXQ"/>
+  </edges>
+</notation:Diagram>

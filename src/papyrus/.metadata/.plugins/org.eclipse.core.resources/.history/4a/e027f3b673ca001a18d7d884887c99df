@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/papyrus/infra/gmfdiag/style" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_6owwwMpyEeqdLZpcx0rwmw" type="CompositeStructure" name="GestureDetectorComponent diagram" measurementUnit="Pixel">
+  <children xmi:type="notation:Shape" xmi:id="_6owwwcpyEeqdLZpcx0rwmw" type="Class_Shape">
+    <children xmi:type="notation:DecorationNode" xmi:id="_6owwwspyEeqdLZpcx0rwmw" type="Class_NameLabel"/>
+    <children xmi:type="notation:DecorationNode" xmi:id="_6owww8pyEeqdLZpcx0rwmw" type="Class_FloatingNameLabel">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_6owwxMpyEeqdLZpcx0rwmw" y="15"/>
+    </children>
+    <children xmi:type="notation:BasicCompartment" xmi:id="_6owwxcpyEeqdLZpcx0rwmw" type="Class_StructureCompartment">
+      <children xmi:type="notation:Shape" xmi:id="_7Mxcw8pyEeqdLZpcx0rwmw" type="StereotypeComment">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_7MxcxMpyEeqdLZpcx0rwmw"/>
+        <styles xmi:type="notation:EObjectValueStyle" xmi:id="_7MxcxspyEeqdLZpcx0rwmw" name="BASE_ELEMENT"/>
+        <element xsi:nil="true"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_7MxcxcpyEeqdLZpcx0rwmw" x="394" y="80"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_8GWJEMpyEeqdLZpcx0rwmw" type="Class_Shape_CN">
+        <children xmi:type="notation:DecorationNode" xmi:id="_8GWwIMpyEeqdLZpcx0rwmw" type="Class_NameLabel_CN"/>
+        <children xmi:type="notation:DecorationNode" xmi:id="_8GWwIcpyEeqdLZpcx0rwmw" type="Class_FloatingNameLabel_CN">
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_8GWwIspyEeqdLZpcx0rwmw" y="15"/>
+        </children>
+        <children xmi:type="notation:BasicCompartment" xmi:id="_8GWwI8pyEeqdLZpcx0rwmw" type="Class_StructureCompartment_CN">
+          <styles xmi:type="notation:TitleStyle" xmi:id="_8GWwJMpyEeqdLZpcx0rwmw"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8GWwJcpyEeqdLZpcx0rwmw"/>
+        </children>
+        <children xmi:type="notation:DecorationNode" xmi:id="_8Gf6EMpyEeqdLZpcx0rwmw" type="StereotypeLabel">
+          <styles xmi:type="notation:StringValueStyle" xmi:id="_8Gf6EcpyEeqdLZpcx0rwmw" name="stereotype" stringValue="robotics::components::Activity"/>
+          <element xmi:type="uml:Stereotype" href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_VoeJwJZ2Eeeq1f8hGgKVzA"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8Gf6EspyEeqdLZpcx0rwmw"/>
+        </children>
+        <children xmi:type="notation:BasicCompartment" xmi:id="_8Gf6E8pyEeqdLZpcx0rwmw" type="StereotypeBrace">
+          <styles xmi:type="notation:TitleStyle" xmi:id="_8Gf6FMpyEeqdLZpcx0rwmw"/>
+          <styles xmi:type="notation:StringValueStyle" xmi:id="_8Gf6FcpyEeqdLZpcx0rwmw" name="stereotype" stringValue="robotics::components::Activity"/>
+          <element xmi:type="uml:Stereotype" href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_VoeJwJZ2Eeeq1f8hGgKVzA"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8Gf6FspyEeqdLZpcx0rwmw"/>
+        </children>
+        <children xmi:type="notation:BasicCompartment" xmi:id="_8GhIPspyEeqdLZpcx0rwmw" type="compartment_shape_display">
+          <styles xmi:type="notation:TitleStyle" xmi:id="_8GhIP8pyEeqdLZpcx0rwmw"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8GhIQMpyEeqdLZpcx0rwmw"/>
+        </children>
+        <children xmi:type="notation:BasicCompartment" xmi:id="_8Gi9ZspyEeqdLZpcx0rwmw" type="StereotypeCompartment">
+          <styles xmi:type="notation:TitleStyle" xmi:id="_8Gi9Z8pyEeqdLZpcx0rwmw"/>
+          <styles xmi:type="notation:StringValueStyle" xmi:id="_8Gi9aMpyEeqdLZpcx0rwmw" name="stereotype" stringValue="robotics::components::Activity"/>
+          <element xmi:type="uml:Stereotype" href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_VoeJwJZ2Eeeq1f8hGgKVzA"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8Gi9acpyEeqdLZpcx0rwmw"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_95BnoMpyEeqdLZpcx0rwmw" type="Port_Shape">
+          <children xmi:type="notation:DecorationNode" xmi:id="_95BnospyEeqdLZpcx0rwmw" type="Port_NameLabel">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_95COsMpyEeqdLZpcx0rwmw" x="25" y="3"/>
+          </children>
+          <children xmi:type="notation:DecorationNode" xmi:id="_95COscpyEeqdLZpcx0rwmw" type="Port_StereotypeLabel">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_95COsspyEeqdLZpcx0rwmw" x="25" y="-10"/>
+          </children>
+          <element xmi:type="uml:Port" href="gestureDetectorComponent.compdef.uml#_94nX8MpyEeqdLZpcx0rwmw"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_95BnocpyEeqdLZpcx0rwmw" x="-10" y="30"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_-UFL8MpyEeqdLZpcx0rwmw" type="Port_Shape">
+          <children xmi:type="notation:DecorationNode" xmi:id="_-UFL8spyEeqdLZpcx0rwmw" type="Port_NameLabel">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_-UFL88pyEeqdLZpcx0rwmw" x="25" y="3"/>
+          </children>
+          <children xmi:type="notation:DecorationNode" xmi:id="_-UFL9MpyEeqdLZpcx0rwmw" type="Port_StereotypeLabel">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_-UFL9cpyEeqdLZpcx0rwmw" x="25" y="-10"/>
+          </children>
+          <element xmi:type="uml:Port" href="gestureDetectorComponent.compdef.uml#_-TumoMpyEeqdLZpcx0rwmw"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_-UFL8cpyEeqdLZpcx0rwmw" x="144" y="29"/>
+        </children>
+        <element xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_8GD1MMpyEeqdLZpcx0rwmw"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8GWJEcpyEeqdLZpcx0rwmw" x="194" y="100"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_8GhvQMpyEeqdLZpcx0rwmw" type="StereotypeComment">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_8GhvQcpyEeqdLZpcx0rwmw"/>
+        <styles xmi:type="notation:EObjectValueStyle" xmi:id="_8GhvQ8pyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+          <eObjectValue xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_8GD1MMpyEeqdLZpcx0rwmw"/>
+        </styles>
+        <element xsi:nil="true"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8GhvQspyEeqdLZpcx0rwmw" x="200"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_95VJp8pyEeqdLZpcx0rwmw" type="StereotypeComment">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_95VJqMpyEeqdLZpcx0rwmw"/>
+        <styles xmi:type="notation:EObjectValueStyle" xmi:id="_95VJqspyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+          <eObjectValue xmi:type="uml:Port" href="gestureDetectorComponent.compdef.uml#_94nX8MpyEeqdLZpcx0rwmw"/>
+        </styles>
+        <element xsi:nil="true"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_95VJqcpyEeqdLZpcx0rwmw" x="200"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_-UTOa8pyEeqdLZpcx0rwmw" type="StereotypeComment">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_-UTObMpyEeqdLZpcx0rwmw"/>
+        <styles xmi:type="notation:EObjectValueStyle" xmi:id="_-UT1cMpyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+          <eObjectValue xmi:type="uml:Port" href="gestureDetectorComponent.compdef.uml#_-TumoMpyEeqdLZpcx0rwmw"/>
+        </styles>
+        <element xsi:nil="true"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_-UTObcpyEeqdLZpcx0rwmw" x="200"/>
+      </children>
+      <styles xmi:type="notation:TitleStyle" xmi:id="_6owwzspyEeqdLZpcx0rwmw"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6owwz8pyEeqdLZpcx0rwmw"/>
+    </children>
+    <element xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_6osfU8pyEeqdLZpcx0rwmw"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6oww0MpyEeqdLZpcx0rwmw" x="100" y="60" width="601" height="321"/>
+  </children>
+  <children xmi:type="notation:Shape" xmi:id="_6oww0cpyEeqdLZpcx0rwmw" type="StereotypeComment">
+    <styles xmi:type="notation:TitleStyle" xmi:id="_6oww0spyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_6oww08pyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_6osfU8pyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6oww1MpyEeqdLZpcx0rwmw" x="420" y="100"/>
+  </children>
+  <children xmi:type="notation:Shape" xmi:id="_6oww1cpyEeqdLZpcx0rwmw" type="StereotypeComment">
+    <styles xmi:type="notation:TitleStyle" xmi:id="_6oww1spyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_6oww18pyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_6osfU8pyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6oww2MpyEeqdLZpcx0rwmw" x="300" y="60"/>
+  </children>
+  <children xmi:type="notation:Shape" xmi:id="_7MqvEMpyEeqdLZpcx0rwmw" type="StereotypeComment">
+    <styles xmi:type="notation:TitleStyle" xmi:id="_7MqvEcpyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_7MrWIMpyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_6osfU8pyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_7MqvEspyEeqdLZpcx0rwmw" x="300" y="60"/>
+  </children>
+  <styles xmi:type="notation:StringValueStyle" xmi:id="_6oww2cpyEeqdLZpcx0rwmw" name="diagram_compatibility_version" stringValue="1.4.0"/>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_6oww2spyEeqdLZpcx0rwmw"/>
+  <styles xmi:type="style:PapyrusDiagramStyle" xmi:id="_6oww28pyEeqdLZpcx0rwmw" diagramKindId="org.eclipse.papyrus.robotics.diagram.component">
+    <owner xmi:type="uml:Model" href="gestureDetectorComponent.compdef.uml#_6osfUMpyEeqdLZpcx0rwmw"/>
+  </styles>
+  <element xmi:type="uml:Model" href="gestureDetectorComponent.compdef.uml#_6osfUMpyEeqdLZpcx0rwmw"/>
+  <edges xmi:type="notation:Connector" xmi:id="_6oww3MpyEeqdLZpcx0rwmw" type="StereotypeCommentLink" source="_6owwwcpyEeqdLZpcx0rwmw">
+    <styles xmi:type="notation:FontStyle" xmi:id="_6oww3cpyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_6oww3spyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_6osfU8pyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_6oww38pyEeqdLZpcx0rwmw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_6oww4MpyEeqdLZpcx0rwmw"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_6oww4cpyEeqdLZpcx0rwmw"/>
+  </edges>
+  <edges xmi:type="notation:Connector" xmi:id="_6oww4spyEeqdLZpcx0rwmw" type="StereotypeCommentLink" source="_6owwwcpyEeqdLZpcx0rwmw" target="_6oww0cpyEeqdLZpcx0rwmw">
+    <styles xmi:type="notation:FontStyle" xmi:id="_6oww48pyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_6oww5MpyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_6osfU8pyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_6oww5cpyEeqdLZpcx0rwmw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_6oww5spyEeqdLZpcx0rwmw"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_6oww58pyEeqdLZpcx0rwmw"/>
+  </edges>
+  <edges xmi:type="notation:Connector" xmi:id="_6oww7spyEeqdLZpcx0rwmw" type="StereotypeCommentLink" source="_6owwwcpyEeqdLZpcx0rwmw" target="_6oww1cpyEeqdLZpcx0rwmw">
+    <styles xmi:type="notation:FontStyle" xmi:id="_6oww78pyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_6oww8MpyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_6osfU8pyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_6oww8cpyEeqdLZpcx0rwmw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_6oww8spyEeqdLZpcx0rwmw"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_6oww88pyEeqdLZpcx0rwmw"/>
+  </edges>
+  <edges xmi:type="notation:Connector" xmi:id="_7MrWIcpyEeqdLZpcx0rwmw" type="StereotypeCommentLink" source="_6owwwcpyEeqdLZpcx0rwmw" target="_7MqvEMpyEeqdLZpcx0rwmw">
+    <styles xmi:type="notation:FontStyle" xmi:id="_7MrWIspyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_7Mr9MspyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_6osfU8pyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_7MrWI8pyEeqdLZpcx0rwmw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7Mr9MMpyEeqdLZpcx0rwmw"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_7Mr9McpyEeqdLZpcx0rwmw"/>
+  </edges>
+  <edges xmi:type="notation:Connector" xmi:id="_8GhvRMpyEeqdLZpcx0rwmw" type="StereotypeCommentLink" source="_8GWJEMpyEeqdLZpcx0rwmw" target="_8GhvQMpyEeqdLZpcx0rwmw">
+    <styles xmi:type="notation:FontStyle" xmi:id="_8GhvRcpyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_8GhvScpyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Class" href="gestureDetectorComponent.compdef.uml#_8GD1MMpyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_8GhvRspyEeqdLZpcx0rwmw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_8GhvR8pyEeqdLZpcx0rwmw"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_8GhvSMpyEeqdLZpcx0rwmw"/>
+  </edges>
+  <edges xmi:type="notation:Connector" xmi:id="_95VJq8pyEeqdLZpcx0rwmw" type="StereotypeCommentLink" source="_95BnoMpyEeqdLZpcx0rwmw" target="_95VJp8pyEeqdLZpcx0rwmw">
+    <styles xmi:type="notation:FontStyle" xmi:id="_95VJrMpyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_95VwsMpyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Port" href="gestureDetectorComponent.compdef.uml#_94nX8MpyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_95VJrcpyEeqdLZpcx0rwmw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_95VJrspyEeqdLZpcx0rwmw"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_95VJr8pyEeqdLZpcx0rwmw"/>
+  </edges>
+  <edges xmi:type="notation:Connector" xmi:id="_-UT1ccpyEeqdLZpcx0rwmw" type="StereotypeCommentLink" source="_-UFL8MpyEeqdLZpcx0rwmw" target="_-UTOa8pyEeqdLZpcx0rwmw">
+    <styles xmi:type="notation:FontStyle" xmi:id="_-UT1cspyEeqdLZpcx0rwmw"/>
+    <styles xmi:type="notation:EObjectValueStyle" xmi:id="_-UT1dspyEeqdLZpcx0rwmw" name="BASE_ELEMENT">
+      <eObjectValue xmi:type="uml:Port" href="gestureDetectorComponent.compdef.uml#_-TumoMpyEeqdLZpcx0rwmw"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_-UT1c8pyEeqdLZpcx0rwmw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_-UT1dMpyEeqdLZpcx0rwmw"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_-UT1dcpyEeqdLZpcx0rwmw"/>
+  </edges>
+</notation:Diagram>

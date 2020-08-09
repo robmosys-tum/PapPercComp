@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/papyrus/infra/gmfdiag/style" xmi:id="_CG3QIMpqEeqtiqzFX2xlXQ" type="CompositeStructure" name="CameraDriverComponent diagram" measurementUnit="Pixel">
+  <children xsi:type="notation:Shape" xmi:id="_CG3QIcpqEeqtiqzFX2xlXQ" type="Class_Shape">
+    <children xsi:type="notation:DecorationNode" xmi:id="_CG3QIspqEeqtiqzFX2xlXQ" type="Class_NameLabel"/>
+    <children xsi:type="notation:DecorationNode" xmi:id="_CG3QI8pqEeqtiqzFX2xlXQ" type="Class_FloatingNameLabel">
+      <layoutConstraint xsi:type="notation:Location" xmi:id="_CG3QJMpqEeqtiqzFX2xlXQ" y="15"/>
+    </children>
+    <children xsi:type="notation:BasicCompartment" xmi:id="_CG3QJcpqEeqtiqzFX2xlXQ" type="Class_StructureCompartment">
+      <children xsi:type="notation:Shape" xmi:id="_CG3QJspqEeqtiqzFX2xlXQ" type="Class_Shape_CN">
+        <children xsi:type="notation:DecorationNode" xmi:id="_CG3QJ8pqEeqtiqzFX2xlXQ" type="Class_NameLabel_CN"/>
+        <children xsi:type="notation:DecorationNode" xmi:id="_CG3QKMpqEeqtiqzFX2xlXQ" type="Class_FloatingNameLabel_CN">
+          <layoutConstraint xsi:type="notation:Location" xmi:id="_CG3QKcpqEeqtiqzFX2xlXQ" y="15"/>
+        </children>
+        <children xsi:type="notation:BasicCompartment" xmi:id="_CG3QKspqEeqtiqzFX2xlXQ" type="Class_StructureCompartment_CN">
+          <styles xsi:type="notation:TitleStyle" xmi:id="_CG3QK8pqEeqtiqzFX2xlXQ"/>
+          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_CG3QLMpqEeqtiqzFX2xlXQ"/>
+        </children>
+        <element href="cameraDriverComponent.compdef.uml#_CGyXpMpqEeqtiqzFX2xlXQ"/>
+        <layoutConstraint xsi:type="notation:Bounds" xmi:id="_CG3QLcpqEeqtiqzFX2xlXQ" x="194" y="80" width="101" height="81"/>
+      </children>
+      <styles xsi:type="notation:TitleStyle" xmi:id="_CG3QLspqEeqtiqzFX2xlXQ"/>
+      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_CG3QL8pqEeqtiqzFX2xlXQ"/>
+    </children>
+    <element href="cameraDriverComponent.compdef.uml#_CGyXo8pqEeqtiqzFX2xlXQ"/>
+    <layoutConstraint xsi:type="notation:Bounds" xmi:id="_CG3QMMpqEeqtiqzFX2xlXQ" x="100" y="60" width="601" height="321"/>
+  </children>
+  <children xsi:type="notation:Shape" xmi:id="_CG3QMcpqEeqtiqzFX2xlXQ" type="StereotypeComment">
+    <styles xsi:type="notation:TitleStyle" xmi:id="_CG3QMspqEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_CG3QM8pqEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="cameraDriverComponent.compdef.uml#_CGyXo8pqEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <layoutConstraint xsi:type="notation:Bounds" xmi:id="_CG3QNMpqEeqtiqzFX2xlXQ" x="420" y="100"/>
+  </children>
+  <children xsi:type="notation:Shape" xmi:id="_CG3QNcpqEeqtiqzFX2xlXQ" type="StereotypeComment">
+    <styles xsi:type="notation:TitleStyle" xmi:id="_CG3QNspqEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_CG3QN8pqEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="cameraDriverComponent.compdef.uml#_CGyXo8pqEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <layoutConstraint xsi:type="notation:Bounds" xmi:id="_CG3QOMpqEeqtiqzFX2xlXQ" x="300" y="60"/>
+  </children>
+  <styles xsi:type="notation:StringValueStyle" xmi:id="_CG3QOcpqEeqtiqzFX2xlXQ" name="diagram_compatibility_version" stringValue="1.4.0"/>
+  <styles xsi:type="notation:DiagramStyle" xmi:id="_CG3QOspqEeqtiqzFX2xlXQ"/>
+  <styles xsi:type="style:PapyrusDiagramStyle" xmi:id="_CG3QO8pqEeqtiqzFX2xlXQ" diagramKindId="org.eclipse.papyrus.robotics.diagram.component">
+    <owner href="cameraDriverComponent.compdef.uml#_CGyXoMpqEeqtiqzFX2xlXQ"/>
+  </styles>
+  <element href="cameraDriverComponent.compdef.uml#_CGyXoMpqEeqtiqzFX2xlXQ"/>
+  <edges xsi:type="notation:Connector" xmi:id="_CG3QPMpqEeqtiqzFX2xlXQ" type="StereotypeCommentLink" source="_CG3QIcpqEeqtiqzFX2xlXQ">
+    <styles xsi:type="notation:FontStyle" xmi:id="_CG3QPcpqEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_CG3QPspqEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="cameraDriverComponent.compdef.uml#_CGyXo8pqEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_CG3QP8pqEeqtiqzFX2xlXQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_CG3QQMpqEeqtiqzFX2xlXQ"/>
+    <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_CG3QQcpqEeqtiqzFX2xlXQ"/>
+  </edges>
+  <edges xsi:type="notation:Connector" xmi:id="_CG3QQspqEeqtiqzFX2xlXQ" type="StereotypeCommentLink" source="_CG3QIcpqEeqtiqzFX2xlXQ" target="_CG3QMcpqEeqtiqzFX2xlXQ">
+    <styles xsi:type="notation:FontStyle" xmi:id="_CG3QQ8pqEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_CG3QRMpqEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="cameraDriverComponent.compdef.uml#_CGyXo8pqEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_CG3QRcpqEeqtiqzFX2xlXQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_CG3QRspqEeqtiqzFX2xlXQ"/>
+    <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_CG3QR8pqEeqtiqzFX2xlXQ"/>
+  </edges>
+  <edges xsi:type="notation:Connector" xmi:id="_CG3QSMpqEeqtiqzFX2xlXQ" type="StereotypeCommentLink" source="_CG3QJspqEeqtiqzFX2xlXQ">
+    <styles xsi:type="notation:FontStyle" xmi:id="_CG3QScpqEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_CG3QSspqEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="cameraDriverComponent.compdef.uml#_CGyXpMpqEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_CG3QS8pqEeqtiqzFX2xlXQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_CG3QTMpqEeqtiqzFX2xlXQ"/>
+    <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_CG3QTcpqEeqtiqzFX2xlXQ"/>
+  </edges>
+  <edges xsi:type="notation:Connector" xmi:id="_CG3QTspqEeqtiqzFX2xlXQ" type="StereotypeCommentLink" source="_CG3QIcpqEeqtiqzFX2xlXQ" target="_CG3QNcpqEeqtiqzFX2xlXQ">
+    <styles xsi:type="notation:FontStyle" xmi:id="_CG3QT8pqEeqtiqzFX2xlXQ"/>
+    <styles xsi:type="notation:EObjectValueStyle" xmi:id="_CG3QUMpqEeqtiqzFX2xlXQ" name="BASE_ELEMENT">
+      <eObjectValue href="cameraDriverComponent.compdef.uml#_CGyXo8pqEeqtiqzFX2xlXQ"/>
+    </styles>
+    <element xsi:nil="true"/>
+    <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_CG3QUcpqEeqtiqzFX2xlXQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+    <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_CG3QUspqEeqtiqzFX2xlXQ"/>
+    <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_CG3QU8pqEeqtiqzFX2xlXQ"/>
+  </edges>
+</notation:Diagram>

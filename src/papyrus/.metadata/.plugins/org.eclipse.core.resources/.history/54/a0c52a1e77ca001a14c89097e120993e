@@ -1,0 +1,29 @@
+#ifndef PKG_HANDTRACKERCOMPONENTCOMPDEF
+#define PKG_HANDTRACKERCOMPONENTCOMPDEF
+
+/************************************************************
+ Pkg_HandTrackerComponentCompdef package header
+ ************************************************************/
+
+#ifndef _IN_
+#define _IN_
+#endif
+#ifndef _OUT_
+#define _OUT_
+#endif
+#ifndef _INOUT_
+#define _INOUT_
+#endif
+
+/* Package dependency header include                        */
+
+namespace HandTrackerComponentCompdef {
+
+// Types defined within the package
+}// of namespace HandTrackerComponentCompdef
+
+/************************************************************
+ End of Pkg_HandTrackerComponentCompdef package header
+ ************************************************************/
+
+#endif

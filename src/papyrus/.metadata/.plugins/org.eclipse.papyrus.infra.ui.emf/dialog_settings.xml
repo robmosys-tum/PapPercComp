@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.papyrus.infra.ui.emf.customizationManager">
+	</section>
+	<section name="org.eclipse.papyrus.infra.ui.emf.providers.EMFGraphicalContentProvider_history__platform:/resource/cameraDriverComponent/models/components/cameraDriverComponent.compdef.uml:uml:Interface:provided">
+		<section name="History">
+			<list key="PreviousSelection">
+				<item value="pathmap://ROS2_LIB_BASE/services/sensor_msgs.servicedef.uml#svcdefs/S_Image"/>
+				<item value="pathmap://ROS2_LIB_BASE/services/sensor_msgs.servicedef.uml#svcdefs/P_Image"/>
+			</list>
+		</section>
+	</section>
+	<section name="org.eclipse.papyrus.infra.ui.emf.providers.EMFGraphicalContentProvider_history__platform:/resource/HandGestureDetectionSystem/models/system/HandGestureDetectionSystem.system.uml:uml:Type:type">
+	</section>
+	<section name="org.eclipse.papyrus.infra.ui.emf.providers.EMFGraphicalContentProvider_history__platform:/resource/handTrackerComponent/models/components/handTrackerComponent.compdef.uml:uml:Interface:required">
+		<section name="History">
+			<list key="PreviousSelection">
+				<item value="pathmap://ROS2_LIB_BASE/services/sensor_msgs.servicedef.uml#svcdefs/S_Image"/>
+			</list>
+		</section>
+	</section>
+	<section name="org.eclipse.papyrus.infra.ui.emf.providers.EMFGraphicalContentProvider_history__platform:/resource/handTrackerComponent/models/components/handTrackerComponent.compdef.uml:uml:Interface:provided">
+		<section name="History">
+			<list key="PreviousSelection">
+				<item value="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#svcdefs/P_PoseArray"/>
+			</list>
+		</section>
+	</section>
+</section>
