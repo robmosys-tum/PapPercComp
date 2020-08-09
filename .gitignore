@@ -1,0 +1,4 @@
+*.log
+src/papyrus/install/*
+src/papyrus/log/*
+src/papyrus/build/*
