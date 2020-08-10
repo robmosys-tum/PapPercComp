@@ -4,23 +4,15 @@
 
 ``./bazel-install.sh ``
 
-2. Run setup_opencv.sh to automatically build OpenCV from source and modify MediaPipe’s OpenCV config:
+2. Make sure you have cmake, python, python3, pip and numpy installed
 
-``cd mediapipe/``
+3. Install OpenCV it using apt-get:
 
-``chmod +x setup_opencv.sh ``
+``sudo apt update && sudo apt install build-essential git ``
 
-``./setup_opencv.sh ``
+``sudo apt install cmake ffmpeg libavformat-dev libdc1394-22-dev libgtk2.0-dev libjpeg-dev libpng-dev libswscale-dev libtbb2 libtbb-dev libtiff-dev``
 
-or install it using apt-get:
-
-`` sudo apt update && sudo apt install build-essential git
-    sudo apt install cmake ffmpeg libavformat-dev libdc1394-22-dev libgtk2.0-dev \
-                     libjpeg-dev libpng-dev libswscale-dev libtbb2 libtbb-dev \
-                     libtiff-dev``
-`` sudo apt-get install libopencv-core-dev libopencv-highgui-dev libopencv-calib3d-dev libopencv-features2d-dev libopencv-imgproc-dev libopencv-video-dev ``
-
-3. Make sure you have cmake, python, python3, pip and numpy installed
+``sudo apt-get install libopencv-core-dev libopencv-highgui-dev libopencv-calib3d-dev libopencv-features2d-dev libopencv-imgproc-dev libopencv-video-dev ``
 
 4. Build mediapipe library
 
