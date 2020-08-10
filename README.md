@@ -5,7 +5,7 @@ Install bazel, following instructions from https://docs.bazel.build/versions/mas
 
 ``./bazel-install.sh ``
 
-2. Make sure you have cmake, python, python3, pip and numpy installed
+2. Make sure you have ros2, cmake, python, python3, pip and numpy installed
 
 3. Install OpenCV it using apt-get:
 
@@ -16,6 +16,8 @@ Install bazel, following instructions from https://docs.bazel.build/versions/mas
 ``sudo apt-get install libopencv-core-dev libopencv-highgui-dev libopencv-calib3d-dev libopencv-features2d-dev libopencv-imgproc-dev libopencv-video-dev ``
 
 4. Build mediapipe library
+
+`` cd mediapipe/``
 
 ``export GLOG_logtostderr=1``
 
