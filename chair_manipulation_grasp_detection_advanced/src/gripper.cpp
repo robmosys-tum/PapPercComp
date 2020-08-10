@@ -211,9 +211,9 @@ bool Gripper::moveToContacts(const std::map<std::string, double>& open_values,
             added_contact.position_ = detected_contact.pos;
 
             if (detected_contact.body_type_1 == collision_detection::BodyType::ROBOT_LINK)
-              added_contact.normal_ = -detected_contact.normal;
-            else if (detected_contact.body_type_2 == collision_detection::BodyType::ROBOT_LINK)
               added_contact.normal_ = detected_contact.normal;
+            else if (detected_contact.body_type_2 == collision_detection::BodyType::ROBOT_LINK)
+              added_contact.normal_ = -detected_contact.normal;
 
             contacts.push_back(added_contact);
           }

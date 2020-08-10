@@ -22,7 +22,7 @@ struct Contact
 
   /**
    * The normal of the contact relative to the world frame.
-   * This always points away from the model.
+   * This always points inside the model.
    */
   Eigen::Vector3d normal_;
 };
