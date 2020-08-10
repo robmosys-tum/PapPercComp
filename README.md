@@ -17,7 +17,9 @@ Install bazel, following instructions from https://docs.bazel.build/versions/mas
 
 4. Build mediapipe library
 
-``bazel build -c opt mediapipe/examples/desktop/hand_tracking:hand_tracking_cpu --define MEDIAPIPE_DISABLE_GPU=1``
+``export GLOG_logtostderr=1
+
+bazel build -c opt mediapipe/examples/desktop/hand_tracking:hand_tracking_cpu --define MEDIAPIPE_DISABLE_GPU=1``
 
 5. Build ROS2/papyrus components
 
