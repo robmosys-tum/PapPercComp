@@ -8,6 +8,8 @@
 
 ``cd mediapipe/``
 
+``chmod +x setup_opencv.sh ``
+
 ``./setup_opencv.sh ``
 
 or install it using apt-get:
