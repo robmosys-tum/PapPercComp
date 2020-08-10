@@ -127,9 +127,7 @@ class SplitNormalizedLandmarkListCalculator : public CalculatorBase {
       RET_CHECK_EQ(output.landmark_size(), total_elements_);
       cc->Outputs().Index(0).AddPacket(
           MakePacket<NormalizedLandmarkList>(output).At(cc->InputTimestamp()));
-
     } else {
-
       if (element_only_) {
         for (int i = 0; i < ranges_.size(); ++i) {
           cc->Outputs().Index(i).AddPacket(

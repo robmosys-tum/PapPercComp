@@ -21,16 +21,24 @@ available on Linux, Android, or iOS.
 
 ## Enabling tracing and profiling
 
-To enable tracing/profiling of a mediapipe graph, the `CalculatorGraphConfig` (in
+To enable tracing and profiling of a mediapipe graph:
+
+   1. The profiling library must be linked to the framework.
+   2. Tracing and profiling must be enabled in the graph configuration.
+
+The profiling library is linked to the framework by default.  If needed,
+the profiling library can be omitted from the framework using the bazel
+command line option: `--define MEDIAPIPE_PROFILING=0`.
+
+To enable tracing and profiling, the `CalculatorGraphConfig` (in
 [calculator.proto](https://github.com/google/mediapipe/tree/master/mediapipe/framework/calculator.proto))
 representing the graph must have a `profiler_config` message at its root. Here
-is a simple setup that turns on a few extra options:
+is a simple setup that turns on tracing and keeps 100 seconds of timing events:
 
 ```
 profiler_config {
-  enable_profiler: true
   trace_enabled: true
-  trace_log_count: 5
+  trace_log_interval_count: 200
 }
 ```
 

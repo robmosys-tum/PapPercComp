@@ -4721,12 +4721,6 @@
                         					
                     </entry>
                     					
-                    <entry kind="macro" name="__DBL_MIN__" value="((double)2.22507385850720138309023271733240406e-308L)">
-                        						
-                        <flag value="BUILTIN|READONLY"/>
-                        					
-                    </entry>
-                    					
                     <entry kind="macro" name="__DEC128_EPSILON__" value="1E-33DL">
                         						
                         <flag value="BUILTIN|READONLY"/>
@@ -5285,12 +5279,6 @@
                         					
                     </entry>
                     					
-                    <entry kind="macro" name="__FLT64_MAX__" value="1.79769313486231570814527423731704357e+308F64">
-                        						
-                        <flag value="BUILTIN|READONLY"/>
-                        					
-                    </entry>
-                    					
                     <entry kind="macro" name="__FLT64_MIN_10_EXP__" value="(-307)">
                         						
                         <flag value="BUILTIN|READONLY"/>
@@ -5322,6 +5310,12 @@
                     </entry>
                     					
                     <entry kind="macro" name="__FLT_DIG__" value="6">
+                        						
+                        <flag value="BUILTIN|READONLY"/>
+                        					
+                    </entry>
+                    					
+                    <entry kind="macro" name="__FLT_DIG__" value="1.79769313486231570814527423731704357e+308F64">
                         						
                         <flag value="BUILTIN|READONLY"/>
                         					
@@ -6114,6 +6108,12 @@
                     </entry>
                     					
                     <entry kind="macro" name="__SIZEOF_LONG_DOUBLE__" value="16">
+                        						
+                        <flag value="BUILTIN|READONLY"/>
+                        					
+                    </entry>
+                    					
+                    <entry kind="macro" name="__SIZEOF_LONG_DOUBLE__" value="((double)2.22507385850720138309023271733240406e-308L)">
                         						
                         <flag value="BUILTIN|READONLY"/>
                         					
@@ -7185,12 +7185,6 @@
                         					
                     </entry>
                     					
-                    <entry kind="macro" name="__FLT32X_MAX__" value="1.79769313486231570814527423731704357e+308F32x">
-                        						
-                        <flag value="BUILTIN|READONLY"/>
-                        					
-                    </entry>
-                    					
                     <entry kind="macro" name="__FLT32X_MIN_10_EXP__" value="(-307)">
                         						
                         <flag value="BUILTIN|READONLY"/>
@@ -7222,6 +7216,12 @@
                     </entry>
                     					
                     <entry kind="macro" name="__FLT32_DIG__" value="6">
+                        						
+                        <flag value="BUILTIN|READONLY"/>
+                        					
+                    </entry>
+                    					
+                    <entry kind="macro" name="__FLT32_DIG__" value="1.79769313486231570814527423731704357e+308F32x">
                         						
                         <flag value="BUILTIN|READONLY"/>
                         					
@@ -7264,12 +7264,6 @@
                     </entry>
                     					
                     <entry kind="macro" name="__FLT32_MAX_EXP__" value="128">
-                        						
-                        <flag value="BUILTIN|READONLY"/>
-                        					
-                    </entry>
-                    					
-                    <entry kind="macro" name="__FLT32_MAX__" value="3.40282346638528859811704183484516925e+38F32">
                         						
                         <flag value="BUILTIN|READONLY"/>
                         					
@@ -7558,6 +7552,12 @@
                     </entry>
                     					
                     <entry kind="macro" name="__FLT_RADIX__" value="2">
+                        						
+                        <flag value="BUILTIN|READONLY"/>
+                        					
+                    </entry>
+                    					
+                    <entry kind="macro" name="__FLT_RADIX__" value="3.40282346638528859811704183484516925e+38F32">
                         						
                         <flag value="BUILTIN|READONLY"/>
                         					
@@ -7852,12 +7852,6 @@
                     </entry>
                     					
                     <entry kind="macro" name="__INTPTR_TYPE__" value="long int">
-                        						
-                        <flag value="BUILTIN|READONLY"/>
-                        					
-                    </entry>
-                    					
-                    <entry kind="macro" name="__INTPTR_WIDTH__" value="64">
                         						
                         <flag value="BUILTIN|READONLY"/>
                         					

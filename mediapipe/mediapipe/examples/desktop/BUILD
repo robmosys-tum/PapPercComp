@@ -51,8 +51,6 @@ cc_library(
     ],
 )
 
-
-
 # Linux only.
 # Must have a GPU with EGL support:
 # ex: sudo apt-get install mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev

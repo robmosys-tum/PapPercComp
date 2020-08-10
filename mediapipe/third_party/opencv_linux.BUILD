@@ -15,18 +15,28 @@ cc_library(
     name = "opencv",
     srcs = glob(
         [
-            "lib/libopencv_core.so",
-            "lib/libopencv_calib3d.so",
-            "lib/libopencv_features2d.so",
-            "lib/libopencv_highgui.so",
-            "lib/libopencv_imgcodecs.so",
-            "lib/libopencv_imgproc.so",
-            "lib/libopencv_video.so",
-            "lib/libopencv_videoio.so",
+            "lib/x86_64-linux-gnu/libopencv_core.so",
+            "lib/x86_64-linux-gnu/libopencv_calib3d.so",
+            "lib/x86_64-linux-gnu/libopencv_features2d.so",
+            "lib/x86_64-linux-gnu/libopencv_highgui.so",
+            "lib/x86_64-linux-gnu/libopencv_imgcodecs.so",
+            "lib/x86_64-linux-gnu/libopencv_imgproc.so",
+            "lib/x86_64-linux-gnu/libopencv_video.so",
+            "lib/x86_64-linux-gnu/libopencv_videoio.so",
         ],
     ),
-    hdrs = glob(["include/opencv2/**/*.h*"]),
-    includes = ["include/"],
+    hdrs = glob([
+        # For OpenCV 3.x
+        "include/opencv2/**/*.h*",
+        # For OpenCV 4.x
+        # "include/opencv4/opencv2/**/*.h*",
+    ]),
+    includes = [
+        # For OpenCV 3.x
+        "include/",
+        # For OpenCV 4.x
+        # "include/opencv4/",
+    ],
     linkstatic = 1,
     visibility = ["//visibility:public"],
 )

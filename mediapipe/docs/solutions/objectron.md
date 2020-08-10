@@ -2,7 +2,7 @@
 layout: default
 title: Objectron (3D Object Detection)
 parent: Solutions
-nav_order: 7
+nav_order: 8
 ---
 
 # MediaPipe Objectron
@@ -156,7 +156,7 @@ Please first see general instructions for
 Note: To visualize a graph, copy the graph and paste it into
 [MediaPipe Visualizer](https://viz.mediapipe.dev/). For more information on how
 to visualize its associated subgraphs, please see
-[visualizer documentation](../visualizer.md).
+[visualizer documentation](../tools/visualizer.md).
 
 ### Objectron for Shoes
 
@@ -188,5 +188,8 @@ to visualize its associated subgraphs, please see
     [Real-Time 3D Object Detection on Mobile Devices with MediaPipe](https://ai.googleblog.com/2020/03/real-time-3d-object-detection-on-mobile.html)
 *   Paper: [MobilePose: Real-Time Pose Estimation for Unseen Objects with Weak
     Shape Supervision](https://arxiv.org/abs/2003.03522)
+*   Paper:
+    [Instant 3D Object Tracking with Applications in Augmented Reality](https://drive.google.com/open?id=1O_zHmlgXIzAdKljp20U_JUkEHOGG52R8)
+    ([presentation](https://www.youtube.com/watch?v=9ndF1AIo7h0))
 *   [TFLite model for shoes](https://github.com/google/mediapipe/tree/master/mediapipe/models/object_detection_3d_sneakers.tflite)
 *   [TFLite model for chairs](https://github.com/google/mediapipe/tree/master/mediapipe/models/object_detection_3d_chair.tflite)

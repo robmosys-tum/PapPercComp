@@ -376,6 +376,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":timed_box_list_id_to_label_calculator_cc_proto",
+        "@com_google_absl//absl/container:node_hash_map",
         "//mediapipe/framework/port:status",
         "//mediapipe/framework:calculator_framework",
         "//mediapipe/framework:packet",
@@ -698,6 +699,8 @@ mediapipe_cc_proto_library(
     visibility = ["//visibility:public"],
     deps = [":rect_to_render_data_calculator_proto"],
 )
+
+# TODO: What is that one for?
 
 mediapipe_cc_proto_library(
     name = "detections_to_render_data_calculator_cc_proto",
