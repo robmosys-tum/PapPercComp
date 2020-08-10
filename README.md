@@ -1,6 +1,7 @@
 # Papyrus4Robotics Hand Gesture Detection 
 
-1. Install bazel, following instructions from https://docs.bazel.build/versions/master/install-ubuntu.html or run bazel-install.sh (sudo rights are necessary, please read bazel-install.sh)
+1. Set Python 3.7 as the default Python version and install the Python “six” library by running ``pip3 install --user six``. 
+Install bazel, following instructions from https://docs.bazel.build/versions/master/install-ubuntu.html or run bazel-install.sh (sudo rights are necessary, please read bazel-install.sh)
 
 ``./bazel-install.sh ``
 
