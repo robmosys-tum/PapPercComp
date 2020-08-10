@@ -5,7 +5,7 @@ Install bazel, following instructions from https://docs.bazel.build/versions/mas
 
 ``./bazel-install.sh ``
 
-2. Make sure you have ros2, cmake, python, python3, pip and numpy installed
+2. Make sure you have ros2, cmake (``sudo apt-get install cmake``), python3 (``sudo apt-get install python3``), pip3 (``sudo apt-get install python3-pip``) and numpy (``pip3 install numpy``) installed
 
 3. Install OpenCV it using apt-get:
 
