@@ -2,7 +2,7 @@
 
 ## Dependencies.
 
-1. Make sure you have ros2, cmake (``sudo apt-get install cmake``), python (``sudo apt-get install python``), python3 (``sudo apt-get install python3``), pip (``sudo apt-get install python-pip``), pip3 (``sudo apt-get install python3-pip``)  and numpy (``pip install numpy``) installed
+1. Make sure you have ros2 and colcon, cmake (``sudo apt-get install cmake``), python (``sudo apt-get install python``), python3 (``sudo apt-get install python3``), pip (``sudo apt-get install python-pip``), pip3 (``sudo apt-get install python3-pip``)  and numpy (``pip install numpy``) installed
 
 Install the Python “six” library by running ``pip3 install --user six``. 
 
@@ -32,7 +32,7 @@ Set Python3 as the default Python version: open your .bashrc file ``nano ~/.bash
 
 5. Build ROS2/papyrus components
 
-``cd src/papyrus/``
+``cd ../src/papyrus/``
 
 ``colcon build --symlink-install``
 
