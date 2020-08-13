@@ -71,7 +71,7 @@ Don't forget to run
     $ source devel/setup.bash
 
 for every new terminal.
-Please, execute the following steps in the exact same order.
+Please execute the following steps in the exact same order.
 
 1. Bringup the scene.
 
@@ -144,7 +144,7 @@ A: This happened to us in a Ubuntu 18 virtual machine. Just run the build again 
 Q: When launching scene_bringup_simple.launch or scene_bringup_advanced.launch Gazebo does not start and I get red error messages in the output.
 
 A: As said earlier, for some reason the tools sometimes kind of conflict with each other and doesn't launch. 
-Just hit Ctrl+C and launch it again. If this doesn't work three times in a row, then some dependency is missing.
+Just hit Ctrl+C and launch it again. If this doesn't work three times in a row, then some dependencies are missing.
 Please make sure that you strictly followed the installation steps.
 
 Q: The motion planning framework fails to find a plan even if the grasp poses seem to be clearly reachable.
