@@ -282,7 +282,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
 
                 mean_BG = background.view(batch_size, d, -1).sum(dim=2) / (N - n_FG + eps)
                 
-                cov_BG = (1/(N - n_FG.view(batch_size, 1) + eps) * torch.bmm(
+                cov_BG = (1/(N - n_FG.view(batch_size, 1, 1) + eps) * torch.bmm(
                         background.view(batch_size, d, -1), 
                         background.view(batch_size, d, -1).transpose(1,2)
                     ) 
