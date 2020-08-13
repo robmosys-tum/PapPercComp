@@ -293,8 +293,8 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 tr_covBG = cov_BG.diagonal(dim1=-2, dim2=-1).sum(dim=-1)
 
 
-                torch.set_printoptions(precision=6)
-                print(f"\n Mean FG: \n {mean_FG[0:2,0:4]} \n and Mean BG: \n {mean_BG[0:2,0:4]} \n and Cov FG diagonals: \n {cov_FG.diagonal(dim1=-2, dim2=-1)[0:2,0:4]} \n and Cov BG diagonals: \n {cov_BG.diagonal(dim1=-2, dim2=-1)[0:2,0:4]} \n")
+                # torch.set_printoptions(precision=6)
+                # print(f"\n Mean FG: \n {mean_FG[0:2,0:4]} \n and Mean BG: \n {mean_BG[0:2,0:4]} \n and Cov FG diagonals: \n {cov_FG.diagonal(dim1=-2, dim2=-1)[0:2,0:4]} \n and Cov BG diagonals: \n {cov_BG.diagonal(dim1=-2, dim2=-1)[0:2,0:4]} \n")
 
 
                 ### Loss function: getting foreground pixels close together, background pixels also close together, then the distance between FG and BG clusters far apart.
@@ -305,7 +305,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 
                 # Then add regularization, force the means to be on the unit ball.
                 reg_strength = 1
-                reg_loss = L2(1, (mean_FG**2).mean(dim=-1)) + L2(1, (mean_BG**2).mean(dim=-1)) 
+                reg_loss = (1 - (foreground.view(batch_size, d, -1)**2).sum(dim=1)).abs().mean() + (1 - (background.view(batch_size, d, -1)**2).sum(dim=1)).abs().mean() 
                 
                 loss = (
                         1 * cov_loss 
