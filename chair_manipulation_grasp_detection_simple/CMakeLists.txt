@@ -29,8 +29,5 @@ include_directories(
   ${PCL_INCLUDE_DIRS}
 )
 
-add_executable(registration_detection_node src/registration_detection_node.cpp)
-target_link_libraries(registration_detection_node ${catkin_LIBRARIES} ${PCL_LIBRARIES})
-
 add_executable(depth_image_detection_node src/depth_image_detection_node.cpp)
 target_link_libraries(depth_image_detection_node ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBRARIES})

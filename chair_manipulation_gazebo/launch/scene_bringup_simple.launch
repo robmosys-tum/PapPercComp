@@ -3,10 +3,11 @@
 
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
+  <arg name="world_id" default="1" doc="ID of the world" />
 
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find chair_manipulation_gazebo)/worlds/scene.world" />
+    <arg name="world_name" value="$(find chair_manipulation_gazebo)/worlds/$(arg world_id).world" />
     <arg name="paused" value="$(arg paused)" />
     <arg name="gui" value="$(arg gui)"/>
   </include>
@@ -18,8 +19,8 @@
 
     <!-- position, orientation and initial joint values of first robot -->
     <arg name="robot1_x" value="0.5" />
-    <arg name="robot1_y" value="1.0" />
-    <arg name="robot1_z" value="0.1" />
+    <arg name="robot1_y" value="0.7" />
+    <arg name="robot1_z" value="0.01" />
     <arg name="robot1_roll" value="0.0" />
     <arg name="robot1_pitch" value="0.0" />
     <arg name="robot1_yaw" value="-1.5707" />
@@ -34,8 +35,8 @@
 
     <!-- position, orientation and initial joint values of second robot -->
     <arg name="robot2_x" value="-0.5" />
-    <arg name="robot2_y" value="-1.0" />
-    <arg name="robot2_z" value="0.1" />
+    <arg name="robot2_y" value="-0.7" />
+    <arg name="robot2_z" value="0.01" />
     <arg name="robot2_roll" value="0.0" />
     <arg name="robot2_pitch" value="0.0" />
     <arg name="robot2_yaw" value="1.5707" />
@@ -57,7 +58,7 @@
     <arg name="y" value="0.0" />
     <arg name="z" value="0.5" />
     <arg name="roll" value="0.0" />
-    <arg name="pitch" value="0.1" />
+    <arg name="pitch" value="0.0" />
     <arg name="yaw" value="3.14159" />
   </include>
 
@@ -69,7 +70,7 @@
     <arg name="y" value="0.0" />
     <arg name="z" value="0.5" />
     <arg name="roll" value="0.0" />
-    <arg name="pitch" value="0.1" />
+    <arg name="pitch" value="0.0" />
     <arg name="yaw" value="0.0" />
   </include>
 

@@ -3,10 +3,11 @@
 
   <arg name="paused" default="true" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
+  <arg name="world_id" default="1" doc="ID of the world" />
 
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find chair_manipulation_gazebo)/worlds/scene.world" />
+    <arg name="world_name" value="$(find chair_manipulation_gazebo)/worlds/$(arg world_id).world" />
     <arg name="paused" value="$(arg paused)" />
     <arg name="gui" value="$(arg gui)"/>
   </include>
