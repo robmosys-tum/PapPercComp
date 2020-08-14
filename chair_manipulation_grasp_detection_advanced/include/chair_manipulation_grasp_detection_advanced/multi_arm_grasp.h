@@ -4,6 +4,7 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <memory>
+#include <Eigen/StdVector>
 
 namespace chair_manipulation
 {
@@ -14,7 +15,7 @@ struct MultiArmGrasp
   /**
    * Pose for each arm with respect to the world frame
    */
-  std::vector<Eigen::Isometry3d> poses_;
+  std::vector<Eigen::Isometry3d, Eigen::aligned_allocator<Eigen::Isometry3d>> poses_;
 
   /**
    * Overall quality of the grasp

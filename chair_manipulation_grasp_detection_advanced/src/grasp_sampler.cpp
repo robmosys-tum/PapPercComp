@@ -4,6 +4,7 @@
 #include "chair_manipulation_grasp_detection_advanced/transform.h"
 #include "chair_manipulation_grasp_detection_advanced/stopwatch.h"
 #include <geometric_shapes/shapes.h>
+#include <Eigen/StdVector>
 
 namespace chair_manipulation
 {
@@ -120,17 +121,28 @@ void GraspSampler::sampleGraspHypothesesFromPrior(const Model& model, const std:
 void GraspSampler::filterCollisionFree(const Model& model, const std::vector<MultiArmGrasp>& grasps,
                                        std::vector<GraspHypothesis>& hypotheses)
 {
-  CollisionCheckingScope scope{ *this, model };
+  // First, filter out duplicates
+  std::vector<Eigen::Isometry3d, Eigen::aligned_allocator<Eigen::Isometry3d>> poses;
   for (const auto& grasp : grasps)
   {
     for (const auto& grasp_pose : grasp.poses_)
     {
-      GraspHypothesis hypothesis;
-      if (!computeContacts(grasp_pose, hypothesis.contacts_))
-        continue;
-      hypothesis.pose_ = grasp_pose;
-      hypotheses.push_back(hypothesis);
+      auto it = std::find_if(poses.begin(), poses.end(), [&](const auto& pose) {
+        return pose.translation() == grasp_pose.translation() && pose.rotation() == grasp_pose.rotation();
+      });
+      if (it == poses.end())
+        poses.push_back(grasp_pose);
     }
+  }
+
+  CollisionCheckingScope scope{ *this, model };
+  for (const auto& grasp_pose : poses)
+  {
+    GraspHypothesis hypothesis;
+    if (!computeContacts(grasp_pose, hypothesis.contacts_))
+      continue;
+    hypothesis.pose_ = grasp_pose;
+    hypotheses.push_back(hypothesis);
   }
 }
 
@@ -155,7 +167,7 @@ bool GraspSampler::findGraspPoseAt(const PointCloudConstPtr& point_cloud, const 
   // Filter out the points where the antipodal normal and position angle is greater than the given threshold
   const auto filter_max_antipodal_angle = [&](int j) {
     auto antipodal_point = (*point_cloud)[j];
-    return computeAntipodalNormalAngle(reference_point, antipodal_point) > params_.max_antipodal_normal_angle_ &&
+    return computeAntipodalNormalAngle(reference_point, antipodal_point) > params_.max_antipodal_normal_angle_ ||
            computeAntipodalPositionAngle(reference_point, antipodal_point) > params_.max_antipodal_position_angle_;
   };
   indices.erase(std::remove_if(indices.begin(), indices.end(), filter_max_antipodal_angle), indices.end());
@@ -256,7 +268,7 @@ bool GraspSampler::computeContacts(const Eigen::Isometry3d& pose, std::vector<Co
 
 double GraspSampler::computeAntipodalNormalAngle(const PointT& reference_point, const PointT& antipodal_point) const
 {
-  return std::acos(-reference_point.getNormalVector3fMap().dot(antipodal_point.getNormalVector3fMap()));
+  return std::acos(reference_point.getNormalVector3fMap().dot(-antipodal_point.getNormalVector3fMap()));
 }
 
 double GraspSampler::computeAntipodalPositionAngle(const PointT& reference_point, const PointT& antipodal_point) const

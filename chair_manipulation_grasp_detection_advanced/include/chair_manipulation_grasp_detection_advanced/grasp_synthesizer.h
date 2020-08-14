@@ -6,8 +6,8 @@
 #include "multi_arm_grasp.h"
 #include "wrench.h"
 #include <ros/ros.h>
-
 #include <utility>
+#include <Eigen/StdVector>
 
 namespace chair_manipulation
 {
@@ -130,7 +130,7 @@ public:
 private:
   GraspSynthesizerParameters params_;
   GraspQualityWeights weights_;
-  std::vector<Eigen::Isometry3d> arm_base_poses_;
+  std::vector<Eigen::Isometry3d, Eigen::aligned_allocator<Eigen::Isometry3d>> arm_base_poses_;
 
   void generateGraspCandidatesRecursively(const std::vector<GraspHypothesis>& hypotheses,
                                           std::vector<GraspCandidate>& candidates,
