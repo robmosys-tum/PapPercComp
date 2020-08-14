@@ -127,7 +127,7 @@ planner_configs:
     dense_delta_fraction: 0.001  # delta fraction for interface detection. default: 0.001
     max_failures: 5000  # maximum consecutive failure limit. default: 5000
 robot1_arm:
-  default_planner_config: None
+  default_planner_config: RRTConnect
   planner_configs:
     - AnytimePathShortening
     - SBL
@@ -185,7 +185,7 @@ robot1_gripper:
   projection_evaluator: joints(robot1_left_finger_joint,robot1_right_finger_joint)
   longest_valid_segment_fraction: 0.005
 robot2_arm:
-  default_planner_config: None
+  default_planner_config: RRTConnect
   planner_configs:
     - AnytimePathShortening
     - SBL

@@ -67,7 +67,7 @@ weights_offline:
 weights_online:
   epsilon1: 0.0
   v1: 1.0
-  grasp_distance: 0.1
+  grasp_distance: 0.25
   nearest_arm_distance: 10.0
   nearest_arm_orientation: 1.0
 

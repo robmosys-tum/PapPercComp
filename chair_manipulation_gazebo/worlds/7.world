@@ -12,8 +12,8 @@
       <uri>model://ground_plane</uri>
     </include>
     <include>
-      <pose>0.2 0 0 0 0 3.14159</pose>
-      <uri>model://office_chair</uri>
+      <pose>0 0 0 0 0 1.5707</pose>
+      <uri>model://ikea_stefan_chair</uri>
     </include>
   </world>
 </sdf>

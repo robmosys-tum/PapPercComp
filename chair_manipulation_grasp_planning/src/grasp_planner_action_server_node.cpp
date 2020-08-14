@@ -86,12 +86,14 @@ private:
 int main(int argc, char* argv[])
 {
   ros::init(argc, argv, "grasp_planner_action_server_node");
+  ros::AsyncSpinner spinner{1};
+  spinner.start();
 
   ros::NodeHandle nh_priv{ "~" };
   auto action_name = nh_priv.param<std::string>("action_ns", "grasp_planner");
 
   chair_manipulation::GraspPlannerActionServer server{ action_name };
-  ros::spin();
 
+  ros::waitForShutdown();
   return 0;
 }

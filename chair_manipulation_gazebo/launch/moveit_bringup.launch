@@ -4,6 +4,9 @@
   <!-- Rotate the grasp such that its orientation aligns with the tcp link. -->
   <arg name="grasp_to_grasp_aligned_XYZYPR" default="0 0 0 0 0 0" />
 
+  <!-- needed for remap -->
+  <param name="robot_description_semantic" textfile="$(find dual_arm_manipulator_moveit_config)/config/dual_arm_manipulator.srdf" />
+
   <!-- launch move group for first robot -->
   <group ns="robot1">
     <!-- remap controllers -->
@@ -29,6 +32,7 @@
     <remap from="/robot1/robot2_right_finger_action_controller/gripper_cmd"             to="/robot2_right_finger_action_controller/gripper_cmd" />
 
     <remap from="/robot1/robot_description" to="/robot_description" />
+    <remap from="/robot1/robot_description_semantic" to="/robot_description_semantic" />
     <remap from="/robot1/joint_states" to="/joint_states" />
 
     <!-- sensor configuration for Moveit -->
@@ -65,6 +69,7 @@
     <remap from="/robot2/robot2_right_finger_action_controller/gripper_cmd"             to="/robot2_right_finger_action_controller/gripper_cmd" />
 
     <remap from="/robot2/robot_description" to="/robot_description" />
+    <remap from="/robot2/robot_description_semantic" to="/robot_description_semantic" />
     <remap from="/robot2/joint_states" to="/joint_states" />
 
     <!-- sensor configuration for Moveit -->

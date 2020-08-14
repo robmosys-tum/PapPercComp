@@ -184,10 +184,10 @@ void GraspPlanner::planArmPose(const tf2::Transform& pose_tf, const std::string&
   geometry_msgs::Pose pose;
   tf2::toMsg(pose_tf, pose);
   arm_group_->setPoseReferenceFrame(world_frame_);
-  arm_group_->setPoseTarget(pose);
   arm_group_->setPlanningTime(planning_attempt_time_);
   arm_group_->setMaxVelocityScalingFactor(max_velocity_scaling_factor_);
   arm_group_->setGoalTolerance(0.01);
+  arm_group_->setPoseTarget(pose);
 
   for (int i = 0; i < planning_attempts_; i++)
   {
