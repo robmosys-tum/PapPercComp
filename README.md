@@ -151,10 +151,8 @@ Please make sure that you strictly followed the installation steps.
 
 Q: The motion planning framework fails to find a plan even if the grasp poses seem to be clearly reachable.
 
-A: This is because the inverse kinematics solver fails. 
-Unfortunately, there seems to be issues with the universal robots and Moveit! regarding the IK solver and we were unable to find a fix for that.
-In most cases Moveit! either immediately finds a valid path or fails due to this problem.
-We tried both the KDL and the ur_kinematics solver and both seem to not find a joint configuration for the goal state even if it is obvious that there must exist one (because we can use rviz to manually move the robot to the target pose using the interactive markers).
+A: Unfortunately, we could not figure out how to fix this problem.
+The topic of motion planning is quite a complex one on its own and we could not solve every issue regarding it.
 In general, it should be noted that Moveit! was not designed for performing simultaneous multi-arm grasping and especially not for larger objects.
 Only by using hacky tricks, we are able to make Moveit! do what we want.
 However, implementing the dual-arm motion planning correctly would require non-trivial adaptions to the framework which was absolutely not possible in the scope of this project as we mainly focused on the detection part.
