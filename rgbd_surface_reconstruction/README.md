@@ -26,11 +26,11 @@ This repository contains code for surface reconstrucion using ros 2. To improve 
 
 * Build the packages using colcon.
 * Launch the nodes using:\
-    ros2 launch rgbd_surface_reconstruction launch_reconstruciton_h1_update.py \
-    ros2 launch rgbd_surface_reconstruction launch_reconstruciton_h1_old.py \
-    ros2 launch rgbd_surface_reconstruction launch_reconstruciton_e1_update.py \
-    ros2 launch rgbd_surface_reconstruction launch_reconstruciton_e1_old.py \
-    ros2 launch rgbd_surface_reconstruction launch_reconstruciton_d1_update.py \
-    ros2 launch rgbd_surface_reconstruction launch_reconstruciton_d1_old.py
+    ros2 launch rgbd_surface_reconstruction launch_reconstruction_h1_update.py \
+    ros2 launch rgbd_surface_reconstruction launch_reconstruction_h1_old.py \
+    ros2 launch rgbd_surface_reconstruction launch_reconstruction_e1_update.py \
+    ros2 launch rgbd_surface_reconstruction launch_reconstruction_e1_old.py \
+    ros2 launch rgbd_surface_reconstruction launch_reconstruction_d1_update.py \
+    ros2 launch rgbd_surface_reconstruction launch_reconstruction_d1_old.py
 
 The launch files will download the respective datasets automatically and then run the surface reconstruction algorithm. The output mesh will then be generated in the current working directory, which can then be viewed with 3D software, like for example Meshlab.
