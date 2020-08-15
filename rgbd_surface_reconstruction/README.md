@@ -21,7 +21,7 @@ This repository contains code for surface reconstrucion using ros 2. To improve 
 
 * clone this repository into your ros2 workspace using the following command:
 
-    git clone --single-branch --branch rgbd_surface_reconstruction https://github.com/robmosys-tum/PapPercComp --recurse-submodules 
+    git clone https://github.com/robmosys-tum/PapPercComp --recurse-submodules 
 
 
 * Build the packages using colcon.
@@ -32,3 +32,5 @@ This repository contains code for surface reconstrucion using ros 2. To improve 
     ros2 launch rgbd_surface_reconstruction launch_reconstruciton_e1_old.py \
     ros2 launch rgbd_surface_reconstruction launch_reconstruciton_d1_update.py \
     ros2 launch rgbd_surface_reconstruction launch_reconstruciton_d1_old.py
+
+The launch files will download the respective datasets automatically and then run the surface reconstruction algorithm. The output mesh will then be generated in the current working directory, which can then be viewed with 3D software, like for example Meshlab.
