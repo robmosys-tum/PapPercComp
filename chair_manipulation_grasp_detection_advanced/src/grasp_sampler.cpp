@@ -25,6 +25,9 @@ void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_
 
   CollisionCheckingScope scope{ *this, model };
 
+  std::size_t num_rejects_constraint = 0;
+  std::size_t num_rejects_collision = 0;
+
   ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Start sampling grasp hypotheses.");
   for (std::size_t s = 0; s < sample_trials; s++)
   {
@@ -37,20 +40,27 @@ void GraspSampler::sampleGraspHypotheses(const Model& model, std::size_t sample_
     ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Sampled grasp pose [" << utils::poseToStr(grasp_pose) << "]");
     if (!success)
     {
-      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Failed to sample grasp pose.");
+      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Rejected: hypothesis constraints not satisfied.");
+      num_rejects_constraint++;
       continue;
     }
 
     GraspHypothesis hypothesis;
     if (!computeContacts(grasp_pose, hypothesis.contacts_))
+    {
+      ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Rejected: hypothesis results in a collision.");
+      num_rejects_collision++;
       continue;
+    }
     hypothesis.pose_ = grasp_pose;
     hypotheses.push_back(hypothesis);
     ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Added sampled grasp hypothesis.");
   }
 
   ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Finished sampling grasp hypotheses.");
-  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Found " << hypotheses.size() << " grasp hypotheses.");
+  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Kept " << hypotheses.size() << " grasp hypotheses.");
+  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Rejected " << num_rejects_constraint << " grasp hypotheses because of constraint violation.");
+  ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Rejected " << num_rejects_collision << " grasp hypotheses that resulted in a collision.");
 }
 
 void GraspSampler::sampleGraspHypothesesFromPrior(const Model& model, const std::vector<MultiArmGrasp>& prior_grasps,
@@ -99,14 +109,16 @@ void GraspSampler::sampleGraspHypothesesFromPrior(const Model& model, const std:
         ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Sampled grasp pose [" << utils::poseToStr(grasp_pose) << "]");
         if (!success)
         {
-          ROS_WARN_STREAM_NAMED("grasp_sampler",
-                                "Failed to sample grasp from [" << utils::poseToStr(prior_pose) << "]");
+          ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Rejected: hypothesis constraints not satisfied.");
           continue;
         }
 
         GraspHypothesis hypothesis;
         if (!computeContacts(grasp_pose, hypothesis.contacts_))
+        {
+          ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Rejected: hypothesis results in a collision.");
           continue;
+        }
         hypothesis.pose_ = grasp_pose;
         hypotheses.push_back(hypothesis);
         ROS_DEBUG_STREAM_NAMED("grasp_sampler", "Added sampled grasp hypothesis.");

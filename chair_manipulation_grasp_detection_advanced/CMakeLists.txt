@@ -19,6 +19,7 @@ find_package(
   tf2_ros
   tf2_eigen
   moveit_core
+  moveit_ros_planning_interface
   moveit_visual_tools
   cpd_wrapper
   nanoflann_wrapper
@@ -79,6 +80,8 @@ set(
   include/chair_manipulation_grasp_detection_advanced/grasp_detection_pipeline.h
   include/chair_manipulation_grasp_detection_advanced/mesh_reconstruction_pipeline.h
   include/chair_manipulation_grasp_detection_advanced/statistics.h
+  include/chair_manipulation_grasp_detection_advanced/ik_checker.h
+  include/chair_manipulation_grasp_detection_advanced/robot.h
   src/model.cpp
   src/utils.cpp
   src/grasp_database.cpp
@@ -96,6 +99,8 @@ set(
   src/mesh_reconstruction.cpp
   src/point_cloud_matcher.cpp
   src/nonrigid_transform.cpp
+  src/ik_checker.cpp
+  src/robot.cpp
 )
 
 set(

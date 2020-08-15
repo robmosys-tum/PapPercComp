@@ -93,6 +93,7 @@ Please execute the following steps in the exact same order.
 
         $ roslaunch chair_manipulation_gazebo lift.launch
 
+    Wait until it says "Start goal PREPARE".
     This will now wait for the grasp tfs.
 
 5. Finally, launch the detection algorithm.
@@ -127,6 +128,7 @@ Please execute the following steps in the exact same order.
 
         $ roslaunch chair_manipulation_gazebo lift.launch
 
+    Wait until it says "Start goal PREPARE".
     This will now wait for the grasp tfs.
 
 6. Finally, launch the detection algorithm.

@@ -9,6 +9,8 @@
 #include "chair_manipulation_grasp_detection_advanced/mesh_reconstruction.h"
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
 #include "chair_manipulation_grasp_detection_advanced/stopwatch.h"
+#include "chair_manipulation_grasp_detection_advanced/ik_checker.h"
+#include "chair_manipulation_grasp_detection_advanced/robot.h"
 #include <ros/ros.h>
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <tf2_eigen/tf2_eigen.h>
@@ -90,7 +92,6 @@ void runGraspDetectionPipeline()
     GraspSynthesizerParameters grasp_synthesizer_params;
     ros::NodeHandle grasp_synthesizer_nh{ "~grasp_synthesizer" };
     grasp_synthesizer_params.load(grasp_synthesizer_nh);
-    auto world_frame = grasp_synthesizer_params.world_frame_;
     GraspSynthesizer grasp_synthesizer{ std::move(grasp_synthesizer_params), std::move(grasp_quality_weights) };
 
     ROS_DEBUG_STREAM_NAMED("main", "Loading grasp database.");
@@ -121,6 +122,18 @@ void runGraspDetectionPipeline()
     ros::NodeHandle mesh_reconstruction_nh{ "~mesh_reconstruction" };
     mesh_reconstruction_params.load(mesh_reconstruction_nh);
     MeshReconstruction mesh_reconstruction{ std::move(mesh_reconstruction_params) };
+
+    ROS_DEBUG_STREAM_NAMED("main", "Creating robot.");
+    RobotParameters robot_params;
+    ros::NodeHandle robot_nh{"~robot"};
+    robot_params.load(robot_nh);
+    auto robot = std::make_shared<Robot>(std::move(robot_params));
+
+    ROS_DEBUG_STREAM_NAMED("main", "Creating IK checker.");
+    IKCheckerParameters ik_checker_params;
+    ros::NodeHandle ik_checker_nh{ "~ik_checker" };
+    ik_checker_params.load(ik_checker_nh);
+    IKChecker ik_checker{ std::move(ik_checker_params), robot };
 
     tf2_ros::StaticTransformBroadcaster broadcaster;
     auto reconstructed_mesh_pub = nh.advertise<shape_msgs::Mesh>(reconstructed_mesh_topic, 1);
@@ -154,7 +167,7 @@ void runGraspDetectionPipeline()
       point_cloud_registration.setInputSource(matched_cloud);
       point_cloud_registration.setInputTarget(segmented_point_cloud);
       point_cloud_registration.align(*registered_cloud, nonrigid_transform);
-      utils::publishPointCloud(*registered_cloud, transformed_cloud_pub, world_frame);
+      utils::publishPointCloud(*registered_cloud, transformed_cloud_pub, robot->getWorldFrame());
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Registration finished.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
@@ -190,20 +203,32 @@ void runGraspDetectionPipeline()
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
-      std::vector<GraspHypothesis> grasp_hypotheses;
-      grasp_sampler.filterCollisionFree(model, prior_grasps, grasp_hypotheses);
+      std::vector<GraspHypothesis> hypotheses;
+      grasp_sampler.filterCollisionFree(model, prior_grasps, hypotheses);
       stopwatch_step.stop();
       ROS_DEBUG_STREAM_NAMED("main", "Filtered collision free grasps.");
       ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
 
       stopwatch_step.start();
+      std::vector<GraspHypothesis> ik_filtered_hypotheses;
+      ik_checker.filter(hypotheses, ik_filtered_hypotheses);
+      stopwatch_step.stop();
+      if (ik_filtered_hypotheses.size() < 2)
+      {
+        ROS_WARN_STREAM_NAMED("main", "Failed: Less than two grasp hypotheses after IK filtering.");
+        continue;
+      }
+      ROS_DEBUG_STREAM_NAMED("main", "Filtered valid IK grasps.");
+      ROS_DEBUG_STREAM_NAMED("main", "It took " << stopwatch_step.elapsedSeconds() << "s.");
+
+      stopwatch_step.start();
       std::vector<MultiArmGrasp> grasps;
       std::vector<GraspCandidate> candidates;
-      grasp_synthesizer.generateGraspCandidates(grasp_hypotheses, candidates);
+      grasp_synthesizer.generateGraspCandidates(ik_filtered_hypotheses, candidates);
       grasp_synthesizer.synthesize(candidates, model, 1, grasps);
       if (grasps.empty())
       {
-        ROS_WARN_STREAM_NAMED("main", "Failed to find a valid grasp.");
+        ROS_WARN_STREAM_NAMED("main", "Failed: Unable to find a valid grasp.");
         continue;
       }
       stopwatch_step.stop();
@@ -218,8 +243,8 @@ void runGraspDetectionPipeline()
         const auto& frame = grasp_detection_params.grasp_frames_[i];
         auto msg = tf2::eigenToTransform(pose);
         msg.header.stamp = ros::Time::now();
-        msg.header.frame_id = world_frame;
-        msg.child_frame_id = frame;
+        msg.header.frame_id = robot->getWorldFrame();
+        msg.child_frame_id = robot->getClosestArm(pose)->getGraspFrame();
         broadcaster.sendTransform(msg);
       }
       stopwatch_step.stop();

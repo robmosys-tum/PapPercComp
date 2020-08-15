@@ -1,6 +1,6 @@
 planning_attempts: 20
 planning_attempt_time: 5
-pre_grasp_distance: 0.1
+pre_grasp_distance: 0.0
 lift_height: 0.1
 max_velocity_scaling_factor: 1.0
 object_mesh_topic: /reconstructed_mesh

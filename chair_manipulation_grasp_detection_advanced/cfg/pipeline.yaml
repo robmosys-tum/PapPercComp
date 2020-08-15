@@ -4,9 +4,9 @@ registered_cloud_topic: cloud_registered
 reconstructed_mesh_topic: reconstructed_mesh
 
 grasp_database_creator:
-  num_sample_trials_per_model: 1000
-  min_num_grasps_per_model: 3
-  max_num_grasps_per_model: 100
+  num_sample_trials_per_model: 2000
+  min_num_grasps_per_model: 10
+  max_num_grasps_per_model: 50
   models:
     - mesh: $(find chair_manipulation_chair_models)/models/dining_chair/meshes/dining_chair.ply
       point_cloud: $(find chair_manipulation_chair_models)/models/dining_chair/point_clouds/dining_chair.pcd
@@ -36,6 +36,20 @@ gripper:
     - left_inner_finger_pad
     - right_inner_finger_pad
 
+robot:
+  world_frame: world
+  arms:
+    - base_frame: robot1_base
+      ik_frame: robot1_wrist_3_link
+      tcp_frame: robot1_tcp
+      grasp_frame: robot1_grasp
+      group_name: robot1_arm
+    - base_frame: robot2_base
+      ik_frame: robot2_wrist_3_link
+      tcp_frame: robot2_tcp
+      grasp_frame: robot2_grasp
+      group_name: robot2_arm
+
 grasp_sampler:
   max_antipodal_normal_angle: 0.08726 # 5 degrees
   max_antipodal_position_angle: 0.08726 # 5 degrees
@@ -47,7 +61,7 @@ grasp_synthesizer:
   num_arms: 2
   friction_coefficient: 0.8
   num_fiction_edges: 8
-  max_arm_radius: 2
+  max_arm_radius: 1.5
   max_yaw_angle: 1.5707
   min_height: 0.2
   nms_distance_threshold: 0.2
@@ -60,16 +74,19 @@ grasp_synthesizer:
 weights_offline:
   epsilon1: 0.0
   v1: 1.0
-  grasp_distance: 0.25
+  grasp_distance: 0.5
   nearest_arm_distance: 0.0
   nearest_arm_orientation: 0.0
 
 weights_online:
   epsilon1: 0.0
   v1: 1.0
-  grasp_distance: 0.25
-  nearest_arm_distance: 10.0
+  grasp_distance: 0.5
+  nearest_arm_distance: 1.0
   nearest_arm_orientation: 1.0
+
+ik_checker:
+  timeout: 0.1
 
 point_cloud_receiver:
   topics:
@@ -96,7 +113,7 @@ point_cloud_segmentation:
   plane_distance_threshold: 0.03
   # The cluster tolerance. Small values may cause objects to be divided
   #	in several clusters, whereas big values may join objects in a same cluster.
-  cluster_tolerance: 0.1
+  cluster_tolerance: 0.2
   # Set the minimum and maximum number of points that a cluster can have.
   min_cluster_size: 250
   max_cluster_size: 1000000000

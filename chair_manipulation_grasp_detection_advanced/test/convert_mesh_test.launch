@@ -1,4 +1,6 @@
 <launch>
   <node name="convert_mesh_test" pkg="chair_manipulation_grasp_detection_advanced" type="convert_mesh_test"
-        output="screen"/>
+        output="screen">
+    <param name="mesh" value="$(find chair_manipulation_chair_models)/models/ikea_stefan_chair/meshes/mesh.ply" />
+  </node>
 </launch>

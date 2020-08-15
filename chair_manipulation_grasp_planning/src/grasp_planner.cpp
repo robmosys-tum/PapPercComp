@@ -18,7 +18,6 @@ GraspPlanner::GraspPlanner(ros::NodeHandle& nh)
   ik_frame_ = nh.param<std::string>("ik_frame", "wrist_3_link");
   tcp_frame_ = nh.param<std::string>("tcp_frame", "tcp");
   grasp_frame_ = nh.param<std::string>("grasp_frame", "grasp");
-  grasp_tcp_aligned_frame_ = nh.param<std::string>("grasp_tcp_aligned_frame", "grasp_tcp_aligned");
   planned_pre_grasp_frame_ = nh.param<std::string>("planned_pre_grasp_frame", "planned_pre_grasp");
   planned_grasp_frame_ = nh.param<std::string>("planned_grasp_frame", "planned_grasp");
   planned_lift_frame_ = nh.param<std::string>("planned_lift_frame", "planned_lift");
@@ -60,12 +59,8 @@ void GraspPlanner::prepare()
     tf2::Transform world_to_grasp;
     tf2::Transform world_to_pre_grasp;
     tf2::Transform world_to_lift;
-
     tf2::Transform grasp_to_pre_grasp;
-
-    tf2::Transform grasp_to_grasp_tcp_aligned;
     tf2::Transform tcp_to_ik;
-    tf2::Transform grasp_to_ik;
 
     // Retrieve transforms
     geometry_msgs::TransformStamped msg;
@@ -74,13 +69,8 @@ void GraspPlanner::prepare()
     msg = tf_buffer.lookupTransform(world_frame_, grasp_frame_, ros::Time{ 0 }, ros::Duration{ 120. });
     tf2::fromMsg(msg.transform, world_to_grasp);
 
-    msg = tf_buffer.lookupTransform(grasp_frame_, grasp_tcp_aligned_frame_, ros::Time{ 0 }, ros::Duration{ 120. });
-    tf2::fromMsg(msg.transform, grasp_to_grasp_tcp_aligned);
-
     msg = tf_buffer.lookupTransform(tcp_frame_, ik_frame_, ros::Time{ 0 }, ros::Duration{ 120. });
     tf2::fromMsg(msg.transform, tcp_to_ik);
-
-    grasp_to_ik = grasp_to_grasp_tcp_aligned * tcp_to_ik;
 
     // The pre-grasp position is located by translating pre_grasp_distance along the z-axis of the grasp pose
     grasp_to_pre_grasp.setIdentity();
@@ -92,9 +82,9 @@ void GraspPlanner::prepare()
     world_to_lift.setOrigin(world_to_grasp.getOrigin() + tf2::Vector3{ 0., 0., lift_height_ });
 
     // Express everything in the IK frame because Moveit's target pose is the pose of the ik_frame
-    world_to_grasp_to_ik_ = world_to_grasp * grasp_to_ik;
-    world_to_pre_grasp_to_ik_ = world_to_pre_grasp * grasp_to_ik;
-    world_to_lift_to_ik_ = world_to_lift * grasp_to_ik;
+    world_to_grasp_to_ik_ = world_to_grasp * tcp_to_ik;
+    world_to_pre_grasp_to_ik_ = world_to_pre_grasp * tcp_to_ik;
+    world_to_lift_to_ik_ = world_to_lift * tcp_to_ik;
 
     // Send planned transforms for visualization
     msg.header.stamp = ros::Time::now();
@@ -187,7 +177,18 @@ void GraspPlanner::planArmPose(const tf2::Transform& pose_tf, const std::string&
   arm_group_->setPlanningTime(planning_attempt_time_);
   arm_group_->setMaxVelocityScalingFactor(max_velocity_scaling_factor_);
   arm_group_->setGoalTolerance(0.01);
-  arm_group_->setPoseTarget(pose);
+
+  // arm_group_->setPoseTarget(pose);
+
+  auto state = arm_group_->getCurrentState();
+  bool success = state->setFromIK(state->getJointModelGroup(arm_group_name_), pose, ik_frame_, 0.1);
+  if (!success)
+  {
+    std::ostringstream msg;
+    msg << "Failed to solve IK for " << pose_name << " pose.";
+    throw GraspPlanningException{ msg.str() };
+  }
+  arm_group_->setJointValueTarget(*state);
 
   for (int i = 0; i < planning_attempts_; i++)
   {

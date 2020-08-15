@@ -2,7 +2,8 @@
 #define CHAIR_MANIPULATION_GRASP_DETECTION_ADVANCED_GRASP_HYPOTHESIS_H
 
 #include "contact.h"
-#include <geometry_msgs/Pose.h>
+#include <vector>
+#include <memory>
 
 namespace chair_manipulation
 {

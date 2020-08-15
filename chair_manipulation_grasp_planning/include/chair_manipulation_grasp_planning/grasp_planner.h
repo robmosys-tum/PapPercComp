@@ -52,7 +52,6 @@ private:
   std::string ik_frame_;
   std::string tcp_frame_;
   std::string grasp_frame_;
-  std::string grasp_tcp_aligned_frame_;
   std::string planned_pre_grasp_frame_;
   std::string planned_grasp_frame_;
   std::string planned_lift_frame_;

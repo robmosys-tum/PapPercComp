@@ -1,7 +1,6 @@
 #include "test_common.h"
 #include <ros/ros.h>
 #include "chair_manipulation_grasp_detection_advanced/utils.h"
-#include "chair_manipulation_grasp_detection_advanced/transform.h"
 #include "chair_manipulation_grasp_detection_advanced/exception.h"
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <tf2_eigen/tf2_eigen.h>
@@ -39,12 +38,12 @@ int main(int argc, char* argv[])
   }
 
   shape_msgs::Mesh mesh_msg;
-  chair_manipulation::utils::shapeMeshToMsg(*params.model_->getMesh(), mesh_msg);
+  chair_manipulation::utils::shapeMeshToMsg(*element->model_->getMesh(), mesh_msg);
 
   ros::Rate rate{ 10 };
   while (ros::ok())
   {
-    utils::publishPointCloud(*params.model_->getPointCloud(), point_cloud_pub, "world");
+    utils::publishPointCloud(*element->model_->getPointCloud(), point_cloud_pub, "world");
     mesh_pub.publish(mesh_msg);
     rate.sleep();
   }

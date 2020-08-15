@@ -49,6 +49,13 @@ struct PointCloud : Runtime
   }
 };
 
+struct TF : Runtime
+{
+  explicit TF(const std::string& msg) : Runtime(msg)
+  {
+  }
+};
+
 }  // namespace exception
 }  // namespace chair_manipulation
 
