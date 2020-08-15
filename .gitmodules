@@ -1,0 +1,6 @@
+[submodule "ros2_corbs_publisher"]
+	path = rgbd_surface_reconstruction/ros2_corbs_publisher
+	url = https://github.com/DanielHettegger/ros2_corbs_publisher.git
+[submodule "rgbd_surface_reconstruction/lib/KinectFusionLib"]
+	path = rgbd_surface_reconstruction/rgbd_surface_reconstruction/lib/KinectFusionLib
+	url = https://github.com/DanielHettegger/KinectFusionLib.git
