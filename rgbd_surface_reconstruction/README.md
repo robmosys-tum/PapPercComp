@@ -4,7 +4,7 @@
 
 This repository contains code for surface reconstrucion using ros 2. To improve surface reconstruction quality, the tsdf fusion weighting has been adapted to include quality estimation based on the Kinect V2 Sensor noise model.
 
-A paper explaining the weighting algorithm can be read [here](paper/Probabilistic_Sensor_Model_Based_Weighting_for_TSDF_based_Surface_Reconstruction_Algorithms.pdf
+A paper explaining the weighting algorithm can be read [here](paper/Probabilistic_Sensor_Model_Based_Weighting_for_TSDF_based_Surface_Reconstruction_Algorithms.pdf)
 
 ## Dependencies
 
