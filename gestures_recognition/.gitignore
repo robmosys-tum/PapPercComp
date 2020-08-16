@@ -1,0 +1,6 @@
+*.log
+*.DS_Store
+src/papyrus/install/*
+src/papyrus/log/*
+src/papyrus/build/*
+src/papyrus/.metadata/*
