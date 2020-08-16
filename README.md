@@ -122,7 +122,7 @@ traced_script_module.save("/some_dir/tracedModel.pt")
 ```
 
 The above code is an example of how tracing could work, however, several details such as image resolution, device, output folder should all be changed accordingly.
- 
+
 
 ## Loading Torch Script in LibTorch
 
@@ -156,3 +156,23 @@ Using `colcon build` and then `ros2 run vos VOS` you can run the Papyrus compone
 
 Due to the traced model containing the entire network architecture and model parameters, it has a size of 240 MB, which is too large to provide on this repository. As the trained model's state dict in PyTorch is only 3 MB, we have provided that one in "TrainedModel/finalModel.pth", and ask the user to trace the model manually to run the ROS2 component.
 
+
+# FAQ
+
+- **Q**: I downloaded the DAVIS2016 dataset and tried running training/validation on the "bear" video, but it tells me there's a shape mismatch error.
+
+    **A**: Segmentation mask `00077.png` in this dataset seems to have an incorrect shape, you should find a way to reduce the number of channels in this segmentation mask from [2, 480, 854] to [1, 480, 854]. I edited the image in NumPy. This extra channel contains all 255 values, presumably opacity/alpha values.
+
+- **Q**: I'm having trouble getting LibTorch to work or loading the traced model into C++.
+  
+    **A**: Several issues we battled with included: 
+
+    1) We traced the trained model on GPU (e.g. on Google Colab) and tried loading it into C++ LibTorch on CPU (as our Linux VM did not have CUDA). Both must be on GPU or both on CPU. You cannot mix and match those two.
+
+    2) "rclcpp" is compiled on ABI=1, therefore if the code has to run together with LibTorch, that library should also be compiled on ABI=1. Be careful which one you're downloading on the LibTorch homepage.
+   
+    3) Don't  forget adding LibTorch to PATH.
+
+- **Q**: Inference is not working!
+
+    **A**: Make sure "AnnotatedFrame.png" is given in your custom data folder. It requires this first frame's segmentation mask to evaluate the frames of your custom video.
