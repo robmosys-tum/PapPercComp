@@ -51,7 +51,9 @@ private:
 	sensor_msgs::msg::Image img_msg_;
 	std_msgs::msg::String classification_;
 	torch::jit::Module classifier_;
-	int camNum_;
+	bool use_cuda_;
+	// Used for running log of classifications
+	std::unordered_map<int, int> classifications_;
 };
 /************************************************************/
 /* External declarations (package visibility)               */
@@ -66,3 +68,4 @@ private:
  ************************************************************/
 
 #endif
+

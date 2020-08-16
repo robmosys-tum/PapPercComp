@@ -27,7 +27,7 @@
 
 #define TOPK 5
 
-static std::unordered_map<int, std::string> CLASSES = {
+const static std::unordered_map<int, std::string> CLASSES = {
 		{GLASS, "GLASS" },
 		{ PAPER, "PAPER" },
 		{ CARDBOARD, "CARDBOARD" },
@@ -41,20 +41,24 @@ namespace Garbage_classificationCompdef {
 // static attributes (if any)
 
 /**
- * 
- * @param options 
+ *
+ * @param options
  */
 Garbage_classification_impl::Garbage_classification_impl(
 		rclcpp::NodeOptions /*in*/options) :
 		Garbage_classification(options) {
 	//TODO make configurable
-	classifier_ = torch::jit::load("/home/seedship/TUM/SS20/Model-Driven\ Approach\ for\ Robotics\ Perception/PapPercComp/models/resnet18/transcripted_model_cuda.pt");
-	camNum_ = 0;
+	classifier_ = torch::jit::load("~/PapPercComp/garbage_classification/models/resnet18/transcripted_model_cuda.pt");
+	use_cuda_ = 1;
+
+	for (unsigned x = 0; x < 6; x++) {
+		classifications_[x] = 0;
+	}
 }
 
 /**
- * 
- * @param image 
+ *
+ * @param image
  */
 void Garbage_classification_impl::classify(
 		const sensor_msgs::msg::Image::SharedPtr /*in*/image) {
@@ -69,7 +73,10 @@ void Garbage_classification_impl::classify(
 	img_tensor = img_tensor.permute({2, 0, 1}); // convert to CxHxW
 	img_tensor = img_tensor / 255.0;
 
-	img_tensor = img_tensor.unsqueeze(0).cuda();
+	img_tensor = img_tensor.unsqueeze(0);
+	if (use_cuda_) {
+		img_tensor = img_tensor.cuda();
+	}
 	std::vector<torch::jit::IValue> input;
 	input.emplace_back(img_tensor);
 
@@ -80,16 +87,25 @@ void Garbage_classification_impl::classify(
 
 	std::string ans("Top " + std::to_string(TOPK) + ":");
 	for (unsigned idx = 0; idx < TOPK; idx++) {
-		ans += (" " + CLASSES[topClasses[idx].item().toInt()]);
+		ans += (" " + CLASSES.at(topClasses[idx].item().toInt()));
 	}
 	classification_.set__data(ans);
+	classifications_[topClasses[0].item().toInt()]++;
 
+	// Does not work on my Arch Linux. Uncomment to see visualization of input
+//	cv::resize(img, img_show, cv::Size(1280, 960));
+//	cv::putText(img_show, ans, cv::Point2i(10, 40), cv::FONT_HERSHEY_TRIPLEX, 1.4, cv::Scalar(0, 255 ,0));
+//	cv::imshow("Garbage Classification Image", img_show);
+//	cv::waitKey(10);
 
-	// Does not work on my Arch Linux
-	cv::resize(img, img_show, cv::Size(1280, 960));
-	cv::putText(img_show, ans, cv::Point2i(10, 40), cv::FONT_HERSHEY_TRIPLEX, 1.4, cv::Scalar(0, 255 ,0));
-	cv::imshow("Garbage Classification Image", img_show);
-	cv::waitKey(10);
+	// Print running total of classifications
+	ans.clear();
+	unsigned total = 0;
+	for (unsigned x = 0; x < 6; x++) {
+		ans += (CLASSES.at(x) + ":" + std::to_string(classifications_[x]) + " ");
+		total += classifications_[x];
+	}
+	ans += "total:" + std::to_string(total);
 
 	RCLCPP_INFO(this->get_logger(), ans);
 	classification_pub_->publish(classification_);
@@ -100,3 +116,4 @@ void Garbage_classification_impl::classify(
 /************************************************************
  End of Garbage_classification_impl class body
  ************************************************************/
+

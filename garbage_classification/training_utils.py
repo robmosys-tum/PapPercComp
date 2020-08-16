@@ -49,9 +49,6 @@ def train_model(model: nn.Module, train: DataLoader, val: DataLoader, optimizer:
     # for epoch in tqdm(range(epochs), total=epochs):
     for epoch in range(epochs):
         for x, y in tqdm(iter(train), total=len(train)):
-            # for x, y in iter(train):
-            ##########################################################
-            # YOUR CODE HERE
             if transform is not None:
                 transform_batch(x, transform)
             x = x.to(model.device)
@@ -71,7 +68,6 @@ def train_model(model: nn.Module, train: DataLoader, val: DataLoader, optimizer:
                 print("Epoch ", epoch, " Acc: ", acc)
             accuracies.append(acc)
             model.train()
-            ##########################################################
     return losses, accuracies
 
 
