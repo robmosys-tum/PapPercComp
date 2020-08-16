@@ -8,7 +8,7 @@ import torch
 import os
 import matplotlib.pyplot as plt
 
-from architecture import PMLEmbedding, deeplabModel, EmbeddingHead
+from architecture import deeplabModel, EmbeddingHead
 from utility import load_model, calc_IoU
 from PIL import Image
 
@@ -159,42 +159,11 @@ def run_model(dataloader, args):
 
 
     elif args.mode == 'inference':
-        # Create a color pallette, selecting a color for each class
-        palette = torch.tensor([2 ** 25 - 1, 2 ** 15 - 1, 2 ** 21 - 1])
-        colors = torch.as_tensor([i for i in range(21)])[:, None] * palette
-        colors = (colors % 255).numpy().astype("uint8")
-
-        imcount = 0
-        IoU_sum = 0
-
         # Output directory might not exist yet
         if not os.path.exists("Output"):
             os.makedirs("Output")
 
-        for im, ground_truth in dataloader:
-            im = im.to(device)
-            ground_truth = ground_truth.to(device)
-            
-            # Using no_grad() is a necessity! Otherwise memory usage will be far too high.
-            with torch.no_grad():
-                output = deeplabModel(im)['out']
-        
-            IoU_sum += calc_IoU(output.argmax(1, keepdims=True), ground_truth).sum()
-
-            # Iterate over all images in the batch
-            for out, gt in zip(output, ground_truth):
-                output_predictions = out.argmax(0)
-                
-                # Plot the semantic segmentation predictions of 21 classes in each color
-                seg = Image.fromarray(output_predictions.byte().cpu().numpy())
-                seg.putpalette(colors)
-                
-                plt.imsave(f"Output/{imcount : 06d}.png", seg)
-                imcount += 1
-
-        # Compute mean Intersection over Union
-        mean_IoU = IoU_sum / imcount
-        print(f"The mean Intersection over Union for this dataset : {mean_IoU: .4f}")
+        _, _ = run_epoch(embedModel, deeplabModel, None, dataloader, mode=args.mode)
 
 
     return 
@@ -313,7 +282,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                         + reg_strength * reg_loss
                     )
                 
-                print(f"Loss is: {loss.item():.6f} of which cov has {cov_loss.item():.6f} and mean_margin has {mean_margin_loss.item():.6f} reg has {reg_loss.item():.6f} \n")
+                print(f"Total Loss: {loss.item():.6f}. Cov part: {cov_loss.item():.6f}. Margin part: {mean_margin_loss.item():.6f}. Regularization: {reg_loss.item():.6f} \n")
 
 
                 # In case you wanna debug memory usage for PyTorch
@@ -326,7 +295,7 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
             epoch_loss += loss.item()
 
 
-        elif mode == 'validation':
+        elif mode == 'validation' or mode == 'inference':
             ### Only during first loop: assign references and compute its embedding
             if reference_image is None:
                 reference_image = image[0]
@@ -367,29 +336,8 @@ def run_epoch(embedModel, deeplabModel, optimizer, dataloader, mode='train'):
                 n_FG = predMask.sum(dim=[-1,-2])
 
                 mean_FG = foreground.view(batch_size, d, -1).sum(dim=2) / (n_FG + eps) 
-
-                #cov_FG = (1/(n_FG.view(batch_size, 1, 1) + eps) * torch.bmm(
-                    #     foreground.view(batch_size, d, -1), 
-                    #     foreground.view(batch_size, d, -1).transpose(1,2)
-                    # ) 
-                    # - torch.bmm(
-                    #     mean_FG.view(batch_size, d, 1), 
-                    #     mean_FG.view(batch_size, d, 1).transpose(1,2)
-                    # ))
-                #tr_covFG = cov_FG.diagonal(dim1=-2, dim2=-1).sum(dim=-1)
-
-
                 mean_BG = background.view(batch_size, d, -1).sum(dim=2) / (N - n_FG + eps)
                 
-                #cov_BG = (1/(N - n_FG.view(batch_size, 1) + eps) * torch.bmm(
-                    #     background.view(batch_size, d, -1), 
-                    #     background.view(batch_size, d, -1).transpose(1,2)
-                    # ) 
-                    # - torch.bmm(
-                    #     mean_BG.view(batch_size, d, 1), 
-                    #     mean_BG.view(batch_size, d, 1).transpose(1,2)
-                    # ))
-                #tr_covBG = cov_BG.diagonal(dim1=-2, dim2=-1).sum(dim=-1)
 
                 # Beta defines how much we should keep the old mean
                 beta = 0.0

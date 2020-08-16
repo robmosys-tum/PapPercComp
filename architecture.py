@@ -26,35 +26,6 @@ class ConvBlock(nn.Sequential):
 
 
 
-class PMLEmbedding(nn.Module):
-    """
-    The embedding network that takes a batch of pixels (shape [N, 3, 1, 1]) that have been put through DeepLabv3 excluding the last conv-layer (i.e. having 256 feature channels). This output is then embedded into a d-dimensional embedding space.
-    """
-    def __init__(self, embed_dim):
-        super(PMLEmbedding, self).__init__()
-        
-        self.embed = nn.Sequential(
-            ConvBlock(256, 1024, kernel_size=1, padding=0, stride=1),
-            nn.Conv2d(1024, embed_dim, kernel_size=1, padding=0, stride=1)
-        )
-
-    
-    def forward(self, pixels):
-        output = self.embed(pixels)
-        return output
-
-
-    @staticmethod
-    def initialize_weight(module):
-        if isinstance(module, nn.Conv2d):
-            nn.init.normal_(module.weight, 0.0, 0.02)
-        elif isinstance(module, nn.BatchNorm2d):
-            # nn.init.constant_(module.weight, 1)
-            nn.init.normal_(module.weight, 1.0, 0.02)
-            nn.init.constant_(module.bias, 0)
-
-
-
 class EmbeddingHead(nn.Module):
     """
     The embedding network that takes an image (shape [N, 3, H, W]) that has been put through DeepLabv3 excluding the last conv-layer (i.e. having 256 feature channels). This output is then embedded into a d-dimensional embedding space namely [N, d, H, W], where we assume it's a pixel-wise embedding, but with spatial local information.

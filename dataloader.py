@@ -131,7 +131,8 @@ class CustomData(torch.utils.data.Dataset):
             if (seg_dir is None) and (f == "AnnotatedFrame.png"):
                 self.seg_masks = im
             else:
-                self.images.append(im)
+                if f != "AnnotatedFrame.png":
+                    self.images.append(im)
             
 
         if seg_dir is not None:
@@ -149,7 +150,7 @@ class CustomData(torch.utils.data.Dataset):
     def __getitem__(self, idx):
         im = self.images[idx]
 
-        if len(self.images) == len(self.seg_masks):
+        if isinstance(self.seg_masks, list):
             seg = self.seg_masks[idx]
         else:
             seg = self.seg_masks

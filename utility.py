@@ -11,6 +11,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+from parse import get_arguments
+
 
 def load_model(model):
     """
@@ -136,8 +138,12 @@ def create_video(output_name="video", image_dir=None, seg_dir=None, true_dir=Non
 
 
 if __name__ == "__main__":
+    args = get_arguments()
+    video = args.videos[0]
+    
     create_video(
-        image_dir=r"Data\DAVIS\JPEGImages\480p\surf",
-        seg_dir="SurfSegSeq",
-        true_dir=r"Data\DAVIS\Annotations\480p\surf")
+        image_dir="Data/DAVIS/JPEGImages/480p/"+video,
+        seg_dir="Output",
+        true_dir="Data/DAVIS/Annotations/480p/"+video
+    )
 
