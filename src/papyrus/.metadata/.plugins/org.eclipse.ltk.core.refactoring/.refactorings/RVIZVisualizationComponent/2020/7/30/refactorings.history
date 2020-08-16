@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;RVIZVisualizationComponent/src-skel&apos; to &apos;src&apos;" description="Rename resource &apos;src-skel&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src-skel" name="src" stamp="1595518227554" updateReferences="true"/>
-</session>
