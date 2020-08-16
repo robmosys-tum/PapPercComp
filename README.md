@@ -1,7 +1,8 @@
 ## Fruit Detection Manipulation
 
 ## Description
-This a ros package that manipulates a robot arm to move towards detections of infected fruit. A dummy fruit infection detector publisher is used for integration.
+This a ros package and its dependencies. 
+The package robot_move manipulates a robot arm to move towards detections of infected fruit. A dummy fruit infection detector publisher is used for integration.
 ## Usage
 * build with `catkin_make`
 * source: `. devel/setup.bash`
