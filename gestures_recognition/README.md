@@ -1,5 +1,8 @@
 # Papyrus4Robotics Hand Gesture Detection 
 
+The project implements the hand gestures detection for a command giving to a robot.
+System requirements: ROS2 under Linux Ubuntu 18.04 (tested), should also work under 16.04.
+
 ## Dependencies.
 
 1. Make sure you have ros2 and colcon, cmake (``sudo apt-get install cmake``), python (``sudo apt-get install python``), python3 (``sudo apt-get install python3``), pip (``sudo apt-get install python-pip``), pip3 (``sudo apt-get install python3-pip``)  and numpy (``pip install numpy``) installed
