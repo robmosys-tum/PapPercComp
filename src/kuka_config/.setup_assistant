@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: ""
+    relative_path: /home/moar/myproject_ws/src/lbr_iiwa_14_r820.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/kuka_lbr_iiwa_14_r820.srdf
+  CONFIG:
+    author_name: test
+    author_email: test@test.com
+    generated_timestamp: 1597061801
