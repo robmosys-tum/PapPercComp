@@ -13,8 +13,6 @@
 #include <moveit_msgs/DisplayTrajectory.h>
 
 #include <moveit_visual_tools/moveit_visual_tools.h>
-
-#include <pluginlib/class_loader.h>
 #include <boost/scoped_ptr.hpp>
 #include "std_msgs/String.h"
 #include "classbox.h"
@@ -120,28 +118,9 @@ via buttons and keyboard shortcuts in RViz */
 /* Batch publishing is used to reduce the number of messages being sent to RViz for large visualizations */
     visual_tools.trigger();
 
-
-//    moveit::core::RobotStatePtr current_state = move_group.getCurrentState();
-//    //
-//    // Next get the current set of joint values for the group.
-//    std::vector<double> joint_group_positions;
-//    current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
-//
-//    // Now, let's modify one of the joints, plan to the new joint space goal and visualize the plan.
-//    joint_group_positions[0] = -1.0;  // radians
-//    joint_group_positions[2] = 1.0;  // radians
-//    move_group.setJointValueTarget(joint_group_positions);
-//
-//    move_group.move();
-
     moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
-//    bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-//    ROS_INFO_NAMED("tutorial", "Visualizing plan 2 (joint space goal) %s", success ? "" : "FAILED");
-
-
     geometry_msgs::PoseStamped pose;
-//    pose.header.frame_id = "base_link";
 
     planning_interface::MotionPlanRequest req;
     planning_interface::MotionPlanResponse res;
@@ -152,39 +131,6 @@ via buttons and keyboard shortcuts in RViz */
     pose.pose.position.x = coordinates.x;
     pose.pose.position.y = coordinates.y;
     pose.pose.position.z = 0.2;
-
-//    std::vector<double> tolerance_pose(3, 0.01);
-//    std::vector<double> tolerance_angle(3, 0.01);
-//
-//    moveit_msgs::Constraints pose_goal =
-//            kinematic_constraints::constructGoalConstraints("link_7", pose, tolerance_pose, tolerance_angle);
-//
-//    req.group_name = PLANNING_GROUP;
-//    req.goal_constraints.push_back(pose_goal);
-//
-//    planning_interface::PlanningContextPtr context =
-//            planner_instance->getPlanningContext(planning_scene, req, res.error_code_);
-//    context->solve(res);
-//    if (res.error_code_.val != res.error_code_.SUCCESS)
-//    {
-//        ROS_ERROR("Could not compute plan successfully");
-//        return 0;
-//    }
-
-//    std::vector<double> joint_group_positions;
-//    current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
-//
-//    move_group.setPoseTarget(pose);
-//
-//    move_group.move();
-//
-//    bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-//    move_group.execute(my_plan);
-//    ros::Duration(0.5).sleep();
-//    move_group.stop();
-
-//    ROS_INFO_NAMED("tutorial", "Visualizing plan 1 (pose goal) %s", success ? "" : "FAILED");
-
 
     std::vector<double> tolerance_pose(3, 0.01);
     std::vector<double> tolerance_angle(3, 0.01);
@@ -207,28 +153,16 @@ via buttons and keyboard shortcuts in RViz */
     ros::Publisher display_publisher =
             node_handle.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true);
     moveit_msgs::DisplayTrajectory display_trajectory;
-//
-///* Visualize the trajectory */
+
     moveit_msgs::MotionPlanResponse response;
     res.getMessage(response);
 
-//    move_group.execute(plan);
-//
-//    group = moveit_commander.MoveGroupCommander(group_name)
-//
-//    moveit::planning_interface::MoveGroupInterface::Plan myplan;
-//    myplan.trajectory_ = response.trajectory;
-
-
-    //
     display_trajectory.trajectory_start = response.trajectory_start;
     display_trajectory.trajectory.push_back(response.trajectory);
     visual_tools.publishTrajectoryLine(display_trajectory.trajectory.back(), joint_model_group);
     visual_tools.trigger();
-//    visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
     display_publisher.publish(display_trajectory);
 
-/* Set the state in the planning scene to the final state of the last plan */
     robot_state->setJointGroupPositions(joint_model_group, response.trajectory.joint_trajectory.points.back().positions);
     planning_scene->setCurrentState(*robot_state.get());
 
@@ -237,8 +171,6 @@ via buttons and keyboard shortcuts in RViz */
     visual_tools.publishText(text_pose, "Pose Goal (1)", rvt::WHITE, rvt::XLARGE);
     visual_tools.trigger();
 
-    /* We can also use visual_tools to wait for user input */
-//    visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
     return 0;
 }
 
