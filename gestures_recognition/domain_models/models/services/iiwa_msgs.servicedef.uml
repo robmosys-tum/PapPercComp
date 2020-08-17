@@ -1,0 +1,1228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:robotics.commobject="http://www.eclipse.org/papyrus/robotics/commobject/1" xmlns:robotics.generics="http://www.eclipse.org/papyrus/robotics/generics/1" xmlns:robotics.services="http://www.eclipse.org/papyrus/robotics/services/1" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http://www.eclipse.org/papyrus/robotics/commobject/1 http://www.eclipse.org/papyrus/robotics/1#//commobject http://www.eclipse.org/papyrus/robotics/generics/1 http://www.eclipse.org/papyrus/robotics/1#//generics http://www.eclipse.org/papyrus/robotics/services/1 http://www.eclipse.org/papyrus/robotics/1#//services">
+  <uml:Model xmi:id="ID" name="iiwa_msgs">
+    <packageImport xmi:id="_VqskMamREeqoi-qMJiOiIQ">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packageImport xmi:id="_VqskMqmREeqoi-qMJiOiIQ">
+      <importedPackage xmi:type="uml:Model" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_LaOOAJcvEeeV0-Lu2yLOjA"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_VqskM6mREeqoi-qMJiOiIQ" name="svcdefs">
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_CartesianControlModeLimits" name="S_CartesianControlModeLimits">
+        <templateBinding xmi:id="_WVl7UamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_WVl7UqmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianControlModeLimits">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_CartesianControlModeLimits" name="P_CartesianControlModeLimits">
+        <templateBinding xmi:id="_WVnwgamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_WVnwgqmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianControlModeLimits">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_CartesianEulerPose" name="S_CartesianEulerPose">
+        <templateBinding xmi:id="_Wcl7MamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_WcmiQKmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianEulerPose">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_CartesianEulerPose" name="P_CartesianEulerPose">
+        <templateBinding xmi:id="_WcnwYqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_WcnwY6mREeqoi-qMJiOiIQ" actual="ID_msg_CartesianEulerPose">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_CartesianImpedanceControlMode" name="S_CartesianImpedanceControlMode">
+        <templateBinding xmi:id="_WjRK8KmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_WjRK8amREeqoi-qMJiOiIQ" actual="ID_msg_CartesianImpedanceControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_CartesianImpedanceControlMode" name="P_CartesianImpedanceControlMode">
+        <templateBinding xmi:id="_WjSZEqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_WjSZE6mREeqoi-qMJiOiIQ" actual="ID_msg_CartesianImpedanceControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_CartesianPlane" name="S_CartesianPlane">
+        <templateBinding xmi:id="_Wp4JQamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_Wp4JQqmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianPlane">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_CartesianPlane" name="P_CartesianPlane">
+        <templateBinding xmi:id="_Wp6lgamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_Wp6lgqmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianPlane">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_CartesianPose" name="S_CartesianPose">
+        <templateBinding xmi:id="_WwuYIKmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_WwuYIamREeqoi-qMJiOiIQ" actual="ID_msg_CartesianPose">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_CartesianPose" name="P_CartesianPose">
+        <templateBinding xmi:id="_WwvmQqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_WwvmQ6mREeqoi-qMJiOiIQ" actual="ID_msg_CartesianPose">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_CartesianQuantity" name="S_CartesianQuantity">
+        <templateBinding xmi:id="_W3cEIamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_W3cEIqmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianQuantity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_CartesianQuantity" name="P_CartesianQuantity">
+        <templateBinding xmi:id="_W3d5UamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_W3d5UqmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianQuantity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_CartesianVelocity" name="S_CartesianVelocity">
+        <templateBinding xmi:id="_W9-J8amREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_W9-J8qmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianVelocity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_CartesianVelocity" name="P_CartesianVelocity">
+        <templateBinding xmi:id="_W9__IqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_W9__I6mREeqoi-qMJiOiIQ" actual="ID_msg_CartesianVelocity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_CartesianWrench" name="S_CartesianWrench">
+        <templateBinding xmi:id="_XEjTEamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XEjTEqmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianWrench">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_CartesianWrench" name="P_CartesianWrench">
+        <templateBinding xmi:id="_XElIQamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XElIQqmREeqoi-qMJiOiIQ" actual="ID_msg_CartesianWrench">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_ControlMode" name="S_ControlMode">
+        <templateBinding xmi:id="_XLOi0amREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XLOi0qmREeqoi-qMJiOiIQ" actual="ID_msg_ControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_ControlMode" name="P_ControlMode">
+        <templateBinding xmi:id="_XLPw8qmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XLPw86mREeqoi-qMJiOiIQ" actual="ID_msg_ControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_DOF" name="S_DOF">
+        <templateBinding xmi:id="_XR8O0amREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XR8O0qmREeqoi-qMJiOiIQ" actual="ID_msg_DOF">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_DOF" name="P_DOF">
+        <templateBinding xmi:id="_XR9c8qmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XR9c86mREeqoi-qMJiOiIQ" actual="ID_msg_DOF">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_DesiredForceControlMode" name="S_DesiredForceControlMode">
+        <templateBinding xmi:id="_XYlCUamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XYlCUqmREeqoi-qMJiOiIQ" actual="ID_msg_DesiredForceControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_DesiredForceControlMode" name="P_DesiredForceControlMode">
+        <templateBinding xmi:id="_XYm3gamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XYm3gqmREeqoi-qMJiOiIQ" actual="ID_msg_DesiredForceControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_JointDamping" name="S_JointDamping">
+        <templateBinding xmi:id="_XffioKmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XffioamREeqoi-qMJiOiIQ" actual="ID_msg_JointDamping">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_JointDamping" name="P_JointDamping">
+        <templateBinding xmi:id="_XflCMqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XflCM6mREeqoi-qMJiOiIQ" actual="ID_msg_JointDamping">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_JointImpedanceControlMode" name="S_JointImpedanceControlMode">
+        <templateBinding xmi:id="_XmwoQamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XmwoQqmREeqoi-qMJiOiIQ" actual="ID_msg_JointImpedanceControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_JointImpedanceControlMode" name="P_JointImpedanceControlMode">
+        <templateBinding xmi:id="_XmydcqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_Xmydc6mREeqoi-qMJiOiIQ" actual="ID_msg_JointImpedanceControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_JointPosition" name="S_JointPosition">
+        <templateBinding xmi:id="_XtosUKmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_XtosUamREeqoi-qMJiOiIQ" actual="ID_msg_JointPosition">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_JointPosition" name="P_JointPosition">
+        <templateBinding xmi:id="_Xtp6cqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_Xtp6c6mREeqoi-qMJiOiIQ" actual="ID_msg_JointPosition">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_JointPositionVelocity" name="S_JointPositionVelocity">
+        <templateBinding xmi:id="_X0W_YamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_X0W_YqmREeqoi-qMJiOiIQ" actual="ID_msg_JointPositionVelocity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_JointPositionVelocity" name="P_JointPositionVelocity">
+        <templateBinding xmi:id="_X0YNgqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_X0YNg6mREeqoi-qMJiOiIQ" actual="ID_msg_JointPositionVelocity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_JointQuantity" name="S_JointQuantity">
+        <templateBinding xmi:id="_X7TU4amREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_X7TU4qmREeqoi-qMJiOiIQ" actual="ID_msg_JointQuantity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_JointQuantity" name="P_JointQuantity">
+        <templateBinding xmi:id="_X7UjAqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_X7UjA6mREeqoi-qMJiOiIQ" actual="ID_msg_JointQuantity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_JointStiffness" name="S_JointStiffness">
+        <templateBinding xmi:id="_YCBA4amREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YCBA4qmREeqoi-qMJiOiIQ" actual="ID_msg_JointStiffness">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_JointStiffness" name="P_JointStiffness">
+        <templateBinding xmi:id="_YCC2EamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YCC2EqmREeqoi-qMJiOiIQ" actual="ID_msg_JointStiffness">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_JointTorque" name="S_JointTorque">
+        <templateBinding xmi:id="_YItewamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YItewqmREeqoi-qMJiOiIQ" actual="ID_msg_JointTorque">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_JointTorque" name="P_JointTorque">
+        <templateBinding xmi:id="_YIus4qmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YIus46mREeqoi-qMJiOiIQ" actual="ID_msg_JointTorque">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_JointVelocity" name="S_JointVelocity">
+        <templateBinding xmi:id="_YPbKwamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YPbKwqmREeqoi-qMJiOiIQ" actual="ID_msg_JointVelocity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_JointVelocity" name="P_JointVelocity">
+        <templateBinding xmi:id="_YPcY4qmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YPcY46mREeqoi-qMJiOiIQ" actual="ID_msg_JointVelocity">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_RedundancyInformation" name="S_RedundancyInformation">
+        <templateBinding xmi:id="_YWTO0amREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YWTO0qmREeqoi-qMJiOiIQ" actual="ID_msg_RedundancyInformation">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_RedundancyInformation" name="P_RedundancyInformation">
+        <templateBinding xmi:id="_YWVEAamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YWVEAqmREeqoi-qMJiOiIQ" actual="ID_msg_RedundancyInformation">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_SinePatternControlMode" name="S_SinePatternControlMode">
+        <templateBinding xmi:id="_Yc93gamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_Yc93gqmREeqoi-qMJiOiIQ" actual="ID_msg_SinePatternControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_SinePatternControlMode" name="P_SinePatternControlMode">
+        <templateBinding xmi:id="_Yc_ssKmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_Yc_ssamREeqoi-qMJiOiIQ" actual="ID_msg_SinePatternControlMode">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_Spline" name="S_Spline">
+        <templateBinding xmi:id="_YjfWQamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YjfWQqmREeqoi-qMJiOiIQ" actual="ID_msg_Spline">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_Spline" name="P_Spline">
+        <templateBinding xmi:id="_YjgkYqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YjgkY6mREeqoi-qMJiOiIQ" actual="ID_msg_Spline">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/S_SplineSegment" name="S_SplineSegment">
+        <templateBinding xmi:id="_YqLNEamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YqLNEqmREeqoi-qMJiOiIQ" actual="ID_msg_SplineSegment">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_6uKNsCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/P_SplineSegment" name="P_SplineSegment">
+        <templateBinding xmi:id="_YqMbMqmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_YqMbM6mREeqoi-qMJiOiIQ" actual="ID_msg_SplineSegment">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_HAQwoPIzEeeJotakjzOasQ"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_CagtgPIzEeeJotakjzOasQ"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/Q_ConfigureControlMode" name="Q_ConfigureControlMode">
+        <templateBinding xmi:id="_eTSKoamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_eTSKoqmREeqoi-qMJiOiIQ" actual="ID_srv_ConfigureControlModeReq">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_eTSKo6mREeqoi-qMJiOiIQ" actual="ID_srv_ConfigureControlModeRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwyanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/Q_SetEndpointFrame" name="Q_SetEndpointFrame">
+        <templateBinding xmi:id="_eZ0QcamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_eZ0QcqmREeqoi-qMJiOiIQ" actual="ID_srv_SetEndpointFrameReq">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_eZ0Qc6mREeqoi-qMJiOiIQ" actual="ID_srv_SetEndpointFrameRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwyanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/Q_SetPTPCartesianSpeedLimits" name="Q_SetPTPCartesianSpeedLimits">
+        <templateBinding xmi:id="_egb10amREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_egb10qmREeqoi-qMJiOiIQ" actual="ID_srv_SetPTPCartesianSpeedLimitsReq">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_egb106mREeqoi-qMJiOiIQ" actual="ID_srv_SetPTPCartesianSpeedLimitsRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwyanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/Q_SetPTPJointSpeedLimits" name="Q_SetPTPJointSpeedLimits">
+        <templateBinding xmi:id="_engHIamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_engHIqmREeqoi-qMJiOiIQ" actual="ID_srv_SetPTPJointSpeedLimitsReq">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_engHI6mREeqoi-qMJiOiIQ" actual="ID_srv_SetPTPJointSpeedLimitsRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwyanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/Q_SetSmartServoJointSpeedLimits" name="Q_SetSmartServoJointSpeedLimits">
+        <templateBinding xmi:id="_euJhsKmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_euJhsamREeqoi-qMJiOiIQ" actual="ID_srv_SetSmartServoJointSpeedLimitsReq">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_euJhsqmREeqoi-qMJiOiIQ" actual="ID_srv_SetSmartServoJointSpeedLimitsRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwyanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/Q_SetSmartServoLinSpeedLimits" name="Q_SetSmartServoLinSpeedLimits">
+        <templateBinding xmi:id="_e0pyUamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_e0pyUqmREeqoi-qMJiOiIQ" actual="ID_srv_SetSmartServoLinSpeedLimitsReq">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_e0pyU6mREeqoi-qMJiOiIQ" actual="ID_srv_SetSmartServoLinSpeedLimitsRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwyanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/Q_SetSpeedOverride" name="Q_SetSpeedOverride">
+        <templateBinding xmi:id="_e7lgwKmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_e7lgwamREeqoi-qMJiOiIQ" actual="ID_srv_SetSpeedOverrideReq">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_e7lgwqmREeqoi-qMJiOiIQ" actual="ID_srv_SetSpeedOverrideRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwyanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/Q_SetWorkpiece" name="Q_SetWorkpiece">
+        <templateBinding xmi:id="_fCcWsKmREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_fCcWsamREeqoi-qMJiOiIQ" actual="ID_srv_SetWorkpieceReq">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_fCcWsqmREeqoi-qMJiOiIQ" actual="ID_srv_SetWorkpieceRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwyanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/Q_TimeToDestination" name="Q_TimeToDestination">
+        <templateBinding xmi:id="_fJpx8amREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_fJpx8qmREeqoi-qMJiOiIQ" actual="ID_srv_TimeToDestinationReq">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwSanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_fJpx86mREeqoi-qMJiOiIQ" actual="ID_srv_TimeToDestinationRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwyanEeiurq-kTHMlgA"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_5u2FwCanEeiurq-kTHMlgA"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/A_MoveAlongSpline" name="A_MoveAlongSpline">
+        <templateBinding xmi:id="_hy99kamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_hy99kqmREeqoi-qMJiOiIQ" actual="ID_action_MoveAlongSplineGoal">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_g8ug8DBiEeqxv6YJjwaRyw"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_hy99k6mREeqoi-qMJiOiIQ" actual="ID_action_MoveAlongSplineRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_Nyas8Ek0Eeqojt4A_a-YAw"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_hy99lKmREeqoi-qMJiOiIQ" actual="ID_action_MoveAlongSplineFeedback">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_VrxO0Ek0Eeqojt4A_a-YAw"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_3PvFcDBhEeqxv6YJjwaRyw"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/A_MoveToCartesianPose" name="A_MoveToCartesianPose">
+        <templateBinding xmi:id="_h6IVgamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_h6IVgqmREeqoi-qMJiOiIQ" actual="ID_action_MoveToCartesianPoseGoal">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_g8ug8DBiEeqxv6YJjwaRyw"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_h6IVg6mREeqoi-qMJiOiIQ" actual="ID_action_MoveToCartesianPoseRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_Nyas8Ek0Eeqojt4A_a-YAw"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_h6IVhKmREeqoi-qMJiOiIQ" actual="ID_action_MoveToCartesianPoseFeedback">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_VrxO0Ek0Eeqojt4A_a-YAw"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_3PvFcDBhEeqxv6YJjwaRyw"/>
+        </templateBinding>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="svcdefs/A_MoveToJointPosition" name="A_MoveToJointPosition">
+        <templateBinding xmi:id="_iBTUgamREeqoi-qMJiOiIQ">
+          <parameterSubstitution xmi:id="_iBTUgqmREeqoi-qMJiOiIQ" actual="ID_action_MoveToJointPositionGoal">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_g8ug8DBiEeqxv6YJjwaRyw"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_iBT7kKmREeqoi-qMJiOiIQ" actual="ID_action_MoveToJointPositionRes">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_Nyas8Ek0Eeqojt4A_a-YAw"/>
+          </parameterSubstitution>
+          <parameterSubstitution xmi:id="_iBT7kamREeqoi-qMJiOiIQ" actual="ID_action_MoveToJointPositionFeedback">
+            <formal xmi:type="uml:ClassifierTemplateParameter" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_VrxO0Ek0Eeqojt4A_a-YAw"/>
+          </parameterSubstitution>
+          <signature xmi:type="uml:RedefinableTemplateSignature" href="pathmap://ROBOTICS_LIBRARIES/robotics.library.uml#_3PvFcDBhEeqxv6YJjwaRyw"/>
+        </templateBinding>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_VqskNKmREeqoi-qMJiOiIQ" name="msg">
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_CartesianControlModeLimits" name="CartesianControlModeLimits">
+        <ownedAttribute xmi:id="_WVBTkKmREeqoi-qMJiOiIQ" name="max_path_deviation" type="ID_msg_CartesianQuantity"/>
+        <ownedAttribute xmi:id="_WVBTkamREeqoi-qMJiOiIQ" name="max_control_force" type="ID_msg_CartesianQuantity"/>
+        <ownedAttribute xmi:id="_WVBTkqmREeqoi-qMJiOiIQ" name="max_control_force_stop">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_WVBTk6mREeqoi-qMJiOiIQ" name="max_cartesian_velocity" type="ID_msg_CartesianQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_CartesianEulerPose" name="CartesianEulerPose">
+        <ownedAttribute xmi:id="_WcB6gKmREeqoi-qMJiOiIQ" name="stamp">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/builtin_interfaces.servicedef.uml#ID_msg_Time"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_WcChkKmREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_WcChkamREeqoi-qMJiOiIQ" name="pose" type="ID_msg_CartesianQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_CartesianImpedanceControlMode" name="CartesianImpedanceControlMode">
+        <ownedAttribute xmi:id="_WitKQKmREeqoi-qMJiOiIQ" name="cartesian_stiffness" type="ID_msg_CartesianQuantity"/>
+        <ownedAttribute xmi:id="_WitKQamREeqoi-qMJiOiIQ" name="cartesian_damping" type="ID_msg_CartesianQuantity"/>
+        <ownedAttribute xmi:id="_WitKQqmREeqoi-qMJiOiIQ" name="nullspace_stiffness">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_WitKQ6mREeqoi-qMJiOiIQ" name="nullspace_damping">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_CartesianPlane" name="CartesianPlane">
+        <ownedAttribute xmi:id="_WpS6cKmREeqoi-qMJiOiIQ" name="XY" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_WpS6camREeqoi-qMJiOiIQ" value="1">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_WpS6cqmREeqoi-qMJiOiIQ" name="XZ" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_WpS6c6mREeqoi-qMJiOiIQ" value="2">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_WpS6dKmREeqoi-qMJiOiIQ" name="YZ" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_WpS6damREeqoi-qMJiOiIQ" value="3">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_CartesianPose" name="CartesianPose">
+        <ownedAttribute xmi:id="_WwIiQKmREeqoi-qMJiOiIQ" name="pose_stamped">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#ID_msg_PoseStamped"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_WwIiQamREeqoi-qMJiOiIQ" name="redundancy" type="ID_msg_RedundancyInformation"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_CartesianQuantity" name="CartesianQuantity">
+        <ownedAttribute xmi:id="_W23cYKmREeqoi-qMJiOiIQ" name="x">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_W23cYamREeqoi-qMJiOiIQ" name="y">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_W23cYqmREeqoi-qMJiOiIQ" name="z">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_W23cY6mREeqoi-qMJiOiIQ" name="a">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_W23cZKmREeqoi-qMJiOiIQ" name="b">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_W23cZamREeqoi-qMJiOiIQ" name="c">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_CartesianVelocity" name="CartesianVelocity">
+        <ownedAttribute xmi:id="_W9aJQKmREeqoi-qMJiOiIQ" name="stamp">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/builtin_interfaces.servicedef.uml#ID_msg_Time"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_W9aJQamREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_W9aJQqmREeqoi-qMJiOiIQ" name="velocity" type="ID_msg_CartesianQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_CartesianWrench" name="CartesianWrench">
+        <ownedAttribute xmi:id="_XD-EQKmREeqoi-qMJiOiIQ" name="stamp">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/builtin_interfaces.servicedef.uml#ID_msg_Time"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XD-EQamREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XD-EQqmREeqoi-qMJiOiIQ" name="wrench">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#ID_msg_Wrench"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XD-EQ6mREeqoi-qMJiOiIQ" name="inaccuracy">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#ID_msg_Wrench"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_ControlMode" name="ControlMode">
+        <ownedAttribute xmi:id="_XKos8KmREeqoi-qMJiOiIQ" name="POSITION_CONTROL" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XKos8amREeqoi-qMJiOiIQ">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XKos8qmREeqoi-qMJiOiIQ" name="JOINT_IMPEDANCE" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XKos86mREeqoi-qMJiOiIQ" value="1">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XKpUAKmREeqoi-qMJiOiIQ" name="CARTESIAN_IMPEDANCE" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XKpUAamREeqoi-qMJiOiIQ" value="2">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XKpUAqmREeqoi-qMJiOiIQ" name="DESIRED_FORCE" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XKpUA6mREeqoi-qMJiOiIQ" value="3">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XKpUBKmREeqoi-qMJiOiIQ" name="SINE_PATTERN" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XKpUBamREeqoi-qMJiOiIQ" value="4">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_DOF" name="DOF">
+        <ownedAttribute xmi:id="_XRTVoKmREeqoi-qMJiOiIQ" name="X" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XRTVoamREeqoi-qMJiOiIQ" value="1">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XRTVoqmREeqoi-qMJiOiIQ" name="Y" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XRT8sKmREeqoi-qMJiOiIQ" value="2">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XRT8samREeqoi-qMJiOiIQ" name="Z" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XRT8sqmREeqoi-qMJiOiIQ" value="3">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XRT8s6mREeqoi-qMJiOiIQ" name="A" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XRT8tKmREeqoi-qMJiOiIQ" value="4">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XRT8tamREeqoi-qMJiOiIQ" name="B" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XRT8tqmREeqoi-qMJiOiIQ" value="5">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XRT8t6mREeqoi-qMJiOiIQ" name="C" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XRT8uKmREeqoi-qMJiOiIQ" value="6">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XRT8uamREeqoi-qMJiOiIQ" name="ROT" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XRT8uqmREeqoi-qMJiOiIQ" value="7">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XRT8u6mREeqoi-qMJiOiIQ" name="TRANSL" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XRT8vKmREeqoi-qMJiOiIQ" value="8">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XRT8vamREeqoi-qMJiOiIQ" name="ALL" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_XRT8vqmREeqoi-qMJiOiIQ" value="9">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_DesiredForceControlMode" name="DesiredForceControlMode">
+        <ownedAttribute xmi:id="_XX-lYKmREeqoi-qMJiOiIQ" name="cartesian_dof">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XX-lYamREeqoi-qMJiOiIQ" name="desired_force">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XX-lYqmREeqoi-qMJiOiIQ" name="desired_stiffness">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_JointDamping" name="JointDamping">
+        <ownedAttribute xmi:id="_Xe00QKmREeqoi-qMJiOiIQ" name="stamp">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/builtin_interfaces.servicedef.uml#ID_msg_Time"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_Xe00QamREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_Xe00QqmREeqoi-qMJiOiIQ" name="damping" type="ID_msg_JointQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_JointImpedanceControlMode" name="JointImpedanceControlMode">
+        <ownedAttribute xmi:id="_XmKLUKmREeqoi-qMJiOiIQ" name="joint_stiffness" type="ID_msg_JointQuantity"/>
+        <ownedAttribute xmi:id="_XmKyYKmREeqoi-qMJiOiIQ" name="joint_damping" type="ID_msg_JointQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_JointPosition" name="JointPosition">
+        <ownedAttribute xmi:id="_Xs_MEKmREeqoi-qMJiOiIQ" name="stamp">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/builtin_interfaces.servicedef.uml#ID_msg_Time"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_Xs_MEamREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_Xs_MEqmREeqoi-qMJiOiIQ" name="header">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/std_msgs.servicedef.uml#ID_msg_Header"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_Xs_ME6mREeqoi-qMJiOiIQ" name="position" type="ID_msg_JointQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_JointPositionVelocity" name="JointPositionVelocity">
+        <ownedAttribute xmi:id="_XzxwkKmREeqoi-qMJiOiIQ" name="stamp">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/builtin_interfaces.servicedef.uml#ID_msg_Time"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XzxwkamREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_XzxwkqmREeqoi-qMJiOiIQ" name="position" type="ID_msg_JointQuantity"/>
+        <ownedAttribute xmi:id="_XzyXoKmREeqoi-qMJiOiIQ" name="velocity" type="ID_msg_JointQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_JointQuantity" name="JointQuantity">
+        <ownedAttribute xmi:id="_X6tfAKmREeqoi-qMJiOiIQ" name="a1">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_X6uGEKmREeqoi-qMJiOiIQ" name="a2">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_X6uGEamREeqoi-qMJiOiIQ" name="a3">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_X6uGEqmREeqoi-qMJiOiIQ" name="a4">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_X6uGE6mREeqoi-qMJiOiIQ" name="a5">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_X6uGFKmREeqoi-qMJiOiIQ" name="a6">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_X6uGFamREeqoi-qMJiOiIQ" name="a7">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zga4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_JointStiffness" name="JointStiffness">
+        <ownedAttribute xmi:id="_YBcZIKmREeqoi-qMJiOiIQ" name="stamp">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/builtin_interfaces.servicedef.uml#ID_msg_Time"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YBcZIamREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YBdAMKmREeqoi-qMJiOiIQ" name="stiffness" type="ID_msg_JointQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_JointTorque" name="JointTorque">
+        <ownedAttribute xmi:id="_YICJUKmREeqoi-qMJiOiIQ" name="stamp">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/builtin_interfaces.servicedef.uml#ID_msg_Time"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YICwYKmREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YICwYamREeqoi-qMJiOiIQ" name="header">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/std_msgs.servicedef.uml#ID_msg_Header"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YICwYqmREeqoi-qMJiOiIQ" name="torque" type="ID_msg_JointQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_JointVelocity" name="JointVelocity">
+        <ownedAttribute xmi:id="_YOyRkKmREeqoi-qMJiOiIQ" name="stamp">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/builtin_interfaces.servicedef.uml#ID_msg_Time"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YOyRkamREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YOyRkqmREeqoi-qMJiOiIQ" name="header">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/std_msgs.servicedef.uml#ID_msg_Header"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YOy4oKmREeqoi-qMJiOiIQ" name="velocity" type="ID_msg_JointQuantity"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_RedundancyInformation" name="RedundancyInformation">
+        <ownedAttribute xmi:id="_YVtY8KmREeqoi-qMJiOiIQ" name="e1">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YVtY8amREeqoi-qMJiOiIQ" name="status">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YVtY8qmREeqoi-qMJiOiIQ" name="turn">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_SinePatternControlMode" name="SinePatternControlMode">
+        <ownedAttribute xmi:id="_YcZPwKmREeqoi-qMJiOiIQ" name="cartesian_dof">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YcZPwamREeqoi-qMJiOiIQ" name="frequency">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YcZPwqmREeqoi-qMJiOiIQ" name="amplitude">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YcZ20KmREeqoi-qMJiOiIQ" name="stiffness">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_Spline" name="Spline">
+        <ownedAttribute xmi:id="_Yi6ugKmREeqoi-qMJiOiIQ" name="segments" type="ID_msg_SplineSegment">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Yi6ugamREeqoi-qMJiOiIQ"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Yi7VkKmREeqoi-qMJiOiIQ" value="*"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_msg_SplineSegment" name="SplineSegment">
+        <ownedAttribute xmi:id="_Ypl-QKmREeqoi-qMJiOiIQ" name="SPL" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_Ypl-QamREeqoi-qMJiOiIQ">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YpmlUKmREeqoi-qMJiOiIQ" name="LIN" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_YpmlUamREeqoi-qMJiOiIQ" value="1">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YpmlUqmREeqoi-qMJiOiIQ" name="CIRC" isStatic="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_YpmlU6mREeqoi-qMJiOiIQ" value="2">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YpmlVKmREeqoi-qMJiOiIQ" name="type">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_YpmlVamREeqoi-qMJiOiIQ" name="point" type="ID_msg_CartesianPose"/>
+        <ownedAttribute xmi:id="_YpmlVqmREeqoi-qMJiOiIQ" name="point_aux" type="ID_msg_CartesianPose"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="ID_srv" name="srv">
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_ConfigureControlModeReq" name="ConfigureControlModeReq">
+        <ownedAttribute xmi:id="_eSti4KmREeqoi-qMJiOiIQ" name="control_mode">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_OvJS4K4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_eSti4amREeqoi-qMJiOiIQ" name="joint_impedance" type="ID_msg_JointImpedanceControlMode"/>
+        <ownedAttribute xmi:id="_eSti4qmREeqoi-qMJiOiIQ" name="cartesian_impedance" type="ID_msg_CartesianImpedanceControlMode"/>
+        <ownedAttribute xmi:id="_eSti46mREeqoi-qMJiOiIQ" name="desired_force" type="ID_msg_DesiredForceControlMode"/>
+        <ownedAttribute xmi:id="_eSti5KmREeqoi-qMJiOiIQ" name="sine_pattern" type="ID_msg_SinePatternControlMode"/>
+        <ownedAttribute xmi:id="_eSti5amREeqoi-qMJiOiIQ" name="limits" type="ID_msg_CartesianControlModeLimits"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_ConfigureControlModeRes" name="ConfigureControlModeRes">
+        <ownedAttribute xmi:id="_eSti5qmREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_eSti56mREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetEndpointFrameReq" name="SetEndpointFrameReq">
+        <ownedAttribute xmi:id="_eZPosKmREeqoi-qMJiOiIQ" name="frame_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetEndpointFrameRes" name="SetEndpointFrameRes">
+        <ownedAttribute xmi:id="_eZPosamREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_eZPosqmREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetPTPCartesianSpeedLimitsReq" name="SetPTPCartesianSpeedLimitsReq">
+        <ownedAttribute xmi:id="_ef31IKmREeqoi-qMJiOiIQ" name="max_cartesian_velocity">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_ef31IamREeqoi-qMJiOiIQ" name="max_orientation_velocity">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_ef31IqmREeqoi-qMJiOiIQ" name="max_cartesian_acceleration">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_ef31I6mREeqoi-qMJiOiIQ" name="max_orientation_acceleration">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_ef4cMKmREeqoi-qMJiOiIQ" name="max_cartesian_jerk">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_ef4cMamREeqoi-qMJiOiIQ" name="max_orientation_jerk">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetPTPCartesianSpeedLimitsRes" name="SetPTPCartesianSpeedLimitsRes">
+        <ownedAttribute xmi:id="_ef4cMqmREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_ef4cM6mREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetPTPJointSpeedLimitsReq" name="SetPTPJointSpeedLimitsReq">
+        <ownedAttribute xmi:id="_em64UKmREeqoi-qMJiOiIQ" name="joint_relative_velocity">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_em64UamREeqoi-qMJiOiIQ" name="joint_relative_acceleration">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetPTPJointSpeedLimitsRes" name="SetPTPJointSpeedLimitsRes">
+        <ownedAttribute xmi:id="_em64UqmREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_em64U6mREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetSmartServoJointSpeedLimitsReq" name="SetSmartServoJointSpeedLimitsReq">
+        <ownedAttribute xmi:id="_ethPkKmREeqoi-qMJiOiIQ" name="joint_relative_velocity">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_ethPkamREeqoi-qMJiOiIQ" name="joint_relative_acceleration">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_eth2oKmREeqoi-qMJiOiIQ" name="override_joint_acceleration">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetSmartServoJointSpeedLimitsRes" name="SetSmartServoJointSpeedLimitsRes">
+        <ownedAttribute xmi:id="_eth2oamREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_eth2oqmREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetSmartServoLinSpeedLimitsReq" name="SetSmartServoLinSpeedLimitsReq">
+        <ownedAttribute xmi:id="_e0FKkKmREeqoi-qMJiOiIQ" name="max_cartesian_velocity">
+          <type xmi:type="uml:DataType" href="pathmap://ROS2_LIB_BASE/services/geometry_msgs.servicedef.uml#ID_msg_Twist"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetSmartServoLinSpeedLimitsRes" name="SetSmartServoLinSpeedLimitsRes">
+        <ownedAttribute xmi:id="_e0FKkamREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_e0FKkqmREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetSpeedOverrideReq" name="SetSpeedOverrideReq">
+        <ownedAttribute xmi:id="_e6-cwKmREeqoi-qMJiOiIQ" name="override_reduction">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetSpeedOverrideRes" name="SetSpeedOverrideRes">
+        <ownedAttribute xmi:id="_e6-cwamREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_e6-cwqmREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetWorkpieceReq" name="SetWorkpieceReq">
+        <ownedAttribute xmi:id="_fB3H4KmREeqoi-qMJiOiIQ" name="workpiece_id">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_SetWorkpieceRes" name="SetWorkpieceRes">
+        <ownedAttribute xmi:id="_fB3H4amREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_fB3H4qmREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_TimeToDestinationReq" name="TimeToDestinationReq"/>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_srv_TimeToDestinationRes" name="TimeToDestinationRes">
+        <ownedAttribute xmi:id="_fJEjIKmREeqoi-qMJiOiIQ" name="remaining_time">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb1zgq4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="ID_action" name="action">
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_action_MoveAlongSplineGoal" name="MoveAlongSplineGoal">
+        <ownedAttribute xmi:id="_hyZV0KmREeqoi-qMJiOiIQ" name="spline" type="ID_msg_Spline"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_action_MoveAlongSplineRes" name="MoveAlongSplineRes">
+        <ownedAttribute xmi:id="_hyZV0amREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_hyZV0qmREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_action_MoveAlongSplineFeedback" name="MoveAlongSplineFeedback"/>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_action_MoveToCartesianPoseGoal" name="MoveToCartesianPoseGoal">
+        <ownedAttribute xmi:id="_h5e1QKmREeqoi-qMJiOiIQ" name="cartesian_pose" type="ID_msg_CartesianPose"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_action_MoveToCartesianPoseRes" name="MoveToCartesianPoseRes">
+        <ownedAttribute xmi:id="_h5e1QamREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_h5e1QqmREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_action_MoveToCartesianPoseFeedback" name="MoveToCartesianPoseFeedback"/>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_action_MoveToJointPositionGoal" name="MoveToJointPositionGoal">
+        <ownedAttribute xmi:id="_iAsQgKmREeqoi-qMJiOiIQ" name="joint_position" type="ID_msg_JointPosition"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_action_MoveToJointPositionRes" name="MoveToJointPositionRes">
+        <ownedAttribute xmi:id="_iAsQgamREeqoi-qMJiOiIQ" name="success">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_Mb0lYK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_iAsQgqmREeqoi-qMJiOiIQ" name="error">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://ROS2_LIBRARY/ros2.primitive.uml#_96bjEK4QEemKGaIZu1xPYw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:DataType" xmi:id="ID_action_MoveToJointPositionFeedback" name="MoveToJointPositionFeedback"/>
+    </packagedElement>
+    <profileApplication xmi:id="_VqskNamREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskNqmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/bpc/1#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_BPC_PROFILES/bpc.profile.uml#__9qqMJZ1Eeeq1f8hGgKVzA"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskN6mREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskOKmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/1#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#__9qqMJZ1Eeeq1f8hGgKVzA"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskOamREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskOqmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/1#//components"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_EZ1TgJZ2Eeeq1f8hGgKVzA"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskO6mREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskPKmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/1#//commpattern"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_8Z6x8Je6EeeiCOWsEr9OuA"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskPamREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskPqmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/1#//deployment"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_tu6OsJe9EeeiCOWsEr9OuA"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskP6mREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskQKmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/1#//services"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_SlbOAJe_EeeiCOWsEr9OuA"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskQamREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskQqmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/1#//commobject"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_bz5AcPCaEeee6ab5J_C5Dg"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskQ6mREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskRKmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/1#//functions"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_SV7GwC6LEei0V9-WLHIyvg"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskRamREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskRqmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/1#//parameters"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_-pU5oDmpEei--ZsfKWaFtw"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskR6mREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskSKmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/robotics/1#//generics"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://ROBOTICS_PROFILES/robotics.profile.uml#_eFhjMEnvEeien6eLHpkAxA"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskSamREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskSqmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/MARTE/1#//MARTE_Foundations/NFPs"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://Papyrus_PROFILES/MARTE.profile.uml#_U_GAoAPMEdyuUt-4qHuVvQ"/>
+    </profileApplication>
+    <profileApplication xmi:id="_VqskS6mREeqoi-qMJiOiIQ">
+      <eAnnotations xmi:id="_VqskTKmREeqoi-qMJiOiIQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/MARTE/1#//MARTE_Annexes/VSL/DataTypes"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://Papyrus_PROFILES/MARTE.profile.uml#_9FdqwA-MEdyLh7muGbCqMw"/>
+    </profileApplication>
+  </uml:Model>
+  <robotics.services:ServiceDefinitionModel xmi:id="_VqskTamREeqoi-qMJiOiIQ" base_Package="ID"/>
+  <robotics.generics:Package xmi:id="_VqskTqmREeqoi-qMJiOiIQ" base_Package="_VqskNKmREeqoi-qMJiOiIQ"/>
+  <robotics.generics:Package xmi:id="_VqskT6mREeqoi-qMJiOiIQ" base_Package="_VqskM6mREeqoi-qMJiOiIQ"/>
+  <robotics.commobject:CommunicationObject xmi:id="_Vvin8KmREeqoi-qMJiOiIQ" base_DataType="ID_msg_CartesianControlModeLimits"/>
+  <robotics.commobject:CommunicationObject xmi:id="_Vvm5YKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_CartesianEulerPose"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VvrK0KmREeqoi-qMJiOiIQ" base_DataType="ID_msg_CartesianImpedanceControlMode"/>
+  <robotics.commobject:CommunicationObject xmi:id="_Vvu1MKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_CartesianPlane"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VvzGoKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_CartesianPose"/>
+  <robotics.commobject:CommunicationObject xmi:id="_Vv2J8KmREeqoi-qMJiOiIQ" base_DataType="ID_msg_CartesianQuantity"/>
+  <robotics.commobject:CommunicationObject xmi:id="_Vv5NQKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_CartesianVelocity"/>
+  <robotics.commobject:CommunicationObject xmi:id="_Vv8QkKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_CartesianWrench"/>
+  <robotics.commobject:CommunicationObject xmi:id="_Vv_T4KmREeqoi-qMJiOiIQ" base_DataType="ID_msg_ControlMode"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwBJEKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_DOF"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwDlUKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_DesiredForceControlMode"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwGBkKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_JointDamping"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwId0KmREeqoi-qMJiOiIQ" base_DataType="ID_msg_JointImpedanceControlMode"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwK6EKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_JointPosition"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwMvQKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_JointPositionVelocity"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwPLgKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_JointQuantity"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwRAsKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_JointStiffness"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwS14KmREeqoi-qMJiOiIQ" base_DataType="ID_msg_JointTorque"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwUrEKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_JointVelocity"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwWgQKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_RedundancyInformation"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwY8gKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_SinePatternControlMode"/>
+  <robotics.commobject:CommunicationObject xmi:id="_VwaxsKmREeqoi-qMJiOiIQ" base_DataType="ID_msg_Spline"/>
+  <robotics.commobject:CommunicationObject xmi:id="_Vwcm4KmREeqoi-qMJiOiIQ" base_DataType="ID_msg_SplineSegment"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WFr3EKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_ConfigureControlModeReq"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WFuTUKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_ConfigureControlModeRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WFwvkKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetEndpointFrameReq"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WFzL0KmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetEndpointFrameRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WF1BAKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetPTPCartesianSpeedLimitsReq"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WF3dQKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetPTPCartesianSpeedLimitsRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WF55gKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetPTPJointSpeedLimitsReq"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WF8VwKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetPTPJointSpeedLimitsRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WF-K8KmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetSmartServoJointSpeedLimitsReq"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WF_ZEKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetSmartServoJointSpeedLimitsRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WGBOQKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetSmartServoLinSpeedLimitsReq"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WGDDcKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetSmartServoLinSpeedLimitsRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WGFfsKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetSpeedOverrideReq"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WGGt0KmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetSpeedOverrideRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WGIjAKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetWorkpieceReq"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WGKYMKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_SetWorkpieceRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WGMNYKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_TimeToDestinationReq"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WGOCkKmREeqoi-qMJiOiIQ" base_DataType="ID_srv_TimeToDestinationRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WHgcAKmREeqoi-qMJiOiIQ" base_DataType="ID_action_MoveAlongSplineGoal"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WHhqIKmREeqoi-qMJiOiIQ" base_DataType="ID_action_MoveAlongSplineRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WHjfUKmREeqoi-qMJiOiIQ" base_DataType="ID_action_MoveAlongSplineFeedback"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WHktcKmREeqoi-qMJiOiIQ" base_DataType="ID_action_MoveToCartesianPoseGoal"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WHmioKmREeqoi-qMJiOiIQ" base_DataType="ID_action_MoveToCartesianPoseRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WHnwwKmREeqoi-qMJiOiIQ" base_DataType="ID_action_MoveToCartesianPoseFeedback"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WHpl8KmREeqoi-qMJiOiIQ" base_DataType="ID_action_MoveToJointPositionGoal"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WHq0EKmREeqoi-qMJiOiIQ" base_DataType="ID_action_MoveToJointPositionRes"/>
+  <robotics.commobject:CommunicationObject xmi:id="_WHspQKmREeqoi-qMJiOiIQ" base_DataType="ID_action_MoveToJointPositionFeedback"/>
+  <robotics.services:ServiceDefinition xmi:id="_WVnJcKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_CartesianControlModeLimits"/>
+  <robotics.services:ServiceDefinition xmi:id="_WVo-oKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_CartesianControlModeLimits"/>
+  <robotics.services:ServiceDefinition xmi:id="_WcnwYKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_CartesianEulerPose"/>
+  <robotics.services:ServiceDefinition xmi:id="_Wco-gKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_CartesianEulerPose"/>
+  <robotics.services:ServiceDefinition xmi:id="_WjSZEKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_CartesianImpedanceControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_WjTnMKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_CartesianImpedanceControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_Wp5-cKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_CartesianPlane"/>
+  <robotics.services:ServiceDefinition xmi:id="_Wp8asKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_CartesianPlane"/>
+  <robotics.services:ServiceDefinition xmi:id="_WwvmQKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_CartesianPose"/>
+  <robotics.services:ServiceDefinition xmi:id="_Www0YKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_CartesianPose"/>
+  <robotics.services:ServiceDefinition xmi:id="_W3dSQKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_CartesianQuantity"/>
+  <robotics.services:ServiceDefinition xmi:id="_W3egYKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_CartesianQuantity"/>
+  <robotics.services:ServiceDefinition xmi:id="_W9__IKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_CartesianVelocity"/>
+  <robotics.services:ServiceDefinition xmi:id="_W-BNQKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_CartesianVelocity"/>
+  <robotics.services:ServiceDefinition xmi:id="_XEkhMKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_CartesianWrench"/>
+  <robotics.services:ServiceDefinition xmi:id="_XElvUKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_CartesianWrench"/>
+  <robotics.services:ServiceDefinition xmi:id="_XLPw8KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_ControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_XLQ_EKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_ControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_XR9c8KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_DOF"/>
+  <robotics.services:ServiceDefinition xmi:id="_XR_SIKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_DOF"/>
+  <robotics.services:ServiceDefinition xmi:id="_XYmQcKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_DesiredForceControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_XYoFoKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_DesiredForceControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_XflCMKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_JointDamping"/>
+  <robotics.services:ServiceDefinition xmi:id="_XfmQUKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_JointDamping"/>
+  <robotics.services:ServiceDefinition xmi:id="_XmydcKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_JointImpedanceControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_Xm0SoKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_JointImpedanceControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_Xtp6cKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_JointPosition"/>
+  <robotics.services:ServiceDefinition xmi:id="_XtrIkKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_JointPosition"/>
+  <robotics.services:ServiceDefinition xmi:id="_X0YNgKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_JointPositionVelocity"/>
+  <robotics.services:ServiceDefinition xmi:id="_X0ZboKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_JointPositionVelocity"/>
+  <robotics.services:ServiceDefinition xmi:id="_X7UjAKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_JointQuantity"/>
+  <robotics.services:ServiceDefinition xmi:id="_X7WYMKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_JointQuantity"/>
+  <robotics.services:ServiceDefinition xmi:id="_YCCPAKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_JointStiffness"/>
+  <robotics.services:ServiceDefinition xmi:id="_YCDdIKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_JointStiffness"/>
+  <robotics.services:ServiceDefinition xmi:id="_YIus4KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_JointTorque"/>
+  <robotics.services:ServiceDefinition xmi:id="_YIwiEKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_JointTorque"/>
+  <robotics.services:ServiceDefinition xmi:id="_YPcY4KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_JointVelocity"/>
+  <robotics.services:ServiceDefinition xmi:id="_YPdnAKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_JointVelocity"/>
+  <robotics.services:ServiceDefinition xmi:id="_YWUc8KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_RedundancyInformation"/>
+  <robotics.services:ServiceDefinition xmi:id="_YWWSIKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_RedundancyInformation"/>
+  <robotics.services:ServiceDefinition xmi:id="_Yc_FoKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_SinePatternControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_YdA60KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_SinePatternControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_YjgkYKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_Spline"/>
+  <robotics.services:ServiceDefinition xmi:id="_YjhygKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_Spline"/>
+  <robotics.services:ServiceDefinition xmi:id="_YqMbMKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/S_SplineSegment"/>
+  <robotics.services:ServiceDefinition xmi:id="_YqOQYKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/P_SplineSegment"/>
+  <robotics.services:ServiceDefinition xmi:id="_eTTYwKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/Q_ConfigureControlMode"/>
+  <robotics.services:ServiceDefinition xmi:id="_eZ1ekKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/Q_SetEndpointFrame"/>
+  <robotics.services:ServiceDefinition xmi:id="_egdD8KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/Q_SetPTPCartesianSpeedLimits"/>
+  <robotics.services:ServiceDefinition xmi:id="_enhVQKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/Q_SetPTPJointSpeedLimits"/>
+  <robotics.services:ServiceDefinition xmi:id="_euKv0KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/Q_SetSmartServoJointSpeedLimits"/>
+  <robotics.services:ServiceDefinition xmi:id="_e0rAcKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/Q_SetSmartServoLinSpeedLimits"/>
+  <robotics.services:ServiceDefinition xmi:id="_e7mu4KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/Q_SetSpeedOverride"/>
+  <robotics.services:ServiceDefinition xmi:id="_fCdk0KmREeqoi-qMJiOiIQ" base_Interface="svcdefs/Q_SetWorkpiece"/>
+  <robotics.services:ServiceDefinition xmi:id="_fJrnIKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/Q_TimeToDestination"/>
+  <robotics.services:ServiceDefinition xmi:id="_hy_ywKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/A_MoveAlongSpline"/>
+  <robotics.services:ServiceDefinition xmi:id="_h6JjoKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/A_MoveToCartesianPose"/>
+  <robotics.services:ServiceDefinition xmi:id="_iBVJsKmREeqoi-qMJiOiIQ" base_Interface="svcdefs/A_MoveToJointPosition"/>
+</xmi:XMI>

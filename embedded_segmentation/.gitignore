@@ -1,0 +1,15 @@
+Data/DAVIS
+Data/DAVIS-data.zip
+Custom/
+Segdir/
+Output/
+TrainedModel/
+BackupResults/
+
+
+__pycache__/dataloader.cpython-37.pyc
+__pycache__/parse.cpython-37.pyc
+__pycache__/utility.cpython-37.pyc
+__pycache__/architecture.cpython-37.pyc
+__pycache__/training.cpython-37.pyc
+RobotLabcourse.ipynb
