@@ -40,5 +40,5 @@ Once the desired customizations are completed, build the ROS2 node by exectuing 
 
 Before exectuing the node, the ROS2 enviornment needs to be updated by sourcing the project. This can be done by executing `source PapPercComp/ros2_ws/install/setup.bash`. The node can then be ran with `ros2 run garbage_classification Garbage_classification`.
 
-Once the node is running, input images can be published to the 'image' topic. Camera images can be used by executing `ros2 run image_tools cam2image --ros-args --param width:=640 --param height:=480`. Prerecorded rosbags are also provided [here](), which can be played by executing the command `ros2 bag play [path to directory of bag]`.
+Once the node is running, input images can be published to the 'image' topic. Camera images can be used by executing `ros2 run image_tools cam2image --ros-args --param width:=640 --param height:=480`. Prerecorded rosbags are also provided [here](https://drive.google.com/file/d/165t-cMs6RIS--qjygwYO9pm8eJu1mR5O/view?usp=sharing), which can be played by executing the command `ros2 bag play [path to directory of bag]`.
 
