@@ -2,7 +2,7 @@
 **Author** [Philipp Seitz](https://github.com/Gistbatch)
 
 This package contains a component created with Papyrus for robotics.
-![component](https://github.com/robmosys-tum/PapPercComp/blob/fruit_detection/images/fruit_detection.compdef.png) 
+![component](https://github.com/robmosys-tum/PapPercComp/blob/master/fruit_detection_component/images/fruit_detection.compdef.png 
 
 ## Overview
 
@@ -15,8 +15,8 @@ The steps are realized with neural networks implemented in TensorFlow.
 For detection a faster_rcnn is used. For classification a SqueezeNet is used.
 
 ## ROS2
-This package was created for ROS2-Eloquent. It contains a launch file [fruit_detection_launch](https://github.com/robmosys-tum/PapPercComp/blob/fruit_detection/launch/fruit_detection_launch.py).
-The node interaction is described here ![interaction](https://github.com/robmosys-tum/PapPercComp/blob/fruit_detection/images/overview.png).
+This package was created for ROS2-Eloquent. It contains a launch file [fruit_detection_launch](https://github.com/robmosys-tum/PapPercComp/blob/master/fruit_detection_component/launch/fruit_detection_launch.py).
+The node interaction is described here ![interaction](https://github.com/robmosys-tum/PapPercComp/blob/master/images/overview.png).
 
 ### Nodes
 The following nodes are declared:
