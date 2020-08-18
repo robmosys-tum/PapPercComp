@@ -144,7 +144,7 @@ void FruitDetection_impl::drawAndPublish(cv_bridge::CvImagePtr cv_ptr,
         putText(img, label, textOrg, fontFace, fontScale, color, thickness, 0);
     }
     cv::imshow("Labeled Image", img);
-    cv::waitKey(5000);
+    cv::waitKey(1);
 }
 }  // namespace Fruit_detectionCompdef
 
