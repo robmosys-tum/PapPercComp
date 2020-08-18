@@ -1,4 +1,5 @@
 # Video Object Segmentation through Latent Space Distribution
+**Author**: Mike Yan Michelis
 
 We present a video object segmentation method that is inspired by the following embedding method (our pipeline is quite similar to theirs, the image below helps understanding both methods): 
 
