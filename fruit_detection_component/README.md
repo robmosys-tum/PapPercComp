@@ -2,7 +2,7 @@
 **Author** [Philipp Seitz](https://github.com/Gistbatch)
 
 This package contains a component created with Papyrus for robotics.
-![component](https://github.com/robmosys-tum/PapPercComp/blob/master/fruit_detection_component/images/fruit_detection.compdef.png 
+![component](https://github.com/robmosys-tum/PapPercComp/blob/master/fruit_detection_component/images/fruit_detection.compdef.png)
 
 ## Overview
 
@@ -16,7 +16,7 @@ For detection a faster_rcnn is used. For classification a SqueezeNet is used.
 
 ## ROS2
 This package was created for ROS2-Eloquent. It contains a launch file [fruit_detection_launch](https://github.com/robmosys-tum/PapPercComp/blob/master/fruit_detection_component/launch/fruit_detection_launch.py).
-The node interaction is described here ![interaction](https://github.com/robmosys-tum/PapPercComp/blob/master/images/overview.png).
+The node interaction is described here ![interaction](https://github.com/robmosys-tum/PapPercComp/blob/master/fruit_detection_component/images/overview.png).
 
 ### Nodes
 The following nodes are declared:
@@ -77,8 +77,8 @@ Simple example:
 2. Build the project: `colcon build --packages-select fruit_detection`
 3. Source the setup: `source install/setup.bash`
 4. Launch the nodes: `ros2 launch fruit_detection fruit_detection_launch.py`
-5. Unzip the example: `unzip src/fruit_detection/example/example.zip -d src/fruit_detection/example`
-6. Play the example bag: `ros2 bag play src/fruit_detection/example/êxample_0.db3`
+5. Unzip the example: `unzip src/fruit_detection/f/example/example.zip -d src/fruit_detection/example`
+6. Play the example bag: `ros2 bag play src/fruit_detection/example/example_0.db3`
 
 Keep in mind that logging doesn't work properly when using `ros2 launch`.
 If you use the the nodes individually make sure to set their parameters!
