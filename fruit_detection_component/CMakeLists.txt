@@ -66,7 +66,7 @@ install(TARGETS
 )
 install(PROGRAMS scripts/detection_service.py DESTINATION lib/${PROJECT_NAME})
 install(PROGRAMS scripts/disease_service.py DESTINATION lib/${PROJECT_NAME})
-
+install(PROGRAMS scripts/minimal_subscriber.py DESTINATION lib/${PROJECT_NAME})
 
 
 ament_package()
