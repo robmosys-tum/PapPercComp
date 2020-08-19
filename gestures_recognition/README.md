@@ -10,7 +10,7 @@ ok, go!             |  stop | rock | peace |  attention
 
 scroll           |  phone | left | right
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-<img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qscroll.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qphone.png" height="220">  |  <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qleft.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qright.png" height="220">
+<img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qscroll.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qphone.png" width="220">  |  <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qleft.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qright.png" width="220">
 
 
 ![Image of ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/okgo.PNG)
