@@ -416,8 +416,6 @@ class GestureRecognition : public rclcpp::Node
 int main(int argc, char ** argv)
 {
 
-  printf("hello world gesture recognition subscriber package\n");
-
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<GestureRecognition>());
   rclcpp::shutdown();
