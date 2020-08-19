@@ -6,7 +6,7 @@ System requirements: ROS2 under Linux Ubuntu 18.04 (tested), should also work un
 The recognized gestures for now:
 ok, go!             |  stop | rock | peace
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-![](https://github.com/EkaterinaKapanzha/images/blob/master/images/qokgo.png)  |  ![](https://github.com/EkaterinaKapanzha/images/blob/master/images/qstop2.png)  |  ![](https://github.com/EkaterinaKapanzha/images/blob/master/images/qrock.png)  |  ![](https://github.com/EkaterinaKapanzha/images/blob/master/images/qpeace.png)
+![](https://github.com/EkaterinaKapanzha/images/blob/master/images/qokgo.png){:height="220px"}  |  ![](https://github.com/EkaterinaKapanzha/images/blob/master/images/qstop2.png){:height="220px"}  |  ![](https://github.com/EkaterinaKapanzha/images/blob/master/images/qrock.png){:height="220px"}  |  ![](https://github.com/EkaterinaKapanzha/images/blob/master/images/qpeace.png){:height="220px"}
 
 , , rock, peace
 
