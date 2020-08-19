@@ -55,8 +55,10 @@ Build ROS2 nodes from the <gestures_recognition_root_folder>/src/papyrus folder:
 
 ``./run.sh ``
 
-7. Run RVIZ, use config file gesturesRecognition.rviz
+7. Run RVIZ in a new terminal window, use config file gesturesRecognition.rviz
 
 ``rviz2``
+
+The running setup should look like this:
 
 
