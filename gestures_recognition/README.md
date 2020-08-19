@@ -60,5 +60,6 @@ Build ROS2 nodes from the <gestures_recognition_root_folder>/src/papyrus folder:
 ``rviz2``
 
 The running setup should look like this:
+![Image of running](https://github.com/EkaterinaKapanzha/images/scenario1.png)
 
 
