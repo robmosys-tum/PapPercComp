@@ -37,6 +37,10 @@ Build mediapipe from the <gestures_recognition_root_folder>/mediapipe folder:
 
 5. Build ROS2/papyrus components
 
+Don't forget to source your ROS:
+
+``. /opt/ros/setup.bash``
+
 Build ROS2 nodes from the <gestures_recognition_root_folder>/src/papyrus folder:
 
 ``cd ../src/papyrus/``
