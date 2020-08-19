@@ -85,7 +85,7 @@ Simple example:
 2. Build the project: `colcon build --packages-select fruit_detection`
 3. Source the setup: `source install/setup.bash`
 4. Launch the nodes: `ros2 launch fruit_detection fruit_detection_launch.py`
-5. Unzip the example: `unzip src/fruit_detection/f/example/example.zip -d src/fruit_detection/example`
+5. Unzip the example: `unzip src/fruit_detection/example/example.zip -d src/fruit_detection/example`
 6. Play the example bag: `ros2 bag play src/fruit_detection/example/example_0.db3`
 
 Keep in mind that logging doesn't work properly when using `ros2 launch`.
