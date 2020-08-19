@@ -29,7 +29,7 @@ neural network. *Parameters: model_file* filepath for the classification network
 
 ### Messages
 The package declares two new message types:
-* ClassImage
+* ClassBox
 ```c
 string fruit
 int32 fruit_score
@@ -40,6 +40,8 @@ float32 ymax
 string disease "undefined"
 int32 disease_score 0
 ```
+The bounding box is given in relative values cwith reference to the image.
+You can get the absolute pixel value by multiplying it with the hight/width respectively.
 * BoxesImage
 ```c
 sensor_msgs/Image img
@@ -48,13 +50,19 @@ ClassBox[] boxes
 
 ## Install
 This package is not published oficially and has to be built from source.
+The repositorie is comprised of multiple individual packages.
+To get it working do:
+```bash
+git clone https://github.com/robmosys-tum/PapPercComp.git
+mv PapPercComp/fruit_detection_component/ <ros2_ws>/src/fruit_detection
+```
 To do this clone the package and build it as an regular ROS2 package using *colcon*.
 Since this packages contains python and c++ nodes some additional steps are required.
 ROS2 supports *python3*. Make sure you have an correct executable at *usr/bin/python3*
 and linked correctly `alias python="python3"`
 Additionally virtual environments are not supported which requires you to make sure *pip3*
 is set e.g. `alias pip="pip3"`.
-Additionally some dependencies need to be installed manually:
+Some dependencies need to be installed manually:
 ```bash
 python3 -m pip install pip --upgrade
 pip3 install tensorflow tensorflow-hub numpy opencv-python
