@@ -27,6 +27,8 @@ Install the Python “six” library by running ``pip3 install --user six``.
 
 Set Python3 as the default Python version: open your .bashrc file ``nano ~/.bashrc``. Type ``alias python=python3`` on to a new line at the top of the file then save the file with ctrl+o and close the file with ctrl+x. Then, back at your command line type ``source ~/.bashrc``.
 
+Build mediapipe from the <gestures_recognition_root_folder>/mediapipe folder:
+
 `` cd mediapipe/``
 
 ``export GLOG_logtostderr=1``
@@ -35,15 +37,17 @@ Set Python3 as the default Python version: open your .bashrc file ``nano ~/.bash
 
 5. Build ROS2/papyrus components
 
+Build ROS2 nodes from the <gestures_recognition_root_folder>/src/papyrus folder:
+
 ``cd ../src/papyrus/``
 
 ``colcon build --symlink-install``
 
 ## Running
 
-6. Run alltogether, in run.sh you can change between single or multi-hand tracking and input from the camera or video files
+6. Go back to the project root folder and run alltogether. In run.sh you can change between single or multi-hand tracking and input from the camera or video files by uncommenting the respective command. If you chose to test with the provided videos, please don't forget to change the path of the video. 
 
-`` cd ../..``
+`` cd <gestures_recognition_root_folder>``
 
 ``./run.sh ``
 
