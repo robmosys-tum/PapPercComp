@@ -5,12 +5,12 @@ System requirements: ROS2 under Linux Ubuntu 18.04 (tested), should also work un
 
 The recognized gestures for now:
 ok, go!             |  stop | rock | peace |  attention
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------: |:-------------------------:
 <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qokgo.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qstop2.png" height="220">  |  <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qrock.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qpeace.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qattention.png" height="220">
 
 scroll           |  phone | left | right
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-<img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qscroll.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qphone.png" width="220">  |  <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qleft.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qright.png" width="220">
+<img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qscroll.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qphone.png" height="220">  |  <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qleft.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qright.png" height="220">
 
 
 ![Image of ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/okgo.PNG)
