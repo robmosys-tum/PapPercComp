@@ -4,7 +4,14 @@ The project implements the hand gestures detection for a command giving to a rob
 System requirements: ROS2 under Linux Ubuntu 18.04 (tested), should also work under 16.04.
 
 The recognized gestures for now:
-![Image of ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/qokgo.png) ![Image of ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/okgo.PNG)
+ok, go!, stop, rock, peace
+
+![ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/qokgo.png) ![stop](https://github.com/EkaterinaKapanzha/images/blob/master/images/qstop2.png) ![rock](https://github.com/EkaterinaKapanzha/images/blob/master/images/qrock.png) ![peace](https://github.com/EkaterinaKapanzha/images/blob/master/images/qpeace.png) 
+
+
+
+
+![Image of ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/okgo.PNG)
 
 ## Dependencies.
 
