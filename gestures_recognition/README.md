@@ -4,15 +4,13 @@ The project implements the hand gestures detection for a command giving to a rob
 System requirements: ROS2 under Linux Ubuntu 18.04 (tested), should also work under 16.04.
 
 The recognized gestures for now:
-ok, go!             |  stop | rock | peace
+ok, go!             |  stop | rock | peace |  attention
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-<img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qokgo.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qstop2.png" width="220">  |  <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qrock.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qpeace.png" width="220">
+<img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qokgo.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qstop2.png" height="220">  |  <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qrock.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qpeace.png" height="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qattention.png" height="220">
 
-, , rock, peace
-
-![ok, go!]() ![stop]() ![rock](https://github.com/EkaterinaKapanzha/images/blob/master/images/qrock.png) ![peace](https://github.com/EkaterinaKapanzha/images/blob/master/images/qpeace.png) 
-
-
+scroll           |  phone | left | right
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+<img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qscroll.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qphone.png" width="220">  |  <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qleft.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qright.png" width="220">
 
 
 ![Image of ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/okgo.PNG)
