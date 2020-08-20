@@ -12,8 +12,11 @@ scroll           |  phone | left | right
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qscroll.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qphone.png" width="220">  |  <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qleft.png" width="220"> | <img src="https://github.com/EkaterinaKapanzha/images/blob/master/images/qright.png" width="220">
 
+After processing the resulting gesture can be shown on upper left corner:
 
 ![Image of ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/okgo.PNG)
+![Image of ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/phone.PNG)
+![Image of ok, go!](https://github.com/EkaterinaKapanzha/images/blob/master/images/peace.PNG)
 
 ## Dependencies.
 
