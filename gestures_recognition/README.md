@@ -77,4 +77,13 @@ Build ROS2 nodes from the <gestures_recognition_root_folder>/src/papyrus folder:
 The running setup should look like this:
 ![Image of running](https://github.com/EkaterinaKapanzha/images/blob/master/images/scenario1.png)
 
+## FAQ
+### How do I stop the program?
 
+If the player is still running, click on it with the mouse and then press any button. Then go to the terminal window from which you started run.sh and give ctrl+c.  If the player is not running anymore (for example, after you played the video), then go to the terminal window from which you started run.sh and give ctrl+c.  
+
+### Everything is running, but I cannot see any image, why?
+Check if you web-camera is working. If you are using virtual machine from VMWare, it’s in the top menu of VMWare - Devices - Camera - USB.
+
+### How do I add more gestures?
+You can add new gestures in the node GestureDetectorComponent (src/papyrus/gestureDetectorComponent/src/GestureDetectorComponentCompdef/GestureDetectorComponent_impl.cpp) in the class Gestures by adding a new function bool isGestureXYZ() with the combination of open and closed fingers, for example (thumb && !index && !middle && !ring && !little) and then adding the correspondent condition to the class GestureRecognition in the same file.
