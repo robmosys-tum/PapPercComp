@@ -1,0 +1,543 @@
+Panels:
+  - Class: rviz/Displays
+    Help Height: 78
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Status1
+        - /MotionPlanning1/Planned Path1
+        - /MeshDisplayCustom1
+      Splitter Ratio: 0.5022761821746826
+    Tree Height: 1106
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.5886790156364441
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Experimental: false
+    Name: Time
+    SyncMode: 0
+    SyncSource: PointCloud2
+Preferences:
+  PromptSaveOnExit: true
+Toolbars:
+  toolButtonStyle: 2
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        camera1/camera_depth_frame:
+          Value: true
+        camera1/camera_depth_optical_frame:
+          Value: true
+        camera1/camera_link:
+          Value: true
+        camera1/camera_rgb_frame:
+          Value: true
+        camera1/camera_rgb_optical_frame:
+          Value: true
+        camera1/world:
+          Value: true
+        camera2/camera_depth_frame:
+          Value: true
+        camera2/camera_depth_optical_frame:
+          Value: true
+        camera2/camera_link:
+          Value: true
+        camera2/camera_rgb_frame:
+          Value: true
+        camera2/camera_rgb_optical_frame:
+          Value: true
+        camera2/world:
+          Value: true
+        robot1_base:
+          Value: true
+        robot1_base_link:
+          Value: true
+        robot1_ee_link:
+          Value: true
+        robot1_forearm_link:
+          Value: true
+        robot1_grasp:
+          Value: true
+        robot1_grasp_tcp_aligned:
+          Value: true
+        robot1_left_inner_finger:
+          Value: true
+        robot1_left_inner_finger_pad:
+          Value: true
+        robot1_left_inner_knuckle:
+          Value: true
+        robot1_left_outer_finger:
+          Value: true
+        robot1_left_outer_knuckle:
+          Value: true
+        robot1_right_inner_finger:
+          Value: true
+        robot1_right_inner_finger_pad:
+          Value: true
+        robot1_right_inner_knuckle:
+          Value: true
+        robot1_right_outer_finger:
+          Value: true
+        robot1_right_outer_knuckle:
+          Value: true
+        robot1_robotiq_arg2f_base_link:
+          Value: true
+        robot1_shoulder_link:
+          Value: true
+        robot1_tcp:
+          Value: true
+        robot1_tool0:
+          Value: true
+        robot1_upper_arm_link:
+          Value: true
+        robot1_wrist_1_link:
+          Value: true
+        robot1_wrist_2_link:
+          Value: true
+        robot1_wrist_3_link:
+          Value: true
+        robot2_base:
+          Value: true
+        robot2_base_link:
+          Value: true
+        robot2_ee_link:
+          Value: true
+        robot2_forearm_link:
+          Value: true
+        robot2_grasp:
+          Value: true
+        robot2_grasp_tcp_aligned:
+          Value: true
+        robot2_left_inner_finger:
+          Value: true
+        robot2_left_inner_finger_pad:
+          Value: true
+        robot2_left_inner_knuckle:
+          Value: true
+        robot2_left_outer_finger:
+          Value: true
+        robot2_left_outer_knuckle:
+          Value: true
+        robot2_right_inner_finger:
+          Value: true
+        robot2_right_inner_finger_pad:
+          Value: true
+        robot2_right_inner_knuckle:
+          Value: true
+        robot2_right_outer_finger:
+          Value: true
+        robot2_right_outer_knuckle:
+          Value: true
+        robot2_robotiq_arg2f_base_link:
+          Value: true
+        robot2_shoulder_link:
+          Value: true
+        robot2_tcp:
+          Value: true
+        robot2_tool0:
+          Value: true
+        robot2_upper_arm_link:
+          Value: true
+        robot2_wrist_1_link:
+          Value: true
+        robot2_wrist_2_link:
+          Value: true
+        robot2_wrist_3_link:
+          Value: true
+        world:
+          Value: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        world:
+          camera1/world:
+            camera1/camera_rgb_frame:
+              camera1/camera_depth_frame:
+                camera1/camera_depth_optical_frame:
+                  {}
+              camera1/camera_link:
+                {}
+              camera1/camera_rgb_optical_frame:
+                {}
+          camera2/world:
+            camera2/camera_rgb_frame:
+              camera2/camera_depth_frame:
+                camera2/camera_depth_optical_frame:
+                  {}
+              camera2/camera_link:
+                {}
+              camera2/camera_rgb_optical_frame:
+                {}
+          robot1_base_link:
+            robot1_base:
+              {}
+            robot1_shoulder_link:
+              robot1_upper_arm_link:
+                robot1_forearm_link:
+                  robot1_wrist_1_link:
+                    robot1_wrist_2_link:
+                      robot1_wrist_3_link:
+                        robot1_ee_link:
+                          {}
+                        robot1_tool0:
+                          robot1_robotiq_arg2f_base_link:
+                            robot1_left_inner_knuckle:
+                              {}
+                            robot1_left_outer_knuckle:
+                              robot1_left_outer_finger:
+                                robot1_left_inner_finger:
+                                  robot1_left_inner_finger_pad:
+                                    {}
+                            robot1_right_inner_knuckle:
+                              {}
+                            robot1_right_outer_knuckle:
+                              robot1_right_outer_finger:
+                                robot1_right_inner_finger:
+                                  robot1_right_inner_finger_pad:
+                                    {}
+                            robot1_tcp:
+                              {}
+          robot2_base_link:
+            robot2_base:
+              {}
+            robot2_shoulder_link:
+              robot2_upper_arm_link:
+                robot2_forearm_link:
+                  robot2_wrist_1_link:
+                    robot2_wrist_2_link:
+                      robot2_wrist_3_link:
+                        robot2_ee_link:
+                          {}
+                        robot2_tool0:
+                          robot2_robotiq_arg2f_base_link:
+                            robot2_left_inner_knuckle:
+                              {}
+                            robot2_left_outer_knuckle:
+                              robot2_left_outer_finger:
+                                robot2_left_inner_finger:
+                                  robot2_left_inner_finger_pad:
+                                    {}
+                            robot2_right_inner_knuckle:
+                              {}
+                            robot2_right_outer_knuckle:
+                              robot2_right_outer_finger:
+                                robot2_right_inner_finger:
+                                  robot2_right_inner_finger_pad:
+                                    {}
+                            robot2_tcp:
+                              {}
+      Update Interval: 0
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 1.0353755950927734
+        Min Value: -4.5299530029296875e-6
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: AxisColor
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Points
+      Topic: /camera1/kinect/depth/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 1.0353755950927734
+        Min Value: -1.9073486328125e-6
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: AxisColor
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Points
+      Topic: /camera2/kinect/depth/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Acceleration_Scaling_Factor: 0.1
+      Class: moveit_rviz_plugin/MotionPlanning
+      Enabled: false
+      Move Group Namespace: robot1
+      MoveIt_Allow_Approximate_IK: false
+      MoveIt_Allow_External_Program: false
+      MoveIt_Allow_Replanning: false
+      MoveIt_Allow_Sensor_Positioning: false
+      MoveIt_Goal_Tolerance: 0
+      MoveIt_Planning_Attempts: 10
+      MoveIt_Planning_Time: 5
+      MoveIt_Use_Cartesian_Path: false
+      MoveIt_Use_Constraint_Aware_IK: true
+      MoveIt_Warehouse_Host: 127.0.0.1
+      MoveIt_Warehouse_Port: 33829
+      MoveIt_Workspace:
+        Center:
+          X: 0
+          Y: 0
+          Z: 0
+        Size:
+          X: 2
+          Y: 2
+          Z: 2
+      Name: MotionPlanning
+      Planned Path:
+        Color Enabled: false
+        Interrupt Display: false
+        Links:
+          All Links Enabled: true
+          Expand Joint Details: false
+          Expand Link Details: false
+          Expand Tree: false
+          Link Tree Style: Links in Alphabetic Order
+        Loop Animation: false
+        Robot Alpha: 0.5
+        Robot Color: 150; 50; 150
+        Show Robot Collision: false
+        Show Robot Visual: true
+        Show Trail: false
+        State Display Time: 0.05 s
+        Trail Step Size: 1
+        Trajectory Topic: robot1/move_group/display_planned_path
+      Planning Metrics:
+        Payload: 1
+        Show Joint Torques: false
+        Show Manipulability: false
+        Show Manipulability Index: false
+        Show Weight Limit: false
+        TextHeight: 0.07999999821186066
+      Planning Request:
+        Colliding Link Color: 255; 0; 0
+        Goal State Alpha: 1
+        Goal State Color: 250; 128; 0
+        Interactive Marker Size: 0
+        Joint Violation Color: 255; 0; 255
+        Planning Group: robot1_arm
+        Query Goal State: true
+        Query Start State: false
+        Show Workspace: false
+        Start State Alpha: 1
+        Start State Color: 0; 255; 0
+      Planning Scene Topic: robot1/move_group/monitored_planning_scene
+      Robot Description: robot1/robot_description
+      Scene Geometry:
+        Scene Alpha: 0.8999999761581421
+        Scene Color: 50; 230; 50
+        Scene Display Time: 0.009999999776482582
+        Show Scene Geometry: true
+        Voxel Coloring: Z-Axis
+        Voxel Rendering: Occupied Voxels
+      Scene Robot:
+        Attached Body Color: 150; 50; 150
+        Links:
+          All Links Enabled: true
+          Expand Joint Details: false
+          Expand Link Details: false
+          Expand Tree: false
+          Link Tree Style: Links in Alphabetic Order
+        Robot Alpha: 1
+        Show Robot Collision: false
+        Show Robot Visual: true
+      Value: false
+      Velocity_Scaling_Factor: 0.1
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /rviz_visual_tools
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /robot1/stomp_trajectories
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /robot2/stomp_trajectories
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /robot1/stomp_trajectory
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /robot2/stomp_trajectory
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/MeshDisplayCustom
+      Enabled: true
+      Image Alpha: 1
+      Image Topic: ""
+      Mesh Alpha: 0.6000000238418579
+      Mesh Color: 255; 255; 255
+      Mesh Topic: reconstructed_mesh
+      Name: MeshDisplayCustom
+      Projector Position:
+        X: 0
+        Y: 0
+        Z: 0
+      Projector Rotation:
+        W: 1
+        X: 0
+        Y: 0
+        Z: 0
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Default Light: true
+    Fixed Frame: world
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Theta std deviation: 0.2617993950843811
+      Topic: /initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
+  Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 1.2786214351654053
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: 0.0024655968882143497
+        Y: 0.13306471705436707
+        Z: 0.15676510334014893
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.4229283928871155
+      Target Frame: <Fixed Frame>
+      Value: Orbit (rviz)
+      Yaw: 0.43245482444763184
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 1403
+  Hide Left Dock: false
+  Hide Right Dock: false
+  MotionPlanning:
+    collapsed: false
+  MotionPlanning - Trajectory Slider:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd000000040000000000000295000004ddfc020000000dfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000003d000004dd000000c900fffffffa000000010100000002fb0000000c00430061006d0065007200610100000000ffffffff0000000000000000fb000000100044006900730070006c0061007900730100000000000002950000015600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067000000033c000001de0000019b00fffffffb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000374000001a60000000000000000fb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000374000001a6000000000000000000000001000004a6000004ddfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fc0000003d000004dd000000a400fffffffa000000010100000002fb0000000c00430061006d0065007200610100000000ffffffff0000000000000000fb0000000a00560069006500770073010000059c0000010f0000010000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000d2d0000003efc0100000002fb0000000800540069006d0065010000000000000d2d000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000005e6000004dd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Time:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 3373
+  X: 67
+  Y: 0
