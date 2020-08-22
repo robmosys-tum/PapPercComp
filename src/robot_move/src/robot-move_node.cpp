@@ -132,11 +132,9 @@ via buttons and keyboard shortcuts in RViz */
     pose.pose.position.y = coordinates.y;
     pose.pose.position.z = 0.2;
 
-    std::vector<double> tolerance_pose(3, 0.01);
-    std::vector<double> tolerance_angle(3, 0.01);
 
     moveit_msgs::Constraints pose_goal =
-            kinematic_constraints::constructGoalConstraints("link_6", pose, tolerance_pose, tolerance_angle);
+            kinematic_constraints::constructGoalConstraints("link_6", pose);
 
     req.group_name = PLANNING_GROUP;
     req.goal_constraints.push_back(pose_goal);
@@ -150,23 +148,12 @@ via buttons and keyboard shortcuts in RViz */
         return 0;
     }
 
-    ros::Publisher display_publisher =
-            node_handle.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true);
-    moveit_msgs::DisplayTrajectory display_trajectory;
-
     moveit_msgs::MotionPlanResponse response;
     res.getMessage(response);
 
-    display_trajectory.trajectory_start = response.trajectory_start;
-    display_trajectory.trajectory.push_back(response.trajectory);
-    visual_tools.publishTrajectoryLine(display_trajectory.trajectory.back(), joint_model_group);
-    visual_tools.trigger();
-    display_publisher.publish(display_trajectory);
-
     robot_state->setJointGroupPositions(joint_model_group, response.trajectory.joint_trajectory.points.back().positions);
     planning_scene->setCurrentState(*robot_state.get());
-
-    visual_tools.publishRobotState(planning_scene->getCurrentStateNonConst(), rviz_visual_tools::BLUE);
+    visual_tools.publishRobotState(planning_scene->getCurrentStateNonConst(), rviz_visual_tools::GREEN);
     visual_tools.publishAxisLabeled(pose.pose, "goal_1");
     visual_tools.publishText(text_pose, "Pose Goal (1)", rvt::WHITE, rvt::XLARGE);
     visual_tools.trigger();
