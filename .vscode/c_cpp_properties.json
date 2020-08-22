@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/moar/myproject_ws/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/moar/myproject_ws/src/iiwa_stack/iiwa_hw/include/**",
+                "/home/moar/myproject_ws/src/iiwa_stack/iiwa_ros/include/**",
+                "/home/moar/myproject_ws/src/kuka_experimental/kuka_eki_hw_interface/include/**",
+                "/home/moar/myproject_ws/src/kuka_experimental/kuka_rsi_hw_interface/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}

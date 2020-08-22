@@ -1,6 +1,5 @@
 #include <ros/ros.h>
 
-// MoveIt
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/planning_interface/planning_interface.h>
 #include <moveit/move_group_interface/move_group_interface.h>
@@ -12,8 +11,6 @@
 #include <moveit_msgs/DisplayTrajectory.h>
 
 #include <moveit_visual_tools/moveit_visual_tools.h>
-
-#include <pluginlib/class_loader.h>
 #include <boost/scoped_ptr.hpp>
 #include "std_msgs/String.h"
 #include "classbox.h"
@@ -121,16 +118,43 @@ via buttons and keyboard shortcuts in RViz */
 
     moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
-    geometry_msgs::Pose pose;
-    geometry_msgs::Pose orig_pose =  move_group.getCurrentPose().pose;
+    geometry_msgs::PoseStamped pose;
+
+    planning_interface::MotionPlanRequest req;
+    planning_interface::MotionPlanResponse res;
+
+    geometry_msgs::PoseStamped orig_pose =  move_group.getCurrentPose();
     ROS_INFO("value %s", move_group.getEndEffectorLink().c_str());
     pose = orig_pose;
-    pose.position.x = coordinates.x;
-    pose.position.y = coordinates.y;
-    pose.position.z = 0.2;
-    move_group.setPoseTarget(pose);
+    pose.pose.position.x = coordinates.x;
+    pose.pose.position.y = coordinates.y;
+    pose.pose.position.z = 0.2;
 
-    move_group.move();
+
+    moveit_msgs::Constraints pose_goal =
+            kinematic_constraints::constructGoalConstraints("link_6", pose);
+
+    req.group_name = PLANNING_GROUP;
+    req.goal_constraints.push_back(pose_goal);
+
+    planning_interface::PlanningContextPtr context =
+            planner_instance->getPlanningContext(planning_scene, req, res.error_code_);
+    context->solve(res);
+    if (res.error_code_.val != res.error_code_.SUCCESS)
+    {
+        ROS_ERROR("Could not compute plan successfully");
+        return 0;
+    }
+
+    moveit_msgs::MotionPlanResponse response;
+    res.getMessage(response);
+
+    robot_state->setJointGroupPositions(joint_model_group, response.trajectory.joint_trajectory.points.back().positions);
+    planning_scene->setCurrentState(*robot_state.get());
+    visual_tools.publishRobotState(planning_scene->getCurrentStateNonConst(), rviz_visual_tools::GREEN);
+    visual_tools.publishAxisLabeled(pose.pose, "goal_1");
+    visual_tools.publishText(text_pose, "Pose Goal (1)", rvt::WHITE, rvt::XLARGE);
+    visual_tools.trigger();
 
     return 0;
 }
