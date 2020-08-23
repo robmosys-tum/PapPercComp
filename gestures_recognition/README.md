@@ -77,6 +77,14 @@ Build ROS2 nodes from the <gestures_recognition_root_folder>/src/papyrus folder:
 The running setup should look like this:
 ![Image of running](https://github.com/EkaterinaKapanzha/images/blob/master/images/scenario1.png)
 
+## Published messages
+
+std_msgs/msg/String - for publishing the detected gesture
+
+geometry_msgs/msg/PoseArray - for publishing 21 detected keypoints
+
+visualization_msgs/msg/MarkerArray - for publishing 21 points for better visualisation in rviz
+
 ## FAQ
 ### How do I stop the program?
 If the player is still running, click on it with the mouse and then press any button. Then go to the terminal window from which you started run.sh and give ctrl+c.  If the player is not running anymore (for example, after you played the video), then go to the terminal window from which you started run.sh and give ctrl+c.  
