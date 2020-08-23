@@ -3,7 +3,7 @@
 #include <sstream>
 #include "classbox.h"
 
-struct tempClassbox {
+struct tempClassbox { // a struct for making initalizing classbox message easy
     float xmin;
     float xmax;
     float ymin;
@@ -15,6 +15,7 @@ struct tempClassbox {
 
 int main(int argc, char **argv) {
 
+//  dummy classbox objects
     tempClassbox arr[] = {
             { xmin: 0.2, xmax: 0.6, ymin: -0.2, ymax: 0, fruit_name: "apple", disease: "mold",  disease_score: 4},
             {xmin: 0.1, xmax: 0.5, ymin: 0.1, ymax: 0.3, fruit_name: "orange", disease: "undefined", disease_score: 0},
@@ -23,6 +24,7 @@ int main(int argc, char **argv) {
 
     robot_move::classbox classboxes [3];
 
+//  initalize classbox message of classbox.h
     for (int i = 0; i < 3; i++) {
         classboxes[i].xmin = arr[i].xmin;
         classboxes[i].xmax = arr[i].xmax;
@@ -36,8 +38,10 @@ int main(int argc, char **argv) {
 
     ros::init(argc, argv, "talker");
     ros::NodeHandle n;
+//  publish to topic chatter
     ros::Publisher chatter_pub = n.advertise<robot_move::classbox>("chatter", 1000);
 
+//  Publish each message with a delay of 5 seconds before each publish
     for (int i = 0; i < 3; i++) {
         ros::Duration d(5);
         d.sleep();

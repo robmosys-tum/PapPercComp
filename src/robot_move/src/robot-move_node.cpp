@@ -113,46 +113,25 @@ via buttons and keyboard shortcuts in RViz */
     moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
 //  pose object to set the new position for the end-effector
-    geometry_msgs::PoseStamped pose;
+    geometry_msgs::Pose pose;
 
     planning_interface::MotionPlanRequest req;
     planning_interface::MotionPlanResponse res;
 
-    geometry_msgs::PoseStamped orig_pose =  move_group.getCurrentPose();
+    geometry_msgs::Pose orig_pose =  move_group.getCurrentPose().pose;
     ROS_INFO("value %s", move_group.getEndEffectorLink().c_str());
     pose = orig_pose;
 
 //  set the coordinates of the end-effector
-    pose.pose.position.x = coordinates.x;
-    pose.pose.position.y = coordinates.y;
-    pose.pose.position.z = 0.2;
+    pose.position.x = coordinates.x;
+    pose.position.y = coordinates.y;
+    pose.position.z = 0.2;
 
-//  create pose goal on link 6 (link connecting the end-effector)
-    moveit_msgs::Constraints pose_goal =
-            kinematic_constraints::constructGoalConstraints("link_6", pose);
+//  set pose target for the end-effector
+    move_group.setPoseTarget(pose);
 
-    req.group_name = PLANNING_GROUP;
-    req.goal_constraints.push_back(pose_goal);
-
-    planning_interface::PlanningContextPtr context = //create planning context ptr from the pose goal request
-            planner_instance->getPlanningContext(planning_scene, req, res.error_code_);
-    context->solve(res); //solve the motion planning problem for the robot
-
-    if (res.error_code_.val != res.error_code_.SUCCESS) {
-        ROS_ERROR("Could not compute plan successfully");
-        return 0;
-    }
-
-    moveit_msgs::MotionPlanResponse response;
-    res.getMessage(response); //obtain motion planning response
-
-    //rotate joints according to the plan
-    robot_state->setJointGroupPositions(joint_model_group, response.trajectory.joint_trajectory.points.back().positions);
-//  set the planning scene state to match the new robot state after joints' rotation
-    planning_scene->setCurrentState(*robot_state.get());
-//  publish the new robot state to rviz
-    visual_tools.publishRobotState(planning_scene->getCurrentStateNonConst(), rviz_visual_tools::GREEN);
-    visual_tools.trigger();
+//  create motion plan for the move_group new position and execute it (inverse-kinematics followed by joints rotations)
+    move_group.move();
 
     return 0;
 }

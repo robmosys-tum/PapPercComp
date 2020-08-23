@@ -23,8 +23,9 @@ generate_messages(
         std_msgs
 )
 
-
 catkin_package(
+        INCLUDE_DIRS
+        ${CATKIN_DEVEL_PREFIX}/include
         CATKIN_DEPENDS
         DEPENDS
         EIGEN3

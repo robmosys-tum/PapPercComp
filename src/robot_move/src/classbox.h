@@ -29,7 +29,7 @@ struct classbox_
     , ymin(0.0)
     , ymax(0.0)
     , fruit_name()
-    , disease("undefined")
+    , disease()
     , disease_score(0)  {
     }
   classbox_(const ContainerAllocator& _alloc)
