@@ -4,6 +4,8 @@
 * The project works with ros melodic and moveit 1
 * Ros melodic can be installed from here http://wiki.ros.org/melodic/Installation
 * Moveit 1 binary installation can be found here https://moveit.ros.org/install/
+* Make sure Eigen3 is installed `sudo apt-get install libeigen3-dev
+* Make sure boost is installed `sudo apt install libboost-all-dev`
 * Clone the repository
 * Build the project with `catkin_make`
 
