@@ -79,11 +79,11 @@ The running setup should look like this:
 
 ## Published messages
 
-std_msgs/msg/String - for publishing the detected gesture
+std_msgs/msg/String, topic /command - for publishing the detected gesture
 
-geometry_msgs/msg/PoseArray - for publishing 21 detected keypoints
+geometry_msgs/msg/PoseArray, topic /hand_joints - for publishing 21 detected keypoints
 
-visualization_msgs/msg/MarkerArray - for publishing 21 points for better visualisation in rviz
+visualization_msgs/msg/MarkerArray, topic /hand_markers - for publishing 21 points for better visualisation in rviz
 
 ## FAQ
 ### How do I stop the program?
