@@ -339,6 +339,8 @@ class GestureRecognition : public rclcpp::Node
 		GestureRecognition() : Node("Gesture_Recognition")
 		{
 			subscriber_ = this->create_subscription<geometry_msgs::msg::PoseArray>("hand_joints", 10, std::bind(&GestureRecognition::topic_callback, this, _1));
+			publisher_ = this->create_publisher<std_msgs::msg::String>("command", 10);
+			//timer_ = this->create_wall_timer(500ms, std::bind(&handTrackerWrapper::timer_callback, this));
 		}
 
 	private:
@@ -406,10 +408,16 @@ class GestureRecognition : public rclcpp::Node
 
 			// send information back to mediapipe
 			gestures.sendInformation(result);
+			std_msgs::msg::String r;
+			r.data = result;
+
+			publisher_->publish(r);
 
 		}
 
 		rclcpp::Subscription<geometry_msgs::msg::PoseArray>::SharedPtr subscriber_;
+    		//rclcpp::TimerBase::SharedPtr timer_;
+    		rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
 
 };
 

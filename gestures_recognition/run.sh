@@ -38,10 +38,10 @@ cd mediapipe
 bazel-bin/mediapipe/examples/desktop/multi_hand_tracking/multi_hand_tracking_cpu   --calculator_graph_config_file=mediapipe/graphs/hand_tracking/multi_hand_tracking_desktop_live.pbtxt &
 
 #uncomment if you want to use prerecorded video
-#bazel-bin/mediapipe/examples/desktop/multi_hand_tracking/multi_hand_tracking_cpu   --calculator_graph_config_file=mediapipe/graphs/hand_tracking/multi_hand_tracking_desktop_live.pbtxt --input_video_path=/home/katya/PapPercComp/Video1.mp4 &
+#bazel-bin/mediapipe/examples/desktop/multi_hand_tracking/multi_hand_tracking_cpu   --calculator_graph_config_file=mediapipe/graphs/hand_tracking/multi_hand_tracking_desktop_live.pbtxt --input_video_path=/home/katya/PapPercComp/gestures_recognition/Video1.mp4 &
 
 #uncomment if you want to use single hand
-#bazel-bin/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu   --calculator_graph_config_file=mediapipe/graphs/hand_tracking/hand_tracking_desktop_live.pbtxt  --input_video_path=/home/katya/PapPercComp/Video1.mp4 &
+#bazel-bin/mediapipe/examples/desktop/hand_tracking/hand_tracking_cpu   --calculator_graph_config_file=mediapipe/graphs/hand_tracking/hand_tracking_desktop_live.pbtxt  --input_video_path=/home/katya/PapPercComp/gestures_recognition/Video1.mp4 &
 
 library=$!
 
