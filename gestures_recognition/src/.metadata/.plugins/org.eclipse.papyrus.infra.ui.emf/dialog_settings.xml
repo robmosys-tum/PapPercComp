@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.papyrus.infra.ui.emf.customizationManager">
+	</section>
+	<section name="org.eclipse.papyrus.infra.ui.emf.providers.EMFGraphicalContentProvider_history__platform:/resource/HandGestureRecognition/models/system/HandGestureRecognition.system.uml:uml:Type:type">
+		<section name="History">
+			<list key="PreviousSelection">
+				<item value="platform:/resource/CameraDriver/models/components/CameraDriver.compdef.uml#_VzUek8poEeqa9MlUHP2SNg"/>
+			</list>
+		</section>
+	</section>
+	<section name="org.eclipse.papyrus.infra.ui.emf.providers.EMFGraphicalContentProvider_history__platform:/resource/CameraDriver/models/components/CameraDriver.compdef.uml:uml:Interface:provided">
+		<section name="History">
+			<list key="PreviousSelection">
+				<item value="pathmap://ROS2_LIB_BASE/services/sensor_msgs.servicedef.uml#svcdefs/P_Image"/>
+			</list>
+		</section>
+	</section>
+</section>

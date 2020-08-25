@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>chair_manipulation</name>
+  <version>0.0.0</version>
+  <description>Meta package that contains all essential package of chair_manipulation</description>
+
+  <maintainer email="philipp.badenhoop@hellocodeblog.com">Philipp Badenhoop</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <exec_depend>chair_manipulation_gazebo</exec_depend>
+  <exec_depend>chair_manipulation_grasp_detection_simple</exec_depend>
+  <exec_depend>chair_manipulation_grasp_detection_advanced</exec_depend>
+  <exec_depend>chair_manipulation_msgs</exec_depend>
+  <exec_depend>chair_manipulation_chair_models</exec_depend>
+  <exec_depend>dual_arm_manipulator_description</exec_depend>
+  <exec_depend>dual_arm_manipulator_gazebo</exec_depend>
+  <exec_depend>dual_arm_manipulator_moveit_config</exec_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+
+</package>

@@ -1,0 +1,7 @@
+# query pattern - request
+# attributes of request ClassificationReq
+sensor_msgs/Image img #BaseImage 
+ClassBox[] boxes #Detection areas to identify diseases in
+---
+# attributes of response ClassificationRes
+ClassBox[] new_boxes #Annotated boxes with disease and disease_score field
