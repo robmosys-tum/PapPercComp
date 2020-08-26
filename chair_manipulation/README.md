@@ -20,6 +20,8 @@ The *chair_manipulation_gazebo* package contains launch files to run the simulat
 
 ### Installation
 
+As a prerequisite, you must have ROS melodic installed on a Ubuntu 18 machine.
+
 First, we have to install two libraries system wide from source: fgt and fcl.
 
     $ cd ~
