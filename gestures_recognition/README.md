@@ -77,10 +77,20 @@ Build ROS2 nodes from the <gestures_recognition_root_folder>/src/papyrus folder:
 The running setup should look like this:
 ![Image of running](https://github.com/EkaterinaKapanzha/images/blob/master/images/scenario1.png)
 
+## Published messages
+
+std_msgs/msg/String, topic /command - for publishing the detected gesture
+
+geometry_msgs/msg/PoseArray, topic /hand_joints - for publishing 21 detected keypoints
+
+visualization_msgs/msg/MarkerArray, topic /hand_markers - for publishing 21 points for better visualisation in rviz
+
 ## FAQ
 ### How do I stop the program?
-
 If the player is still running, click on it with the mouse and then press any button. Then go to the terminal window from which you started run.sh and give ctrl+c.  If the player is not running anymore (for example, after you played the video), then go to the terminal window from which you started run.sh and give ctrl+c.  
+
+### I get "error binding to socket", what do I do?
+In new terminal type ``netstat -tulpn | grep LISTEN`` and you will get something like 5763/bazel-bin/medi, where first 5763 numbers is process id. Then type ``kill -9 5763``, replacing 5763 with the process id you see next to /bazel-bin/medi and /HandTrackerCom. 
 
 ### Everything is running, but I cannot see any image, why?
 Check if you web-camera is working. If you are using virtual machine from VMWare, it’s in the top menu of VMWare - Devices - Camera - USB.

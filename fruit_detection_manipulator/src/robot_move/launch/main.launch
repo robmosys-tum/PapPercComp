@@ -1,0 +1,17 @@
+<launch>
+    <include file="$(find kuka_config)/launch/planning_context.launch">
+        <arg name="load_robot_description" value="true"/>
+    </include>
+
+    <include file="$(find kuka_config)/launch/demo.launch">
+    </include>
+
+    <node name="robot_model_and_robot_state_tutorial"
+          pkg="robot_move"
+          type="robot_move"
+          respawn="false" output="screen">
+        <param name="/planning_plugin" value="ompl_interface/OMPLPlanner"/>
+        <rosparam command="load"
+                  file="$(find kuka_config)/config/ompl_planning.yaml"/>
+    </node>
+</launch>
