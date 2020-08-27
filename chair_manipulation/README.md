@@ -68,7 +68,15 @@ Don't forget to run
 for every new terminal.
 Please execute the following steps in the exact same order.
 
-1. Bringup the scene.
+1. First, we have to create the grasp database of the advanced algorithm.
+You may ask: Why do we need this for the simple algorithm?
+The answer is that we need to reconstruct the chair's mesh which will be attached to the grippers.
+This is required to tell Moveit! that a contact between the grippers and the chair is not a collision.
+In order to create the database, run:
+
+        $ roslaunch chair_manipulation_grasp_detection_advanced create_grasp_database.launch
+
+2. Bringup the scene.
 
         $ roslaunch chair_manipulation_gazebo scene_bringup_simple.launch
 
@@ -78,20 +86,20 @@ Please execute the following steps in the exact same order.
 
     All worlds are contained inside the chair_manipulation_gazebo/worlds directory.
 
-2. Now, go inside Gazebo and press the play button.
+3. Now, go inside Gazebo and press the play button.
 
-3. Bringup moveit.
+4. Bringup moveit.
 
         $ roslaunch chair_manipulation_gazebo moveit_bringup.launch
 
-4. Start the node that lifts the chair.
+5. Start the node that lifts the chair.
 
         $ roslaunch chair_manipulation_gazebo lift.launch
 
     Wait until it says "Start goal PREPARE".
     This will now wait for the grasp tfs.
 
-5. Finally, launch the detection algorithm.
+6. Finally, launch the detection algorithm.
 
         $ roslaunch chair_manipulation_gazebo detection_simple.launch
 
