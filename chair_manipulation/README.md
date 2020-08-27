@@ -136,7 +136,8 @@ Q: The catkin build fails with the message
 
     c++: internal compiler error: Killed (program cc1plus)
 
-A: This happened to us in a Ubuntu 18 virtual machine. Just run the build again and don't worry.
+A: These types of errors often happen when the compiler runs out of memory which is typical for virtual machines.
+In this case it helps to allocate more memory for the virtual machine. It also may help to simply rerun catkin build.
 
 Q: When launching scene_bringup_simple.launch or scene_bringup_advanced.launch Gazebo does not start and I get red error messages in the output.
 
