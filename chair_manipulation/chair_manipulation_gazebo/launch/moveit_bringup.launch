@@ -10,7 +10,7 @@
   <!-- sensor configuration for Moveit -->
   <rosparam ns="move_group" command="load" file="$(find chair_manipulation_gazebo)/cfg/sensors.yaml" />
   <include file="$(find dual_arm_manipulator_moveit_config)/launch/dual_arm_manipulator_moveit_planning_execution.launch">
-      <arg name="use_rviz" value="false" />
+    <arg name="use_rviz" value="false" />
   </include>
 
   <!-- launch move group for first robot -->
@@ -38,7 +38,6 @@
     <remap from="/robot1/robot2_right_finger_action_controller/gripper_cmd"             to="/robot2_right_finger_action_controller/gripper_cmd" />
 
     <remap from="/robot1/robot_description" to="/robot_description" />
-    <remap from="/robot1/robot_description_semantic" to="/robot_description_semantic" />
     <remap from="/robot1/joint_states" to="/joint_states" />
 
     <!-- sensor configuration for Moveit -->
@@ -75,7 +74,6 @@
     <remap from="/robot2/robot2_right_finger_action_controller/gripper_cmd"             to="/robot2_right_finger_action_controller/gripper_cmd" />
 
     <remap from="/robot2/robot_description" to="/robot_description" />
-    <remap from="/robot2/robot_description_semantic" to="/robot_description_semantic" />
     <remap from="/robot2/joint_states" to="/joint_states" />
 
     <!-- sensor configuration for Moveit -->

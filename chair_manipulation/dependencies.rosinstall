@@ -45,3 +45,9 @@
     local-name: panda_moveit_config
     uri: https://github.com/ros-planning/panda_moveit_config.git
     version: melodic-devel
+
+# Mesh display plugin
+- git:
+    local-name: rviz_mesh_display
+    uri: https://github.com/RoboStack/rviz_mesh_display
+    version: master

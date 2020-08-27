@@ -6,6 +6,7 @@
 
   <group ns="robot1">
 
+    <remap from="/robot1/robot_description" to="/robot_description" />
     <remap from="/robot1/joint_states" to="/joint_states" />
 
     <node name="robot1_grasp_planner_action_server" pkg="chair_manipulation_grasp_planning" type="grasp_action_planner_server_node" output="screen">
@@ -51,6 +52,7 @@
 
   <group ns="robot2">
 
+    <remap from="/robot2/robot_description" to="/robot_description" />
     <remap from="/robot2/joint_states" to="/joint_states" />
 
     <node name="robot2_grasp_planner_action_server" pkg="chair_manipulation_grasp_planning" type="grasp_action_planner_server_node" output="screen">

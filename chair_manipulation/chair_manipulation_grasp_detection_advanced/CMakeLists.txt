@@ -26,7 +26,12 @@ find_package(
 )
 
 find_package(PCL REQUIRED)
-find_package(FCL REQUIRED)
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBFCL_PC REQUIRED fcl)
+# find *absolute* paths to LIBFCL_INCLUDE_DIRS and LIBFCL_LIBRARIES
+find_path(LIBFCL_INCLUDE_DIRS fcl/config.h HINTS ${LIBFCL_PC_INCLUDE_DIR} ${LIBFCL_PC_INCLUDE_DIRS})
+find_library(LIBFCL_LIBRARIES fcl HINTS ${LIBFCL_PC_LIBRARY_DIRS})
 
 find_package(Qhull REQUIRED)
 if (HAVE_QHULL_2011)
@@ -40,6 +45,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
   ${QHULL_INCLUDE_DIRS}
+  ${LIBFCL_INCLUDE_DIRS}
 )
 
 set(
@@ -48,6 +54,7 @@ set(
   ${PCL_LIBRARIES}
   ${FCL_LIBRARIES}
   ${QHULL_LIBRARIES}
+  ${LIBFCL_LIBRARIES}
 )
 
 set(
