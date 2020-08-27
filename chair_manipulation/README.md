@@ -68,15 +68,7 @@ Don't forget to run
 for every new terminal.
 Please execute the following steps in the exact same order.
 
-1. First, we have to create the grasp database of the advanced algorithm.
-You may ask: Why do we need this for the simple algorithm?
-The answer is that we need to reconstruct the chair's mesh which will be attached to the grippers.
-This is required to tell Moveit! that a contact between the grippers and the chair is not a collision.
-In order to create the database, run:
-
-        $ roslaunch chair_manipulation_grasp_detection_advanced create_grasp_database.launch
-
-2. Bringup the scene.
+1. Bringup the scene.
 
         $ roslaunch chair_manipulation_gazebo scene_bringup_simple.launch
 
@@ -86,20 +78,20 @@ In order to create the database, run:
 
     All worlds are contained inside the chair_manipulation_gazebo/worlds directory.
 
-3. Now, go inside Gazebo and press the play button.
+2. Now, go inside Gazebo and press the play button.
 
-4. Bringup moveit.
+3. Bringup moveit.
 
         $ roslaunch chair_manipulation_gazebo moveit_bringup.launch
 
-5. Start the node that lifts the chair.
+4. Start the node that lifts the chair.
 
         $ roslaunch chair_manipulation_gazebo lift.launch
 
     Wait until it says "Start goal PREPARE".
     This will now wait for the grasp tfs.
 
-6. Finally, launch the detection algorithm.
+5. Finally, launch the detection algorithm.
 
         $ roslaunch chair_manipulation_gazebo detection_simple.launch
 
@@ -144,8 +136,7 @@ Q: The catkin build fails with the message
 
     c++: internal compiler error: Killed (program cc1plus)
 
-A: These types of errors often happen when the compiler runs out of memory which is typical for virtual machines.
-In this case it helps to allocate more memory for the virtual machine. It also may help to simply rerun catkin build.
+A: This happened to us in a Ubuntu 18 virtual machine. Just run the build again and don't worry.
 
 Q: When launching scene_bringup_simple.launch or scene_bringup_advanced.launch Gazebo does not start and I get red error messages in the output.
 

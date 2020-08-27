@@ -177,18 +177,7 @@ void GraspPlanner::planArmPose(const tf2::Transform& pose_tf, const std::string&
   arm_group_->setPlanningTime(planning_attempt_time_);
   arm_group_->setMaxVelocityScalingFactor(max_velocity_scaling_factor_);
   arm_group_->setGoalTolerance(0.01);
-
-  // arm_group_->setPoseTarget(pose);
-
-  auto state = arm_group_->getCurrentState();
-  bool success = state->setFromIK(state->getJointModelGroup(arm_group_name_), pose, ik_frame_, 0.1);
-  if (!success)
-  {
-    std::ostringstream msg;
-    msg << "Failed to solve IK for " << pose_name << " pose.";
-    throw GraspPlanningException{ msg.str() };
-  }
-  arm_group_->setJointValueTarget(*state);
+  arm_group_->setPoseTarget(pose);
 
   for (int i = 0; i < planning_attempts_; i++)
   {

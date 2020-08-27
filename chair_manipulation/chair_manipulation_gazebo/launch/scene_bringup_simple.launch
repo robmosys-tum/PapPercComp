@@ -15,7 +15,7 @@
   <!-- spawn dual arm manipulator -->
   <include file="$(find dual_arm_manipulator_gazebo)/launch/spawn.launch">
     <arg name="robot_name" value="dual_arm_manipulator" />
-    <arg name="limited" value="false" />
+    <arg name="limited" value="true" />
 
     <!-- position, orientation and initial joint values of first robot -->
     <arg name="robot1_x" value="0.5" />
