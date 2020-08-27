@@ -144,18 +144,17 @@ A: As said earlier, for some reason the tools sometimes kind of conflict with ea
 Just hit Ctrl+C and launch it again. If this doesn't work three times in a row, then some dependencies are missing.
 Please make sure that you strictly followed the installation steps.
 
-Q: The motion planning framework fails to find a plan even if the grasp poses seem to be clearly reachable.
-
-A: Unfortunately, we could not figure out how to fix this problem.
-The topic of motion planning is quite a complex one on its own and we could not solve every issue regarding it.
-In general, it should be noted that Moveit! was not designed for performing simultaneous multi-arm grasping and especially not for larger objects.
-Only by using hacky tricks, we are able to make Moveit! do what we want.
-However, implementing the dual-arm motion planning correctly would require non-trivial adaptions to the framework which was absolutely not possible in the scope of this project as we mainly focused on the detection part.
-
 Q: The robot makes strange acrobatic movements to approach the grasping position.
 
 A: This is due to the nature of search-tree-based motion planners that are used here.
 
 Q: The robot completely freaks out (slides along the ground or collides with the chair) when executing the grasp and lift phases.
 
-A: Unfortunately, the planner does not consider singular configurations which can lead to such catastrophical behaviors. Again, a more sophisticated planner would be required here.
+A: Unfortunately, the planner does not consider singular configurations which can lead to such catastrophical behaviors. 
+In general, a more sophisticated planner for dual-arm execution would be required. 
+Moveit! is actually not designed for multi-arm motion planning (for example, there do not exist constraints to synchronize the motion of multiple arms).
+
+Q: The gripper slips through the chair.
+
+A: Unfortunately, Gazebo is not optimized for grasping and therefore, slippage is a common issue.
+To tackle this problem, we are using a grasping plugin which helps in some sense but is still far from being perfect.

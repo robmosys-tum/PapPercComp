@@ -1,8 +1,9 @@
 #include "chair_manipulation_grasp_planning/grasp_planner.h"
-#include <tf2_ros/transform_listener.h>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include <geometry_msgs/Pose.h>
 #include "chair_manipulation_grasp_planning/utils.h"
+#include <geometry_msgs/Pose.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_eigen/tf2_eigen.h>
 #include <thread>
 
 namespace chair_manipulation
@@ -29,6 +30,7 @@ GraspPlanner::GraspPlanner(ros::NodeHandle& nh)
   pre_grasp_distance_ = nh.param<double>("pre_grasp_distance", 0.1);
   lift_height_ = nh.param<double>("lift_height", 0.2);
   max_velocity_scaling_factor_ = nh.param<double>("max_velocity_scaling_factor", 0.1);
+  position_tolerance_ = nh.param<double>("position_tolerance", 0.01);
 
   touch_links_ = nh.param<std::vector<std::string>>("touch_links", {});
 
@@ -72,7 +74,8 @@ void GraspPlanner::prepare()
     msg = tf_buffer.lookupTransform(tcp_frame_, ik_frame_, ros::Time{ 0 }, ros::Duration{ 120. });
     tf2::fromMsg(msg.transform, tcp_to_ik);
 
-    // The pre-grasp position is located by translating pre_grasp_distance along the z-axis of the grasp pose
+    // The pre-grasp position is located by translating pre_grasp_distance along
+    // the z-axis of the grasp pose
     grasp_to_pre_grasp.setIdentity();
     grasp_to_pre_grasp.setOrigin(tf2::Vector3{ 0., 0., -pre_grasp_distance_ });
     world_to_pre_grasp = world_to_grasp * grasp_to_pre_grasp;
@@ -81,7 +84,8 @@ void GraspPlanner::prepare()
     world_to_lift.setRotation(world_to_grasp.getRotation());
     world_to_lift.setOrigin(world_to_grasp.getOrigin() + tf2::Vector3{ 0., 0., lift_height_ });
 
-    // Express everything in the IK frame because Moveit's target pose is the pose of the ik_frame
+    // Express everything in the IK frame because Moveit's target pose is the
+    // pose of the ik_frame
     world_to_grasp_to_ik_ = world_to_grasp * tcp_to_ik;
     world_to_pre_grasp_to_ik_ = world_to_pre_grasp * tcp_to_ik;
     world_to_lift_to_ik_ = world_to_lift * tcp_to_ik;
@@ -129,7 +133,7 @@ void GraspPlanner::executePreGrasp()
 
 void GraspPlanner::planGrasp()
 {
-  constrainOrientation();
+  setPathConstraints(world_to_grasp_to_ik_);
   planArmPose(world_to_grasp_to_ik_, "grasp");
 }
 
@@ -146,6 +150,7 @@ void GraspPlanner::executeGrasp()
 
 void GraspPlanner::planLift()
 {
+  setPathConstraints(world_to_lift_to_ik_);
   planArmPose(world_to_lift_to_ik_, "lift");
 }
 
@@ -211,22 +216,71 @@ void GraspPlanner::closeGripper()
     throw GraspPlanningException{ "Failed to close gripper." };
 }
 
-void GraspPlanner::constrainOrientation()
+void GraspPlanner::setPathConstraints(const tf2::Transform& goal_pose)
 {
+  // Get start pose
+  tf2::Transform start_pose;
+  auto state = arm_group_->getCurrentState();
+  Eigen::Isometry3d arm_to_world = state->getFrameTransform(world_frame_);
+  Eigen::Isometry3d arm_to_ik = state->getFrameTransform(ik_frame_);
+  Eigen::Isometry3d world_to_ik = arm_to_world.inverse() * arm_to_ik;
+  tf2::convert(world_to_ik, start_pose);
+  tf2::Vector3 start_to_goal = goal_pose.getOrigin() - start_pose.getOrigin();
+
+  // Orientation constraint
   const auto& orientation = world_to_grasp_to_ik_.getRotation();
-  moveit_msgs::OrientationConstraint ocm;
-  ocm.header.frame_id = world_frame_;
-  ocm.link_name = ik_frame_;
-  ocm.orientation.x = orientation.x();
-  ocm.orientation.y = orientation.y();
-  ocm.orientation.z = orientation.z();
-  ocm.orientation.w = orientation.w();
-  ocm.absolute_x_axis_tolerance = 0.1;
-  ocm.absolute_y_axis_tolerance = 0.1;
-  ocm.absolute_z_axis_tolerance = 0.1;
-  ocm.weight = 1.0;
+  moveit_msgs::OrientationConstraint orientation_constraint;
+  orientation_constraint.header.frame_id = world_frame_;
+  orientation_constraint.link_name = ik_frame_;
+  orientation_constraint.orientation.x = orientation.x();
+  orientation_constraint.orientation.y = orientation.y();
+  orientation_constraint.orientation.z = orientation.z();
+  orientation_constraint.orientation.w = orientation.w();
+  orientation_constraint.absolute_x_axis_tolerance = 0.1;
+  orientation_constraint.absolute_y_axis_tolerance = 0.1;
+  orientation_constraint.absolute_z_axis_tolerance = 0.1;
+  orientation_constraint.weight = 1.0;
+
+  // Constrain position to be inside a cylinder
+  shape_msgs::SolidPrimitive cylinder_primitive;
+  cylinder_primitive.type = shape_msgs::SolidPrimitive::CYLINDER;
+  cylinder_primitive.dimensions.resize(2);
+  cylinder_primitive.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS] = position_tolerance_;
+  cylinder_primitive.dimensions[shape_msgs::SolidPrimitive::CYLINDER_HEIGHT] =
+      start_to_goal.length() + 2. * position_tolerance_;
+
+  // Cylinder pose
+  tf2::Vector3 cylinder_position = start_pose.getOrigin() + 0.5 * start_to_goal;
+  tf2::Vector3 cylinder_z_direction = start_to_goal.normalized();
+  tf2::Vector3 origin_z_direction{ 0., 0., 1. };
+  tf2::Vector3 axis = origin_z_direction.cross(cylinder_z_direction).normalized();
+  double angle = std::acos(cylinder_z_direction.dot(origin_z_direction));
+  tf2::Quaternion q{ axis, angle };
+  q.normalize();
+  geometry_msgs::Pose cylinder_pose;
+  cylinder_pose.position.x = cylinder_position.x();
+  cylinder_pose.position.y = cylinder_position.y();
+  cylinder_pose.position.z = cylinder_position.z();
+  cylinder_pose.orientation.x = q.x();
+  cylinder_pose.orientation.y = q.y();
+  cylinder_pose.orientation.z = q.z();
+  cylinder_pose.orientation.w = q.w();
+
+  // Position constraint
+  moveit_msgs::PositionConstraint position_constraint;
+  position_constraint.header.frame_id = world_frame_;
+  position_constraint.link_name = ik_frame_;
+  position_constraint.target_point_offset.x = 0.;
+  position_constraint.target_point_offset.y = 0.;
+  position_constraint.target_point_offset.z = 0.;
+  position_constraint.weight = 1.0;
+  position_constraint.constraint_region.primitives.push_back(cylinder_primitive);
+  position_constraint.constraint_region.primitive_poses.push_back(cylinder_pose);
+
+  // Add to arm group
   moveit_msgs::Constraints constraints;
-  constraints.orientation_constraints.push_back(ocm);
+  constraints.orientation_constraints.push_back(orientation_constraint);
+  constraints.position_constraints.push_back(position_constraint);
   arm_group_->setPathConstraints(constraints);
 }
 

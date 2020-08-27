@@ -63,6 +63,7 @@ private:
   double pre_grasp_distance_;
   double lift_height_;
   double max_velocity_scaling_factor_;
+  double position_tolerance_;
 
   std::vector<std::string> touch_links_;
 
@@ -90,7 +91,7 @@ private:
 
   void closeGripper();
 
-  void constrainOrientation();
+  void setPathConstraints(const tf2::Transform& goal_pose);
 };
 
 class GraspPlanningException : public std::runtime_error
