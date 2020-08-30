@@ -43,18 +43,25 @@ public:
   void cleanup();
 
 private:
-  std::string arm_group_name_;
-  std::string gripper_group_name_;
-  std::string open_group_state_;
-  std::string closed_group_state_;
-
   std::string world_frame_;
-  std::string ik_frame_;
-  std::string tcp_frame_;
-  std::string grasp_frame_;
-  std::string planned_pre_grasp_frame_;
-  std::string planned_grasp_frame_;
-  std::string planned_lift_frame_;
+
+  std::string robot1_end_effector_frame_;
+  std::string robot2_end_effector_frame_;
+
+  std::string robot1_tcp_frame_;
+  std::string robot2_tcp_frame_;
+
+  std::string robot1_grasp_frame_;
+  std::string robot2_grasp_frame_;
+
+  std::string robot1_planned_pre_grasp_frame_;
+  std::string robot2_planned_pre_grasp_frame_;
+
+  std::string robot1_planned_grasp_frame_;
+  std::string robot2_planned_grasp_frame_;
+
+  std::string robot1_planned_lift_frame_;
+  std::string robot2_planned_lift_frame_;
 
   std::string object_mesh_topic_;
 
@@ -67,31 +74,42 @@ private:
 
   std::vector<std::string> touch_links_;
 
-  std::string gripper_command_action_ns_;
-  std::unique_ptr<GripperCommandActionClient> gripper_command_client_;
+  std::string robot1_gripper_command_action_ns_;
+  std::string robot2_gripper_command_action_ns_;
 
-  // std::unique_ptr because we need to initialize them with values from the parameter server
-  std::unique_ptr<moveit::planning_interface::MoveGroupInterface> arm_group_;
-  std::unique_ptr<moveit::planning_interface::MoveGroupInterface> gripper_group_;
+  std::unique_ptr<GripperCommandActionClient> robot1_gripper_command_client_;
+  std::unique_ptr<GripperCommandActionClient> robot2_gripper_command_client_;
+
+  std::string arms_group_name_;
+  std::unique_ptr<moveit::planning_interface::MoveGroupInterface> arms_group_;
   std::unique_ptr<moveit::planning_interface::PlanningSceneInterface> planning_scene_interface_;
 
   moveit::planning_interface::MoveGroupInterface::Plan plan_;
 
-  tf2::Transform world_to_pre_grasp_to_ik_;
-  tf2::Transform world_to_grasp_to_ik_;
-  tf2::Transform world_to_lift_to_ik_;
+  tf2::Transform world_to_robot1_pre_grasp_ee_;
+  tf2::Transform world_to_robot2_pre_grasp_ee_;
+
+  tf2::Transform world_to_robot1_grasp_ee_;
+  tf2::Transform world_to_robot2_grasp_ee_;
+
+  tf2::Transform world_to_robot1_lift_ee_;
+  tf2::Transform world_to_robot2_lift_ee_;
 
   tf2_ros::StaticTransformBroadcaster broadcaster_;
 
   shape_msgs::MeshConstPtr object_mesh_;
 
-  void planArmPose(const tf2::Transform& pose_tf, const std::string& pose_name);
+  void planArmPose(const tf2::Transform& robot1_ee_pose, const tf2::Transform& robot2_ee_pose,
+                   const std::string& pose_name);
 
   void openGripper();
 
   void closeGripper();
 
-  void setPathConstraints(const tf2::Transform& goal_pose);
+  void setPathConstraints(const tf2::Transform& robot1_goal_pose, const tf2::Transform& robot2_goal_pose);
+
+  void addPathConstraints(const tf2::Transform& goal_pose, const std::string& end_effector_frame,
+                          const tf2::Transform& grasp_pose, moveit_msgs::Constraints& constraints);
 };
 
 class GraspPlanningException : public std::runtime_error
