@@ -7,3 +7,9 @@
 [submodule "rgbd_surface_reconstruction/lib/KinectFusionLib"]
 	path = rgbd_surface_reconstruction/rgbd_surface_reconstruction/lib/KinectFusionLib
 	url = https://github.com/DanielHettegger/KinectFusionLib.git
+[submodule "chair_manipulation/ros_wrappers/cpd_wrapper/cpd"]
+	path = chair_manipulation/ros_wrappers/cpd_wrapper/cpd
+	url = https://github.com/Badenhoop/cpd
+[submodule "chair_manipulation/ros_wrappers/nanoflann_wrapper/nanoflann"]
+	path = chair_manipulation/ros_wrappers/nanoflann_wrapper/nanoflann
+	url = https://github.com/jlblancoc/nanoflann

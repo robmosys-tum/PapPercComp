@@ -31,14 +31,18 @@ catkin_package(CATKIN_DEPENDS)
 
 include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS})
 
-add_executable(move_node src/move_node.cpp src/utils.cpp)
+set(SOURCE_FILES
+    include/chair_manipulation_grasp_planning/grasp_planner.h
+    include/chair_manipulation_grasp_planning/utils.h
+    src/utils.cpp
+    src/grasp_planner.cpp
+)
+
+add_executable(move_node src/move_node.cpp ${SOURCE_FILES})
 target_link_libraries(move_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
-add_executable(grasp_action_planner_server_node include/chair_manipulation_grasp_planning/grasp_planner.h src/grasp_planner.cpp include/chair_manipulation_grasp_planning/utils.h src/utils.cpp src/grasp_planner_action_server_node.cpp)
-target_link_libraries(grasp_action_planner_server_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+add_executable(grasp_planner_node src/grasp_planner_node.cpp ${SOURCE_FILES})
+target_link_libraries(grasp_planner_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
-add_executable(dual_grasp_planner_node include/chair_manipulation_grasp_planning/grasp_planner.h include/chair_manipulation_grasp_planning/dual_grasp_planner.h src/grasp_planner.cpp src/dual_grasp_planner.cpp src/dual_grasp_planner_node.cpp include/chair_manipulation_grasp_planning/utils.h src/utils.cpp)
-target_link_libraries(dual_grasp_planner_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-
-add_executable(gripper_command_action_server_node include/chair_manipulation_grasp_planning/grasp_planner.h include/chair_manipulation_grasp_planning/dual_grasp_planner.h src/grasp_planner.cpp src/dual_grasp_planner.cpp include/chair_manipulation_grasp_planning/utils.h src/utils.cpp src/gripper_command_action_server_node.cpp)
+add_executable(gripper_command_action_server_node src/gripper_command_action_server_node.cpp ${SOURCE_FILES})
 target_link_libraries(gripper_command_action_server_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})

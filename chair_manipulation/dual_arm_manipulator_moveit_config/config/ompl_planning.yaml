@@ -242,3 +242,32 @@ robot2_gripper:
     - SPARStwo
   projection_evaluator: joints(robot2_left_finger_joint,robot2_right_finger_joint)
   longest_valid_segment_fraction: 0.005
+arms:
+  default_planner_config: RRTConnect
+  planner_configs:
+    - AnytimePathShortening
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+    - FMT
+    - BFMT
+    - PDST
+    - STRIDE
+    - BiTRRT
+    - LBTRRT
+    - BiEST
+    - ProjEST
+    - LazyPRM
+    - LazyPRMstar
+    - SPARS
+    - SPARStwo
+  projection_evaluator: joints(robot1_shoulder_pan_joint,robot1_shoulder_lift_joint)
+  longest_valid_segment_fraction: 0.005
