@@ -1,0 +1,4 @@
+<launch>
+
+<arg name="urdf_path" value"/home/moar/myproject_ws/src/lbr_iiwa_14_r820.urdf"/>
+</launch>
