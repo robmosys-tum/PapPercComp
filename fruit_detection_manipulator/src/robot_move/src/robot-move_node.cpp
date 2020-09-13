@@ -16,10 +16,21 @@
 //classbox message header file
 #include "classbox.h"
 
+//opencv
+#include <opencv2/opencv.hpp>
+
+#include "NumCpp.hpp"
+
 // coordinates struct to save the center of the published classbox
 struct Coordinates {
     float x;
     float y;
+};
+
+struct Coordinates2 {
+    float x;
+    float y;
+    float z;
 };
 
 /**
@@ -37,6 +48,40 @@ int chatterCallback(const robot_move::classbox classbox ) {
 
     coordinates.x = (classbox.xmin + classbox.xmax) / 2;
     coordinates.y = (classbox.ymin + classbox.ymax) / 2;
+    double u = coordinates.x;
+    double v = coordinates.y;
+
+    nc::NdArray<double> uv_1= {u,v,1};
+    uv_1=uv_1.transpose();
+
+    nc::NdArray<double> newcam_mtx = {
+            {1.16392310e+03, 0.00000000e+00, 6.28041958e+02},
+            {0.00000000e+00, 1.12263977e+03, 3.42072773e+02},
+            {0.00000000e+00, 0.00000000e+00, 1.00000000e+00}
+    };
+    nc::NdArray<double> inverse_newcam_mtx = nc::linalg::inv(newcam_mtx);
+
+    nc::NdArray<double> tvec1 = {
+            -10.44832422,
+            -13.4489327,
+            5.22469801
+    };
+
+    nc::NdArray<double> R_mtx= {
+            { 0.99863679, -0.05182086, -0.00625726},
+            { 0.05206021,  0.99751354,  0.04750242},
+            { 0.00378008, -0.04776342,  0.99885152}
+    };
+    nc::NdArray<double> inverse_R_mtx = nc::linalg::inv(R_mtx);
+
+    double scaling_factor = 49.59819;
+
+    nc::NdArray<double> suv_1= nc::multiply(scaling_factor, uv_1);
+    nc::NdArray<double> xyz_c= inverse_newcam_mtx.dot(suv_1);
+    std::cout << xyz_c.shape()<<std::endl;
+    std::cout << tvec1.shape()<<std::endl;
+    xyz_c= nc::subtract(xyz_c, tvec1.transpose());
+    nc::NdArray<double> XYZ= inverse_R_mtx.dot(xyz_c);
 
     ROS_INFO("I heard %f", coordinates.x);
 
@@ -123,9 +168,9 @@ via buttons and keyboard shortcuts in RViz */
     pose = orig_pose;
 
 //  set the coordinates of the end-effector
-    pose.position.x = coordinates.x;
-    pose.position.y = coordinates.y;
-    pose.position.z = 0.2;
+    pose.position.x = XYZ[0];
+    pose.position.y = XYZ[1];
+    pose.position.z = XYZ[2];
 
 //  set pose target for the end-effector
     move_group.setPoseTarget(pose);

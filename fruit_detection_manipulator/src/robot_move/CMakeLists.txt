@@ -10,8 +10,14 @@ find_package(catkin REQUIRED COMPONENTS
         )
 
 find_package(Eigen3 REQUIRED)
+find_package(OpenCV REQUIRED)
+include_directories( ${OpenCV_INCLUDE_DIRS})
 
-find_package(Boost REQUIRED system filesystem date_time thread)
+set( BOOST_ROOT "" CACHE PATH "/usr/local/lib" )
+set( Boost_NO_SYSTEM_PATHS on CACHE BOOL "Do not search system for Boost" )
+
+find_package(Boost  REQUIRED  system filesystem date_time thread)
+find_package(NumCpp REQUIRED)
 
 add_message_files(
         FILES
@@ -36,7 +42,7 @@ include_directories(${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIR}  ${EIGEN3_INCLUD
 add_executable(robot_move src/robot-move_node.cpp)
 target_link_libraries(robot_move
         ${catkin_LIBRARIES}
-    )
+        )
 
 add_executable(talker src/publisher.cpp)
 
