@@ -7,7 +7,11 @@ We present a video object segmentation method that is inspired by the following 
 
 ![Paper Figure](BlazeFast.PNG)
 
-The Python packages we use are **Numpy** and **PyTorch**, for visualization we use **matplotlib**. The code runs on the newest version of all these packages.
+
+# Prerequisites
+
+The Python packages we use are **Numpy** and **PyTorch**, for visualization we use **matplotlib**.
+For the C++ part we additionally use **OpenCV**.
 
 ---
 
