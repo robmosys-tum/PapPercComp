@@ -10,8 +10,8 @@ We present a video object segmentation method that is inspired by the following 
 
 # Prerequisites
 
-The Python packages we use are **Numpy** and **PyTorch**, for visualization we use **matplotlib**.
-For the C++ part we additionally use **OpenCV**.
+The Python packages we use are **Numpy** (version 1.18.5) and **PyTorch** (version 1.6.0+cu101), for visualization we use **matplotlib** (version 3.2.2).
+For the C++ part we additionally use **OpenCV** (version 3.2.0). The versions we used are in the parentheses.
 
 ---
 
@@ -160,6 +160,8 @@ From experiments our model seems to use about 2GB of RAM on the VM in this manne
 Using `colcon build` and then `ros2 run vos VOS` you can run the Papyrus component defined in the VOS directory. However, make sure to first change the paths in "VOS/src/VOSCompdef/VOS.cpp" for annotated\_path and model\_path. The first path should point to the image file that contains the annotated first frame for the video, and the second path should point to the traced model that you want to load.
 
 Due to the traced model containing the entire network architecture and model parameters, it has a size of 240 MB, which is too large to provide on this repository. As the trained model's state dict in PyTorch is only 3 MB, we have provided that one in "TrainedModel/finalModel.pth", and ask the user to trace the model manually to run the ROS2 component.
+
+Our VOS component is *subscribed* to the `/image` topic and *publishes* images to the `/segmentation` topic. Both *message types* are "sensor_msgs::msg::Image".
 
 
 # FAQ
