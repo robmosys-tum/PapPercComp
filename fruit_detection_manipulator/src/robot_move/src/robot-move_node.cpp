@@ -33,25 +33,10 @@ struct Coordinates2 {
     float z;
 };
 
-/**
- * Subscriber callback function
- *
-*/
-int chatterCallback(const robot_move::classbox classbox ) {
-    if (classbox.disease == "undefined" || classbox.disease_score < 3) { // if no fruit disease or classification score is too low.
-        ROS_INFO("no disease or low score");
-        ROS_INFO("score %i", classbox.disease_score);
-        return 0;
-    }
+nc::NdArray<double> convertToWorldCoord(double u, double v) {
 
-    Coordinates coordinates;
 
-    coordinates.x = (classbox.xmin + classbox.xmax) / 2;
-    coordinates.y = (classbox.ymin + classbox.ymax) / 2;
-    double u = coordinates.x;
-    double v = coordinates.y;
-
-    nc::NdArray<double> uv_1= {u,v,1};
+    nc::NdArray<double> uv_1= {{u,v,1}};
     uv_1=uv_1.transpose();
 
     nc::NdArray<double> newcam_mtx = {
@@ -78,12 +63,36 @@ int chatterCallback(const robot_move::classbox classbox ) {
 
     nc::NdArray<double> suv_1= nc::multiply(scaling_factor, uv_1);
     nc::NdArray<double> xyz_c= inverse_newcam_mtx.dot(suv_1);
-    std::cout << xyz_c.shape()<<std::endl;
-    std::cout << tvec1.shape()<<std::endl;
     xyz_c= nc::subtract(xyz_c, tvec1.transpose());
-    nc::NdArray<double> XYZ= inverse_R_mtx.dot(xyz_c);
+    return inverse_R_mtx.dot(xyz_c);
+}
 
-    ROS_INFO("I heard %f", coordinates.x);
+/**
+ * Subscriber callback function
+ *
+*/
+int chatterCallback(const robot_move::classbox classbox ) {
+    if (classbox.disease == "undefined" || classbox.disease_score < 3) { // if no fruit disease or classification score is too low.
+        ROS_INFO("no disease or low score");
+        ROS_INFO("score %i", classbox.disease_score);
+        return 0;
+    }
+
+    Coordinates coordinates;
+
+    coordinates.x = (classbox.xmin + classbox.xmax) / 2;
+    coordinates.y = (classbox.ymin + classbox.ymax) / 2;
+
+    double u = coordinates.x;
+    double v = coordinates.y;
+
+    nc::NdArray<double> XYZ = convertToWorldCoord(u, v);
+
+    std::cout << "Converted x "<<XYZ[0]<<std::endl;
+    std::cout << "Converted y "<<XYZ[1]<<std::endl;
+    std::cout << "Converted z "<<XYZ[2]<<std::endl;
+
+
 
     ros::NodeHandle node_handle("~");
     ros::AsyncSpinner spinner(1);
@@ -168,9 +177,9 @@ via buttons and keyboard shortcuts in RViz */
     pose = orig_pose;
 
 //  set the coordinates of the end-effector
-    pose.position.x = XYZ[0];
-    pose.position.y = XYZ[1];
-    pose.position.z = XYZ[2];
+    pose.position.x = -0.01193831;
+    pose.position.y =  -0.01193831;
+    pose.position.z =  0.17874127;
 
 //  set pose target for the end-effector
     move_group.setPoseTarget(pose);

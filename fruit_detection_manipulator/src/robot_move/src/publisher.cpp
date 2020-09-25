@@ -17,9 +17,9 @@ int main(int argc, char **argv) {
 
 //  dummy classbox objects
     tempClassbox arr[] = {
-            { xmin: 0.2, xmax: 0.6, ymin: -0.2, ymax: 0, fruit_name: "apple", disease: "mold",  disease_score: 4},
-            {xmin: 0.1, xmax: 0.5, ymin: 0.1, ymax: 0.3, fruit_name: "orange", disease: "undefined", disease_score: 0},
-            {xmin: 0.2, xmax: 0.4, ymin: 0.5, ymax: 0.8, fruit_name: "banana", disease: "mold", disease_score: 2}
+            { xmin: 200, xmax: 400, ymin: 100, ymax: 300, fruit_name: "apple", disease: "mold",  disease_score: 4},
+            {xmin: 100, xmax: 500, ymin: 100, ymax: 300, fruit_name: "orange", disease: "undefined", disease_score: 0},
+            {xmin: 200, xmax: 400, ymin: 500, ymax: 800, fruit_name: "banana", disease: "mold", disease_score: 2}
     };
 
     robot_move::classbox classboxes [3];
